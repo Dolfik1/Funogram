@@ -4,6 +4,10 @@ open FunHttp
 open FunHttp.HttpRequestHeaders
 open Newtonsoft.Json
 open System.Collections.Generic
+open System.Runtime.CompilerServices
+
+[<assembly: InternalsVisibleTo("Funogram.Tests")>]
+do()
 
 module internal Helpers =
     let getUrl token methodName = "https://api.telegram.org/bot" + token + "/" + methodName
@@ -71,11 +75,11 @@ type Telegram private() =
                 "timeout", Helpers.toString timeout ])
 
     /// Receive incoming updates using long polling
-    static member inline GetUpdatesAsync (token: string, ?offset: int64, ?limit: int, ?timeout: int) =
+    static member GetUpdatesAsync token offset limit timeout =
         Telegram.GetUpdatesBaseAsync(token, offset, limit, timeout)
 
     /// Receive incoming updates using long polling
-    static member GetUpdates (token: string, ?offset: int64, ?limit: int, ?timeout: int) =
+    static member GetUpdates token offset limit timeout =
         Telegram.GetUpdatesBaseAsync(token, offset, limit, timeout) |> Async.RunSynchronously
 
     /// Returns basic information about the bot in form of a User object.
@@ -135,3 +139,5 @@ type Telegram private() =
                 ?replyMarkup: Types.Markup
             ) = Telegram.SendMessageBaseAsync
                     (token, chatId, text, parseMode, disableNotification, disableNotification, replyToMessageId, replyMarkup)
+
+    
