@@ -10,8 +10,9 @@
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="4.1.*" />
     <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
-    <PackageReference Include="microsoft.testplatform.testhost" Version="15.0.0" />
+    <PackageReference Include="Microsoft.TestPlatform.TestHost" Version="15.0.0" />
     <PackageReference Include="xUnit" Version="2.2.0" />
+    <PackageReference Include="xUnit.Runner.VisualStudio" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Funogram/Funogram.fsproj" />
