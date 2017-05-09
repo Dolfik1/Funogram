@@ -6,15 +6,13 @@ open Xunit
 open Extensions
 
 
-let jsonUser = { Id = 1L; FirstName = "FirstName"; LastName = "LastName"; Username = "Username" }
-let jsonUserString = "{id:1,first_name:\"FirstName\",last_name:\"LastName\",username:\"Username\"}"
+let jsonObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None }
+let jsonObjString = "{\"type\":\"italic\",\"offset\":0,\"length\":100,\"url\":\"http://github.com\",\"user\":null}"
 
 [<Fact>]
 let ``JSON deserializing`` () =
-    Helpers.parseJson<Types.User>(jsonUserString) 
-        |> shouldEqual jsonUser
+    Helpers.parseJson<MessageEntity>(jsonObjString) |> shouldEqual jsonObj
 
 [<Fact>]
 let ``JSON serializing`` () =
-    let o = Helpers.serializeObject(jsonUser) 
-    shouldEqual o jsonUserString
+    Helpers.serializeObject(jsonObj) |> shouldEqual jsonObjString

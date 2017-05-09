@@ -17,17 +17,3 @@ module internal JsonHelpers =
 
         override this.WriteJson (writer, value, serializer) =
             raise(NotImplementedException())
-
-
-    type SnakeCaseContractResolver() =
-        inherit DefaultContractResolver()
-        let toTitleCase (str: string) = System.Char.ToUpper(str.ToCharArray().[0]).ToString() + str.Substring(1)
-        let isNullOrEmpty text = System.String.IsNullOrEmpty text
-
-        override this.ResolvePropertyName propertyName =
-            match isNullOrEmpty propertyName with
-                | true -> propertyName
-                | _ -> propertyName.Split [|'_'|] 
-                       |> Seq.map toTitleCase
-                       |> System.String.Concat
-

@@ -5,15 +5,21 @@ open FunHttp.HttpRequestHeaders
 open Newtonsoft.Json
 open System.Collections.Generic
 open System.Runtime.CompilerServices
+open Newtonsoft.Json.Serialization
 
 [<assembly: InternalsVisibleTo("Funogram.Tests")>]
 do()
 
 module internal Helpers =
+
     let getUrl token methodName = "https://api.telegram.org/bot" + token + "/" + methodName
    
     let jsonOpts = 
-        JsonSerializerSettings(ContractResolver = JsonHelpers.SnakeCaseContractResolver())
+        JsonSerializerSettings(
+            ContractResolver = DefaultContractResolver(
+                NamingStrategy = SnakeCaseNamingStrategy()),
+            Converters = [| IdiomaticDuConverter() |])
+
     let parseJson<'a> str = JsonConvert.DeserializeObject<'a>(str, jsonOpts)
     let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
     let serializeOptionObject (o: 'a option) = 
