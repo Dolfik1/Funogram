@@ -6,13 +6,10 @@ open Xunit
 open Extensions
 
 
-let jsonObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None }
-let jsonObjString = "{\"type\":\"italic\",\"offset\":0,\"length\":100,\"url\":\"http://github.com\",\"user\":null}"
-
 [<Fact>]
 let ``JSON deserializing`` () =
-    Helpers.parseJson<MessageEntity>(jsonObjString) |> shouldEqual jsonObj
+    Helpers.parseJson<MessageEntity>(Constants.jsonTestObjString) |> shouldEqual Constants.jsonTestObj
 
 [<Fact>]
 let ``JSON serializing`` () =
-    Helpers.serializeObject(jsonObj) |> shouldEqual jsonObjString
+    Helpers.serializeObject(Constants.jsonTestObj) |> shouldEqual Constants.jsonTestObjString

@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Constants.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="Json.fs" />
   </ItemGroup>
