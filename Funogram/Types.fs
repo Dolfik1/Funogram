@@ -5,11 +5,10 @@ module Types =
     open System
     open Newtonsoft.Json
 
-
     type ChatId = 
-      | Int of int
-      | Long of int64
-      | String of string
+      | ChatIdInt of int
+      | ChatIdLong of int64
+      | ChatIdString of string
 
 
     [<CLIMutable>]
@@ -467,3 +466,32 @@ module Types =
       | ReplyKeyboardMarkup of ReplyKeyboardMarkup
       | ReplyKeyboardRemove of ReplyKeyboardRemove
       | ForceReply of ForceReply
+
+    /// Telegram Bot Api Response
+    type ApiResponse<'a> = 
+      {
+        /// True if request success
+        Ok: bool
+        /// Result of request
+        Result: 'a option
+        Description: string option
+        ErrorCode: int option
+      }
+
+      
+    /// Provides available types of an update.
+    module UpdateType = 
+        /// Indicates that the received update is a Message
+        let (|Message|_|) (update: Update) = update.Message
+        /// New version of a message that is known to the bot and was edited
+        let (|EditedMessage|_|) (update: Update) = update.EditedMessage
+        /// New incoming channel post of any kind — text, photo, sticker, etc.
+        let (|ChannelPost|_|) (update: Update) = update.ChannelPost
+        /// New version of a incoming channel post of any kind — text, photo, sticker, etc.
+        let (|EditedChannelPost|_|) (update: Update) = update.EditedChannelPost
+        /// Indicates that the received update is a type of InlineQuery
+        let (|InlineQuery|_|) (update: Update) = update.InlineQuery
+        /// Indicates that the received update is a result of an inline query that was chosen by a user and sent to their chat partner
+        let (|ChosenInlineResult|_|) (update: Update) = update.ChosenInlineResult
+        /// New incoming callback query
+        let (|CallbackQuery|_|) (update: Update) = update.CallbackQuery

@@ -9,7 +9,7 @@ type IdiomaticDuConverter() =
     inherit JsonConverter()
     
     [<Literal>]
-    let discriminator = "__Case"
+    let Discriminator = "__Case"
     let primitives = Set [ JsonToken.Boolean; JsonToken.Date; JsonToken.Float; JsonToken.Integer; JsonToken.Null; JsonToken.String ]
 
     let writeValue (value:obj) (serializer:JsonSerializer, writer : JsonWriter) =
@@ -22,7 +22,7 @@ type IdiomaticDuConverter() =
                       (serializer, writer) |> writeValue value)
     
     let writeDiscriminator (name : string) (writer : JsonWriter) = 
-        writer.WritePropertyName discriminator
+        writer.WritePropertyName Discriminator
         writer.WriteValue name
         
     override __.WriteJson(writer, value, serializer) = 
@@ -64,7 +64,7 @@ type IdiomaticDuConverter() =
         
         let values = 
             parts
-            |> Seq.filter (fun ((_, keyValue), _) -> keyValue <> (discriminator :> obj))
+            |> Seq.filter (fun ((_, keyValue), _) -> keyValue <> (Discriminator :> obj))
             |> Seq.map snd
             |> Seq.filter (fun (valueToken, _) -> primitives.Contains valueToken)
             |> Seq.map snd
@@ -74,7 +74,7 @@ type IdiomaticDuConverter() =
             let unionCases = FSharpType.GetUnionCases(destinationType)
             let unionCase =
                 parts
-                |> Seq.tryFind (fun ((_,keyValue), _) -> keyValue = (discriminator :> obj))
+                |> Seq.tryFind (fun ((_,keyValue), _) -> keyValue = (Discriminator :> obj))
                 |> Option.map (snd >> snd)
             match unionCase with
             | Some case -> unionCases |> Array.find (fun f -> f.Name :> obj = case)

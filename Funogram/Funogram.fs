@@ -3,7 +3,6 @@ namespace Funogram
 open FunHttp
 open FunHttp.HttpRequestHeaders
 open Newtonsoft.Json
-open System.Collections.Generic
 open System.Runtime.CompilerServices
 open Newtonsoft.Json.Serialization
 
@@ -11,6 +10,8 @@ open Newtonsoft.Json.Serialization
 do()
 
 module internal Helpers =
+    open Types
+
 
     let getUrl token methodName = "https://api.telegram.org/bot" + token + "/" + methodName
    
@@ -20,7 +21,14 @@ module internal Helpers =
                 NamingStrategy = SnakeCaseNamingStrategy()),
             Converters = [| IdiomaticDuConverter() |])
 
-    let parseJson<'a> str = JsonConvert.DeserializeObject<'a>(str, jsonOpts)
+    let parseJson<'a> str = 
+        match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
+        | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
+        | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
+            Error <| sprintf "%s. Error code: %i" x.Description.Value x.ErrorCode.Value
+        | _ -> Error ("Unknown error")
+
+
     let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
     let serializeOptionObject (o: 'a option) = 
         match o with
@@ -33,8 +41,8 @@ module internal Helpers =
         match parseMode with
         | None -> ""
         | _ -> match parseMode.Value with
-                | Types.ParseMode.HTML -> "HTML"
-                | Types.ParseMode.Markdown -> "Markdown"
+                | HTML -> "HTML"
+                | Markdown -> "Markdown"
 
     let getFormValues (param: (string * string) list option) =
         let p = (param |> Option.defaultValue []) 
@@ -46,6 +54,12 @@ module internal Helpers =
             |> String.concat "&")
     let getUrlArgs (param: (string * string) list option) =
         "?" + (getFormValues param)
+
+    let getChatIdString (chatId: Types.ChatId) =
+        match chatId with
+            | ChatIdInt v -> v |> string
+            | ChatIdLong v -> v |> string
+            | ChatIdString v -> v
 
 [<AbstractClass>]
 type Telegram private() =
@@ -73,7 +87,7 @@ type Telegram private() =
 
     /// Receive incoming updates using long polling
     static member internal GetUpdatesBaseAsync (token: string, offset: int64 option, limit: int option, timeout: int option) =
-        Telegram.MakeRequestAsync<Types.Update>
+        Telegram.MakeRequestAsync<seq<Types.Update>>
             ( token, 
               "getUpdates",
               [ "offset", Helpers.toString offset
@@ -81,11 +95,11 @@ type Telegram private() =
                 "timeout", Helpers.toString timeout ])
 
     /// Receive incoming updates using long polling
-    static member GetUpdatesAsync token offset limit timeout =
+    static member GetUpdatesAsync (token: string, ?offset: int64, ?limit: int, ?timeout: int) =
         Telegram.GetUpdatesBaseAsync(token, offset, limit, timeout)
 
     /// Receive incoming updates using long polling
-    static member GetUpdates token offset limit timeout =
+    static member GetUpdates (token: string, ?offset: int64, ?limit: int, ?timeout: int) =
         Telegram.GetUpdatesBaseAsync(token, offset, limit, timeout) |> Async.RunSynchronously
 
     /// Returns basic information about the bot in form of a User object.
@@ -99,7 +113,7 @@ type Telegram private() =
     static member SendMessageBaseAsync
         (
             token: string, 
-            chatId: obj, 
+            chatId: Types.ChatId, 
             text: string,
             parseMode: Types.ParseMode option, 
             disableWebPagePreview: bool option,
@@ -110,7 +124,7 @@ type Telegram private() =
         Telegram.MakeRequestAsync<Types.Message>
             ( token, 
               "sendMessage",
-              [ "chat_id", chatId |> string
+              [ "chat_id", Helpers.getChatIdString chatId
                 "text", text
                 "parse_mode", Helpers.parseModeName parseMode
                 "disable_web_page_preview", Helpers.toString disableWebPagePreview
@@ -119,10 +133,10 @@ type Telegram private() =
                 "reply_markup", Helpers.serializeOptionObject replyMarkup ])
 
     /// Use this method to send text messages. On success, the sent Message is returned
-    static member SendMessageAsync
+    static member SendMessage
         (
             token: string, 
-            chatId: string, 
+            chatId: Types.ChatId, 
             text: string,
             ?parseMode: Types.ParseMode, 
             ?disableWebPagePreview: bool,
@@ -130,13 +144,13 @@ type Telegram private() =
             ?replyToMessageId: int64,
             ?replyMarkup: Types.Markup
         ) = Telegram.SendMessageBaseAsync
-                (token, chatId, text, parseMode, disableNotification, disableNotification, replyToMessageId, replyMarkup)
+                (token, chatId, text, parseMode, disableWebPagePreview, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
 
     /// Use this method to send text messages. On success, the sent Message is returned
     static member SendMessageAsync
             (
                 token: string, 
-                chatId: int, 
+                chatId: Types.ChatId, 
                 text: string,
                 ?parseMode: Types.ParseMode, 
                 ?disableWebPagePreview: bool,
@@ -144,6 +158,5 @@ type Telegram private() =
                 ?replyToMessageId: int64,
                 ?replyMarkup: Types.Markup
             ) = Telegram.SendMessageBaseAsync
-                    (token, chatId, text, parseMode, disableNotification, disableNotification, replyToMessageId, replyMarkup)
+                    (token, chatId, text, parseMode, disableWebPagePreview, disableNotification, replyToMessageId, replyMarkup)
 
-    

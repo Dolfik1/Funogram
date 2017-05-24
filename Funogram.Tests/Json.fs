@@ -8,8 +8,10 @@ open Extensions
 
 [<Fact>]
 let ``JSON deserializing`` () =
-    Helpers.parseJson<MessageEntity>(Constants.jsonTestObjString) |> shouldEqual Constants.jsonTestObj
+    match Helpers.parseJson<MessageEntity>(Constants.jsonTestObjString) with
+        | Ok r -> shouldEqual r Constants.jsonTestObj
+        | Error e -> failwith(e)
 
 [<Fact>]
 let ``JSON serializing`` () =
-    Helpers.serializeObject(Constants.jsonTestObj) |> shouldEqual Constants.jsonTestObjString
+    Helpers.serializeObject(Constants.jsonTestObj) |> shouldEqual Constants.jsonTestObjResultString
