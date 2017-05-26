@@ -3,7 +3,7 @@
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IdiomaticDuConverter.fs" />
+    <Compile Include="JsonConverters.fs" />
     <Compile Include="JsonHelpers.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="Funogram.fs" />

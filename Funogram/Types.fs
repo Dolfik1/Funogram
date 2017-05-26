@@ -1,5 +1,10 @@
 namespace Funogram
 
+open System.Runtime.CompilerServices
+
+// Allow construct types to Funogram.Tests
+[<assembly: InternalsVisibleTo("Newtonsoft.Json")>]
+do()
 
 module Types =
     open System
@@ -19,9 +24,11 @@ module Types =
           /// User‘s or bot’s first name
           FirstName: string
           /// User‘s or bot’s last name
-          LastName: string
+          LastName: string option
           /// User‘s or bot’s username
-          Username: string }
+          Username: string option
+          /// IETF language tag of the user's language
+          LanguageCode: string option }
 
     [<CLIMutable>]
     /// This object represents a chat.
@@ -469,15 +476,17 @@ module Types =
 
     /// Telegram Bot Api Response
     type ApiResponse<'a> = 
-      {
-        /// True if request success
+      { /// True if request success
         Ok: bool
         /// Result of request
         Result: 'a option
         Description: string option
-        ErrorCode: int option
-      }
+        ErrorCode: int option }
 
+    /// Telegram Bot Api Response Error
+    type ApiResponseError = 
+      { Description: string
+        ErrorCode: int }
       
     /// Provides available types of an update.
     module UpdateType = 

@@ -7,11 +7,19 @@ open Extensions
 
 
 [<Fact>]
-let ``JSON deserializing`` () =
-    match Helpers.parseJson<MessageEntity>(Constants.jsonTestObjString) with
+let ``JSON deserializing MessageEntity`` () =
+    let a = Helpers.parseJson<MessageEntity>(Constants.jsonTestObjResultString)
+    
+    match Helpers.parseJson<MessageEntity>(Constants.jsonTestObjResultString) with
         | Ok r -> shouldEqual r Constants.jsonTestObj
-        | Error e -> failwith(e)
+        | Error e -> failwith(e.Description)
 
 [<Fact>]
-let ``JSON serializing`` () =
-    Helpers.serializeObject(Constants.jsonTestObj) |> shouldEqual Constants.jsonTestObjResultString
+let ``JSON serializing MessageEntity`` () =
+    Helpers.serializeObject(Constants.jsonTestObj) |> shouldEqual Constants.jsonTestObjString
+
+[<Fact>]
+let ``JSON deserializing User`` () =
+        match Helpers.parseJson<User>(Constants.jsonTestObjUserResultString) with
+        | Ok r -> shouldEqual r Constants.jsonTestObjUser
+        | Error e -> failwith(e.Description)

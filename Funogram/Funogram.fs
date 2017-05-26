@@ -3,8 +3,8 @@ namespace Funogram
 open FunHttp
 open FunHttp.HttpRequestHeaders
 open Newtonsoft.Json
-open System.Runtime.CompilerServices
 open Newtonsoft.Json.Serialization
+open System.Runtime.CompilerServices
 
 [<assembly: InternalsVisibleTo("Funogram.Tests")>]
 do()
@@ -14,19 +14,22 @@ module internal Helpers =
 
 
     let getUrl token methodName = "https://api.telegram.org/bot" + token + "/" + methodName
-   
+
     let jsonOpts = 
         JsonSerializerSettings(
+            NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = DefaultContractResolver(
                 NamingStrategy = SnakeCaseNamingStrategy()),
-            Converters = [| IdiomaticDuConverter() |])
+            Converters = [| OptionConverter() |],
+            TypeNameHandling = TypeNameHandling.All,
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
 
     let parseJson<'a> str = 
         match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
         | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
         | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-            Error <| sprintf "%s. Error code: %i" x.Description.Value x.ErrorCode.Value
-        | _ -> Error ("Unknown error")
+            Error { Description = "Unknown error"; ErrorCode = -1 }
+        | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
 
 
     let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
