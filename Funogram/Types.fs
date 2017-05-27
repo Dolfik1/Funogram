@@ -185,17 +185,29 @@ module Types =
           FoursquareId: string option }
     
     [<CLIMutable>]
-    // This object represent a user's profile pictures.
+    /// This object represent a user's profile pictures.
     type UserProfilePhotos =
-      { // Total number of profile pictures the target user has
+      { /// Total number of profile pictures the target user has
         TotalCount: int
-        // Requested profile pictures (in up to 4 sizes each)
+        /// Requested profile pictures (in up to 4 sizes each)
         Photos: seq<seq<PhotoSize>> }
 
     [<CLIMutable>]
+    /// This object represents a file ready to be downloaded. The file can be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>. 
+    /// It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile.
+    type File =
+      { /// Unique identifier for this file
+        FileId: string
+        /// File size, if known
+        FileSize: int option
+        /// File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
+        FilePath: string option
+      }
+      
+    [<CLIMutable>]
     /// You can provide an animation for your game so that it looks stylish in chats 
     /// (check out Lumberjack for an example). This object represents an animation file 
-    // to be displayed in the message containing a game.
+    /// to be displayed in the message containing a game.
     type Animation =
         { /// Unique file identifier
           FileId: string

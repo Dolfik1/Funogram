@@ -12,8 +12,7 @@ do()
 module internal Helpers =
     open Types
 
-
-    let getUrl token methodName = "https://api.telegram.org/bot" + token + "/" + methodName
+    let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
 
     let jsonOpts = 
         JsonSerializerSettings(
@@ -27,7 +26,7 @@ module internal Helpers =
         match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
         | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
         | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-            Error { Description = "Unknown error"; ErrorCode = -1 }
+            Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
         | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
 
     let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
@@ -111,14 +110,21 @@ type Telegram private() =
         Telegram.GetMeAsync token |> Async.RunSynchronously
 
     static member internal SendMessageBaseAsync
-        (
+        (   /// Bot token
             token: string, 
+            // 
             chatId: Types.ChatId, 
+            // 
             text: string,
+            // 
             parseMode: Types.ParseMode option, 
+            // 
             disableWebPagePreview: bool option,
+            // 
             disableNotification: bool option,
+            // 
             replyToMessageId: int64 option,
+            // 
             replyMarkup: Types.Markup option
         ) =
         Telegram.MakeRequestAsync<Types.Message>
@@ -174,33 +180,33 @@ type Telegram private() =
                   "disable_notification", Helpers.toString disableNotification
                   "message_id", messageId.ToString() ])
 
-    // Use this method to forward messages of any kind. On success, the sent Message is returned.
+    /// Use this method to forward messages of any kind. On success, the sent Message is returned.
     static member ForwardMessage 
         (
-            // Bot token
+            /// Bot token
             token: string,
-            // Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
             chatId: Types.ChatId,
-            // Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
+            /// Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
             fromChatId: Types.ChatId,
-            // Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
+            /// Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
             messageId: int,
-            // Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.
+            /// Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.
             ?disableNotification: bool
         ) = Telegram.ForwardMessageBaseAsync(token, chatId, fromChatId, messageId, disableNotification) |> Async.RunSynchronously
 
-    // Use this method to forward messages of any kind. On success, the sent Message is returned.
+    /// Use this method to forward messages of any kind. On success, the sent Message is returned.
     static member ForwardMessageAsync 
         (
-            // Bot token
+            /// Bot token
             token: string,
-            // Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
             chatId: Types.ChatId,
-            // Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
+            /// Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
             fromChatId: Types.ChatId,
-            // Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
+            /// Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)
             messageId: int,
-            // Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.
+            /// Sends the message silently. iOS users will not receive a notification, Android users will receive a notification with no sound.
             ?disableNotification: bool
         ) = Telegram.ForwardMessageBaseAsync(token, chatId, fromChatId, messageId, disableNotification)
 
@@ -232,26 +238,55 @@ type Telegram private() =
                   "offset", Helpers.toString offset
                   "limit", Helpers.toString limit ])
 
-    // Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
+    /// Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
     static member GetUserProfilePhotos
-        (   // Bot token
+        (   /// Bot token
             token: string,
-            // Unique identifier of the target user
+            /// Unique identifier of the target user
             userId: int,
-            // Sequential number of the first photo to be returned. By default, all photos are returned.
+            /// Sequential number of the first photo to be returned. By default, all photos are returned.
             offset: int option,
-            // Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.
+            /// Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.
             limit: int option
         ) = Telegram.GetUserProfilePhotosBaseAsync(token, userId, offset, limit) |> Async.RunSynchronously
         
     // Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
     static member GetUserProfilePhotosAsync
-        (   // Bot token
+        (   /// Bot token
             token: string,
-            // Unique identifier of the target user
+            /// Unique identifier of the target user
             userId: int,
-            // Sequential number of the first photo to be returned. By default, all photos are returned.
+            /// Sequential number of the first photo to be returned. By default, all photos are returned.
             offset: int option,
-            // Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.
+            /// Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.
             limit: int option
         ) = Telegram.GetUserProfilePhotosBaseAsync(token, userId, offset, limit)
+
+
+    /// Use this method to get basic info about a file and prepare it for downloading. 
+    /// For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. 
+    /// The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where 
+    /// <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. 
+    /// When the link expires, a new one can be requested by calling getFile again.
+    static member internal GetFileAsync 
+        (   /// Bot token
+            token: string,
+            /// File identifier to get info about
+            fileId: string
+        ) = Telegram.MakeRequestAsync<Types.File> (token, 
+                "getFile",
+                [ "userId", fileId ])
+
+    /// Use this method to get basic info about a file and prepare it for downloading. 
+    /// For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. 
+    /// The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where 
+    /// <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. 
+    /// When the link expires, a new one can be requested by calling getFile again.
+    static member internal GetFile 
+        (   /// Bot token
+            token: string,
+            /// File identifier to get info about
+            fileId: string
+        ) = Telegram.GetFileAsync(token, fileId) |> Async.RunSynchronously
+
+    
