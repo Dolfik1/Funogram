@@ -21,7 +21,6 @@ module internal Helpers =
             ContractResolver = DefaultContractResolver(
                 NamingStrategy = SnakeCaseNamingStrategy()),
             Converters = [| OptionConverter() |],
-            TypeNameHandling = TypeNameHandling.All,
             ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
 
     let parseJson<'a> str = 
@@ -31,14 +30,12 @@ module internal Helpers =
             Error { Description = "Unknown error"; ErrorCode = -1 }
         | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
 
-
     let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
     let serializeOptionObject (o: 'a option) = 
         match o with
             | None -> ""
             | _ -> serializeObject o
 
-        
     let inline toString arg = arg |> Option.map string |> Option.defaultValue ""
     let parseModeName parseMode = 
         match parseMode with
