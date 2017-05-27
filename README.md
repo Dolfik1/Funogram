@@ -7,10 +7,11 @@ F# Telegram Bot Api library
 - getUpdates
 - getMe
 - sendMessage (partially completed, not tested all cases)
+- forwardMessage (not tested)
+- getUserProfilePhotos (not tested)
 
 
 ### In progress 🕐:
-- forwardMessage
 - sendPhoto
 - sendAudio
 - sendDocument
@@ -22,7 +23,6 @@ F# Telegram Bot Api library
 - sendVenue
 - sendContact
 - sendChatAction
-- getUserProfilePhotos
 - getFile
 - kickChatMember
 - unbanChatMember
