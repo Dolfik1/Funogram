@@ -183,6 +183,14 @@ module Types =
           Address: string
           /// Foursquare identifier of the venue
           FoursquareId: string option }
+    
+    [<CLIMutable>]
+    // This object represent a user's profile pictures.
+    type UserProfilePhotos =
+      { // Total number of profile pictures the target user has
+        TotalCount: int
+        // Requested profile pictures (in up to 4 sizes each)
+        Photos: seq<seq<PhotoSize>> }
 
     [<CLIMutable>]
     /// You can provide an animation for your game so that it looks stylish in chats 
