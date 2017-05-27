@@ -4,32 +4,32 @@ F# Telegram Bot Api library
 # Work in progress
 
 #### Completed 👍:
-getUpdates
-getMe
-sendMessage (partially completed, not tested all cases)
+- getUpdates
+- getMe
+- sendMessage (partially completed, not tested all cases)
 
 
-### Not completed 👎:
-forwardMessage
-sendPhoto
-sendAudio
-sendDocument
-sendSticker
-sendVideo
-sendVoice
-sendVideoNote
-sendLocation
-sendVenue
-sendContact
-sendChatAction
-getUserProfilePhotos
-getFile
-kickChatMember
-unbanChatMember
-leaveChat
-getChat
-getChatAdministrators
-getChatMembersCount
-getChatMember
-answerCallbackQuery
-Inline mode methods
+### In progress 🕐:
+- forwardMessage
+- sendPhoto
+- sendAudio
+- sendDocument
+- sendSticker
+- sendVideo
+- sendVoice
+- sendVideoNote
+- sendLocation
+- sendVenue
+- sendContact
+- sendChatAction
+- getUserProfilePhotos
+- getFile
+- kickChatMember
+- unbanChatMember
+- leaveChat
+- getChat
+- getChatAdministrators
+- getChatMembersCount
+- getChatMember
+- answerCallbackQuery
+- Inline mode methods
