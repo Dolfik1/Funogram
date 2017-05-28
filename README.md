@@ -10,6 +10,9 @@ F# Telegram Bot Api library
 - ❕forwardMessage (not tested)
 - ❕getUserProfilePhotos (not tested)
 - ❕getFile (not tested)
+- ❕kickChatMember
+- ❕unbanChatMember
+- ❕leaveChat
 
 
 ### In progress 🕐:
@@ -24,9 +27,6 @@ F# Telegram Bot Api library
 - sendVenue
 - sendContact
 - sendChatAction
-- kickChatMember
-- unbanChatMember
-- leaveChat
 - getChat
 - getChatAdministrators
 - getChatMembersCount
