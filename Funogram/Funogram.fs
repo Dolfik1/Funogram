@@ -11,7 +11,6 @@ do()
 
 module internal Helpers =
     open Types
-
     let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
 
     let jsonOpts = 
@@ -289,4 +288,74 @@ type Telegram private() =
             fileId: string
         ) = Telegram.GetFileAsync(token, fileId) |> Async.RunSynchronously
 
+    /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be 
+    /// able to return to the group on their own using invite links, etc., unless unbanned first. 
+    /// The bot must be an administrator in the group for this to work. Returns True on success.
+    /// Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members 
+    /// may only be removed by the group's creator or by the member that added them.
+    static member KickChatMemberAsync
+        (   ///  Bot token
+            token: string,
+            /// Unique identifier for the target group or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int
+        ) = Telegram.MakeRequestAsync<bool> (token, 
+                "kickChatMember",
+                [ "chatId", Helpers.getChatIdString chatId
+                  "userId", userId.ToString() ])
+
+    /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be 
+    /// able to return to the group on their own using invite links, etc., unless unbanned first. 
+    /// The bot must be an administrator in the group for this to work. Returns True on success.
+    /// Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members 
+    /// may only be removed by the group's creator or by the member that added them.
+    static member KickChatMember
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target group or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int
+        ) = Telegram.KickChatMemberAsync(token, chatId, userId) |> Async.RunSynchronously
     
+    /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group 
+    /// or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
+    static member UnbanChatMemberAsync
+        (   ///  Bot token
+            token: string,
+            /// Unique identifier for the target group or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int
+        ) = Telegram.MakeRequestAsync<bool> (token, 
+                "unbanChatMember",
+                [ "chatId", Helpers.getChatIdString chatId
+                  "userId", userId.ToString() ])
+
+    /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group 
+    /// or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
+    static member UnbanChatMember
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target group or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int
+        ) = Telegram.UnbanChatMember(token, chatId, userId)
+
+    /// Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
+    static member LeaveChatAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.MakeRequestAsync<bool> (token, "leaveChat", [ "chatId", Helpers.getChatIdString chatId ])
+
+    /// Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
+    static member LeaveChat
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.LeaveChatAsync(token, chatId) |> Async.RunSynchronously
