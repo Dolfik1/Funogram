@@ -233,7 +233,7 @@ type Telegram private() =
             limit: int option
         ) = Telegram.MakeRequestAsync<Types.UserProfilePhotos> (token, 
                 "getUserProfilePhotos",
-                [ "userId", userId.ToString()
+                [ "user_id", userId.ToString()
                   "offset", Helpers.toString offset
                   "limit", Helpers.toString limit ])
 
@@ -262,11 +262,7 @@ type Telegram private() =
         ) = Telegram.GetUserProfilePhotosBaseAsync(token, userId, offset, limit)
 
 
-    /// Use this method to get basic info about a file and prepare it for downloading. 
-    /// For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. 
-    /// The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where 
-    /// <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. 
-    /// When the link expires, a new one can be requested by calling getFile again.
+    /// Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
     static member internal GetFileAsync 
         (   /// Bot token
             token: string,
@@ -274,13 +270,9 @@ type Telegram private() =
             fileId: string
         ) = Telegram.MakeRequestAsync<Types.File> (token, 
                 "getFile",
-                [ "userId", fileId ])
+                [ "user_id", fileId ])
 
-    /// Use this method to get basic info about a file and prepare it for downloading. 
-    /// For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. 
-    /// The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where 
-    /// <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. 
-    /// When the link expires, a new one can be requested by calling getFile again.
+    /// Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
     static member internal GetFile 
         (   /// Bot token
             token: string,
@@ -288,11 +280,8 @@ type Telegram private() =
             fileId: string
         ) = Telegram.GetFileAsync(token, fileId) |> Async.RunSynchronously
 
-    /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be 
-    /// able to return to the group on their own using invite links, etc., unless unbanned first. 
-    /// The bot must be an administrator in the group for this to work. Returns True on success.
-    /// Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members 
-    /// may only be removed by the group's creator or by the member that added them.
+    /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the group for this to work. Returns True on success.
+    /// Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
     static member KickChatMemberAsync
         (   ///  Bot token
             token: string,
@@ -300,16 +289,12 @@ type Telegram private() =
             chatId: Types.ChatId,
             /// Unique identifier of the target user
             userId: int
-        ) = Telegram.MakeRequestAsync<bool> (token, 
+        ) = Telegram.MakeRequestAsync<bool>(token, 
                 "kickChatMember",
-                [ "chatId", Helpers.getChatIdString chatId
-                  "userId", userId.ToString() ])
+                [ "chat_id", Helpers.getChatIdString chatId
+                  "user_id", userId.ToString() ])
 
-    /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be 
-    /// able to return to the group on their own using invite links, etc., unless unbanned first. 
-    /// The bot must be an administrator in the group for this to work. Returns True on success.
-    /// Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members 
-    /// may only be removed by the group's creator or by the member that added them.
+    /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the group for this to work. Returns True on success. Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
     static member KickChatMember
         (   /// Bot token
             token: string,
@@ -319,8 +304,7 @@ type Telegram private() =
             userId: int
         ) = Telegram.KickChatMemberAsync(token, chatId, userId) |> Async.RunSynchronously
     
-    /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group 
-    /// or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
+    /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
     static member UnbanChatMemberAsync
         (   ///  Bot token
             token: string,
@@ -328,13 +312,12 @@ type Telegram private() =
             chatId: Types.ChatId,
             /// Unique identifier of the target user
             userId: int
-        ) = Telegram.MakeRequestAsync<bool> (token, 
+        ) = Telegram.MakeRequestAsync<bool>(token, 
                 "unbanChatMember",
-                [ "chatId", Helpers.getChatIdString chatId
-                  "userId", userId.ToString() ])
+                [ "chat_id", Helpers.getChatIdString chatId
+                  "user_id", userId.ToString() ])
 
-    /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group 
-    /// or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
+    /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
     static member UnbanChatMember
         (   /// Bot token
             token: string,
@@ -350,7 +333,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Telegram.MakeRequestAsync<bool> (token, "leaveChat", [ "chatId", Helpers.getChatIdString chatId ])
+        ) = Telegram.MakeRequestAsync<bool>(token, "leaveChat", [ "chat_id", Helpers.getChatIdString chatId ])
 
     /// Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
     static member LeaveChat
@@ -359,3 +342,76 @@ type Telegram private() =
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
         ) = Telegram.LeaveChatAsync(token, chatId) |> Async.RunSynchronously
+
+    /// Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.
+    static member GetChatAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.MakeRequestAsync<Types.Chat>(token, "getChat", [ "chat_id", Helpers.getChatIdString chatId ])
+
+    /// Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.
+    static member GetChat
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.GetChatAsync(token, chatId) |> Async.RunSynchronously
+
+    /// Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.
+    static member GetChatAdministratorsAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.MakeRequestAsync<seq<Types.ChatMember>>(token, "getChatAdministrators", [ "chat_id", Helpers.getChatIdString chatId ])
+
+    /// Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.
+    static member GetChatAdministrators
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.GetChatAdministratorsAsync(token, chatId) |> Async.RunSynchronously
+    
+    /// Use this method to get the number of members in a chat. Returns Int on success.
+    static member GetChatMembersCountAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", Helpers.getChatIdString chatId ])
+    
+    /// Use this method to get the number of members in a chat. Returns Int on success.
+    static member GetChatMembersCount
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", Helpers.getChatIdString chatId ]) |> Async.RunSynchronously
+
+    /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
+    static member GetChatMemberAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int
+        ) = Telegram.MakeRequestAsync<Types.ChatMember>(token, 
+                "getChatMember",
+                [ "chat_id", Helpers.getChatIdString chatId
+                  "user_id", userId.ToString() ])
+
+    /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
+    static member GetChatMember
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int
+        ) = Telegram.GetChatMemberAsync(token, chatId, userId) |> Async.RunSynchronously
+
+    

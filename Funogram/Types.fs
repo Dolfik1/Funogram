@@ -487,6 +487,15 @@ module Types =
         /// text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
         Selective: bool
       }
+    
+    /// This object contains information about one member of the chat.
+    type ChatMember = 
+      {
+        /// Information about the user
+        User: User
+        /// The member's status in the chat. Can be “creator”, “administrator”, “member”, “left” or “kicked”
+        Status: string
+      }
       
     type Markup = 
       | InlineKeyboardMarkup of InlineKeyboardMarkup 

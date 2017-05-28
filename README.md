@@ -13,6 +13,10 @@ F# Telegram Bot Api library
 - ❕kickChatMember
 - ❕unbanChatMember
 - ❕leaveChat
+- ❕getChat
+- ❕getChatAdministrators
+- ❕getChatMembersCount
+- ❕getChatMember
 
 
 ### In progress 🕐:
@@ -27,9 +31,5 @@ F# Telegram Bot Api library
 - sendVenue
 - sendContact
 - sendChatAction
-- getChat
-- getChatAdministrators
-- getChatMembersCount
-- getChatMember
 - answerCallbackQuery
 - Inline mode methods
