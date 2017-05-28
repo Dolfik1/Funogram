@@ -9,3 +9,46 @@ module Constants =
 
     let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = Some("BotFather"); LanguageCode = None; }
     let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather"}}"""
+
+    let jsonTestEditResult1 = EditMessageResult.Success(true)
+    let jsonTestEditResult1String = "true"
+
+    let jsonTestChat = { Id = 1L; Type = "group"; Title = Some("Test group"); Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = Some(true) }
+    let jsonTestMessage = 
+        { MessageId = 123L
+          Date = System.DateTime(2117, 05, 28, 12, 47, 51)
+          Text = Some("abc")
+          Chat = jsonTestChat
+          From = None
+          ForwardFrom = None
+          ForwardFromChat = None
+          ForwardFromMessageId = None
+          ForwardDate = None
+          ReplyToMessage = None
+          EditDate = None
+          Entities = None
+          Audio = None
+          Document = None
+          Game = None
+          Photo = None
+          Sticker = None
+          Video = None
+          Voice = None
+          Caption = None
+          Contact = None
+          Location = None
+          Venue = None
+          NewChatMember = None
+          LeftChatMember = None
+          NewChatTitle = None
+          NewChatPhoto = None
+          DeleteChatPhoto = None
+          GroupChatCreated = None
+          SupergroupChatCreated = None
+          ChannelChatCreated = None
+          MigrateToChatId = None
+          MigrateFromChatId = None
+          PinnedMessage = None }
+
+    let jsonTestEditResult2 = EditMessageResult.Message(jsonTestMessage)
+    let jsonTestEditResult2String = """{"message_id":123,"date":4651649271,"text":"abc","chat":{"id":123,"type":"group","title":"Test group","all_members_are_administrators":true}}"""

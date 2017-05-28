@@ -17,6 +17,10 @@ F# Telegram Bot Api library
 - ❕getChatAdministrators (not tested)
 - ❕getChatMembersCount (not tested)
 - ❕getChatMember (not tested)
+- ❕answerCallbackQuery (not tested)
+- ❕editMessageText (not working, for now, DU not deserializes)
+- ❕editMessageCaption (not working, for now, DU not deserializes)
+- ❕editMessageReplyMarkup (not working, for now, DU not deserializes)
 
 
 ### In progress 🕐:
@@ -31,5 +35,13 @@ F# Telegram Bot Api library
 - sendVenue
 - sendContact
 - sendChatAction
-- answerCallbackQuery
-- Inline mode methods
+- editMessageCaption
+- editMessageReplyMarkup
+- deleteMessage
+- answerInlineQuery
+- sendInvoice
+- answerShippingQuery
+- answerPreCheckoutQuery
+- sendGame
+- setGameScore
+- getGameHighScores

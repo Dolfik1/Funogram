@@ -59,6 +59,8 @@ module internal Helpers =
         | ChatIdLong v -> v |> string
         | ChatIdString v -> v
 
+    let getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
+
 [<AbstractClass>]
 type Telegram private() =
     static member internal MakeRequestAsync<'a> 
@@ -414,4 +416,229 @@ type Telegram private() =
             userId: int
         ) = Telegram.GetChatMemberAsync(token, chatId, userId) |> Async.RunSynchronously
 
+    static member internal AnswerCallbackQueryBaseAsync
+        (
+            token: string,
+            callbackQueryId: string option,
+            text: string option,
+            showAlert: bool option,
+            url: string option,
+            cacheTime: int option
+        ) = Telegram.MakeRequestAsync<bool>(token, 
+                "answerCallbackQuery",
+                [ "callback_query_id", Helpers.toString callbackQueryId
+                  "text", Helpers.toString text
+                  "show_alert", Helpers.toString showAlert
+                  "url", Helpers.toString url
+                  "cache_time", Helpers.toString cacheTime ])
+
+    /// Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+    /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via BotFather and accept the terms. Otherwise, you may use links like telegram.me/your_bot?start=XXXX that open your bot with a parameter.
+    static member AnswerCallbackQueryAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the query to be answered
+            ?callbackQueryId: string,
+            /// Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+            ?text: string,
+            /// If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
+            ?showAlert: bool,
+            /// URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game – note that this will only work if the query comes from a callback_game button.
+            /// Otherwise, you may use links like telegram.me/your_bot?start=XXXX that open your bot with a parameter.
+            ?url: string,
+            /// The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
+            ?cacheTime: int
+        ) = Telegram.AnswerCallbackQueryBaseAsync(token, callbackQueryId, text, showAlert, url, cacheTime)
+
+    /// Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
+    /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via BotFather and accept the terms. Otherwise, you may use links like telegram.me/your_bot?start=XXXX that open your bot with a parameter.
+    static member AnswerCallbackQuery
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the query to be answered
+            ?callbackQueryId: string,
+            /// Text of the notification. If not specified, nothing will be shown to the user, 0-200 characters
+            ?text: string,
+            /// If true, an alert will be shown by the client instead of a notification at the top of the chat screen. Defaults to false.
+            ?showAlert: bool,
+            /// URL that will be opened by the user's client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game – note that this will only work if the query comes from a callback_game button.
+            /// Otherwise, you may use links like telegram.me/your_bot?start=XXXX that open your bot with a parameter.
+            ?url: string,
+            /// The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.
+            ?cacheTime: int
+        ) = Telegram.AnswerCallbackQueryBaseAsync(token, callbackQueryId, text, showAlert, url, cacheTime) |> Async.RunSynchronously
+
+    static member internal EditMessageTextBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId option,
+            messageId: int option,
+            inlineMessageId: string option,
+            text: string,
+            parseMode: Types.ParseMode option,
+            disableWebPagePreview: bool option,
+            replyMarkup: Types.InlineKeyboardMarkup option
+        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+                "editMessageText",
+                [ "chat_id", Helpers.toString chatId
+                  "message_id", Helpers.toString messageId
+                  "inline_message_id", Helpers.toString inlineMessageId
+                  "text", text
+                  "parse_mode", Helpers.parseModeName parseMode
+                  "disable_web_page_preview", Helpers.toString disableWebPagePreview
+                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
     
+    /// Use this method to edit text and game messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
+    static member EditMessageTextAsync
+        (
+            /// Bot token
+            token: string,
+            /// New text of the message
+            text: string,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            ?chatId: Types.ChatId,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string,
+            /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in your bot's message.
+            ?parseMode: Types.ParseMode,
+            /// Disables link previews for links in this message
+            ?disableWebPagePreview: bool,
+            /// A JSON-serialized object for an inline keyboard.
+            ?replyMarkup: Types.InlineKeyboardMarkup
+        ) = Telegram.EditMessageTextBaseAsync(token, chatId, messageId, inlineMessageId, text, parseMode, disableWebPagePreview, replyMarkup)
+    
+    /// Use this method to edit text and game messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
+    static member EditMessageText
+        (
+            /// Bot token
+            token: string,
+            /// New text of the message
+            text: string,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            ?chatId: Types.ChatId,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string,
+            /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in your bot's message.
+            ?parseMode: Types.ParseMode,
+            /// Disables link previews for links in this message
+            ?disableWebPagePreview: bool,
+            /// A JSON-serialized object for an inline keyboard.
+            ?replyMarkup: Types.InlineKeyboardMarkup
+        ) = Telegram.EditMessageTextBaseAsync(token, chatId, messageId, inlineMessageId, text, parseMode, disableWebPagePreview, replyMarkup) |> Async.RunSynchronously
+
+    static member internal EditMessageCaptionBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId option,
+            messageId: int option,
+            inlineMessageId: string option,
+            caption: string option,
+            replyMarkup: Types.InlineKeyboardMarkup option
+        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+                "editMessageCaption",
+                [ "chat_id", Helpers.getChatIdStringOption chatId
+                  "message_id", Helpers.toString messageId
+                  "inline_message_id", Helpers.toString inlineMessageId
+                  "caption", Helpers.toString caption
+                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+    
+    /// Use this method to edit captions of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
+    static member internal EditMessageCaptionAsync
+        (   /// Bot token
+            token: string,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            ?chatId: Types.ChatId,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string,
+            /// New caption of the message
+            ?caption: string,
+            /// A JSON-serialized object for an inline keyboard.
+            ?replyMarkup: Types.InlineKeyboardMarkup
+        ) = Telegram.EditMessageCaptionBaseAsync(token, chatId, messageId, inlineMessageId, caption, replyMarkup)
+    
+    /// Use this method to edit captions of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
+    static member internal EditMessageCaption
+        (   /// Bot token
+            token: string,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            ?chatId: Types.ChatId,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string,
+            /// New caption of the message
+            ?caption: string,
+            /// A JSON-serialized object for an inline keyboard.
+            ?replyMarkup: Types.InlineKeyboardMarkup
+        ) = Telegram.EditMessageCaptionBaseAsync(token, chatId, messageId, inlineMessageId, caption, replyMarkup) |> Async.RunSynchronously
+    
+    static member internal EditMessageReplyMarkupBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId option,
+            messageId: int option,
+            inlineMessageId: string option,
+            replyMarkup: Types.InlineKeyboardMarkup option
+        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+                "editMessageReplyMarkup",
+                [ "chat_id", Helpers.getChatIdStringOption chatId
+                  "message_id", Helpers.toString messageId
+                  "inline_message_id", Helpers.toString inlineMessageId
+                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+
+    /// Use this method to edit only the reply markup of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
+    static member internal EditMessageReplyMarkupAsync
+        (   /// Bot token
+            token: string,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            ?chatId: Types.ChatId,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string,
+            /// A JSON-serialized object for an inline keyboard.
+            ?replyMarkup: Types.InlineKeyboardMarkup
+        ) = Telegram.EditMessageReplyMarkupBaseAsync(token, chatId, messageId, inlineMessageId, replyMarkup)
+        
+    /// Use this method to edit only the reply markup of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
+    static member internal EditMessageReplyMarkup
+        (   /// Bot token
+            token: string,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            ?chatId: Types.ChatId,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string,
+            /// A JSON-serialized object for an inline keyboard.
+            ?replyMarkup: Types.InlineKeyboardMarkup
+        ) = Telegram.EditMessageReplyMarkupBaseAsync(token, chatId, messageId, inlineMessageId, replyMarkup) |> Async.RunSynchronously    
+    
+    /// Use this method to delete a message. A message can only be deleted if it was sent less than 48 hours ago. Any such recently sent outgoing message may be deleted. Additionally, if the bot is an administrator in a group chat, it can delete any message. If the bot is an administrator in a supergroup, it can delete messages from any other user and service messages about people joining or leaving the group (other types of service messages may only be removed by the group creator). In channels, bots can only remove their own messages. Returns True on success. 
+    static member DeleteMessageAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Identifier of the message to delete
+            messageId: int
+        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+                "deleteMessage",
+                [ "chatId", Helpers.getChatIdString chatId
+                  "message_id", messageId.ToString() ])   
+
+    /// Use this method to delete a message. A message can only be deleted if it was sent less than 48 hours ago. Any such recently sent outgoing message may be deleted. Additionally, if the bot is an administrator in a group chat, it can delete any message. If the bot is an administrator in a supergroup, it can delete messages from any other user and service messages about people joining or leaving the group (other types of service messages may only be removed by the group creator). In channels, bots can only remove their own messages. Returns True on success. 
+    static member DeleteMessage
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Identifier of the message to delete
+            messageId: int
+        ) = Telegram.DeleteMessageAsync(token, chatId, messageId) |> Async.RunSynchronously

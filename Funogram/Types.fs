@@ -38,15 +38,15 @@ module Types =
           /// Type of chat, can be either "private", "group", "supergroup" or "channel"
           Type: string
           /// Title, for supergroups, channels and group chats
-          Title: string
+          Title: string option
           /// Username, for private chats, supergroups and channels if available
-          Username: string
+          Username: string option
           /// First name of the other party in a private chat
-          FirstName: string
+          FirstName: string option
           /// Last name of the other party in a private chat
-          LastName: string
+          LastName: string option
           /// True if a group has ‘All Members Are Admins’ enabled.
-          AllMembersAreAdministrators: bool }
+          AllMembersAreAdministrators: bool option }
 
     [<CLIMutable>]
     /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
@@ -255,7 +255,7 @@ module Types =
           /// For messages forwarded from a channel, information about the original channel
           ForwardFromChat: Chat option
           /// For forwarded channel posts, identifier of the original message in the channel
-          ForwardFromMessageId: int64
+          ForwardFromMessageId: int64 option
           [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
           /// For forwarded messages, date the original message
           ForwardDate: DateTime option
@@ -533,3 +533,10 @@ module Types =
         let (|ChosenInlineResult|_|) (update: Update) = update.ChosenInlineResult
         /// New incoming callback query
         let (|CallbackQuery|_|) (update: Update) = update.CallbackQuery
+
+    /// If edited message is sent by the bot, used Message, otherwise Success.
+    type EditMessageResult = 
+      /// Message sent by the bot
+      | Message of Message
+      /// Message sent via the bot or another...
+      | Success of bool
