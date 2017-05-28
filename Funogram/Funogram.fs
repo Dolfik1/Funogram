@@ -547,7 +547,7 @@ type Telegram private() =
                   "reply_markup", Helpers.serializeOptionObject replyMarkup ])
     
     /// Use this method to edit captions of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
-    static member internal EditMessageCaptionAsync
+    static member EditMessageCaptionAsync
         (   /// Bot token
             token: string,
             /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -563,7 +563,7 @@ type Telegram private() =
         ) = Telegram.EditMessageCaptionBaseAsync(token, chatId, messageId, inlineMessageId, caption, replyMarkup)
     
     /// Use this method to edit captions of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
-    static member internal EditMessageCaption
+    static member EditMessageCaption
         (   /// Bot token
             token: string,
             /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -593,7 +593,7 @@ type Telegram private() =
                   "reply_markup", Helpers.serializeOptionObject replyMarkup ])
 
     /// Use this method to edit only the reply markup of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
-    static member internal EditMessageReplyMarkupAsync
+    static member EditMessageReplyMarkupAsync
         (   /// Bot token
             token: string,
             /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -607,7 +607,7 @@ type Telegram private() =
         ) = Telegram.EditMessageReplyMarkupBaseAsync(token, chatId, messageId, inlineMessageId, replyMarkup)
         
     /// Use this method to edit only the reply markup of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
-    static member internal EditMessageReplyMarkup
+    static member EditMessageReplyMarkup
         (   /// Bot token
             token: string,
             /// Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)
@@ -642,3 +642,66 @@ type Telegram private() =
             /// Identifier of the message to delete
             messageId: int
         ) = Telegram.DeleteMessageAsync(token, chatId, messageId) |> Async.RunSynchronously
+
+        
+    static member internal AnswerInlineQueryBaseAsync
+        (
+            token: string,
+            inlineQueryId: string,
+            results: seq<Types.InlineQueryResult>,
+            cacheTime: int option,
+            isPersonal: bool option,
+            nextOffset: string option,
+            switchPmText: string option,
+            switchPmParameter: string option
+        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+                "answerInlineQuery",
+                [ "inline_query_id", inlineQueryId
+                  "results", Helpers.serializeObject results
+                  "cache_time", Helpers.toString cacheTime
+                  "is_personal", Helpers.toString isPersonal
+                  "next_offset", Helpers.toString nextOffset
+                  "switch_pm_text", Helpers.toString switchPmText
+                  "switch_pm_parameter", Helpers.toString switchPmParameter ])
+    
+    /// Use this method to send answers to an inline query. On success, True is returned. No more than 50 results per query are allowed.
+    static member AnswerInlineQueryAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the answered query
+            inlineQueryId: string,
+            /// A JSON-serialized array of results for the inline query
+            results: seq<Types.InlineQueryResult>,
+            /// The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to 300.
+            ?cacheTime: int,
+            /// Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query
+            ?isPersonal: bool,
+            /// Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don‘t support pagination. Offset length can’t exceed 64 bytes.
+            ?nextOffset: string,
+            /// If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
+            ?switchPmText: string,
+            /// Deep-linking parameter for the /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
+            ?switchPmParameter: string
+        ) = Telegram.AnswerInlineQueryBaseAsync(token, inlineQueryId, results, cacheTime, isPersonal, nextOffset, switchPmText, switchPmParameter)
+    
+    /// Use this method to send answers to an inline query. On success, True is returned. No more than 50 results per query are allowed.
+    static member AnswerInlineQuery
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the answered query
+            inlineQueryId: string,
+            /// A JSON-serialized array of results for the inline query
+            results: seq<Types.InlineQueryResult>,
+            /// The maximum amount of time in seconds that the result of the inline query may be cached on the server. Defaults to 300.
+            ?cacheTime: int,
+            /// Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query
+            ?isPersonal: bool,
+            /// Pass the offset that a client should send in the next query with the same text to receive more results. Pass an empty string if there are no more results or if you don‘t support pagination. Offset length can’t exceed 64 bytes.
+            ?nextOffset: string,
+            /// If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter
+            ?switchPmText: string,
+            /// Deep-linking parameter for the /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
+            ?switchPmParameter: string
+        ) = Telegram.AnswerInlineQueryBaseAsync(token, inlineQueryId, results, cacheTime, isPersonal, nextOffset, switchPmText, switchPmParameter) |> Async.RunSynchronously
+
+    

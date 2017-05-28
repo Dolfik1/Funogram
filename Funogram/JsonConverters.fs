@@ -12,18 +12,18 @@ type OptionConverter() =
         t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
 
     override x.WriteJson(writer, value, serializer) =
-        let value = 
+        let value =
             if isNull(value) then null
-            else 
+            else
                 let _,fields = FSharpValue.GetUnionFields(value, value.GetType())
-                fields.[0]  
+                fields.[0]
         serializer.Serialize(writer, value)
 
-    override x.ReadJson(reader, t, existingValue, serializer) =        
+    override x.ReadJson(reader, t, existingValue, serializer) =      
         let innerType = t.GetTypeInfo().GetGenericArguments().[0]
-        let innerType = 
+        let innerType =
             if innerType.GetTypeInfo().IsValueType then (typedefof<Nullable<_>>).MakeGenericType([|innerType|])
-            else innerType        
+            else innerType
         let value = serializer.Deserialize(reader, innerType)
         let cases = FSharpType.GetUnionCases(t)
         if isNull(value) then FSharpValue.MakeUnion(cases.[0], [||])

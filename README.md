@@ -21,6 +21,8 @@ F# Telegram Bot Api library
 - ❕editMessageText (not working, for now, DU not deserializes)
 - ❕editMessageCaption (not working, for now, DU not deserializes)
 - ❕editMessageReplyMarkup (not working, for now, DU not deserializes)
+- ❕deleteMessage (not tested)
+- ❕answerInlineQuery (not working, for now, DU not deserializes)
 
 
 ### In progress 🕐:
@@ -35,10 +37,6 @@ F# Telegram Bot Api library
 - sendVenue
 - sendContact
 - sendChatAction
-- editMessageCaption
-- editMessageReplyMarkup
-- deleteMessage
-- answerInlineQuery
 - sendInvoice
 - answerShippingQuery
 - answerPreCheckoutQuery

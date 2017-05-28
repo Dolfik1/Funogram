@@ -540,3 +540,499 @@ module Types =
       | Message of Message
       /// Message sent via the bot or another...
       | Success of bool
+    
+    /// Represents the content of a text message to be sent as the result of an inline query. 
+    type InputTextMessageContent =
+      { /// Text of the message to be sent, 1-4096 characters
+        MessageText: string
+        /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in your bot's message.
+        ParseMode: ParseMode option
+        /// Disables link previews for links in the sent message
+        DisableWebPagePreview: bool option }
+
+    /// Represents the content of a location message to be sent as the result of an inline query. 
+    type InputLocationMessageContent =
+      { /// Latitude of the location in degrees
+        Latitude: float
+        /// Longitude of the location in degrees
+        Longitude: float }
+
+    /// Represents the content of a venue message to be sent as the result of an inline query. 
+    type InputVenueMessageContent =
+      { /// Latitude of the venue in degrees
+        Latitude: float
+        /// Longitude of the venue in degrees
+        Longitude: float
+        /// Name of the venue
+        Title: string
+        /// Address of the venue
+        Address: string
+        /// Foursquare identifier of the venue, if known
+        FoursquareId: string option }
+
+    /// Represents the content of a contact message to be sent as the result of an inline query. 
+    type InputContactMessageContent =
+      { /// Contact's phone number
+        PhoneNumber: string
+        /// Contact's first name
+        FirstName: string
+        /// Contact's last name
+        LastName: string option }
+
+    /// This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 4 types:
+    type InputMessageContent =
+      | TextMessage of InputTextMessageContent
+      | LocationMessage of InputLocationMessageContent
+      | VenueMessage of InputVenueMessageContent
+      | ContactMessage of InputContactMessageContent
+
+
+    /// Represents a link to an mp3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+    type InlineQueryResultCachedAudio = 
+      { /// Type of the result, must be audio
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid file identifier for the audio file
+        AudioFileId: string
+        /// Caption, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the audio
+        InputMessageContent: InputMessageContent option }
+
+    /// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
+    type InlineQueryResultCachedDocument = 
+      { /// Type of the result, must be document
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// Title for the result
+        Title: string
+        /// A valid file identifier for the file
+        DocumentFileId: string
+        /// Short description of the result
+        Description: string option
+        /// Caption of the document to be sent, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the file
+        InputMessageContent: InputMessageContent option }
+      
+      /// Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with specified content instead of the animation.
+      type InlineQueryResultCachedGif =
+        { /// Type of the result, must be gif
+          Type: string
+          /// Unique identifier for this result, 1-64 bytes
+          Id: string
+          /// A valid file identifier for the GIF file
+          GifFileId: string
+          /// Title for the result
+          Title: string option
+          /// Caption of the GIF file to be sent, 0-200 characters
+          Caption: string option
+          /// Inline keyboard attached to the message
+          ReplyMarkup: InlineKeyboardMarkup option
+          /// Content of the message to be sent instead of the GIF animation
+          InputMessageContent: InputMessageContent option }
+
+    /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
+    type InlineQueryResultCachedMpeg4Gif =
+      { /// Type of the result, must be mpeg4_gif
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid file identifier for the MP4 file
+        Mpeg4FileId: string
+        /// Title for the result
+        Title: string
+        /// Caption of the MPEG-4 file to be sent, 0-200 characters
+        Caption: string
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup
+        /// Content of the message to be sent instead of the video animation
+        InputMessageContent: InputMessageContent }
+
+    /// Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
+    type InlineQueryResultCachedPhoto =
+      { /// Type of the result, must be photo
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid file identifier of the photo
+        PhotoFileId: string
+        /// Title for the result
+        Title: string option
+        /// Short description of the result
+        Description: string option
+        /// Caption of the photo to be sent, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the photo
+        InputMessageContent: InputMessageContent option }
+
+    /// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
+    type InlineQueryResultCachedSticker =
+      { /// Type of the result, must be sticker
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid file identifier of the sticker
+        StickerFileId: string
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the sticker
+        InputMessageContent: InputMessageContent option }
+
+    /// Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
+    type InlineQueryResultCachedVideo = 
+      { /// Type of the result, must be video
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid file identifier for the video file
+        VideoFileId: string
+        /// Title for the result
+        Title: string
+        /// Short description of the result
+        Description: string option
+        /// Caption of the video to be sent, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the video
+        InputMessageContent: InputMessageContent option }
+
+    /// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
+    type InlineQueryResultCachedVoice =
+      { /// Type of the result, must be voice
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid file identifier for the voice message
+        VoiceFileId: string
+        /// Voice message title
+        Title: string
+        /// Caption, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the voice message
+        InputMessageContent: InputMessageContent option }
+
+    /// Represents a link to an article or web page.
+    type InlineQueryResultArticle =
+      { /// Type of the result, must be article
+        Type: string
+        /// Unique identifier for this result, 1-64 Bytes
+        Id: string
+        /// Title of the result
+        Title: string
+        /// Content of the message to be sent
+        InputMessageContent: InputMessageContent option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// URL of the result
+        Url: string option
+        /// Pass True, if you don't want the URL to be shown in the message
+        HideUrl: bool option
+        /// Short description of the result
+        Description: string option
+        /// Url of the thumbnail for the result
+        ThumbUrl: string option
+        /// Thumbnail width
+        ThumbWidth: int option
+        /// Thumbnail height
+        ThumbHeight: int option }
+    
+    /// Represents a link to an mp3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+    type InlineQueryResultAudio = 
+      { /// Type of the result, must be audio
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid URL for the audio file
+        AudioUrl: string
+        /// Title
+        Title: string
+        /// Caption, 0-200 characters
+        Caption: string option
+        /// Performer
+        Performer: string option
+        /// Audio duration in seconds
+        AudioDuration: int option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the audio
+        InputMessageContent: InputMessageContent option }
+
+    /// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
+    type InlineQueryResultContact =
+      { /// Type of the result, must be contact
+        Type: string
+        /// Unique identifier for this result, 1-64 Bytes
+        Id: string
+        /// Contact's phone number
+        PhoneNumber: string
+        /// Contact's first name
+        FirstName: string
+        /// Contact's last name
+        LastName: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the contact
+        InputMessageContent: InputMessageContent option
+        /// Url of the thumbnail for the result
+        ThumbUrl: string option
+        /// Thumbnail width
+        ThumbWidth: int option
+        /// Thumbnail height
+        ThumbHeight: int option
+      }
+    
+    /// Represents a Game.
+    type InlineQueryResultGame = 
+      { /// Type of the result, must be game
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// Short name of the game
+        GameShortName: string
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+      }
+    
+    /// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
+    type InlineQueryResultDocument =
+      { /// Type of the result, must be document
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// Title for the result
+        Title: string
+        /// Caption of the document to be sent, 0-200 characters
+        Caption: string
+        /// A valid URL for the file
+        DocumentUrl: string
+        /// Mime type of the content of the file, either “application/pdf” or “application/zip”
+        MimeType: string
+        /// Short description of the result
+        Description: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the file
+        InputMessageContent: InputMessageContent option
+        /// URL of the thumbnail (jpeg only) for the file
+        ThumbUrl: string option
+        /// Thumbnail width
+        ThumbWidth: int option
+        /// Thumbnail height
+        ThumbHeight: int option
+      }
+
+    /// Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
+    type InlineQueryResultGif =
+      { /// Type of the result, must be gif
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid URL for the GIF file. File size must not exceed 1MB
+        GifUrl: string
+        /// Width of the GIF
+        GifWidth: int option
+        /// Height of the GIF
+        GifHeight: int option
+        /// Duration of the GIF
+        GifDuration: int option
+        /// URL of the static thumbnail for the result (jpeg or gif)
+        ThumbUrl: string
+        /// Title for the result
+        Title: string option
+        /// Caption of the GIF file to be sent, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the GIF animation
+        InputMessageContent: InputMessageContent option
+      }
+
+    /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location
+    type InlineQueryResultLocation =
+      { /// Type of the result, must be location
+        Type: string
+        /// Unique identifier for this result, 1-64 Bytes
+        Id: string
+        /// Location latitude in degrees
+        Latitude: float
+        /// Location longitude in degrees
+        Longitude: float
+        /// Location title
+        Title: string
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the location
+        InputMessageContent: InputMessageContent option
+        /// Url of the thumbnail for the result
+        ThumbUrl: string option
+        /// Thumbnail width
+        ThumbWidth: int option
+        /// Thumbnail height
+        ThumbHeight: int option
+      }
+    
+    /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation
+    type InlineQueryResultMpeg4Gif =
+      { /// Type of the result, must be mpeg4_gif
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid URL for the MP4 file. File size must not exceed 1MB
+        Mpeg4Url: string
+        /// Video width
+        Mpeg4Width: int option
+        /// Video height
+        Mpeg4Height: int option
+        /// Video duration
+        Mpeg4Duration: int option
+        /// URL of the static thumbnail (jpeg or gif) for the result
+        ThumbUrl: string
+        /// Title for the result
+        Title: string option
+        /// Caption of the MPEG-4 file to be sent, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the video animation
+        InputMessageContent: InputMessageContent option
+      }
+
+    /// Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
+    type InlineQueryResultPhoto =
+      { /// Type of the result, must be photo
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
+        PhotoUrl: string
+        /// URL of the thumbnail for the photo
+        ThumbUrl: string
+        /// Width of the photo
+        PhotoWidth: int option
+        /// Height of the photo
+        PhotoHeight: int option
+        /// Title for the result
+        Title: string option
+        /// Short description of the result
+        Description: string option
+        /// Caption of the photo to be sent, 0-200 characters
+        Caption: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the photo
+        InputMessageContent: InputMessageContent option
+      }
+    
+    /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue
+    type InlineQueryResultVenue =
+      { /// Type of the result, must be venue
+        Type: string
+        /// Unique identifier for this result, 1-64 Bytes
+        Id: string
+        /// Latitude of the venue location in degrees
+        Latitude: float
+        /// Longitude of the venue location in degrees
+        Longitude: float
+        /// Title of the venue
+        Title: string
+        /// Address of the venue
+        Address: string
+        /// Foursquare identifier of the venue if known
+        FoursquareId: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the venue
+        InputMessageContent: InputMessageContent option
+        /// Url of the thumbnail for the result
+        ThumbUrl: string option
+        /// Thumbnail width
+        ThumbWidth: int option
+        /// Thumbnail height
+        ThumbHeight: int option
+      }
+
+    /// Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
+    type InlineQueryResultVideo =
+      { /// Type of the result, must be video
+        Type: string
+        /// Unique identifier for this result, 1-64 bytes
+        Id: string
+        /// A valid URL for the embedded video player or video file
+        VideoUrl: string
+        /// Mime type of the content of video url, “text/html” or “video/mp4”
+        MimeType: string
+        /// URL of the thumbnail (jpeg only) for the video
+        ThumbUrl: string
+        /// Title for the result
+        Title: string
+        /// Caption of the video to be sent, 0-200 characters
+        Caption: string option
+        /// Video width
+        VideoWidth: int option
+        /// Video height
+        VideoHeight: int option
+        /// Video duration in seconds
+        VideoDuration: int option
+        /// Short description of the result
+        Description: string option
+        /// Inline keyboard attached to the message
+        ReplyMarkup: InlineKeyboardMarkup option
+        /// Content of the message to be sent instead of the video
+        InputMessageContent: InputMessageContent option
+      }
+
+      /// Represents a link to a voice recording in an .ogg container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
+      type InlineQueryResultVoice =
+        { /// Type of the result, must be voice
+          Type: string
+          /// Unique identifier for this result, 1-64 bytes
+          Id: string
+          /// A valid URL for the voice recording
+          VoiceUrl: string
+          /// Recording title
+          Title: string
+          /// Caption, 0-200 characters
+          Caption: string option
+          /// Recording duration in seconds
+          VoiceDuration: int option
+          /// Inline keyboard attached to the message
+          ReplyMarkup: InlineKeyboardMarkup option
+          /// Content of the message to be sent instead of the voice recording
+          InputMessageContent: InputMessageContent option
+        }
+      
+      /// This object represents one result of an inline query. Telegram clients currently support results of the 20 types
+      type InlineQueryResult = 
+        | CachedAudio of InlineQueryResultCachedAudio
+        | CachedDocument of InlineQueryResultCachedDocument
+        | CachedGif of InlineQueryResultCachedGif
+        | CachedMpeg4Gif of InlineQueryResultCachedMpeg4Gif
+        | CachedPhoto of InlineQueryResultCachedPhoto
+        | CachedSticker of InlineQueryResultCachedSticker
+        | CachedVideo of InlineQueryResultCachedVideo
+        | CachedVoice of InlineQueryResultCachedVoice
+        | Article of InlineQueryResultArticle
+        | Audio of InlineQueryResultAudio
+        | Contact of InlineQueryResultContact
+        | Game of InlineQueryResultGame
+        | Document of InlineQueryResultDocument
+        | Gif of InlineQueryResultGif
+        | Location of InlineQueryResultLocation
+        | Mpeg4Gif of InlineQueryResultMpeg4Gif
+        | Photo of InlineQueryResultPhoto
+        | Venue of InlineQueryResultVenue
+        | Video of InlineQueryResultVideo
+        | Voice of InlineQueryResultVoice
+

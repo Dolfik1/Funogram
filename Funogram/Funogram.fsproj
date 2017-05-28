@@ -14,7 +14,4 @@
     <PackageReference Include="FunHttp" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="../../Newtonsoft.Json.FSharp/JsonNet/Newtonsoft.Json.FSharp.fsproj" />
-  </ItemGroup>
 </Project>
