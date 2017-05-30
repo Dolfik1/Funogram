@@ -242,7 +242,7 @@ module Types =
     /// This object represents a message
     type Message = 
         { /// Unique message identifier inside this chat
-          MessageId: int64
+          MessageId: int
           /// Sender, can be empty for messages sent to channels
           From: User option
           [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]

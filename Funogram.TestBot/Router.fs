@@ -22,7 +22,9 @@ module Router =
 /send_message3 - Disable web page preview and notifications
 /send_message4 - Test reply message (need send command with "replied"" message)
 /send_message5 - Test ReplyKeyboardMarkup
-/send_message6 - Test RemoveKeyboardMarkup""")
+/send_message6 - Test RemoveKeyboardMarkup
+
+/forward_message - Test forward message (need send command with reply message to forward)""")
 
 
     let sendMessage1 token msg = 
@@ -55,6 +57,15 @@ module Router =
                 ChatId.ChatIdLong(msg.Chat.Id), "Keyboard was removed!", 
                 replyMarkup = Markup.ReplyKeyboardRemove({ RemoveKeyboard = true; Selective = None; }))
 
+    let forwardMessage token msg =
+        match msg.ReplyToMessage with
+        | Some x -> processError <| Telegram.ForwardMessage
+                                        (token, 
+                                        ChatId.ChatIdLong(msg.Chat.Id), 
+                                        ChatId.ChatIdLong(x.Chat.Id),
+                                        x.MessageId)
+        | _ -> processError <| Telegram.SendMessage(token, ChatId.ChatIdLong(msg.Chat.Id), "Please, send this command with reply to message!")
+
     let processMessage (bot: Bot) (message: Message) = 
         match message.Text with
         | Some x -> 
@@ -65,6 +76,8 @@ module Router =
             | "/send_message4" -> sendMessage4 bot.Token message
             | "/send_message5" -> sendMessage5 bot.Token message
             | "/send_message6" -> sendMessage5 bot.Token message
+            | "/send_message7" -> sendMessage6 bot.Token message
+            | "/forward_message" -> forwardMessage bot.Token message
             | _ -> showAvailableCommands bot.Token message
         | _ -> ()
             

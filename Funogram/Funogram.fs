@@ -118,7 +118,7 @@ type Telegram private() =
             parseMode: Types.ParseMode option, 
             disableWebPagePreview: bool option,
             disableNotification: bool option,
-            replyToMessageId: int64 option,
+            replyToMessageId: int option,
             replyMarkup: Types.Markup option
         ) =
         Telegram.MakeRequestAsync<Types.Message>
@@ -141,7 +141,7 @@ type Telegram private() =
             ?parseMode: Types.ParseMode, 
             ?disableWebPagePreview: bool,
             ?disableNotification: bool,
-            ?replyToMessageId: int64,
+            ?replyToMessageId: int,
             ?replyMarkup: Types.Markup
         ) = Telegram.SendMessageBaseAsync
                 (token, chatId, text, parseMode, disableWebPagePreview, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
@@ -155,7 +155,7 @@ type Telegram private() =
                 ?parseMode: Types.ParseMode, 
                 ?disableWebPagePreview: bool,
                 ?disableNotification: bool,
-                ?replyToMessageId: int64,
+                ?replyToMessageId: int,
                 ?replyMarkup: Types.Markup
             ) = Telegram.SendMessageBaseAsync
                     (token, chatId, text, parseMode, disableWebPagePreview, disableNotification, replyToMessageId, replyMarkup)
