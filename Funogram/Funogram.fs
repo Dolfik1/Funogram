@@ -48,7 +48,7 @@ module internal Helpers =
         match p with
         | [] -> ""
         | _ -> (param.Value 
-            |> Seq.map (fun (x, y) -> sprintf "%s=%s" x y) 
+            |> Seq.map (fun (x, y) -> sprintf "%s=%s" x (System.Net.WebUtility.UrlEncode(y))) 
             |> String.concat "&")
     let getUrlArgs (param: (string * string) list option) =
         "?" + (getFormValues param)
@@ -111,21 +111,14 @@ type Telegram private() =
         Telegram.GetMeAsync token |> Async.RunSynchronously
 
     static member internal SendMessageBaseAsync
-        (   /// Bot token
+        (   
             token: string, 
-            // 
             chatId: Types.ChatId, 
-            // 
             text: string,
-            // 
             parseMode: Types.ParseMode option, 
-            // 
             disableWebPagePreview: bool option,
-            // 
             disableNotification: bool option,
-            // 
             replyToMessageId: int64 option,
-            // 
             replyMarkup: Types.Markup option
         ) =
         Telegram.MakeRequestAsync<Types.Message>

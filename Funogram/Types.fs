@@ -451,7 +451,7 @@ module Types =
     type ReplyKeyboardMarkup =
       {
         /// Array of button rows, each represented by an Array of KeyboardButton objects
-        Keyboard: (KeyboardButton list * KeyboardButton list) list
+        Keyboard: (KeyboardButton seq) seq
         /// Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are 
         /// just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height 
         /// as the app's standard keyboard.
@@ -1035,4 +1035,3 @@ module Types =
         | Venue of InlineQueryResultVenue
         | Video of InlineQueryResultVideo
         | Voice of InlineQueryResultVoice
-

@@ -3,3 +3,4 @@ bin
 .vscode
 .vs
 packages
+Funogram.TestBot/token
