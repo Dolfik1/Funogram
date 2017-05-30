@@ -6,7 +6,7 @@ F# Telegram Bot Api library
 #### Completed 👍:
 - getUpdates
 - getMe
-- ❕sendMessage (partially completed, not tested all cases)
+- ❕sendMessage (not working replyMarkup parameter, because DU not serializes correctly)
 - ❕forwardMessage (not tested)
 - ❕getUserProfilePhotos (not tested)
 - ❕getFile (not tested)
