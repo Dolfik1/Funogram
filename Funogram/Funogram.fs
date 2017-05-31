@@ -18,7 +18,7 @@ module internal Helpers =
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = DefaultContractResolver(
                 NamingStrategy = SnakeCaseNamingStrategy()),
-            Converters = [| OptionConverter() |],
+            Converters = [| OptionConverter(); DuConverter() |],
             ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
 
     let parseJson<'a> str = 

@@ -28,3 +28,23 @@ type OptionConverter() =
         let cases = FSharpType.GetUnionCases(t)
         if isNull(value) then FSharpValue.MakeUnion(cases.[0], [||])
         else FSharpValue.MakeUnion(cases.[1], [|value|])
+
+type DuConverter() = 
+    inherit JsonConverter()
+    
+    override x.CanConvert(t) =
+        FSharpType.IsUnion(t)
+        
+    override x.WriteJson(writer, value, serializer) = 
+        let t = value.GetType()
+        let caseInfo, fieldValues = FSharpValue.GetUnionFields(value, t)
+
+        let value =
+            match fieldValues.Length with
+            | 0 -> null
+            | 1 -> fieldValues.[0]
+            | _ -> fieldValues :> obj
+        serializer.Serialize(writer, value)
+    
+    override x.ReadJson(reader, t, existingValue, serializer) = 
+        failwith "Not implemented!"

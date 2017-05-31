@@ -24,8 +24,17 @@ let ``JSON deserializing User`` () =
         | Ok r -> shouldEqual r Constants.jsonTestObjUser
         | Error e -> failwith(e.Description)
 
+
 [<Fact>]
 let ``JSON deserializing EditMessageResult 1`` () =
         match Helpers.parseJson<EditMessageResult>(Constants.jsonTestEditResult1String) with
         | Ok r -> shouldEqual r Constants.jsonTestEditResult1
         | Error e -> failwith(e.Description)
+
+[<Fact>]
+let ``JSON serializing EditMessageResult 1`` () =
+        shouldEqual (Helpers.serializeObject Constants.jsonTestEditResult1) Constants.jsonTestEditResult1String
+
+[<Fact>]
+let ``JSON serializing EditMessageResult 2`` () =
+        shouldEqual (Helpers.serializeObject Constants.jsonTestEditResult2) Constants.jsonTestEditResult2String

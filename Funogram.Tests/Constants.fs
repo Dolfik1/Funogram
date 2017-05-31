@@ -51,4 +51,4 @@ module Constants =
           PinnedMessage = None }
 
     let jsonTestEditResult2 = EditMessageResult.Message(jsonTestMessage)
-    let jsonTestEditResult2String = """{"message_id":123,"date":4651649271,"text":"abc","chat":{"id":123,"type":"group","title":"Test group","all_members_are_administrators":true}}"""
+    let jsonTestEditResult2String = """{"message_id":123,"date":4651649271,"chat":{"id":1,"type":"group","title":"Test group","all_members_are_administrators":true},"text":"abc"}"""
