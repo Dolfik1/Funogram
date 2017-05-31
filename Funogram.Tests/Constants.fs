@@ -15,7 +15,7 @@ module Constants =
 
     let jsonTestChat = { Id = 1L; Type = "group"; Title = Some("Test group"); Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = Some(true) }
     let jsonTestMessage = 
-        { MessageId = 123L
+        { MessageId = 123
           Date = System.DateTime(2117, 05, 28, 12, 47, 51)
           Text = Some("abc")
           Chat = jsonTestChat
