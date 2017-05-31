@@ -8,12 +8,12 @@ F# Telegram Bot Api library
 - getMe
 - forwardMessage
 - ❕sendMessage (not working replyMarkup parameter, because DU not serializes correctly)
-- ❕getUserProfilePhotos (not tested)
+- getUserProfilePhotos
 - ❕getFile (not tested)
 - ❕kickChatMember (not tested)
 - ❕unbanChatMember (not tested)
 - ❕leaveChat (not tested)
-- ❕getChat (not tested)
+- getChat
 - ❕getChatAdministrators (not tested)
 - ❕getChatMembersCount (not tested)
 - ❕getChatMember (not tested)

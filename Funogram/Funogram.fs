@@ -55,9 +55,9 @@ module internal Helpers =
 
     let getChatIdString (chatId: Types.ChatId) =
         match chatId with
-        | ChatIdInt v -> v |> string
-        | ChatIdLong v -> v |> string
-        | ChatIdString v -> v
+        | Int v -> v |> string
+        | Long v -> v |> string
+        | String v -> v
 
     let getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
 
@@ -239,9 +239,9 @@ type Telegram private() =
             /// Unique identifier of the target user
             userId: int,
             /// Sequential number of the first photo to be returned. By default, all photos are returned.
-            offset: int option,
+            ?offset: int,
             /// Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.
-            limit: int option
+            ?limit: int
         ) = Telegram.GetUserProfilePhotosBaseAsync(token, userId, offset, limit) |> Async.RunSynchronously
         
     // Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
@@ -251,9 +251,9 @@ type Telegram private() =
             /// Unique identifier of the target user
             userId: int,
             /// Sequential number of the first photo to be returned. By default, all photos are returned.
-            offset: int option,
+            ?offset: int,
             /// Limits the number of photos to be retrieved. Values between 1—100 are accepted. Defaults to 100.
-            limit: int option
+            ?limit: int
         ) = Telegram.GetUserProfilePhotosBaseAsync(token, userId, offset, limit)
 
 

@@ -11,9 +11,9 @@ module Types =
     open Newtonsoft.Json
 
     type ChatId = 
-      | ChatIdInt of int
-      | ChatIdLong of int64
-      | ChatIdString of string
+      | Int of int
+      | Long of int64
+      | String of string
 
 
     [<CLIMutable>]
