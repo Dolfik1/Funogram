@@ -27,8 +27,14 @@ let ``JSON deserializing User`` () =
 
 [<Fact>]
 let ``JSON deserializing EditMessageResult 1`` () =
-        match Helpers.parseJson<EditMessageResult>(Constants.jsonTestEditResult1String) with
+        match Helpers.parseJson<EditMessageResult>(Constants.jsonTestEditResult1ApiString) with
         | Ok r -> shouldEqual r Constants.jsonTestEditResult1
+        | Error e -> failwith(e.Description)
+
+[<Fact>]
+let ``JSON deserializing EditMessageResult 2`` () =
+        match Helpers.parseJson<EditMessageResult>(Constants.jsonTestEditResult2ApiString) with
+        | Ok r -> shouldEqual r Constants.jsonTestEditResult2
         | Error e -> failwith(e.Description)
 
 [<Fact>]

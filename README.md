@@ -7,7 +7,7 @@ F# Telegram Bot Api library
 - getUpdates
 - getMe
 - forwardMessage
-- ❕sendMessage (not working replyMarkup parameter, because DU not serializes correctly)
+- ❕sendMessage (not tested ForceReply and Inline)
 - getUserProfilePhotos
 - ❕getFile (not tested)
 - ❕kickChatMember (not tested)
@@ -22,7 +22,7 @@ F# Telegram Bot Api library
 - ❕editMessageCaption (not working, for now, DU not deserializes)
 - ❕editMessageReplyMarkup (not working, for now, DU not deserializes)
 - ❕deleteMessage (not tested)
-- ❕answerInlineQuery (not working, for now, DU not deserializes)
+- ❕answerInlineQuery (not tested)
 
 
 ### In progress 🕐:

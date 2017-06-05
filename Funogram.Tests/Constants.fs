@@ -12,6 +12,7 @@ module Constants =
 
     let jsonTestEditResult1 = EditMessageResult.Success(true)
     let jsonTestEditResult1String = "true"
+    let jsonTestEditResult1ApiString = """{"ok":true,"result":true}"""
 
     let jsonTestChat = { Id = 1L; Type = "group"; Title = Some("Test group"); Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = Some(true) }
     let jsonTestMessage = 
@@ -52,3 +53,4 @@ module Constants =
 
     let jsonTestEditResult2 = EditMessageResult.Message(jsonTestMessage)
     let jsonTestEditResult2String = """{"message_id":123,"date":4651649271,"chat":{"id":1,"type":"group","title":"Test group","all_members_are_administrators":true},"text":"abc"}"""
+    let jsonTestEditResult2ApiString = sprintf """{"ok":true,"result":%s}""" jsonTestEditResult2String

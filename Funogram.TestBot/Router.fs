@@ -85,8 +85,7 @@ module Router =
             | "/send_message3" -> sendMessage3 bot.Token message
             | "/send_message4" -> sendMessage4 bot.Token message
             | "/send_message5" -> sendMessage5 bot.Token message
-            | "/send_message6" -> sendMessage5 bot.Token message
-            | "/send_message7" -> sendMessage6 bot.Token message
+            | "/send_message6" -> sendMessage6 bot.Token message
             | "/forward_message" -> forwardMessage bot.Token message
             | "/show_my_photos_sizes" -> showMyPhotos bot.Token message
             | "/get_chat_info" -> getChatInfo bot.Token message

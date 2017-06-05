@@ -25,7 +25,7 @@ module internal JsonHelpers =
             elif isNull(reader.Value) then
                 box null
             else
-                let v = (reader.Value |> string |> float |> DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddMilliseconds)
+                let v = (reader.Value |> string |> float |> DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds)
                 if isOption objectType then
                     box (Some v)
                 else
