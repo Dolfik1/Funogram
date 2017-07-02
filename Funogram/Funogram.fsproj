@@ -8,6 +8,9 @@
     <Compile Include="Types.fs" />
     <Compile Include="Helpers.fs" />
     <Compile Include="Api.fs" />
+
+    <Compile Include="Bot/Sscanf.fs" />
+    <Compile Include="Bot/Bot.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="4.1.*" />

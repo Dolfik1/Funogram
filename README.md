@@ -26,9 +26,9 @@ F# Telegram Bot Api library
 - ❕sendInvoice (not tested)
 - ❕answerShippingQuery (not tested)
 - ❕answerPreCheckoutQuery (not tested)
+- ❕sendPhoto (not tested)
 
 ### In progress 🕐:
-- sendPhoto
 - sendAudio
 - sendDocument
 - sendSticker

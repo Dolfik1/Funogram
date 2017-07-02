@@ -10,7 +10,7 @@ do()
 [<AbstractClass>]
 type Telegram private() =
     /// Receive incoming updates using long polling
-    static member internal GetUpdatesBaseAsync (token: string, offset: int64 option, limit: int option, timeout: int option) =
+    static member GetUpdatesBaseAsync (token: string, offset: int64 option, limit: int option, timeout: int option) =
         Api.MakeRequestAsync<seq<Types.Update>>
             ( token, 
               "getUpdates",
@@ -34,7 +34,7 @@ type Telegram private() =
     static member GetMe token =
         Telegram.GetMeAsync token |> Async.RunSynchronously
 
-    static member internal SendMessageBaseAsync
+    static member SendMessageBaseAsync
         (   
             token: string, 
             chatId: Types.ChatId, 
@@ -762,7 +762,7 @@ type Telegram private() =
                 photoSize, photoWidth, photoHeight, needName, needPhoneNumber, needEmail, needShippingAddress, isFlexible, disableNotification, 
                 replyToMessageId, replyMarkup) |> Async.RunSynchronously
 
-    static member AnswerShippingQueryBaseAsync
+    static member internal AnswerShippingQueryBaseAsync
         (   
             token: string,
             shippingQueryId: string,
@@ -804,8 +804,7 @@ type Telegram private() =
             ?errorMessage: string
         ) = Telegram.AnswerShippingQueryBaseAsync(token, shippingQueryId, ok, shippingOptions, errorMessage) |> Async.RunSynchronously
 
-    
-    static member AnswerPreCheckoutQueryBaseAsync
+    static member internal AnswerPreCheckoutQueryBaseAsync
         (   
             token: string,
             preCheckoutQueryId: string,
@@ -841,4 +840,56 @@ type Telegram private() =
             ?errorMessage: string
         ) = Telegram.AnswerPreCheckoutQueryBaseAsync(token, preCheckoutQueryId, ok, errorMessage) |> Async.RunSynchronously
 
+    static member internal SendPhotoBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            photo: Types.FileToSend,
+            caption: string,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "answerInlineQuery",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "photo", box photo
+                  "caption", box caption
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send photos
+    static member SendPhotoAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo.
+            photo: Types.FileToSend,
+            /// Photo caption (may also be used when resending photos by file_id), 0-200 characters
+            caption: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendPhotoBaseAsync(token, chatId, photo, caption, disableNotification, replyToMessageId, replyMarkup)
     
+    /// Use this method to send photos. On success, the sent Message is returned.
+    static member SendPhoto
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo.
+            photo: Types.FileToSend,
+            /// Photo caption (may also be used when resending photos by file_id), 0-200 characters
+            caption: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendPhotoBaseAsync(token, chatId, photo, caption, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously

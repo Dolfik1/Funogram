@@ -60,7 +60,7 @@ module internal Helpers =
         else None
        
 [<AbstractClass>]
-type Api private() =
+type internal Api private() =
     static member private Client = new HttpClient()
     static member private ConvertParameterValue (value: obj): (HttpContent * string option) = 
         let typeInfo = value.GetType().GetTypeInfo()
