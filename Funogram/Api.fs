@@ -1,7 +1,5 @@
 namespace Funogram
 
-open FunHttp
-open FunHttp.HttpRequestHeaders
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 open System.Runtime.CompilerServices
@@ -9,91 +7,16 @@ open System.Runtime.CompilerServices
 [<assembly: InternalsVisibleTo("Funogram.Tests")>]
 do()
 
-module internal Helpers =
-    open Types
-    let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
-
-    let jsonOpts = 
-        JsonSerializerSettings(
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = DefaultContractResolver(
-                NamingStrategy = SnakeCaseNamingStrategy()),
-            Converters = [| OptionConverter(); DuConverter() |],
-            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
-
-    let parseJson<'a> str = 
-        match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
-        | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
-        | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-            Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
-        | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
-
-    let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
-    let serializeOptionObject (o: 'a option) = 
-        match o with
-        | None -> ""
-        | _ -> serializeObject o
-
-    let inline toString arg = arg |> Option.map string |> Option.defaultValue ""
-    let parseModeName parseMode = 
-        match parseMode with
-        | None -> ""
-        | _ -> match parseMode.Value with
-                | HTML -> "HTML"
-                | Markdown -> "Markdown"
-
-    let getFormValues (param: (string * string) list option) =
-        let p = (param |> Option.defaultValue []) 
-                |> List.filter (fun (x, y) -> System.String.IsNullOrWhiteSpace(y) |> not)
-        match p with
-        | [] -> ""
-        | _ -> (param.Value 
-            |> Seq.map (fun (x, y) -> sprintf "%s=%s" x (System.Net.WebUtility.UrlEncode(y))) 
-            |> String.concat "&")
-    let getUrlArgs (param: (string * string) list option) =
-        "?" + (getFormValues param)
-
-    let getChatIdString (chatId: Types.ChatId) =
-        match chatId with
-        | Int v -> v |> string
-        | Long v -> v |> string
-        | String v -> v
-
-    let getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
-
 [<AbstractClass>]
 type Telegram private() =
-
-    static member internal MakeRequestAsync<'a> 
-        (
-            token: string,
-            methodName: string,
-            ?param: (string * string) list,
-            ?httpMethod: string
-        ) = 
-        async {
-            let method = httpMethod |> Option.defaultWith (fun x -> HttpMethod.Get)
-            return 
-                match method with
-                | "GET" -> Http.RequestString ((Helpers.getUrl token methodName) + (Helpers.getUrlArgs param)) 
-                                    |> Helpers.parseJson<'a>
-                | "POST" -> Http.RequestString
-                                ((Helpers.getUrl token methodName), 
-                                httpMethod = "POST",
-                                headers = [ ContentType HttpContentTypes.FormValues ],
-                                body = TextRequest ((Helpers.getFormValues param)))
-                            |> Helpers.parseJson<'a>
-                | _ -> failwith "Unsupported request"
-        }
-
     /// Receive incoming updates using long polling
     static member internal GetUpdatesBaseAsync (token: string, offset: int64 option, limit: int option, timeout: int option) =
-        Telegram.MakeRequestAsync<seq<Types.Update>>
+        Api.MakeRequestAsync<seq<Types.Update>>
             ( token, 
               "getUpdates",
-              [ "offset", Helpers.toString offset
-                "limit", Helpers.toString limit
-                "timeout", Helpers.toString timeout ])
+              [ "offset", box offset
+                "limit", box limit
+                "timeout", box timeout ])
 
     /// Receive incoming updates using long polling
     static member GetUpdatesAsync (token: string, ?offset: int64, ?limit: int, ?timeout: int) =
@@ -105,7 +28,7 @@ type Telegram private() =
 
     /// Returns basic information about the bot in form of a User object.
     static member GetMeAsync token =
-        Telegram.MakeRequestAsync<Types.User>(token, "getMe")
+        Api.MakeRequestAsync<Types.User>(token, "getMe")
 
     /// Returns basic information about the bot in form of a User object.        
     static member GetMe token =
@@ -122,16 +45,16 @@ type Telegram private() =
             replyToMessageId: int option,
             replyMarkup: Types.Markup option
         ) =
-        Telegram.MakeRequestAsync<Types.Message>
+        Api.MakeRequestAsync<Types.Message>
             (token, 
               "sendMessage",
-              [ "chat_id", Helpers.getChatIdString chatId
-                "text", text
-                "parse_mode", Helpers.parseModeName parseMode
-                "disable_web_page_preview", Helpers.toString disableWebPagePreview
-                "disable_notification", Helpers.toString disableNotification
-                "reply_to_message_id", Helpers.toString replyToMessageId
-                "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+              [ "chat_id", box (Helpers.getChatIdString chatId)
+                "text", box text
+                "parse_mode", box (Helpers.parseModeName parseMode)
+                "disable_web_page_preview", box disableWebPagePreview
+                "disable_notification", box disableNotification
+                "reply_to_message_id", box replyToMessageId
+                "reply_markup", box replyMarkup ])
 
     /// Use this method to send text messages. On success, the sent Message is returned
     static member SendMessage
@@ -168,12 +91,12 @@ type Telegram private() =
             fromChatId: Types.ChatId,
             messageId: int,
             disableNotification: bool option
-        ) = Telegram.MakeRequestAsync<Types.Message> (token, 
+        ) = Api.MakeRequestAsync<Types.Message> (token, 
                 "forwardMessage",
-                [ "chat_id", Helpers.getChatIdString chatId
-                  "from_chat_id", Helpers.getChatIdString fromChatId
-                  "disable_notification", Helpers.toString disableNotification
-                  "message_id", messageId.ToString() ])
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "from_chat_id", box (Helpers.getChatIdString fromChatId)
+                  "disable_notification", box disableNotification
+                  "message_id", box messageId ])
 
     /// Use this method to forward messages of any kind. On success, the sent Message is returned.
     static member ForwardMessage 
@@ -227,11 +150,11 @@ type Telegram private() =
             userId: int,
             offset: int option,
             limit: int option
-        ) = Telegram.MakeRequestAsync<Types.UserProfilePhotos> (token, 
+        ) = Api.MakeRequestAsync<Types.UserProfilePhotos> (token, 
                 "getUserProfilePhotos",
-                [ "user_id", userId.ToString()
-                  "offset", Helpers.toString offset
-                  "limit", Helpers.toString limit ])
+                [ "user_id", box userId
+                  "offset", box offset
+                  "limit", box limit ])
 
     /// Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
     static member GetUserProfilePhotos
@@ -264,9 +187,9 @@ type Telegram private() =
             token: string,
             /// File identifier to get info about
             fileId: string
-        ) = Telegram.MakeRequestAsync<Types.File> (token, 
+        ) = Api.MakeRequestAsync<Types.File> (token, 
                 "getFile",
-                [ "user_id", fileId ])
+                [ "user_id", box fileId ])
 
     /// Use this method to get basic info about a file and prepare it for downloading. For the moment, bots can download files of up to 20MB in size. On success, a File object is returned. The file can then be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>, where <file_path> is taken from the response. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile again.
     static member internal GetFile 
@@ -285,10 +208,10 @@ type Telegram private() =
             chatId: Types.ChatId,
             /// Unique identifier of the target user
             userId: int
-        ) = Telegram.MakeRequestAsync<bool>(token, 
+        ) = Api.MakeRequestAsync<bool>(token, 
                 "kickChatMember",
-                [ "chat_id", Helpers.getChatIdString chatId
-                  "user_id", userId.ToString() ])
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "user_id", box userId ])
 
     /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the group for this to work. Returns True on success. Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
     static member KickChatMember
@@ -308,10 +231,10 @@ type Telegram private() =
             chatId: Types.ChatId,
             /// Unique identifier of the target user
             userId: int
-        ) = Telegram.MakeRequestAsync<bool>(token, 
+        ) = Api.MakeRequestAsync<bool>(token, 
                 "unbanChatMember",
-                [ "chat_id", Helpers.getChatIdString chatId
-                  "user_id", userId.ToString() ])
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "user_id", box userId ])
 
     /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
     static member UnbanChatMember
@@ -329,7 +252,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Telegram.MakeRequestAsync<bool>(token, "leaveChat", [ "chat_id", Helpers.getChatIdString chatId ])
+        ) = Api.MakeRequestAsync<bool>(token, "leaveChat", [ "chat_id", box (Helpers.getChatIdString chatId) ])
 
     /// Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
     static member LeaveChat
@@ -345,7 +268,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Telegram.MakeRequestAsync<Types.Chat>(token, "getChat", [ "chat_id", Helpers.getChatIdString chatId ])
+        ) = Api.MakeRequestAsync<Types.Chat>(token, "getChat", [ "chat_id", box (Helpers.getChatIdString chatId) ])
 
     /// Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.
     static member GetChat
@@ -361,7 +284,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Telegram.MakeRequestAsync<seq<Types.ChatMember>>(token, "getChatAdministrators", [ "chat_id", Helpers.getChatIdString chatId ])
+        ) = Api.MakeRequestAsync<seq<Types.ChatMember>>(token, "getChatAdministrators", [ "chat_id", box (Helpers.getChatIdString chatId) ])
 
     /// Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.
     static member GetChatAdministrators
@@ -377,7 +300,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Telegram.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", Helpers.getChatIdString chatId ])
+        ) = Api.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", box (Helpers.getChatIdString chatId) ])
     
     /// Use this method to get the number of members in a chat. Returns Int on success.
     static member GetChatMembersCount
@@ -385,7 +308,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Telegram.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", Helpers.getChatIdString chatId ]) |> Async.RunSynchronously
+        ) = Api.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", box (Helpers.getChatIdString chatId) ]) |> Async.RunSynchronously
 
     /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
     static member GetChatMemberAsync
@@ -395,10 +318,10 @@ type Telegram private() =
             chatId: Types.ChatId,
             /// Unique identifier of the target user
             userId: int
-        ) = Telegram.MakeRequestAsync<Types.ChatMember>(token, 
+        ) = Api.MakeRequestAsync<Types.ChatMember>(token, 
                 "getChatMember",
-                [ "chat_id", Helpers.getChatIdString chatId
-                  "user_id", userId.ToString() ])
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "user_id", box userId ])
 
     /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
     static member GetChatMember
@@ -418,13 +341,13 @@ type Telegram private() =
             showAlert: bool option,
             url: string option,
             cacheTime: int option
-        ) = Telegram.MakeRequestAsync<bool>(token, 
+        ) = Api.MakeRequestAsync<bool>(token, 
                 "answerCallbackQuery",
-                [ "callback_query_id", Helpers.toString callbackQueryId
-                  "text", Helpers.toString text
-                  "show_alert", Helpers.toString showAlert
-                  "url", Helpers.toString url
-                  "cache_time", Helpers.toString cacheTime ])
+                [ "callback_query_id", box callbackQueryId
+                  "text", box text
+                  "show_alert", box showAlert
+                  "url", box url
+                  "cache_time", box cacheTime ])
 
     /// Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.
     /// Alternatively, the user can be redirected to the specified Game URL. For this option to work, you must first create a game for your bot via BotFather and accept the terms. Otherwise, you may use links like telegram.me/your_bot?start=XXXX that open your bot with a parameter.
@@ -472,15 +395,15 @@ type Telegram private() =
             parseMode: Types.ParseMode option,
             disableWebPagePreview: bool option,
             replyMarkup: Types.InlineKeyboardMarkup option
-        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+        ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "editMessageText",
-                [ "chat_id", Helpers.toString chatId
-                  "message_id", Helpers.toString messageId
-                  "inline_message_id", Helpers.toString inlineMessageId
-                  "text", text
-                  "parse_mode", Helpers.parseModeName parseMode
-                  "disable_web_page_preview", Helpers.toString disableWebPagePreview
-                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+                [ "chat_id", box chatId
+                  "message_id", box messageId
+                  "inline_message_id", box inlineMessageId
+                  "text", box text
+                  "parse_mode", box (Helpers.parseModeName parseMode)
+                  "disable_web_page_preview", box disableWebPagePreview
+                  "reply_markup", box replyMarkup ])
     
     /// Use this method to edit text and game messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
     static member EditMessageTextAsync
@@ -532,13 +455,13 @@ type Telegram private() =
             inlineMessageId: string option,
             caption: string option,
             replyMarkup: Types.InlineKeyboardMarkup option
-        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+        ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "editMessageCaption",
-                [ "chat_id", Helpers.getChatIdStringOption chatId
-                  "message_id", Helpers.toString messageId
-                  "inline_message_id", Helpers.toString inlineMessageId
-                  "caption", Helpers.toString caption
-                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+                [ "chat_id", box (Helpers.getChatIdStringOption chatId)
+                  "message_id", box messageId
+                  "inline_message_id", box inlineMessageId
+                  "caption", box caption
+                  "reply_markup", box replyMarkup ])
     
     /// Use this method to edit captions of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned
     static member EditMessageCaptionAsync
@@ -579,12 +502,12 @@ type Telegram private() =
             messageId: int option,
             inlineMessageId: string option,
             replyMarkup: Types.InlineKeyboardMarkup option
-        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+        ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "editMessageReplyMarkup",
-                [ "chat_id", Helpers.getChatIdStringOption chatId
-                  "message_id", Helpers.toString messageId
-                  "inline_message_id", Helpers.toString inlineMessageId
-                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+                [ "chat_id", box (Helpers.getChatIdStringOption chatId)
+                  "message_id", box messageId
+                  "inline_message_id", box inlineMessageId
+                  "reply_markup", box replyMarkup ])
 
     /// Use this method to edit only the reply markup of messages sent by the bot or via the bot (for inline bots). On success, if edited message is sent by the bot, the edited Message is returned, otherwise True is returned.
     static member EditMessageReplyMarkupAsync
@@ -622,10 +545,10 @@ type Telegram private() =
             chatId: Types.ChatId,
             /// Identifier of the message to delete
             messageId: int
-        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+        ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "deleteMessage",
-                [ "chatId", Helpers.getChatIdString chatId
-                  "message_id", messageId.ToString() ])   
+                [ "chatId", box (Helpers.getChatIdString chatId)
+                  "message_id", box messageId ])   
 
     /// Use this method to delete a message. A message can only be deleted if it was sent less than 48 hours ago. Any such recently sent outgoing message may be deleted. Additionally, if the bot is an administrator in a group chat, it can delete any message. If the bot is an administrator in a supergroup, it can delete messages from any other user and service messages about people joining or leaving the group (other types of service messages may only be removed by the group creator). In channels, bots can only remove their own messages. Returns True on success. 
     static member DeleteMessage
@@ -648,15 +571,15 @@ type Telegram private() =
             nextOffset: string option,
             switchPmText: string option,
             switchPmParameter: string option
-        ) = Telegram.MakeRequestAsync<Types.EditMessageResult>(token,
+        ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "answerInlineQuery",
-                [ "inline_query_id", inlineQueryId
-                  "results", Helpers.serializeObject results
-                  "cache_time", Helpers.toString cacheTime
-                  "is_personal", Helpers.toString isPersonal
-                  "next_offset", Helpers.toString nextOffset
-                  "switch_pm_text", Helpers.toString switchPmText
-                  "switch_pm_parameter", Helpers.toString switchPmParameter ])
+                [ "inline_query_id", box inlineQueryId
+                  "results", box results
+                  "cache_time", box cacheTime
+                  "is_personal", box isPersonal
+                  "next_offset", box nextOffset
+                  "switch_pm_text", box switchPmText
+                  "switch_pm_parameter", box switchPmParameter ])
     
     /// Use this method to send answers to an inline query. On success, True is returned. No more than 50 results per query are allowed.
     static member AnswerInlineQueryAsync
@@ -721,28 +644,28 @@ type Telegram private() =
             disableNotification: bool option,
             replyToMessageId: int option,
             replyMarkup: Types.InlineKeyboardMarkup option
-        ) = Telegram.MakeRequestAsync<Types.Message>(token,
+        ) = Api.MakeRequestAsync<Types.Message>(token,
                 "answerInlineQuery",
-                [ "chat_id", chatId |> string
-                  "title", title
-                  "payload", payload
-                  "provider_token", providerToken
-                  "start_parameter", startParameter
-                  "currency", currency
-                  "prices", Helpers.serializeObject prices
-                  "photo_url", Helpers.toString photoUrl
-                  "description", Helpers.toString description
-                  "photo_size", Helpers.toString photoSize
-                  "photo_width", Helpers.toString photoWidth
-                  "photo_height", Helpers.toString photoHeight
-                  "need_name", Helpers.toString needName
-                  "need_phone_number", Helpers.toString needPhoneNumber
-                  "need_email", Helpers.toString needEmail
-                  "need_shipping_address", Helpers.toString needShippingAddress
-                  "is_flexible", Helpers.toString isFlexible
-                  "disable_notification", Helpers.toString disableNotification
-                  "reply_to_message_id", Helpers.toString replyToMessageId
-                  "reply_markup", Helpers.serializeOptionObject replyMarkup ])
+                [ "chat_id", box chatId
+                  "title", box title
+                  "payload", box payload
+                  "provider_token", box providerToken
+                  "start_parameter", box startParameter
+                  "currency", box currency
+                  "prices", box prices
+                  "photo_url", box photoUrl
+                  "description", box description
+                  "photo_size", box photoSize
+                  "photo_width", box photoWidth
+                  "photo_height", box photoHeight
+                  "need_name", box needName
+                  "need_phone_number", box needPhoneNumber
+                  "need_email", box needEmail
+                  "need_shipping_address", box needShippingAddress
+                  "is_flexible", box isFlexible
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
 
     /// Use this method to send invoices
     static member internal SendInvoiceAsync
@@ -846,12 +769,12 @@ type Telegram private() =
             ok: bool,
             shippingOptions: Types.ShippingOption seq option,
             errorMessage: string option
-        ) = Telegram.MakeRequestAsync<bool>(token,
+        ) = Api.MakeRequestAsync<bool>(token,
                 "answerInlineQuery",
-                [ "shipping_query_id", shippingQueryId
-                  "ok", ok |> string
-                  "shipping_options", Helpers.serializeOptionObject shippingOptions
-                  "error_message", Helpers.toString errorMessage ])
+                [ "shipping_query_id", box shippingQueryId
+                  "ok", box ok
+                  "shipping_options", box shippingOptions
+                  "error_message", box errorMessage ])
 
     /// If you sent an invoice requesting a shipping address and the parameter is_flexible was specified, the Bot API will send an Update with a shipping_query field to the bot. Use this method to reply to shipping queries
     static member AnswerShippingQueryAsync
@@ -888,11 +811,11 @@ type Telegram private() =
             preCheckoutQueryId: string,
             ok: bool,
             errorMessage: string option
-        ) = Telegram.MakeRequestAsync<bool>(token,
+        ) = Api.MakeRequestAsync<bool>(token,
                 "answerInlineQuery",
-                [ "pre_checkout_query_id", preCheckoutQueryId
-                  "ok", ok |> string
-                  "error_message", Helpers.toString errorMessage ])
+                [ "pre_checkout_query_id", box preCheckoutQueryId
+                  "ok", box ok
+                  "error_message", box errorMessage ])
 
     /// Once the user has confirmed their payment and shipping details, the Bot API sends the final confirmation in the form of an Update with the field pre_checkout_query. Use this method to respond to such pre-checkout queries. On success, True is returned. Note: The Bot API must receive an answer within 10 seconds after the pre-checkout query was sent.
     static member AnswerPreCheckoutQueryAsync

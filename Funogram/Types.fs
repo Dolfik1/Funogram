@@ -1,5 +1,6 @@
 namespace Funogram
 
+open System.IO
 open System.Runtime.CompilerServices
 
 // Allow construct types to Funogram.Tests
@@ -554,7 +555,7 @@ module Types =
           /// New incoming callback query
           CallbackQuery: CallbackQuery option }
 
-        /// Message text parsing mode
+    /// Message text parsing mode
     type ParseMode = 
       /// Markdown parse syntax
       | Markdown
@@ -1215,3 +1216,8 @@ module Types =
         | Venue of InlineQueryResultVenue
         | Video of InlineQueryResultVideo
         | Voice of InlineQueryResultVoice
+
+    type FileToSend = 
+      | Url of Uri 
+      | File of string * Stream
+      | FileId of string

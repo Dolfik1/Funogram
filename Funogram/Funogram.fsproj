@@ -6,12 +6,12 @@
     <Compile Include="JsonConverters.fs" />
     <Compile Include="JsonHelpers.fs" />
     <Compile Include="Types.fs" />
+    <Compile Include="Helpers.fs" />
     <Compile Include="Api.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="4.1.*" />
     <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
-    <PackageReference Include="FunHttp" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
   </ItemGroup>
 </Project>

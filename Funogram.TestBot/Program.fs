@@ -13,7 +13,6 @@ module Main =
             let rec loopAsync offset = async {
                 try
                     let! updatesResult = Telegram.GetUpdatesAsync(token, offset, 100, 60000)
-
                     match updatesResult with
                     | Ok updates -> 
                         if updates |> Seq.isEmpty then
@@ -30,6 +29,8 @@ module Main =
                                 return! loopAsync offset
                 with
                     | ex -> printfn "Error: %s" ex.Message
+                            printfn "%O" ex
+                            return! loopAsync (offset + 1L)
                 
                 //do! Async.Sleep 1000
                 return! loopAsync offset
