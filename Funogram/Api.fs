@@ -2,6 +2,7 @@ namespace Funogram
 
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
+open System
 open System.Runtime.CompilerServices
 
 [<assembly: InternalsVisibleTo("Funogram.Tests")>]
@@ -1231,15 +1232,15 @@ type Telegram private() =
             /// Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video. Sending video notes by a URL is currently unsupported
             videoNote: Types.FileToSend,
             /// Duration of sent video in seconds
-            duration: int option,
+            ?duration: int,
             /// Video width and height
-            length: int option,
+            ?length: int,
             /// Sends the message silently. Users will receive a notification with no sound.
-            disableNotification: bool option,
+            ?disableNotification: bool,
             /// If the message is a reply, ID of the original message
-            replyToMessageId: int option,
+            ?replyToMessageId: int,
             /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
-            replyMarkup: Types.Markup option
+            ?replyMarkup: Types.Markup
         ) = Telegram.SendVideoNoteBaseAsync(token, chatId, videoNote, duration, length, disableNotification, replyToMessageId, replyMarkup)
 
     /// As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages
@@ -1251,13 +1252,713 @@ type Telegram private() =
             /// Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video. Sending video notes by a URL is currently unsupported
             videoNote: Types.FileToSend,
             /// Duration of sent video in seconds
-            duration: int option,
+            ?duration: int,
             /// Video width and height
-            length: int option,
+            ?length: int,
             /// Sends the message silently. Users will receive a notification with no sound.
-            disableNotification: bool option,
+            ?disableNotification: bool,
             /// If the message is a reply, ID of the original message
-            replyToMessageId: int option,
+            ?replyToMessageId: int,
             /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
-            replyMarkup: Types.Markup option
+            ?replyMarkup: Types.Markup
         ) = Telegram.SendVideoNoteBaseAsync(token, chatId, videoNote, duration, length, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendLocationBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            latitude: float,
+            longitude: float,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendLocation",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "latitude", box latitude
+                  "longitude", box longitude
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send point on the map
+    static member SendLocationAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Latitude of location
+            latitude: float,
+            /// Longitude of location
+            longitude: float,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendLocationBaseAsync(token, chatId, latitude, longitude, disableNotification, replyToMessageId, replyMarkup)
+
+    /// Use this method to send point on the map
+    static member SendLocation
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Latitude of location
+            latitude: float,
+            /// Longitude of location
+            longitude: float,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendLocationBaseAsync(token, chatId, latitude, longitude, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendVenueBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId,
+            latitude: float,
+            longitude: float,
+            title: string,
+            address: string,
+            foursquareId: string option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendVenue",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "latitude", box latitude
+                  "longitude", box longitude
+                  "longitude", box longitude
+                  "title", box title
+                  "address", box address
+                  "foursquare_id", box foursquareId
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send information about a venue
+    static member SendVenueAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Latitude of the venue
+            latitude: float,
+            /// Longitude of the venue
+            longitude: float,
+            /// Name of the venue
+            title: string,
+            /// Address of the venue
+            address: string,
+            /// Foursquare identifier of the venue
+            ?foursquareId: string,
+            /// Sends the message silently. Users will receive a notification with no sound
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendVenueBaseAsync(token, chatId, latitude, longitude, title, address, foursquareId, disableNotification, replyToMessageId, replyMarkup)
+
+
+    /// Use this method to send information about a venue
+    static member SendVenue
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Latitude of the venue
+            latitude: float,
+            /// Longitude of the venue
+            longitude: float,
+            /// Name of the venue
+            title: string,
+            /// Address of the venue
+            address: string,
+            /// Foursquare identifier of the venue
+            ?foursquareId: string,
+            /// Sends the message silently. Users will receive a notification with no sound
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendVenueBaseAsync(token, chatId, latitude, longitude, title, address, foursquareId, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendContactBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId,
+            phoneNumber: string,
+            firstName: string,
+            lastName: string option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendContact",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "phone_number", box phoneNumber
+                  "first_name", box firstName
+                  "last_name", box lastName
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send phone contacts
+    static member SendContactAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Contact's phone number
+            phoneNumber: string,
+            /// Contact's first name
+            firstName: string,
+            /// Contact's last name
+            ?lastName: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendContactBaseAsync(token, chatId, phoneNumber, firstName, lastName, disableNotification, replyToMessageId, replyMarkup)
+    
+    /// Use this method to send phone contacts
+    static member SendContact
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Contact's phone number
+            phoneNumber: string,
+            /// Contact's first name
+            firstName: string,
+            /// Contact's last name
+            ?lastName: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendContactBaseAsync(token, chatId, phoneNumber, firstName, lastName, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    /// Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status).
+    static member SendChatActionAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Type of action to broadcast
+            action: Types.ChatAction
+        ) = Api.MakeRequestAsync<bool>(token,
+                "sendChatAction",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "action", box action ])
+    
+    /// Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status).
+    static member SendChatAction
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Type of action to broadcast
+            action: Types.ChatAction
+        ) = Telegram.SendChatActionAsync(token, chatId, action) |> Async.RunSynchronously
+
+    static member internal SendGameBaseAsync
+        (
+            token: string,
+            chatId: int,
+            gameShortName: string,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendGame",
+                [ "chat_id", box chatId
+                  "game_short_name", box gameShortName
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send a game
+    static member SendGameAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat
+            chatId: int,
+            /// Short name of the game, serves as the unique identifier for the game. Set up your games via Botfather.
+            gameShortName: string,
+            /// Sends the message silently. Users will receive a notification with no sound
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// A JSON-serialized object for an inline keyboard. If empty, one ‘Play game_title’ button will be shown. If not empty, the first button must launch the game
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendGameBaseAsync(token, chatId, gameShortName, disableNotification, replyToMessageId, replyMarkup)
+                  
+    /// Use this method to send a game
+    static member SendGame
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat
+            chatId: int,
+            /// Short name of the game, serves as the unique identifier for the game. Set up your games via Botfather.
+            gameShortName: string,
+            /// Sends the message silently. Users will receive a notification with no sound
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// A JSON-serialized object for an inline keyboard. If empty, one ‘Play game_title’ button will be shown. If not empty, the first button must launch the game
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendGameBaseAsync(token, chatId, gameShortName, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SetGameScoreBaseAsync
+        (
+            token: string,
+            userId: int,
+            score: uint32,
+            force: bool option,
+            disableEditMessage: bool option,
+            chatId: int option,
+            messageId: int option,
+            inlineMessageId: string option
+        ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
+                "setGameScore",
+                [ "user_id", box userId
+                  "score", box score
+                  "force", box force 
+                  "disable_edit_message", box disableEditMessage
+                  "chat_id", box chatId
+                  "message_id", box messageId
+                  "inline_message_id", box inlineMessageId ])
+
+    /// Use this method to set the score of the specified user in a game. On success, if the message was sent by the bot, returns the edited Message, otherwise returns True. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+    static member SetGameScoreAsync
+        (   /// Bot token
+            token: string,
+            /// User identifier
+            userId: int,
+            /// New score, must be non-negative
+            score: uint32,
+            /// Pass True, if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
+            ?force: bool,
+            /// Pass True, if the game message should not be automatically edited to include the current scoreboard
+            ?disableEditMessage: bool,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat
+            ?chatId: int,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string
+        ) = Telegram.SetGameScoreBaseAsync(token, userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId)
+
+    /// Use this method to set the score of the specified user in a game. On success, if the message was sent by the bot, returns the edited Message, otherwise returns True. Returns an error, if the new score is not greater than the user's current score in the chat and force is False.
+    static member SetGameScore
+        (   /// Bot token
+            token: string,
+            /// User identifier
+            userId: int,
+            /// New score, must be non-negative
+            score: uint32,
+            /// Pass True, if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters
+            ?force: bool,
+            /// Pass True, if the game message should not be automatically edited to include the current scoreboard
+            ?disableEditMessage: bool,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat
+            ?chatId: int,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string
+        ) = Telegram.SetGameScoreBaseAsync(token, userId, score, force, disableEditMessage, chatId, messageId, inlineMessageId) |> Async.RunSynchronously
+
+    static member internal GetGameHighScoresBaseAsync
+        (
+            token: string,
+            userId: int,
+            chatId: int option,
+            messageId: int option,
+            inlineMessageId: string option
+        ) = Api.MakeRequestAsync<Types.GameHighScore seq>(token,
+                "getGameHighScores",
+                [ "user_id", box userId
+                  "chat_id", box chatId
+                  "message_id", box messageId
+                  "inline_message_id", box inlineMessageId ])
+                  
+    /// Use this method to get data for high score tables. Will return the score of the specified user and several of his neighbors in a game
+    /// This method will currently return scores for the target user, plus two of his closest neighbors on each side. Will also return the top three users if the user and his neighbors are not among them. Please note that this behavior is subject to change.
+    static member GetGameHighScoresAsync
+        (   /// Bot token
+            token: string,
+            /// Target user id
+            userId: int,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat
+            ?chatId: int,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string
+        ) = Telegram.GetGameHighScoresBaseAsync(token, userId, chatId, messageId, inlineMessageId)
+                  
+    /// Use this method to get data for high score tables. Will return the score of the specified user and several of his neighbors in a game
+    /// This method will currently return scores for the target user, plus two of his closest neighbors on each side. Will also return the top three users if the user and his neighbors are not among them. Please note that this behavior is subject to change.
+    static member GetGameHighScores
+        (   /// Bot token
+            token: string,
+            /// Target user id
+            userId: int,
+            /// Required if inline_message_id is not specified. Unique identifier for the target chat
+            ?chatId: int,
+            /// Required if inline_message_id is not specified. Identifier of the sent message
+            ?messageId: int,
+            /// Required if chat_id and message_id are not specified. Identifier of the inline message
+            ?inlineMessageId: string
+        ) = Telegram.GetGameHighScoresBaseAsync(token, userId, chatId, messageId, inlineMessageId) |> Async.RunSynchronously
+
+    static member internal RestrictChatMemberBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId,
+            userId: int,
+            untilDate: DateTime option,
+            canSendMessages: bool option,
+            canSendMediaMessages: bool option,
+            canSendOtherMessages: bool option,
+            canAddWebPagePreviews: bool option
+        ) = Api.MakeRequestAsync<bool>(token,
+                "restrictChatMember",
+                [ "user_id", box userId
+                  "chat_id", box (Helpers.getChatIdString chatId)
+                  "until_date", box untilDate
+                  "can_send_messages", box canSendMessages
+                  "can_send_media_messages", box canSendMediaMessages
+                  "can_send_other_messages", box canSendOtherMessages
+                  "can_add_web_page_previews", box canAddWebPagePreviews ])
+
+    /// Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate admin rights. Pass True for all boolean parameters to lift restrictions from a user
+    static member RestrictChatMemberAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int,
+            /// Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+            ?untilDate: DateTime,
+            /// Pass True, if the user can send text messages, contacts, locations and venues
+            ?canSendMessages: bool,
+            /// Pass True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
+            ?canSendMediaMessages: bool,
+            /// Pass True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages
+            ?canSendOtherMessages: bool,
+            /// Pass True, if the user may add web page previews to their messages, implies can_send_media_messages
+            ?canAddWebPagePreviews: bool
+        ) = Telegram.RestrictChatMemberBaseAsync(token, chatId, userId, untilDate, canSendMessages, canSendMediaMessages, canSendOtherMessages, canAddWebPagePreviews)
+    
+    /// Use this method to restrict a user in a supergroup. The bot must be an administrator in the supergroup for this to work and must have the appropriate admin rights. Pass True for all boolean parameters to lift restrictions from a user
+    static member RestrictChatMember
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int,
+            /// Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever
+            ?untilDate: DateTime,
+            /// Pass True, if the user can send text messages, contacts, locations and venues
+            ?canSendMessages: bool,
+            /// Pass True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
+            ?canSendMediaMessages: bool,
+            /// Pass True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages
+            ?canSendOtherMessages: bool,
+            /// Pass True, if the user may add web page previews to their messages, implies can_send_media_messages
+            ?canAddWebPagePreviews: bool
+        ) = Telegram.RestrictChatMemberBaseAsync(token, chatId, userId, untilDate, canSendMessages, canSendMediaMessages, canSendOtherMessages, canAddWebPagePreviews) |> Async.RunSynchronously
+
+    static member internal PromoteChatMemberBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId,
+            userId: int,
+            canChangeInfo: bool option,
+            canPostMessages: bool option,
+            canEditMessages: bool option,
+            canDeleteMessages: bool option,
+            canInviteUsers: bool option,
+            canRestrictMembers: bool option,
+            canPinMessages: bool option,
+            canPromoteMembers: bool option
+        ) = Api.MakeRequestAsync<bool>(token,
+                "promoteChatMember",
+                [ "user_id", box userId
+                  "chat_id", box (Helpers.getChatIdString chatId)
+                  "can_change_info", box canChangeInfo
+                  "can_post_messages", box canPostMessages
+                  "can_edit_messages", box canEditMessages
+                  "can_delete_messages", box canDeleteMessages
+                  "can_invite_users", box canInviteUsers
+                  "can_restrict_members", box canRestrictMembers
+                  "can_pin_messages", box canPinMessages
+                  "can_promote_members", box canPromoteMembers ])
+
+    /// Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Pass False for all boolean parameters to demote a user
+    static member PromoteChatMemberAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int,
+            /// Pass True, if the administrator can change chat title, photo and other settings
+            canChangeInfo: bool option,
+            /// Pass True, if the administrator can create channel posts, channels only
+            canPostMessages: bool option,
+            /// Pass True, if the administrator can edit messages of other users, channels only
+            canEditMessages: bool option,
+            /// Pass True, if the administrator can delete messages of other users
+            canDeleteMessages: bool option,
+            /// Pass True, if the administrator can invite new users to the chat
+            canInviteUsers: bool option,
+            /// Pass True, if the administrator can restrict, ban or unban chat members
+            canRestrictMembers: bool option,
+            /// Pass True, if the administrator can pin messages, supergroups only
+            canPinMessages: bool option,
+            /// Pass True, if the administrator can add new administrators with a subset of his own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)
+            canPromoteMembers: bool option
+        ) = Telegram.PromoteChatMemberBaseAsync(token, chatId, userId, canChangeInfo, canPostMessages, canEditMessages, canDeleteMessages, canInviteUsers, canRestrictMembers, canPinMessages, canPromoteMembers)
+
+    /// Use this method to promote or demote a user in a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. Pass False for all boolean parameters to demote a user
+    static member PromoteChatMember
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int,
+            /// Pass True, if the administrator can change chat title, photo and other settings
+            canChangeInfo: bool option,
+            /// Pass True, if the administrator can create channel posts, channels only
+            canPostMessages: bool option,
+            /// Pass True, if the administrator can edit messages of other users, channels only
+            canEditMessages: bool option,
+            /// Pass True, if the administrator can delete messages of other users
+            canDeleteMessages: bool option,
+            /// Pass True, if the administrator can invite new users to the chat
+            canInviteUsers: bool option,
+            /// Pass True, if the administrator can restrict, ban or unban chat members
+            canRestrictMembers: bool option,
+            /// Pass True, if the administrator can pin messages, supergroups only
+            canPinMessages: bool option,
+            /// Pass True, if the administrator can add new administrators with a subset of his own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)
+            canPromoteMembers: bool option
+        ) = Telegram.PromoteChatMemberBaseAsync(token, chatId, userId, canChangeInfo, canPostMessages, canEditMessages, canDeleteMessages, canInviteUsers, canRestrictMembers, canPinMessages, canPromoteMembers) |> Async.RunSynchronously
+
+    static member internal KickChatMemberBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId,
+            userId: int,
+            untilDate: DateTime option
+        ) = Api.MakeRequestAsync<bool>(token,
+                "kickChatMember",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "user_id", box userId
+                  "until_date", box untilDate ])
+
+    /// Use this method to kick a user from a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
+    static member KickChatMemberAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int,
+            /// Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever
+            ?untilDate: DateTime
+        ) = Telegram.KickChatMemberBaseAsync(token, chatId, userId, untilDate)
+
+    /// Use this method to kick a user from a group, a supergroup or a channel. In the case of supergroups and channels, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
+    static member KickChatMember
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target group or username of the target supergroup or channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Unique identifier of the target user
+            userId: int,
+            /// Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever
+            ?untilDate: DateTime
+        ) = Telegram.KickChatMemberBaseAsync(token, chatId, userId, untilDate) |> Async.RunSynchronously
+    
+    /// Use this method to export an invite link to a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    static member ExportChatInviteLinkAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Api.MakeRequestAsync<string>(token,  "exportChatInviteLink", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+
+    /// Use this method to export an invite link to a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    static member ExportChatInviteLink
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.ExportChatInviteLinkAsync(token, chatId) |> Async.RunSynchronously
+
+    /// Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member SetChatPhotoAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// New chat photo
+            photo: Types.FileToSend
+        ) = Api.MakeRequestAsync<string>(token,  
+                "setChatPhoto", 
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "photo", box photo ])
+
+    /// Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member SetChatPhoto
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// New chat photo
+            photo: Types.FileToSend
+        ) = Telegram.SetChatPhotoAsync(token, chatId, photo) |> Async.RunSynchronously
+
+    /// Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member DeleteChatPhotoAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Api.MakeRequestAsync<string>(token, "deleteChatPhoto", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+
+    /// Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member DeleteChatPhoto
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId
+        ) = Telegram.DeleteChatPhotoAsync(token, chatId) |> Async.RunSynchronously
+
+    /// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. 
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member SetChatTitleAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// New chat title, 1-255 characters
+            title: string
+        ) = Api.MakeRequestAsync<string>(token, 
+                "setChatTitle", 
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "title", box title ])
+
+    /// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. 
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member SetChatTitle
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// New chat title, 1-255 characters
+            title: string
+        ) = Telegram.SetChatTitleAsync(token, chatId, title) |> Async.RunSynchronously
+
+    /// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member SetChatDescriptionAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// New chat description, 0-255 characters
+            description: string
+        ) = Api.MakeRequestAsync<string>(token, 
+                "setChatDescription", 
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "description", box description ])
+
+    /// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
+    static member SetChatDescription
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// New chat description, 0-255 characters
+            description: string
+        ) = Telegram.SetChatDescriptionAsync(token, chatId, description) |> Async.RunSynchronously
+
+    static member internal PinChatMessageBaseAsync
+        (
+            token: string,
+            chatId: Types.ChatId,
+            messageId: int,
+            disableNotification: bool option
+        ) = Api.MakeRequestAsync<bool>(token,
+                "pinChatMessage",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "message_id", box messageId
+                  "disable_notification", box disableNotification ])
+    
+    /// Use this method to pin a message in a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    static member PinChatMessageAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Identifier of a message to pin
+            messageId: int,
+            /// Pass True, if it is not necessary to send a notification to all group members about the new pinned message
+            disableNotification: bool option
+        ) = Telegram.PinChatMessageBaseAsync(token, chatId, messageId, disableNotification)
+    
+    /// Use this method to pin a message in a supergroup. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    static member PinChatMessage
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId,
+            /// Identifier of a message to pin
+            messageId: int,
+            /// Pass True, if it is not necessary to send a notification to all group members about the new pinned message
+            disableNotification: bool option
+        ) = Telegram.PinChatMessageBaseAsync(token, chatId, messageId, disableNotification) |> Async.RunSynchronously
+   
+    /// Use this method to unpin a message in a supergroup chat. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    static member UnpinChatMessageAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId
+        ) = Api.MakeRequestAsync<bool>(token, "unpinChatMessage", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+   
+    /// Use this method to unpin a message in a supergroup chat. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
+    static member UnpinChatMessage
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+            chatId: Types.ChatId
+        ) = Telegram.UnpinChatMessageAsync(token, chatId) |> Async.RunSynchronously

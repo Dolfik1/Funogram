@@ -18,9 +18,9 @@ F# Telegram Bot Api library
 - ❕getChatMembersCount (not tested)
 - ❕getChatMember (not tested)
 - ❕answerCallbackQuery (not tested)
-- ❕editMessageText (not working, for now, DU not deserializes)
-- ❕editMessageCaption (not working, for now, DU not deserializes)
-- ❕editMessageReplyMarkup (not working, for now, DU not deserializes)
+- ❕editMessageText (not tested)
+- ❕editMessageCaption (not tested)
+- ❕editMessageReplyMarkup (not tested)
 - ❕deleteMessage (not tested)
 - ❕answerInlineQuery (not tested)
 - ❕sendInvoice (not tested)
@@ -33,22 +33,20 @@ F# Telegram Bot Api library
 - ❕sendVideo (not tested)
 - ❕sendVoice (not tested)
 - ❕sendVideoNote (not tested)
-
-### In progress 🕐:
-- sendLocation
-- sendVenue
-- sendContact
-- sendChatAction
-- sendGame
-- setGameScore
-- getGameHighScores
-- restrictChatMember
-- promoteChatMember
-- kickChatMember
-- exportChatInviteLink
-- setChatPhoto
-- deleteChatPhoto
-- setChatTitle
-- setChatDescription
-- pinChatMessage
-- unpinChatMessage
+- ❕sendLocation (not tested)
+- ❕sendVenue (not tested)
+- ❕sendContact (not tested)
+- ❕sendChatAction (not tested)
+- ❕sendGame (not tested)
+- ❕setGameScore (not tested)
+- ❕getGameHighScores (not tested)
+- ❕restrictChatMember (not tested)
+- ❕promoteChatMember (not tested)
+- ❕kickChatMember (not tested)
+- ❕exportChatInviteLink (not tested)
+- ❕setChatPhoto (not tested)
+- ❕deleteChatPhoto (not tested)
+- ❕setChatTitle (not tested)
+- ❕setChatDescription (not tested)
+- ❕pinChatMessage (not tested)
+- ❕unpinChatMessage (not tested)

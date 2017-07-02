@@ -218,8 +218,7 @@ module Types =
         /// File size, if known
         FileSize: int option
         /// File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
-        FilePath: string option
-      }
+        FilePath: string option }
       
     [<CLIMutable>]
     /// You can provide an animation for your game so that it looks stylish in chats 
@@ -267,8 +266,7 @@ module Types =
         /// Video thumbnail
         Thumb: PhotoSize option
         /// File size
-        FileSize: int option
-      }
+        FileSize: int option }
 
     [<CLIMutable>]
     /// This object contains basic information about an invoice
@@ -318,8 +316,7 @@ module Types =
       { /// Portion label
         Label: string
         /// Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
-        Amount: int
-      }
+        Amount: int }
 
     [<CLIMutable>]
     /// This object represents one shipping option
@@ -562,6 +559,19 @@ module Types =
       /// HTML parse syntax
       | HTML
 
+    /// Type of action to broadcast
+    type ChatAction =
+      | Typing
+      | UploadPhoto
+      | RecordVideo
+      | UploadVideo
+      | RecordAudio
+      | UploadAudio
+      | UploadDocument
+      | FindLocation
+      | RecordVideoNote
+      | UploadVideoNote
+
     /// A placeholder, currently holds no information
     type CallbackGame() = class end
 
@@ -581,8 +591,7 @@ module Types =
         /// chat's input field. Can be empty, in which case only the bot’s username will be inserted.
         SwitchInlineQueryCurrentChat: string option
         /// Description of the game that will be launched when the user presses the button.
-        CallbackGame: CallbackGame option
-      }
+        CallbackGame: CallbackGame option }
 
     /// This object represents one button of the reply keyboard. For simple text buttons String can be used 
     /// instead of this object to specify text of the button. Optional fields are mutually exclusive.
@@ -592,14 +601,12 @@ module Types =
         /// If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
         RequestContact: bool option
         /// If True, the user's current location will be sent when the button is pressed. Available in private chats only
-        RequestLocation: bool option
-      }
+        RequestLocation: bool option }
 
     /// This object represents an inline keyboard that appears right next to the message it belongs to
     type InlineKeyboardMarkup =
       { /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
-        InlineKeyboard: (InlineKeyboardButton list * InlineKeyboardButton list) list
-      }
+        InlineKeyboard: (InlineKeyboardButton list * InlineKeyboardButton list) list }
 
     /// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
     type ReplyKeyboardMarkup =
@@ -616,8 +623,7 @@ module Types =
         OneTimeKeyboard: bool option
         /// Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in 
         /// the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message
-        Selective: bool option
-      }
+        Selective: bool option }
       
     /// Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display 
     /// the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. 
@@ -628,8 +634,7 @@ module Types =
         RemoveKeyboard: bool
         /// Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text 
         /// of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
-        Selective: bool option
-      }
+        Selective: bool option }
 
     /// Upon receiving a message with this object, Telegram clients will display a reply interface to the user 
     /// (act as if the user has selected the bot‘s message and tapped ’Reply'). This can be extremely useful if 
@@ -639,8 +644,7 @@ module Types =
         ForceReply: bool
         /// Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the 
         /// text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
-        Selective: bool
-      }
+        Selective: bool }
     
     /// This object contains information about one member of the chat.
     type ChatMember = 
@@ -971,8 +975,7 @@ module Types =
         /// Thumbnail width
         ThumbWidth: int option
         /// Thumbnail height
-        ThumbHeight: int option
-      }
+        ThumbHeight: int option }
     
     /// Represents a Game.
     type InlineQueryResultGame = 
@@ -983,8 +986,7 @@ module Types =
         /// Short name of the game
         GameShortName: string
         /// Inline keyboard attached to the message
-        ReplyMarkup: InlineKeyboardMarkup option
-      }
+        ReplyMarkup: InlineKeyboardMarkup option }
     
     /// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
     type InlineQueryResultDocument =
@@ -1011,8 +1013,7 @@ module Types =
         /// Thumbnail width
         ThumbWidth: int option
         /// Thumbnail height
-        ThumbHeight: int option
-      }
+        ThumbHeight: int option }
 
     /// Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
     type InlineQueryResultGif =
@@ -1037,8 +1038,7 @@ module Types =
         /// Inline keyboard attached to the message
         ReplyMarkup: InlineKeyboardMarkup option
         /// Content of the message to be sent instead of the GIF animation
-        InputMessageContent: InputMessageContent option
-      }
+        InputMessageContent: InputMessageContent option }
 
     /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location
     type InlineQueryResultLocation =
@@ -1061,8 +1061,7 @@ module Types =
         /// Thumbnail width
         ThumbWidth: int option
         /// Thumbnail height
-        ThumbHeight: int option
-      }
+        ThumbHeight: int option }
     
     /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation
     type InlineQueryResultMpeg4Gif =
@@ -1087,8 +1086,7 @@ module Types =
         /// Inline keyboard attached to the message
         ReplyMarkup: InlineKeyboardMarkup option
         /// Content of the message to be sent instead of the video animation
-        InputMessageContent: InputMessageContent option
-      }
+        InputMessageContent: InputMessageContent option }
 
     /// Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
     type InlineQueryResultPhoto =
@@ -1113,8 +1111,7 @@ module Types =
         /// Inline keyboard attached to the message
         ReplyMarkup: InlineKeyboardMarkup option
         /// Content of the message to be sent instead of the photo
-        InputMessageContent: InputMessageContent option
-      }
+        InputMessageContent: InputMessageContent option }
     
     /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue
     type InlineQueryResultVenue =
@@ -1141,8 +1138,7 @@ module Types =
         /// Thumbnail width
         ThumbWidth: int option
         /// Thumbnail height
-        ThumbHeight: int option
-      }
+        ThumbHeight: int option }
 
     /// Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
     type InlineQueryResultVideo =
@@ -1171,8 +1167,7 @@ module Types =
         /// Inline keyboard attached to the message
         ReplyMarkup: InlineKeyboardMarkup option
         /// Content of the message to be sent instead of the video
-        InputMessageContent: InputMessageContent option
-      }
+        InputMessageContent: InputMessageContent option }
 
       /// Represents a link to a voice recording in an .ogg container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
       type InlineQueryResultVoice =
@@ -1191,8 +1186,7 @@ module Types =
           /// Inline keyboard attached to the message
           ReplyMarkup: InlineKeyboardMarkup option
           /// Content of the message to be sent instead of the voice recording
-          InputMessageContent: InputMessageContent option
-        }
+          InputMessageContent: InputMessageContent option }
       
       /// This object represents one result of an inline query. Telegram clients currently support results of the 20 types
       type InlineQueryResult = 
@@ -1221,3 +1215,12 @@ module Types =
       | Url of Uri 
       | File of string * Stream
       | FileId of string
+
+    /// This object represents one row of the high scores table for a game
+    type GameHighScore =
+      { /// Position in high score table for the game
+        Position: int
+        /// User
+        User: User
+        /// Score
+        Score: int }

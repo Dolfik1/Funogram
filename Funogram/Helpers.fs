@@ -15,6 +15,9 @@ module internal Helpers =
     open Types
     let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
 
+
+    let getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
+
     let jsonOpts = 
         JsonSerializerSettings(
             NullValueHandling = NullValueHandling.Ignore,
@@ -69,6 +72,9 @@ type internal Api private() =
             (new StringContent(value.ToString().ToLower()) :> HttpContent, None)
         elif value :? string then
             (new StringContent(value :?> string) :> HttpContent, None)
+        elif value :? DateTime then
+            let date = value :?> DateTime
+            (new StringContent(Helpers.getUnix date |> string) :> HttpContent, None)
         elif typeInfo.IsPrimitive then
             (new StringContent(value.ToString(), Encoding.UTF8) :> HttpContent, None)
         elif (value :? Types.FileToSend) then
