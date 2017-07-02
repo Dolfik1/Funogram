@@ -67,6 +67,8 @@ type internal Api private() =
 
         if value :? bool then
             (new StringContent(value.ToString().ToLower()) :> HttpContent, None)
+        elif value :? string then
+            (new StringContent(value :?> string) :> HttpContent, None)
         elif typeInfo.IsPrimitive then
             (new StringContent(value.ToString(), Encoding.UTF8) :> HttpContent, None)
         elif (value :? Types.FileToSend) then

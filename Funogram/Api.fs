@@ -850,7 +850,7 @@ type Telegram private() =
             replyToMessageId: int option,
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
-                "answerInlineQuery",
+                "sendPhoto",
                 [ "chat_id", box (Helpers.getChatIdString chatId)
                   "photo", box photo
                   "caption", box caption

@@ -6,6 +6,7 @@ open Funogram
 open Funogram.TestBot.Types
 open Funogram.Types
 open Funogram.Bot
+open FunHttp
 
 
 module Main =
@@ -29,6 +30,10 @@ module Main =
                                     ChatId.Long(msg.Chat.Id),
                                     sprintf "Id: %i, Type: %s" x.Id x.Type) |> ignore
         | Error e -> printf "Error: %s" e.Description
+
+    let sendPhoto token msg =
+        let image = Http.RequestStream("https://upload.wikimedia.org/wikipedia/commons/f/f5/Example_image.jpg")
+        Telegram.SendPhoto(token, ChatId.Long(msg.Chat.Id), FileToSend.File("example.jpg", image.ResponseStream), "Example") |> processResult
 
     let updateArrived ctx = 
         let fromId() = ChatId.Long(ctx.Update.Message.Value.From.Value.Id)
@@ -62,10 +67,10 @@ module Main =
                         OneTimeKeyboard = None
                         Selective = None
                     }
-                    sayWithArgs "That's keyboard!" (Some ParseMode.Markdown) None None None (Some markup)))
+                    sayWithArgs "That's keyboard!" None None None None (Some markup)))
                 cmd "/send_message6" (fun _ ->
                     let markup = Markup.ReplyKeyboardRemove { RemoveKeyboard = true; Selective = None; }
-                    sayWithArgs "Keyboard was removed!" (Some ParseMode.Markdown) None None None (Some markup))
+                    sayWithArgs "Keyboard was removed!" None None None None (Some markup))
                 
                 cmd "/forward_message" (fun _ -> Telegram.ForwardMessage(ctx.Config.Token, fromId(), fromId(), ctx.Update.Message.Value.MessageId) |> processResult)
                 cmd "/show_my_photos_sizes" (fun _ -> 
@@ -76,6 +81,7 @@ module Main =
                         say (sprintf "Photos: %s" (x.Value.Photos |> Seq.map (fun f -> f |> Seq.last) |> Seq.map (fun f -> sprintf "%ix%i" f.Width f.Height) |> String.concat ","))
                 ))
                 cmd "/get_chat_info" (fun _ -> getChatInfo ctx.Config.Token ctx.Update.Message.Value)
+                cmd "/send_photo" (fun _ -> sendPhoto ctx.Config.Token ctx.Update.Message.Value)
             ]
 
         if result then ()
@@ -89,7 +95,8 @@ module Main =
 
 /forward_message - Test forward message
 /show_my_photos_sizes - Test getUserProfilePhotos method
-/get_chat_info - Returns id and type of current chat"""
+/get_chat_info - Returns id and type of current chat
+/send_photo - Send example photo"""
 
     let start token =
         let config = { defaultConfig with Token = token }

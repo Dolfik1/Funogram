@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <Compile Include="Types.fs" />
-    <Compile Include="Router.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
