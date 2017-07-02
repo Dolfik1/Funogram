@@ -845,7 +845,7 @@ type Telegram private() =
             token: string,
             chatId: Types.ChatId,
             photo: Types.FileToSend,
-            caption: string,
+            caption: string option,
             disableNotification: bool option,
             replyToMessageId: int option,
             replyMarkup: Types.Markup option
@@ -867,7 +867,7 @@ type Telegram private() =
             /// Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo.
             photo: Types.FileToSend,
             /// Photo caption (may also be used when resending photos by file_id), 0-200 characters
-            caption: string,
+            ?caption: string,
             /// Sends the message silently. Users will receive a notification with no sound.
             ?disableNotification: bool,
             /// If the message is a reply, ID of the original message
@@ -885,7 +885,7 @@ type Telegram private() =
             /// Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet, or upload a new photo.
             photo: Types.FileToSend,
             /// Photo caption (may also be used when resending photos by file_id), 0-200 characters
-            caption: string,
+            ?caption: string,
             /// Sends the message silently. Users will receive a notification with no sound.
             ?disableNotification: bool,
             /// If the message is a reply, ID of the original message
@@ -893,3 +893,371 @@ type Telegram private() =
             /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
             ?replyMarkup: Types.Markup
         ) = Telegram.SendPhotoBaseAsync(token, chatId, photo, caption, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+    
+    static member internal SendAudioBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            audio: Types.FileToSend,
+            caption: string option,
+            duration: int option,
+            performer: string option,
+            title: string option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendAudio",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "audio", box audio
+                  "caption", box caption
+                  "duration", box duration
+                  "performer", box performer
+                  "title", box title
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .mp3 format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+    /// For sending voice messages, use the sendVoice method instead.
+    static member SendAudioAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one 
+            audio: Types.FileToSend,
+            /// Audio caption, 0-200 characters
+            ?caption: string,
+            /// Duration of the audio in seconds
+            ?duration: int,
+            /// Performer
+            ?performer: string,
+            /// Track name
+            ?title: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendAudioBaseAsync(token, chatId, audio, caption, duration, performer, title, disableNotification, replyToMessageId, replyMarkup)
+
+    /// Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .mp3 format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
+    /// For sending voice messages, use the sendVoice method instead.
+    static member SendAudio
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Audio file to send. Pass a file_id as String to send an audio file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get an audio file from the Internet, or upload a new one 
+            audio: Types.FileToSend,
+            /// Audio caption, 0-200 characters
+            ?caption: string,
+            /// Duration of the audio in seconds
+            ?duration: int,
+            /// Performer
+            ?performer: string,
+            /// Track name
+            ?title: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendAudioBaseAsync(token, chatId, audio, caption, duration, performer, title, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendDocumentBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            document: Types.FileToSend,
+            caption: string option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendDocument",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "document", box document
+                  "caption", box caption
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+    static member SendDocumentAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format
+            chatId: Types.ChatId,
+            /// File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
+            document: Types.FileToSend,
+            /// Document caption (may also be used when resending documents by file_id), 0-200 characters
+            ?caption: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendDocumentBaseAsync(token, chatId, document, caption, disableNotification, replyToMessageId, replyMarkup)
+    
+    /// Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
+    static member SendDocument
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format
+            chatId: Types.ChatId,
+            /// File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
+            document: Types.FileToSend,
+            /// Document caption (may also be used when resending documents by file_id), 0-200 characters
+            ?caption: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendDocumentBaseAsync(token, chatId, document, caption, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendStickerBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            sticker: Types.FileToSend,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendSticker",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "sticker", box sticker
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+    
+    /// Use this method to send .webp stickers
+    static member SendStickerAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .webp file from the Internet, or upload a new one 
+            sticker: Types.FileToSend,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendStickerBaseAsync(token, chatId, sticker, disableNotification, replyToMessageId, replyMarkup)
+
+    /// Use this method to send .webp stickers
+    static member SendSticker
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .webp file from the Internet, or upload a new one 
+            sticker: Types.FileToSend,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendStickerBaseAsync(token, chatId, sticker, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendVideoBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            video: Types.FileToSend,
+            duration: int option,
+            width: int option,
+            height: int option,
+            caption: string option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendVideo",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "video", box video
+                  "duration", box duration
+                  "width", box width
+                  "height", box height
+                  "caption", box caption
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+    static member SendVideoAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video 
+            video: Types.FileToSend,
+            /// Duration of sent video in seconds
+            ?duration: int,
+            /// Video width
+            ?width: int,
+            /// Video height
+            ?height: int,
+            /// Video caption (may also be used when resending videos by file_id), 0-200 characters
+            ?caption: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendVideoBaseAsync(token, chatId, video, duration, width, height, caption, disableNotification, replyToMessageId, replyMarkup)
+
+    /// Use this method to send video files, Telegram clients support mp4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.
+    static member SendVideo
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Video to send. Pass a file_id as String to send a video that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a video from the Internet, or upload a new video 
+            video: Types.FileToSend,
+            /// Duration of sent video in seconds
+            ?duration: int,
+            /// Video width
+            ?width: int,
+            /// Video height
+            ?height: int,
+            /// Video caption (may also be used when resending videos by file_id), 0-200 characters
+            ?caption: string,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendVideoBaseAsync(token, chatId, video, duration, width, height, caption, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendVoiceBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            voice: Types.FileToSend,
+            caption: string option,
+            duration: int option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendVoice",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "voice", box voice
+                  "caption", box caption
+                  "duration", box duration
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+    
+    /// Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .ogg file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+    static member SendVoiceAsync
+        (   /// Bot token   
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
+            voice: Types.FileToSend,
+            /// Voice message caption, 0-200 characters
+            ?caption: string,
+            /// Duration of the voice message in seconds
+            ?duration: int,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendVoiceBaseAsync(token, chatId, voice, caption, duration, disableNotification, replyToMessageId, replyMarkup)
+    
+    /// Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .ogg file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
+    static member SendVoice
+        (   /// Bot token   
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Audio file to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one
+            voice: Types.FileToSend,
+            /// Voice message caption, 0-200 characters
+            ?caption: string,
+            /// Duration of the voice message in seconds
+            ?duration: int,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            ?disableNotification: bool,
+            /// If the message is a reply, ID of the original message
+            ?replyToMessageId: int,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            ?replyMarkup: Types.Markup
+        ) = Telegram.SendVoiceBaseAsync(token, chatId, voice, caption, duration, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
+
+    static member internal SendVideoNoteBaseAsync
+        (   
+            token: string,
+            chatId: Types.ChatId,
+            videoNote: Types.FileToSend,
+            duration: int option,
+            length: int option,
+            disableNotification: bool option,
+            replyToMessageId: int option,
+            replyMarkup: Types.Markup option
+        ) = Api.MakeRequestAsync<Types.Message>(token,
+                "sendVideoNote",
+                [ "chat_id", box (Helpers.getChatIdString chatId)
+                  "video_note", box videoNote
+                  "duration", box duration
+                  "length", box length
+                  "disable_notification", box disableNotification
+                  "reply_to_message_id", box replyToMessageId
+                  "reply_markup", box replyMarkup ])
+
+    /// As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages
+    static member SendVideoNoteAsync
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video. Sending video notes by a URL is currently unsupported
+            videoNote: Types.FileToSend,
+            /// Duration of sent video in seconds
+            duration: int option,
+            /// Video width and height
+            length: int option,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            disableNotification: bool option,
+            /// If the message is a reply, ID of the original message
+            replyToMessageId: int option,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            replyMarkup: Types.Markup option
+        ) = Telegram.SendVideoNoteBaseAsync(token, chatId, videoNote, duration, length, disableNotification, replyToMessageId, replyMarkup)
+
+    /// As of v.4.0, Telegram clients support rounded square mp4 videos of up to 1 minute long. Use this method to send video messages
+    static member SendVideoNote
+        (   /// Bot token
+            token: string,
+            /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+            chatId: Types.ChatId,
+            /// Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video. Sending video notes by a URL is currently unsupported
+            videoNote: Types.FileToSend,
+            /// Duration of sent video in seconds
+            duration: int option,
+            /// Video width and height
+            length: int option,
+            /// Sends the message silently. Users will receive a notification with no sound.
+            disableNotification: bool option,
+            /// If the message is a reply, ID of the original message
+            replyToMessageId: int option,
+            /// Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.
+            replyMarkup: Types.Markup option
+        ) = Telegram.SendVideoNoteBaseAsync(token, chatId, videoNote, duration, length, disableNotification, replyToMessageId, replyMarkup) |> Async.RunSynchronously
