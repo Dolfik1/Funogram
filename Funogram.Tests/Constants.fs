@@ -14,42 +14,9 @@ module Constants =
     let jsonTestEditResult1String = "true"
     let jsonTestEditResult1ApiString = """{"ok":true,"result":true}"""
 
-    let jsonTestChat = { Id = 1L; Type = "group"; Title = Some("Test group"); Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = Some(true) }
+    let jsonTestChat = { defaultChat with Id = 1L; Type = "group"; Title = Some("Test group"); AllMembersAreAdministrators = Some(true) }
     let jsonTestMessage = 
-        { MessageId = 123
-          Date = System.DateTime(2117, 05, 28, 12, 47, 51)
-          Text = Some("abc")
-          Chat = jsonTestChat
-          From = None
-          ForwardFrom = None
-          ForwardFromChat = None
-          ForwardFromMessageId = None
-          ForwardDate = None
-          ReplyToMessage = None
-          EditDate = None
-          Entities = None
-          Audio = None
-          Document = None
-          Game = None
-          Photo = None
-          Sticker = None
-          Video = None
-          Voice = None
-          Caption = None
-          Contact = None
-          Location = None
-          Venue = None
-          NewChatMember = None
-          LeftChatMember = None
-          NewChatTitle = None
-          NewChatPhoto = None
-          DeleteChatPhoto = None
-          GroupChatCreated = None
-          SupergroupChatCreated = None
-          ChannelChatCreated = None
-          MigrateToChatId = None
-          MigrateFromChatId = None
-          PinnedMessage = None }
+        { defaultMessage with MessageId = 123;  Date = System.DateTime(2117, 05, 28, 12, 47, 51); Text = Some("abc"); Chat = jsonTestChat }
 
     let jsonTestEditResult2 = EditMessageResult.Message(jsonTestMessage)
     let jsonTestEditResult2String = """{"message_id":123,"date":4651649271,"chat":{"id":1,"type":"group","title":"Test group","all_members_are_administrators":true},"text":"abc"}"""

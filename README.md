@@ -23,7 +23,9 @@ F# Telegram Bot Api library
 - ❕editMessageReplyMarkup (not working, for now, DU not deserializes)
 - ❕deleteMessage (not tested)
 - ❕answerInlineQuery (not tested)
-
+- ❕sendInvoice (not tested)
+- ❕answerShippingQuery (not tested)
+- ❕answerPreCheckoutQuery (not tested)
 
 ### In progress 🕐:
 - sendPhoto
@@ -37,9 +39,19 @@ F# Telegram Bot Api library
 - sendVenue
 - sendContact
 - sendChatAction
-- sendInvoice
-- answerShippingQuery
-- answerPreCheckoutQuery
 - sendGame
 - setGameScore
 - getGameHighScores
+
+
+
+- restrictChatMember
+- promoteChatMember
+- kickChatMember
+- exportChatInviteLink
+- setChatPhoto
+- deleteChatPhoto
+- setChatTitle
+- setChatDescription
+- pinChatMessage
+- unpinChatMessage

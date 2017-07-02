@@ -31,6 +31,14 @@ module Types =
           LanguageCode: string option }
 
     [<CLIMutable>]
+    /// This object represents a chat photo
+    type ChatPhoto =
+        { /// Unique file identifier of small (160x160) chat photo. This file_id can be used only for photo download.
+          SmallFileId: string
+          /// Unique file identifier of big (640x640) chat photo. This file_id can be used only for photo download.
+          BigFileId: string }
+
+    [<CLIMutable>]
     /// This object represents a chat.
     type Chat =
         { /// Unique identifier for this chat.
@@ -46,7 +54,15 @@ module Types =
           /// Last name of the other party in a private chat
           LastName: string option
           /// True if a group has ‘All Members Are Admins’ enabled.
-          AllMembersAreAdministrators: bool option }
+          AllMembersAreAdministrators: bool option
+          /// Chat photo. Returned only in getChat
+          Photo: ChatPhoto option
+          /// Description, for supergroups and channel chats. Returned only in getChat.
+          Description: string option
+          /// Chat invite link, for supergroups and channel chats. Returned only in getChat.
+          InviteLink: string option }
+
+    let defaultChat = { Id = 0L; Type = ""; Chat.Title = None; Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = None; Photo = None; Description = None; InviteLink = None; }
 
     [<CLIMutable>]
     /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
@@ -237,7 +253,131 @@ module Types =
           TextEntities: MessageEntity seq option
           /// Animation that will be displayed in the game message in chats. Upload via BotFather
           Animation: Animation option }
-          
+    
+    [<CLIMutable>]
+    /// This object represents a video message (available in Telegram apps as of v.4.0).
+    type VideoNote =
+      { /// Unique identifier for this file
+        FileId: string
+        /// Video width and height as defined by sender
+        Length: int
+        /// Duration of the video in seconds as defined by sender
+        Duration: int
+        /// Video thumbnail
+        Thumb: PhotoSize option
+        /// File size
+        FileSize: int option
+      }
+
+    [<CLIMutable>]
+    /// This object contains basic information about an invoice
+    type Invoice = 
+      { /// Product name
+        Title: string
+        /// Product description
+        Description: string
+        /// Unique bot deep-linking parameter that can be used to generate this invoice
+        StartParameter: string
+        /// Three-letter ISO 4217 currency code
+        Currency: string
+        /// Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+        TotalAmount: int }
+    
+    [<CLIMutable>]
+    /// This object represents a shipping address
+    type ShippingAddress =
+      { /// ISO 3166-1 alpha-2 country code
+        CountryCode: string
+        /// State, if applicable
+        State: string
+        /// City
+        City: string
+        /// First line for the address
+        StreetLine1: string
+        /// Second line for the address
+        StreetLine2: string
+        /// Address post code
+        PostCode: string }
+
+    [<CLIMutable>]
+    /// This object represents information about an order.
+    type OrderInfo = 
+      { /// User name
+        Name: string option
+        /// Optional. User's phone number
+        PhoneNumber: string option
+        /// User email
+        Email: string option
+        /// User shipping address
+        ShippingAddress: ShippingAddress option }
+
+    [<CLIMutable>]
+    /// This object represents a portion of the price for goods or services.
+    type LabeledPrice =
+      { /// Portion label
+        Label: string
+        /// Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+        Amount: int
+      }
+
+    [<CLIMutable>]
+    /// This object represents one shipping option
+    type ShippingOption =
+      { /// Shipping option identifier
+        Id: string
+        /// Option title
+        Title: string
+        /// List of price portions
+        Prices: LabeledPrice seq }
+
+    [<CLIMutable>]
+    /// This object contains basic information about a successful payment
+    type SuccessfulPayment =
+      { /// Three-letter ISO 4217 currency code
+        Currency: string
+        /// Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+        TotalAmount: int
+        /// Bot specified invoice payload
+        InvoicePayload: string
+        /// Identifier of the shipping option chosen by the user
+        ShippingOptionId: string option
+        /// Order info provided by the user
+        OrderInfo: OrderInfo option
+        /// Telegram payment identifier
+        TelegramPaymentChargeId: string
+        /// Provider payment identifier
+        ProviderPaymentChargeId: string }
+    
+    [<CLIMutable>]
+    /// This object contains information about an incoming shipping query.
+    type ShippingQuery = 
+      { /// Unique query identifier
+        Id: string
+        /// User who sent the query
+        From: User
+        /// Bot specified invoice payload
+        InvoicePayload: string
+        /// User specified shipping address
+        ShippingAddress: ShippingAddress }
+
+    [<CLIMutable>]
+    /// This object contains information about an incoming pre-checkout query
+    type PreCheckoutQuery =
+      { /// Unique query identifier
+        Id: string
+        /// User who sent the query
+        From: User
+        /// Three-letter ISO 4217 currency code
+        Currency: string
+        /// Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+        TotalAmount: int
+        /// Bot specified invoice payload
+        InvoicePayload: string
+        /// Identifier of the shipping option chosen by the user
+        ShippingOptionId: string option
+        /// Order info provided by the user
+        OrderInfo: OrderInfo option }
+
     [<CLIMutable>]
     /// This object represents a message
     type Message = 
@@ -284,6 +424,10 @@ module Types =
           Video: Video option
           /// Message is a voice message, information about the file
           Voice: Voice option
+          /// Message is a video note, information about the video message
+          VideoNote: VideoNote option
+          /// New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
+          NewChatMembers: User seq option
           /// Caption for the document, photo or video, 0-200 characters
           Caption: string option
           /// Message is a shared contact, information about the contact
@@ -318,9 +462,18 @@ module Types =
           MigrateToChatId: int64 option
           /// The supergroup has been migrated from a group with the specified identifier
           MigrateFromChatId: int64 option
-          /// Specified message was pinned. Note that the Message object in this field 
-          /// will not contain further ReplyToMessage fields even if it is itself a reply.
-          PinnedMessage: Message option }
+          /// Specified message was pinned. Note that the Message object in this field will not contain further ReplyToMessage fields even if it is itself a reply.
+          PinnedMessage: Message option
+          /// Message is an invoice for a payment, information about the invoice
+          Invoice: Invoice option
+          /// Message is a service message about a successful payment, information about the payment
+          SuccessfulPayment: SuccessfulPayment option }
+    let defaultMessage = { MessageId = 1; From = None; Date = DateTime.MinValue; Chat = defaultChat; ForwardFrom = None; ForwardFromChat = None; 
+      ForwardDate = None; ForwardFromMessageId = None; ReplyToMessage = None; EditDate = None; Text = None; Entities = None; Audio = None; 
+      Document = None; Game = None; Photo = None; Sticker = None; Video = None; Voice = None; VideoNote = None; NewChatMembers = None; Caption = None; 
+      Contact = None; Location = None; Venue = None; NewChatMember = None; LeftChatMember = None; NewChatTitle = None; NewChatPhoto = None; 
+      DeleteChatPhoto = None; GroupChatCreated = None; SupergroupChatCreated = None; ChannelChatCreated = None; MigrateToChatId = None; MigrateFromChatId = None; 
+      PinnedMessage = None; Invoice = None; SuccessfulPayment = None; }
 
     [<CLIMutable>]
     /// This object represents an incoming inline query. 
@@ -490,12 +643,39 @@ module Types =
     
     /// This object contains information about one member of the chat.
     type ChatMember = 
-      {
-        /// Information about the user
+      { /// Information about the user
         User: User
         /// The member's status in the chat. Can be “creator”, “administrator”, “member”, “left” or “kicked”
-        Status: string
-      }
+        Status: string 
+        [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
+        /// Restictred and kicked only. Date when restrictions will be lifted for this user, unix time
+        UntilDate: DateTime option
+        /// Administrators only. True, if the bot is allowed to edit administrator privileges of that user
+        CanBeEdited: bool option
+        /// Administrators only. True, if the administrator can change the chat title, photo and other settings
+        CanChangeInfo: bool option
+        /// Administrators only. True, if the administrator can post in the channel, channels only
+        CanPostMessages: bool option
+        /// Administrators only. True, if the administrator can edit messages of other users, channels only
+        CanEditMessages: bool option
+        /// Administrators only. True, if the administrator can delete messages of other users
+        CanDeleteMessages: bool option
+        /// Administrators only. True, if the administrator can invite new users to the chat
+        CanInviteUsers: bool option
+        /// Administrators only. True, if the administrator can restrict, ban or unban chat members
+        CanRestrictMembers: bool option
+        /// Administrators only. True, if the administrator can pin messages, supergroups only
+        CanPinMessages: bool option
+        /// Administrators only. True, if the administrator can add new administrators with a subset of his own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
+        CanPromoteMembers: bool option
+        /// Restricted only. True, if the user can send text messages, contacts, locations and venues
+        CanSendMessages: bool option
+        /// Restricted only. True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
+        CanSendMediaMessages: bool option
+        /// Restricted only. True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages
+        CanSendOtherMessages: bool option
+        /// Optional. Restricted only. True, if user may add web page previews to his messages, implies can_send_media_messages
+        CanAddWebPagePreviews: bool option }
       
     type Markup = 
       | InlineKeyboardMarkup of InlineKeyboardMarkup 
