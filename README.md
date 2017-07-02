@@ -42,9 +42,6 @@ F# Telegram Bot Api library
 - sendGame
 - setGameScore
 - getGameHighScores
-
-
-
 - restrictChatMember
 - promoteChatMember
 - kickChatMember
