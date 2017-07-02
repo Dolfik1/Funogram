@@ -11,10 +11,8 @@ module internal JsonHelpers =
     type UnixDateTimeConverter() =
         inherit JsonConverter()
 
-
-        let isOption (t: Type) = t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
-
         let getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
+        let isOption (t: Type) = t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
 
         override this.CanConvert objectType = 
             objectType = typeof<DateTime>
