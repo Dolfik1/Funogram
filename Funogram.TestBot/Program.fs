@@ -2,7 +2,7 @@
 
 open System
 open System.IO
-open Funogram
+open Funogram.Api
 open Funogram.TestBot.Types
 open Funogram.Types
 open Funogram.Bot
@@ -13,6 +13,8 @@ module Main =
 
     [<Literal>]
     let TokenFileName = "token"
+    let mutable botToken = "none"
+    let bot data = api botToken data |> Async.RunSynchronously
 
     let processResultWithValue (result: Result<'a, ApiResponseError>) =
         match result with
@@ -23,32 +25,21 @@ module Main =
     let processResult (result: Result<'a, ApiResponseError>) =
         processResultWithValue result |> ignore
 
-    let getChatInfo token msg = 
-        match Telegram.GetChat(token, ChatId.Long(msg.Chat.Id)) with
-        | Ok x -> processResultWithValue <| Telegram.SendMessage(
-                                    token,
-                                    ChatId.Long(msg.Chat.Id),
-                                    sprintf "Id: %i, Type: %s" x.Id x.Type) |> ignore
-        | Error e -> printf "Error: %s" e.Description
+    let getChatInfo msg = ()
+        //match bot (getChat msg.Chat.Id) with
+        //| Ok x -> processResultWithValue <| bot (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type)) |> ignore
+        //| Error e -> printf "Error: %s" e.Description
 
-    let sendPhoto token msg =
+    let sendPhoto msg =
         let image = Http.RequestStream("https://upload.wikimedia.org/wikipedia/commons/f/f5/Example_image.jpg")
-        Telegram.SendPhoto(token, ChatId.Long(msg.Chat.Id), FileToSend.File("example.jpg", image.ResponseStream), "Example") |> processResult
+        bot (sendPhoto msg.Chat.Id (FileToSend.File("example.jpg", image.ResponseStream)) "Example") |> processResult
 
     let updateArrived ctx = 
-        let fromId() = ChatId.Long(ctx.Update.Message.Value.From.Value.Id)
+        let fromId() = ctx.Update.Message.Value.From.Value.Id
 
             
         let sayWithArgs text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup = 
-            Telegram.SendMessageBaseAsync (
-                ctx.Config.Token, 
-                fromId(), 
-                text, 
-                parseMode, 
-                disableWebPagePreview, 
-                disableNotification, 
-                replyToMessageId, 
-                replyMarkup) |> Async.RunSynchronously |> processResult
+            bot (sendMessageBase (ChatId.Int (fromId())) text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup) |> processResult
 
         let say text = sayWithArgs text None None None None None
 
@@ -72,16 +63,16 @@ module Main =
                     let markup = Markup.ReplyKeyboardRemove { RemoveKeyboard = true; Selective = None; }
                     sayWithArgs "Keyboard was removed!" None None None None (Some markup))
                 
-                cmd "/forward_message" (fun _ -> Telegram.ForwardMessage(ctx.Config.Token, fromId(), fromId(), ctx.Update.Message.Value.MessageId) |> processResult)
+                cmd "/forward_message" (fun _ -> bot (forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId) |> processResult)
                 cmd "/show_my_photos_sizes" (fun _ -> 
                 (   
-                    let x = Telegram.GetUserProfilePhotos(ctx.Config.Token, ctx.Update.Message.Value.Chat.Id |> int) |> processResultWithValue
+                    let x = bot (getUserProfilePhotos ctx.Update.Message.Value.Chat.Id) |> processResultWithValue
                     if x.IsNone then ()
                     else
                         say (sprintf "Photos: %s" (x.Value.Photos |> Seq.map (fun f -> f |> Seq.last) |> Seq.map (fun f -> sprintf "%ix%i" f.Width f.Height) |> String.concat ","))
                 ))
-                cmd "/get_chat_info" (fun _ -> getChatInfo ctx.Config.Token ctx.Update.Message.Value)
-                cmd "/send_photo" (fun _ -> sendPhoto ctx.Config.Token ctx.Update.Message.Value)
+                cmd "/get_chat_info" (fun _ -> getChatInfo ctx.Update.Message.Value)
+                cmd "/send_photo" (fun _ -> sendPhoto ctx.Update.Message.Value)
             ]
 
         if result then ()
@@ -99,6 +90,7 @@ module Main =
 /send_photo - Send example photo"""
 
     let start token =
+        botToken <- token
         let config = { defaultConfig with Token = token }
         startBot config updateArrived
     

@@ -1,4 +1,4 @@
-﻿namespace Funogram
+﻿module internal Funogram.JsonConverters
 
 open Microsoft.FSharp.Reflection
 open Newtonsoft.Json

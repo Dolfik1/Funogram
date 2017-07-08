@@ -1,4 +1,7 @@
-namespace Funogram
+module internal Funogram.Helpers
+
+
+open JsonConverters
 
 open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
@@ -11,57 +14,57 @@ open System.Text
 [<assembly: InternalsVisibleTo("Funogram.Tests")>]
 do()
 
-module internal Helpers =
-    open Types
-    let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
+open Types
+open JsonHelpers
+
+let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
 
 
-    let getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
+let getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
 
-    let jsonOpts = 
-        JsonSerializerSettings(
-            NullValueHandling = NullValueHandling.Ignore,
-            ContractResolver = DefaultContractResolver(
-                NamingStrategy = SnakeCaseNamingStrategy()),
-            Converters = [| OptionConverter(); DuConverter() |],
-            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
+let jsonOpts = 
+    JsonSerializerSettings(
+        NullValueHandling = NullValueHandling.Ignore,
+        ContractResolver = DefaultContractResolver(
+            NamingStrategy = SnakeCaseNamingStrategy()),
+        Converters = [| OptionConverter(); DuConverter() |],
+        ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
 
-    let parseJson<'a> str = 
-        match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
-        | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
-        | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-            Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
-        | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
+let parseJson<'a> str = 
+    match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
+    | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
+    | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
+        Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
+    | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
 
-    let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
+let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
 
-    let parseModeName parseMode = 
-        match parseMode with
-        | None -> None
-        | _ -> match parseMode.Value with
-                | HTML -> Some "HTML"
-                | Markdown -> Some "Markdown"
+let parseModeName parseMode = 
+    match parseMode with
+    | None -> None
+    | _ -> match parseMode.Value with
+            | HTML -> Some "HTML"
+            | Markdown -> Some "Markdown"
 
-    let getChatIdString (chatId: Types.ChatId) =
-        match chatId with
-        | Int v -> v |> string
-        | Long v -> v |> string
-        | String v -> v
+let getChatIdString (chatId: Types.ChatId) =
+    match chatId with
+    | Int v -> v |> string
+    | String v -> v
 
-    let getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
+let getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
 
-    let isOption (t: Type) = t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
+let isOption (t: Type) = t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
 
-    let (|SomeObj|_|) =
-      let ty = typedefof<option<_>>
-      fun (a:obj) ->
-        let aty = a.GetType().GetTypeInfo()
-        let v = aty.GetProperty("Value")
-        if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then
-          if isNull(a) then None
-          else Some(v.GetValue(a, [| |]))
-        else None
-       
+let (|SomeObj|_|) =
+  let ty = typedefof<option<_>>
+  fun (a:obj) ->
+    let aty = a.GetType().GetTypeInfo()
+    let v = aty.GetProperty("Value")
+    if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then
+      if isNull(a) then None
+      else Some(v.GetValue(a, [| |]))
+    else None
+   
 [<AbstractClass>]
 type internal Api private() =
     static member private Client = new HttpClient()
@@ -74,7 +77,7 @@ type internal Api private() =
             (new StringContent(value :?> string) :> HttpContent, None)
         elif value :? DateTime then
             let date = value :?> DateTime
-            (new StringContent(Helpers.getUnix date |> string) :> HttpContent, None)
+            (new StringContent(getUnix date |> string) :> HttpContent, None)
         elif typeInfo.IsPrimitive then
             (new StringContent(value.ToString(), Encoding.UTF8) :> HttpContent, None)
         elif (value :? Types.FileToSend) then
@@ -84,8 +87,8 @@ type internal Api private() =
             | Types.FileId x -> (new StringContent(x) :> HttpContent, None)
             | Types.File (name, content) -> (new StreamContent(content) :> HttpContent, Some name)
         else
-            (new StringContent(Helpers.serializeObject value) :> HttpContent, None)
-    
+            (new StringContent(serializeObject value) :> HttpContent, None)
+
     static member private DowncastOptionObj = 
         let ty = typedefof<option<_>>
         fun (a:obj) ->
@@ -105,21 +108,21 @@ type internal Api private() =
 
         async {
             
-            let url = Helpers.getUrl token methodName
+            let url = getUrl token methodName
 
             if param.IsNone || param.Value.Length = 0 then
                 return Api.Client.GetStringAsync(url) 
                         |> Async.AwaitTask 
                         |> Async.RunSynchronously 
-                        |> Helpers.parseJson<'a>
+                        |> parseJson<'a>
             else
                 let paramValues = param.Value |> List.choose (fun (key, value) -> 
                     match value with 
                     | null -> None
-                    | Helpers.SomeObj(o) -> 
+                    | SomeObj(o) -> 
                         Some (key, o)
                     | _ -> 
-                        if Helpers.isOption (value.GetType()) then None
+                        if isOption (value.GetType()) then None
                         else Some (key, value))
 
                 if paramValues |> Seq.exists (fun (a, b) -> (b :? Types.FileToSend)) then
@@ -135,14 +138,14 @@ type internal Api private() =
                     let result = Api.Client.PostAsync(url, form)
                                 |> Async.AwaitTask 
                                 |> Async.RunSynchronously
-                    return Helpers.parseJson<'a> (result.Content.ReadAsStringAsync() |> Async.AwaitTask |> Async.RunSynchronously)
+                    return parseJson<'a> (result.Content.ReadAsStringAsync() |> Async.AwaitTask |> Async.RunSynchronously)
                 else
-                    let json = Helpers.serializeObject (paramValues |> dict)
+                    let json = serializeObject (paramValues |> dict)
                     let result = new StringContent(json, Encoding.UTF8, "application/json")
 
                     let result = Api.Client.PostAsync(url, result)
                                 |> Async.AwaitTask 
                                 |> Async.RunSynchronously
-                    return Helpers.parseJson<'a> (result.Content.ReadAsStringAsync() |> Async.AwaitTask |> Async.RunSynchronously)
+                    return parseJson<'a> (result.Content.ReadAsStringAsync() |> Async.AwaitTask |> Async.RunSynchronously)
                     
         }

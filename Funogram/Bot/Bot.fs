@@ -1,6 +1,8 @@
 module Funogram.Bot
+
 open Funogram.Sscanf
 open Funogram.Types
+open Funogram.Rest
 
 
 type BotConfig = 
@@ -21,9 +23,6 @@ type UpdateContext =
     Config: BotConfig
     Me: User
   }
-
-let (>=>) a b = a (fun _ -> b)
-
 
 let cmd (command: string) (h: _ -> unit) =
     let f (r: Message) =
