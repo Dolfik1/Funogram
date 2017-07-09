@@ -3,6 +3,11 @@ F# Telegram Bot Api library
 
 # Work in progress
 
+Old methods moved in `Funogram.Rest` module.
+New more functional api available in `Funogram.Api` module.
+
+Not recommended to use functions who ends with `Base`, because it's may be changed in future. If you want to use this functions, you need to minimize usage of it (write wrapper, for example).
+
 #### Completed 👍:
 - getUpdates
 - getMe
