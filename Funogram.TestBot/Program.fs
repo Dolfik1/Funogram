@@ -81,7 +81,7 @@ let updateArrived ctx =
             cmd "/forward_message" (fun _ -> bot (forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId))
             cmd "/show_my_photos_sizes" (fun _ -> 
             (
-                let x = botResult (getUserProfilePhotosAll fromId()) |> processResultWithValue
+                let x = botResult (getUserProfilePhotosAll (fromId())) |> processResultWithValue
                 if x.IsNone then ()
                 else
                     let text = sprintf "Photos: %s" (x.Value.Photos 
