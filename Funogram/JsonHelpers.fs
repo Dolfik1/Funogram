@@ -6,7 +6,9 @@ open System
 open System.Reflection
 open FSharp.Reflection
 
-/// Used for convert Unit to DateTime
+type InSnakeCaseAttribute() = inherit System.Attribute()
+
+/// Used for convert Unix to DateTime
 type UnixDateTimeConverter() =
     inherit JsonConverter()
 

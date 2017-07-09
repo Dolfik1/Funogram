@@ -10,7 +10,8 @@
     <Compile Include="Rest.fs" />
 
     <Compile Include="RequestsTypes.fs" />
-    <Compile Include="Api.fs" />
+    <!-- <Compile Include="api.fsi" /> -->
+    <Compile Include="api.fs" />
 
     <Compile Include="Bot/Sscanf.fs" />
     <Compile Include="Bot/Bot.fs" />

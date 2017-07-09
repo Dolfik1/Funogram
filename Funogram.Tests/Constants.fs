@@ -16,7 +16,7 @@ module Constants =
 
     let jsonTestChat = { defaultChat with Id = 1L; Type = "group"; Title = Some("Test group"); AllMembersAreAdministrators = Some(true) }
     let jsonTestMessage = 
-        { defaultMessage with MessageId = 123;  Date = System.DateTime(2117, 05, 28, 12, 47, 51); Text = Some("abc"); Chat = jsonTestChat }
+        { defaultMessage with MessageId = 123L;  Date = System.DateTime(2117, 05, 28, 12, 47, 51); Text = Some("abc"); Chat = jsonTestChat }
 
     let jsonTestEditResult2 = EditMessageResult.Message(jsonTestMessage)
     let jsonTestEditResult2String = """{"message_id":123,"date":4651649271,"chat":{"id":1,"type":"group","title":"Test group","all_members_are_administrators":true},"text":"abc"}"""

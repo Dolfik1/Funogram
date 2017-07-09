@@ -19,7 +19,6 @@ open JsonHelpers
 
 let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
 
-
 let getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
 
 let jsonOpts = 
@@ -27,9 +26,8 @@ let jsonOpts =
         NullValueHandling = NullValueHandling.Ignore,
         ContractResolver = DefaultContractResolver(
             NamingStrategy = SnakeCaseNamingStrategy()),
-        Converters = [| OptionConverter(); DuConverter() |],
+        Converters = [| OptionConverter(); DuConverter(); |],
         ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
-
 let parseJson<'a> str = 
     match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
     | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
@@ -65,9 +63,11 @@ let (|SomeObj|_|) =
       else Some(v.GetValue(a, [| |]))
     else None
    
+let mutable private clientLazy = lazy(new HttpClient())
+
 [<AbstractClass>]
 type internal Api private() =
-    static member private Client = new HttpClient()
+    static member private Client = clientLazy.Value
     static member private ConvertParameterValue (value: obj): (HttpContent * string option) = 
         let typeInfo = value.GetType().GetTypeInfo()
 

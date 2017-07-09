@@ -1,6 +1,7 @@
 module Funogram.Types
 
 open Funogram.JsonHelpers
+
 open System.IO
 open System.Runtime.CompilerServices
 
@@ -544,10 +545,11 @@ type Update =
 type ParseMode = 
   /// Markdown parse syntax
   | Markdown
-  /// HTML parse syntax
+  /// Html parse syntax
   | HTML
 
 /// Type of action to broadcast
+[<InSnakeCase>]
 type ChatAction =
   | Typing
   | UploadPhoto

@@ -92,8 +92,7 @@ let startBot config updateArrived =
   ()
 
 let processCommands (ctx: UpdateContext) (commands: (Message -> bool) seq) =
-  let message = ctx.Update.Message
-  match message with
+  match ctx.Update.Message with
   | Some msg -> commands 
                 |> Seq.map (fun f -> f msg) 
                 |> Seq.exists id

@@ -8,6 +8,18 @@ open Newtonsoft.Json.Linq
 open System.Collections.Generic
 open Newtonsoft.Json.Serialization
 
+
+let getSnakeCaseName (name: string) =
+    let chars =
+        seq {
+            let chars = name.ToCharArray()
+            for i in 0 .. chars.Length - 1 do
+                if i > 0 && Char.IsUpper(chars.[i]) then
+                    yield '_'
+                yield chars.[i]
+        }
+    String.Concat(chars).ToLower()
+
 type OptionConverter() =
     inherit JsonConverter()
     
@@ -75,30 +87,34 @@ type DuConverter() =
             false
         else
             let objs = jsonProps |> Seq.where(fun f -> f.Value.HasValues)
-            if (objs |> Seq.length) = 0 then 
+            if objs |> Seq.isEmpty then 
                 true
             else
                 let getType name = 
                     let _, x = sourceProps |> Seq.findBack (fun (k, _) -> k = name)
                     x.PropertyType
-
-                    
+    
                 objs |> Seq.forall(
                             fun f -> isJsonObjectAndTypeEquals (getType f.Key) (f.Value :?> JObject) serializer)
-
-
 
     override x.CanConvert(t) = FSharpType.IsUnion(t)
         
     override x.WriteJson(writer, value, serializer) = 
         let t = value.GetType()
-        let _, fieldValues = FSharpValue.GetUnionFields(value, t)
+        let caseInfo, fieldValues = FSharpValue.GetUnionFields(value, t)
+
+        let getCaseInfoName() =
+            let snakeCase = t.GetTypeInfo().CustomAttributes 
+                            |> Seq.exists (fun f -> f.AttributeType = typeof<SnakeCaseNamingStrategy>)
+            if snakeCase then getSnakeCaseName caseInfo.Name
+            else caseInfo.Name
 
         let value =
             match fieldValues.Length with
-            | 0 -> null
+            | 0 -> getCaseInfoName() :> obj
             | 1 -> fieldValues.[0]
             | _ -> fieldValues :> obj
+
         serializer.Serialize(writer, value)
     
     override x.ReadJson(reader, t, existingValue, serializer) = 

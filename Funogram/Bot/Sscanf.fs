@@ -1,4 +1,4 @@
-module Funogram.Sscanf
+module internal Funogram.Sscanf
 
 open System
 open System.Text
