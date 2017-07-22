@@ -3,14 +3,14 @@
     <TargetFrameworks>net45;netstandard1.6</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
-    <VersionPrefix>1.1.1</VersionPrefix>
+    <VersionPrefix>1.1.2</VersionPrefix>
     <VersionSuffix>alpha</VersionSuffix>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="JsonHelpers.fs" />
     <Compile Include="Types.fs" />
     <Compile Include="JsonConverters.fs" />
-    <Compile Include="Helpers.fs" />
+    <Compile Include="Tools.fs" />
     <Compile Include="Rest.fs" />
     <Compile Include="RequestsTypes.fs" />
     <!-- <Compile Include="api.fsi" /> -->

@@ -2,7 +2,7 @@ module Funogram.Api
 
 open Funogram.Types
 open Funogram.RequestsTypes
-open Funogram.Helpers
+open Funogram.Tools
 
 open System
 open System.Reflection

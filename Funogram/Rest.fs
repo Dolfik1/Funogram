@@ -4,7 +4,7 @@ open Newtonsoft.Json
 open Newtonsoft.Json.Serialization
 open System
 open System.Runtime.CompilerServices
-open Helpers
+open Tools
 
 [<assembly: InternalsVisibleTo("Funogram.Tests")>]
 do()
@@ -50,9 +50,9 @@ type Telegram private() =
         Api.MakeRequestAsync<Types.Message>
             (token, 
               "sendMessage",
-              [ "chat_id", box (Helpers.getChatIdString chatId)
+              [ "chat_id", box (Tools.getChatIdString chatId)
                 "text", box text
-                "parse_mode", box (Helpers.parseModeName parseMode)
+                "parse_mode", box (Tools.parseModeName parseMode)
                 "disable_web_page_preview", box disableWebPagePreview
                 "disable_notification", box disableNotification
                 "reply_to_message_id", box replyToMessageId
@@ -95,8 +95,8 @@ type Telegram private() =
             disableNotification: bool option
         ) = Api.MakeRequestAsync<Types.Message> (token, 
                 "forwardMessage",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
-                  "from_chat_id", box (Helpers.getChatIdString fromChatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
+                  "from_chat_id", box (Tools.getChatIdString fromChatId)
                   "disable_notification", box disableNotification
                   "message_id", box messageId ])
 
@@ -212,7 +212,7 @@ type Telegram private() =
             userId: int
         ) = Api.MakeRequestAsync<bool>(token, 
                 "kickChatMember",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "user_id", box userId ])
 
     /// Use this method to kick a user from a group or a supergroup. In the case of supergroups, the user will not be able to return to the group on their own using invite links, etc., unless unbanned first. The bot must be an administrator in the group for this to work. Returns True on success. Note: This will method only work if the ‘All Members Are Admins’ setting is off in the target group. Otherwise members may only be removed by the group's creator or by the member that added them.
@@ -235,7 +235,7 @@ type Telegram private() =
             userId: int
         ) = Api.MakeRequestAsync<bool>(token, 
                 "unbanChatMember",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "user_id", box userId ])
 
     /// Use this method to unban a previously kicked user in a supergroup or channel. The user will not return to the group or channel automatically, but will be able to join via link, etc. The bot must be an administrator for this to work. Returns True on success.
@@ -254,7 +254,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<bool>(token, "leaveChat", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<bool>(token, "leaveChat", [ "chat_id", box (Tools.getChatIdString chatId) ])
 
     /// Use this method for your bot to leave a group, supergroup or channel. Returns True on success.
     static member LeaveChat
@@ -270,7 +270,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<Types.Chat>(token, "getChat", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<Types.Chat>(token, "getChat", [ "chat_id", box (Tools.getChatIdString chatId) ])
 
     /// Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.
     static member GetChat
@@ -286,7 +286,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<seq<Types.ChatMember>>(token, "getChatAdministrators", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<seq<Types.ChatMember>>(token, "getChatAdministrators", [ "chat_id", box (Tools.getChatIdString chatId) ])
 
     /// Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.
     static member GetChatAdministrators
@@ -302,7 +302,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", box (Tools.getChatIdString chatId) ])
     
     /// Use this method to get the number of members in a chat. Returns Int on success.
     static member GetChatMembersCount
@@ -310,7 +310,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", box (Helpers.getChatIdString chatId) ]) |> Async.RunSynchronously
+        ) = Api.MakeRequestAsync<int>(token, "getChatMembersCount", [ "chat_id", box (Tools.getChatIdString chatId) ]) |> Async.RunSynchronously
 
     /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
     static member GetChatMemberAsync
@@ -322,7 +322,7 @@ type Telegram private() =
             userId: int
         ) = Api.MakeRequestAsync<Types.ChatMember>(token, 
                 "getChatMember",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "user_id", box userId ])
 
     /// Use this method to get information about a member of a chat. Returns a ChatMember object on success.
@@ -403,7 +403,7 @@ type Telegram private() =
                   "message_id", box messageId
                   "inline_message_id", box inlineMessageId
                   "text", box text
-                  "parse_mode", box (Helpers.parseModeName parseMode)
+                  "parse_mode", box (Tools.parseModeName parseMode)
                   "disable_web_page_preview", box disableWebPagePreview
                   "reply_markup", box replyMarkup ])
     
@@ -459,7 +459,7 @@ type Telegram private() =
             replyMarkup: Types.InlineKeyboardMarkup option
         ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "editMessageCaption",
-                [ "chat_id", box (Helpers.getChatIdStringOption chatId)
+                [ "chat_id", box (Tools.getChatIdStringOption chatId)
                   "message_id", box messageId
                   "inline_message_id", box inlineMessageId
                   "caption", box caption
@@ -506,7 +506,7 @@ type Telegram private() =
             replyMarkup: Types.InlineKeyboardMarkup option
         ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "editMessageReplyMarkup",
-                [ "chat_id", box (Helpers.getChatIdStringOption chatId)
+                [ "chat_id", box (Tools.getChatIdStringOption chatId)
                   "message_id", box messageId
                   "inline_message_id", box inlineMessageId
                   "reply_markup", box replyMarkup ])
@@ -549,7 +549,7 @@ type Telegram private() =
             messageId: int
         ) = Api.MakeRequestAsync<Types.EditMessageResult>(token,
                 "deleteMessage",
-                [ "chatId", box (Helpers.getChatIdString chatId)
+                [ "chatId", box (Tools.getChatIdString chatId)
                   "message_id", box messageId ])   
 
     /// Use this method to delete a message. A message can only be deleted if it was sent less than 48 hours ago. Any such recently sent outgoing message may be deleted. Additionally, if the bot is an administrator in a group chat, it can delete any message. If the bot is an administrator in a supergroup, it can delete messages from any other user and service messages about people joining or leaving the group (other types of service messages may only be removed by the group creator). In channels, bots can only remove their own messages. Returns True on success. 
@@ -853,7 +853,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendPhoto",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "photo", box photo
                   "caption", box caption
                   "disable_notification", box disableNotification
@@ -910,7 +910,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendAudio",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "audio", box audio
                   "caption", box caption
                   "duration", box duration
@@ -981,7 +981,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendDocument",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "document", box document
                   "caption", box caption
                   "disable_notification", box disableNotification
@@ -1034,7 +1034,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendSticker",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "sticker", box sticker
                   "disable_notification", box disableNotification
                   "reply_to_message_id", box replyToMessageId
@@ -1086,7 +1086,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendVideo",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "video", box video
                   "duration", box duration
                   "width", box width
@@ -1156,7 +1156,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendVoice",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "voice", box voice
                   "caption", box caption
                   "duration", box duration
@@ -1216,7 +1216,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendVideoNote",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "video_note", box videoNote
                   "duration", box duration
                   "length", box length
@@ -1275,7 +1275,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendLocation",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "latitude", box latitude
                   "longitude", box longitude
                   "disable_notification", box disableNotification
@@ -1332,7 +1332,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendVenue",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "latitude", box latitude
                   "longitude", box longitude
                   "longitude", box longitude
@@ -1404,7 +1404,7 @@ type Telegram private() =
             replyMarkup: Types.Markup option
         ) = Api.MakeRequestAsync<Types.Message>(token,
                 "sendContact",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "phone_number", box phoneNumber
                   "first_name", box firstName
                   "last_name", box lastName
@@ -1462,7 +1462,7 @@ type Telegram private() =
             action: Types.ChatAction
         ) = Api.MakeRequestAsync<bool>(token,
                 "sendChatAction",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "action", box action ])
     
     /// Use this method when you need to tell the user that something is happening on the bot's side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status).
@@ -1640,7 +1640,7 @@ type Telegram private() =
         ) = Api.MakeRequestAsync<bool>(token,
                 "restrictChatMember",
                 [ "user_id", box userId
-                  "chat_id", box (Helpers.getChatIdString chatId)
+                  "chat_id", box (Tools.getChatIdString chatId)
                   "until_date", box untilDate
                   "can_send_messages", box canSendMessages
                   "can_send_media_messages", box canSendMediaMessages
@@ -1703,7 +1703,7 @@ type Telegram private() =
         ) = Api.MakeRequestAsync<bool>(token,
                 "promoteChatMember",
                 [ "user_id", box userId
-                  "chat_id", box (Helpers.getChatIdString chatId)
+                  "chat_id", box (Tools.getChatIdString chatId)
                   "can_change_info", box canChangeInfo
                   "can_post_messages", box canPostMessages
                   "can_edit_messages", box canEditMessages
@@ -1773,7 +1773,7 @@ type Telegram private() =
             untilDate: DateTime option
         ) = Api.MakeRequestAsync<bool>(token,
                 "kickChatMember",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "user_id", box userId
                   "until_date", box untilDate ])
 
@@ -1809,7 +1809,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<string>(token,  "exportChatInviteLink", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<string>(token,  "exportChatInviteLink", [ "chat_id", box (Tools.getChatIdString chatId) ])
 
     /// Use this method to export an invite link to a supergroup or a channel. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
     static member ExportChatInviteLink
@@ -1830,7 +1830,7 @@ type Telegram private() =
             photo: Types.FileToSend
         ) = Api.MakeRequestAsync<string>(token,  
                 "setChatPhoto", 
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "photo", box photo ])
 
     /// Use this method to set a new profile photo for the chat. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
@@ -1851,7 +1851,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target channel (in the format @channelusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<string>(token, "deleteChatPhoto", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<string>(token, "deleteChatPhoto", [ "chat_id", box (Tools.getChatIdString chatId) ])
 
     /// Use this method to delete a chat photo. Photos can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
     /// Note: In regular groups (non-supergroups), this method will only work if the ‘All Members Are Admins’ setting is off in the target group.
@@ -1873,7 +1873,7 @@ type Telegram private() =
             title: string
         ) = Api.MakeRequestAsync<string>(token, 
                 "setChatTitle", 
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "title", box title ])
 
     /// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights. 
@@ -1898,7 +1898,7 @@ type Telegram private() =
             description: string
         ) = Api.MakeRequestAsync<string>(token, 
                 "setChatDescription", 
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "description", box description ])
 
     /// Use this method to change the title of a chat. Titles can't be changed for private chats. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
@@ -1920,7 +1920,7 @@ type Telegram private() =
             disableNotification: bool option
         ) = Api.MakeRequestAsync<bool>(token,
                 "pinChatMessage",
-                [ "chat_id", box (Helpers.getChatIdString chatId)
+                [ "chat_id", box (Tools.getChatIdString chatId)
                   "message_id", box messageId
                   "disable_notification", box disableNotification ])
     
@@ -1954,7 +1954,7 @@ type Telegram private() =
             token: string,
             /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
             chatId: Types.ChatId
-        ) = Api.MakeRequestAsync<bool>(token, "unpinChatMessage", [ "chat_id", box (Helpers.getChatIdString chatId) ])
+        ) = Api.MakeRequestAsync<bool>(token, "unpinChatMessage", [ "chat_id", box (Tools.getChatIdString chatId) ])
    
     /// Use this method to unpin a message in a supergroup chat. The bot must be an administrator in the chat for this to work and must have the appropriate admin rights
     static member UnpinChatMessage

@@ -1,4 +1,4 @@
-module internal Funogram.Helpers
+module Funogram.Tools
 
 
 open JsonConverters
@@ -17,43 +17,42 @@ do()
 open Types
 open JsonHelpers
 
-let getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
+let private getUrl token methodName = sprintf "https://api.telegram.org/bot%s/%s" token methodName
+let internal getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
 
-let getUnix (date: DateTime) = Convert.ToInt64(date.Subtract( DateTime(1970, 1, 1)).TotalSeconds);
-
-let jsonOpts = 
+let private jsonOpts = 
     JsonSerializerSettings(
         NullValueHandling = NullValueHandling.Ignore,
         ContractResolver = DefaultContractResolver(
             NamingStrategy = SnakeCaseNamingStrategy()),
         Converters = [| OptionConverter(); DuConverter(); |],
         ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor)
-let parseJson<'a> str = 
+let internal parseJson<'a> str = 
     match (JsonConvert.DeserializeObject<Types.ApiResponse<'a>>(str, jsonOpts)) with
     | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
     | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
         Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
     | _ -> Error { Description = "Unknown error"; ErrorCode = -1 }
 
-let serializeObject (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
+let toJsonString (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
 
-let parseModeName parseMode = 
+let internal parseModeName parseMode = 
     match parseMode with
     | None -> None
     | _ -> match parseMode.Value with
             | HTML -> Some "HTML"
             | Markdown -> Some "Markdown"
 
-let getChatIdString (chatId: Types.ChatId) =
+let internal getChatIdString (chatId: Types.ChatId) =
     match chatId with
     | Int v -> v |> string
     | String v -> v
 
-let getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
+let internal getChatIdStringOption (chatId: Types.ChatId option) = chatId |> Option.map getChatIdString |> Option.defaultValue ""
 
-let isOption (t: Type) = t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
+let private isOption (t: Type) = t.GetTypeInfo().IsGenericType && t.GetGenericTypeDefinition() = typedefof<option<_>>
 
-let (|SomeObj|_|) =
+let internal (|SomeObj|_|) =
   let ty = typedefof<option<_>>
   fun (a:obj) ->
     let aty = a.GetType().GetTypeInfo()
@@ -62,7 +61,7 @@ let (|SomeObj|_|) =
       if isNull(a) then None
       else Some(v.GetValue(a, [| |]))
     else None
-   
+
 let mutable private clientLazy = lazy(new HttpClient())
 
 [<AbstractClass>]
@@ -87,7 +86,7 @@ type internal Api private() =
             | Types.FileId x -> (new StringContent(x) :> HttpContent, None)
             | Types.File (name, content) -> (new StreamContent(content) :> HttpContent, Some name)
         else
-            (new StringContent(serializeObject value) :> HttpContent, None)
+            (new StringContent(toJsonString value) :> HttpContent, None)
 
     static member private DowncastOptionObj = 
         let ty = typedefof<option<_>>
@@ -140,7 +139,7 @@ type internal Api private() =
                                 |> Async.RunSynchronously
                     return parseJson<'a> (result.Content.ReadAsStringAsync() |> Async.AwaitTask |> Async.RunSynchronously)
                 else
-                    let json = serializeObject (paramValues |> dict)
+                    let json = toJsonString (paramValues |> dict)
                     let result = new StringContent(json, Encoding.UTF8, "application/json")
 
                     let result = Api.Client.PostAsync(url, result)
