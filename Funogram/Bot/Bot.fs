@@ -24,9 +24,15 @@ type UpdateContext =
     Me: User
   }
 
+let private getTextForCommand (me: User) (text: string option) = 
+  let username() = "@" + me.Username.Value
+  if text.IsSome && text.Value.EndsWith(username()) then 
+    Some (text.Value.Replace(username(), ""))
+  else text
+
 let cmd (command: string) (h: _ -> unit) =
-    let f (r: Message) =
-      match r.Text with
+    let f (r: Message, me: User) =
+      match (getTextForCommand me r.Text) with
       | Some text ->
         if text = command then
           h()
@@ -45,8 +51,8 @@ let cmdScan (pf : PrintfFormat<_,_,_,_,'t>) (h : 't -> unit) =
       with _ ->
         None
 
-    let f (r: Message) =
-      match r.Text with
+    let f (r: Message, me: User) =
+      match (getTextForCommand me r.Text) with
       | Some text -> 
         match scan text with
         | Some p -> 
@@ -91,9 +97,9 @@ let startBot config updateArrived =
   | Ok me -> runBot config me updateArrived
   ()
 
-let processCommands (ctx: UpdateContext) (commands: (Message -> bool) seq) =
+let processCommands (ctx: UpdateContext) (commands: (Message * User -> bool) seq) =
   match ctx.Update.Message with
   | Some msg -> commands 
-                |> Seq.map (fun f -> f msg) 
+                |> Seq.map (fun f -> f (msg, ctx.Me))
                 |> Seq.exists id
   | None -> false
