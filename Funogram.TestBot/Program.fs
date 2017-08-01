@@ -40,8 +40,12 @@ let bot data = api botToken data |> Async.RunSynchronously |> processResult
 let botResult data = api botToken data |> Async.RunSynchronously
 
 let getChatInfo msg =
-    match botResult (getChat msg.Chat.Id) with
-    | Ok x -> processResultWithValue <| botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type)) |> ignore
+    let result = botResult (getChat msg.Chat.Id)
+    match result with
+    | Ok x -> 
+        botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type)) 
+        |> processResultWithValue 
+        |> ignore
     | Error e -> printf "Error: %s" e.Description
 
 let sendPhoto msg =
@@ -101,7 +105,7 @@ let updateArrived ctx =
 let start token =
     botToken <- token
     let config = { defaultConfig with Token = token }
-    startBot config updateArrived
+    startBot config updateArrived None
 
 [<EntryPoint>]
 let main argv =

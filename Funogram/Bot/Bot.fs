@@ -63,7 +63,7 @@ let cmdScan (pf : PrintfFormat<_,_,_,_,'t>) (h : 't -> unit) =
       | None -> false
     f
 
-let private runBot config me updateArrived = 
+let private runBot config me updateArrived updatesArrived = 
 
   let rec loopAsync offset = async {
     try
@@ -76,6 +76,10 @@ let private runBot config me updateArrived =
         let offset = updates |> Seq.map (fun f -> f.UpdateId) |> Seq.max |> fun x -> x + 1L
 
         do updates |> Seq.iter (fun f -> updateArrived { Update = f; Config = config; Me = me })
+        match updatesArrived with
+        | Some updatesArrived -> do updates |> updatesArrived
+        | _ -> ()
+
 
         return! loopAsync offset // sends new offset
       | Error e -> 
@@ -90,11 +94,11 @@ let private runBot config me updateArrived =
   }
   loopAsync (config.Offset |> Option.defaultValue 0L) |> Async.RunSynchronously
 
-let startBot config updateArrived =
+let startBot config updateArrived updatesArrived =
   let meResult = Telegram.GetMeAsync config.Token |> Async.RunSynchronously
   match meResult with 
   | Error e -> failwith(e.Description) 
-  | Ok me -> runBot config me updateArrived
+  | Ok me -> runBot config me updateArrived updatesArrived
   ()
 
 let processCommands (ctx: UpdateContext) (commands: (Message * User -> bool) seq) =
