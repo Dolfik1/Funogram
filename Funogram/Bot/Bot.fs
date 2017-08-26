@@ -2,7 +2,7 @@ module Funogram.Bot
 
 open Funogram.Sscanf
 open Funogram.Types
-open Funogram.Rest
+open Funogram.Api
 
 
 type BotConfig = 
@@ -65,9 +65,11 @@ let cmdScan (pf : PrintfFormat<_,_,_,_,'t>) (h : 't -> unit) =
 
 let private runBot config me updateArrived updatesArrived = 
 
+  let bot data = api config.Token data
+
   let rec loopAsync offset = async {
     try
-      let! updatesResult = Telegram.GetUpdatesBaseAsync(config.Token, Some offset, config.Limit, config.Timeout)
+      let! updatesResult = getUpdatesBase (Some offset) (config.Limit) config.Timeout [] |> bot
       match updatesResult with
       | Ok updates -> 
         if updates |> Seq.isEmpty then
@@ -95,7 +97,8 @@ let private runBot config me updateArrived updatesArrived =
   loopAsync (config.Offset |> Option.defaultValue 0L) |> Async.RunSynchronously
 
 let startBot config updateArrived updatesArrived =
-  let meResult = Telegram.GetMeAsync config.Token |> Async.RunSynchronously
+
+  let meResult = getMe |> api config.Token |> Async.RunSynchronously
   match meResult with 
   | Error e -> failwith(e.Description) 
   | Ok me -> runBot config me updateArrived updatesArrived

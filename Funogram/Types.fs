@@ -5,12 +5,12 @@ open Funogram.JsonHelpers
 open System.IO
 open System.Runtime.CompilerServices
 
+open System
+open Newtonsoft.Json
+
 // Allow construct types to Funogram.Tests
 [<assembly: InternalsVisibleTo("Newtonsoft.Json")>]
 do()
-
-open System
-open Newtonsoft.Json
 
 type ChatId = 
   | Int of int64
@@ -22,6 +22,8 @@ type ChatId =
 type User =
   { /// Unique identifier for this user or bot
     Id: int64
+    /// True, if this user is a bot
+    IsBot: bool
     /// User‘s or bot’s first name
     FirstName: string
     /// User‘s or bot’s last name
@@ -61,13 +63,12 @@ type Chat =
     /// Description, for supergroups and channel chats. Returned only in getChat.
     Description: string option
     /// Chat invite link, for supergroups and channel chats. Returned only in getChat.
-    InviteLink: string option }
+    InviteLink: string option
+    /// Pinned message, for supergroups. Returned only in getChat.
+    PinnedMessage: Message option }
 
-let defaultChat = { Id = 0L; Type = ""; Chat.Title = None; Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = None; Photo = None; Description = None; InviteLink = None; }
-
-[<CLIMutable>]
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
-type MessageEntity =
+and [<CLIMutable>] MessageEntity =
   {  /// Type of the entity. Can be mention (@username), hashtag, bot_command, url, email, bold (bold text), 
     /// italic (italic text), code (monowidth string), pre (monowidth block), text_link (for clickable text URLs), 
     /// text_mention (for users without usernames)    
@@ -81,9 +82,8 @@ type MessageEntity =
     /// For “text_mention” only, the mentioned user
     User: User option }
 
-[<CLIMutable>]
 /// This object represents an audio file to be treated as music by the Telegram clients
-type Audio =
+and [<CLIMutable>] Audio =
   {  /// Unique identifier for this file
     FileId: string
     /// Duration of the audio in seconds as defined by sender
@@ -97,9 +97,8 @@ type Audio =
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
 /// This object represents one size of a photo or a file / sticker thumbnail.
-type PhotoSize =
+and [<CLIMutable>] PhotoSize =
   {  /// Unique identifier for this file
     FileId: string
     /// Photo width
@@ -109,9 +108,8 @@ type PhotoSize =
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
 /// This object represents a general file (as opposed to photos, voice messages and audio files).
-type Document = 
+and [<CLIMutable>] Document = 
   {  /// Unique file identifier
     FileId: string
     /// Document thumbnail as defined by sender
@@ -123,9 +121,26 @@ type Document =
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
+and MaskPoint =
+  | Forehead
+  | Eyes
+  | Mouth
+  | Chin
+
+/// This object describes the position on faces where a mask should be placed by default.
+and [<CLIMutable>] MaskPosition =
+  { /// The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
+    Point: MaskPoint
+    /// Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position.
+    XShift: float
+    /// Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will place the mask just below the default mask position.
+    YShift: float
+    /// Mask scaling coefficient. For example, 2.0 means double size.
+    Scale: float
+  }
+
 /// This object represents a sticker.
-type Sticker =
+and [<CLIMutable>] Sticker =
   {  /// Unique identifier for this file
     FileId: string
     /// Sticker width
@@ -136,12 +151,26 @@ type Sticker =
     Thumb: PhotoSize option
     /// Emoji associated with the sticker
     Emoji: string option
+    /// Name of the sticker set to which the sticker belongs
+    SetName: string option
+    /// For mask stickers, the position where the mask should be placed
+    MaskPosition: MaskPosition option
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
+/// This object represents a sticker set.
+and [<CLIMutable>] StickerSet =
+  { /// Sticker set name
+    Name: string
+    /// Sticker set title
+    Title: string
+    /// True, if the sticker set contains masks
+    ContainsMasks: bool
+    /// List of all set stickers
+    Stickers: Sticker seq }
+
 /// This object represents a video file.
-type Video =
+and [<CLIMutable>] Video =
   {  /// Unique identifier for this file
     FileId: string
     /// Video width as defined by sender
@@ -157,9 +186,8 @@ type Video =
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
 /// This object represents a voice note
-type Voice = 
+and [<CLIMutable>] Voice = 
   {  /// Unique identifier for this file
     FileId: string
     /// Duration of the audio in seconds as defined by sender
@@ -169,9 +197,8 @@ type Voice =
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
 /// Contact's phone number
-type Contact =
+and [<CLIMutable>] Contact =
   {  /// 
     PhoneNumber: string
     /// Contact's first name
@@ -181,17 +208,15 @@ type Contact =
     /// Contact's user identifier in Telegram
     UserId: int option }
 
-[<CLIMutable>]
 /// This object represents a point on the map
-type Location =
+and [<CLIMutable>] Location =
   {  /// Longitude as defined by sender
     Longitude: double
     /// Latitude as defined by sender
     Latitude: double }
     
-[<CLIMutable>]
 /// This object represents a venue.
-type Venue =
+and [<CLIMutable>] Venue =
   {  /// Venue location
     Location: Location
     /// Name of the venue
@@ -201,18 +226,16 @@ type Venue =
     /// Foursquare identifier of the venue
     FoursquareId: string option }
     
-[<CLIMutable>]
 /// This object represent a user's profile pictures.
-type UserProfilePhotos =
+and [<CLIMutable>] UserProfilePhotos =
   { /// Total number of profile pictures the target user has
     TotalCount: int
     /// Requested profile pictures (in up to 4 sizes each)
     Photos: seq<seq<PhotoSize>> }
 
-[<CLIMutable>]
 /// This object represents a file ready to be downloaded. The file can be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>. 
 /// It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile.
-type File =
+and [<CLIMutable>] File =
   { /// Unique identifier for this file
     FileId: string
     /// File size, if known
@@ -220,9 +243,8 @@ type File =
     /// File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
     FilePath: string option }
       
-[<CLIMutable>]
 /// You can provide an animation for your game so that it looks stylish in chats (check out Lumberjack for an example). This object represents an animation file to be displayed in the message containing a game.
-type Animation =
+and [<CLIMutable>] Animation =
   {  /// Unique file identifier
     FileId: string
     /// Animation thumbnail as defined by sender
@@ -234,9 +256,8 @@ type Animation =
     /// File size
     FileSize: string option }
 
-[<CLIMutable>]
 /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers
-type Game = 
+and [<CLIMutable>] Game = 
   {  /// Title of the game
     Title: string
     /// Description of the game
@@ -252,9 +273,8 @@ type Game =
     /// Animation that will be displayed in the game message in chats. Upload via BotFather
     Animation: Animation option }
     
-[<CLIMutable>]
 /// This object represents a video message (available in Telegram apps as of v.4.0).
-type VideoNote =
+and [<CLIMutable>] VideoNote =
   { /// Unique identifier for this file
     FileId: string
     /// Video width and height as defined by sender
@@ -266,9 +286,8 @@ type VideoNote =
     /// File size
     FileSize: int option }
 
-[<CLIMutable>]
 /// This object contains basic information about an invoice
-type Invoice = 
+and [<CLIMutable>] Invoice = 
   { /// Product name
     Title: string
     /// Product description
@@ -280,9 +299,8 @@ type Invoice =
     /// Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
     TotalAmount: int }
     
-[<CLIMutable>]
 /// This object represents a shipping address
-type ShippingAddress =
+and [<CLIMutable>] ShippingAddress =
   { /// ISO 3166-1 alpha-2 country code
     CountryCode: string
     /// State, if applicable
@@ -296,9 +314,8 @@ type ShippingAddress =
     /// Address post code
     PostCode: string }
 
-[<CLIMutable>]
 /// This object represents information about an order.
-type OrderInfo = 
+and [<CLIMutable>] OrderInfo = 
   { /// User name
     Name: string option
     /// Optional. User's phone number
@@ -308,17 +325,15 @@ type OrderInfo =
     /// User shipping address
     ShippingAddress: ShippingAddress option }
 
-[<CLIMutable>]
 /// This object represents a portion of the price for goods or services.
-type LabeledPrice =
+and [<CLIMutable>] LabeledPrice =
   { /// Portion label
     Label: string
     /// Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
     Amount: int }
 
-[<CLIMutable>]
 /// This object represents one shipping option
-type ShippingOption =
+and [<CLIMutable>] ShippingOption =
   { /// Shipping option identifier
     Id: string
     /// Option title
@@ -326,9 +341,8 @@ type ShippingOption =
     /// List of price portions
     Prices: LabeledPrice seq }
 
-[<CLIMutable>]
 /// This object contains basic information about a successful payment
-type SuccessfulPayment =
+and [<CLIMutable>] SuccessfulPayment =
   { /// Three-letter ISO 4217 currency code
     Currency: string
     /// Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
@@ -344,9 +358,8 @@ type SuccessfulPayment =
     /// Provider payment identifier
     ProviderPaymentChargeId: string }
     
-[<CLIMutable>]
 /// This object contains information about an incoming shipping query.
-type ShippingQuery = 
+and [<CLIMutable>] ShippingQuery = 
   { /// Unique query identifier
     Id: string
     /// User who sent the query
@@ -356,9 +369,8 @@ type ShippingQuery =
     /// User specified shipping address
     ShippingAddress: ShippingAddress }
 
-[<CLIMutable>]
 /// This object contains information about an incoming pre-checkout query
-type PreCheckoutQuery =
+and [<CLIMutable>] PreCheckoutQuery =
   { /// Unique query identifier
     Id: string
     /// User who sent the query
@@ -374,9 +386,8 @@ type PreCheckoutQuery =
     /// Order info provided by the user
     OrderInfo: OrderInfo option }
 
-[<CLIMutable>]
 /// This object represents a message
-type Message = 
+and [<CLIMutable>] Message = 
   {  /// Unique message identifier inside this chat
     MessageId: int64
     /// Sender, can be empty for messages sent to channels
@@ -392,6 +403,9 @@ type Message =
     ForwardFromChat: Chat option
     /// For forwarded channel posts, identifier of the original message in the channel
     ForwardFromMessageId: int64 option
+    /// For messages forwarded from channels, signature of the post author if present
+    ForwardSignature: string option
+
     [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
     /// For forwarded messages, date the original message
     ForwardDate: DateTime option
@@ -402,6 +416,8 @@ type Message =
     [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
     /// Date the message was last edited
     EditDate: DateTime option
+    /// Signature of the post author for messages in channels
+    AuthorSignature: string option
     /// For text messages, the actual UTF-8 text of the message, 0-4096 characters.
     Text: string option
     /// For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
@@ -464,11 +480,16 @@ type Message =
     Invoice: Invoice option
     /// Message is a service message about a successful payment, information about the payment
     SuccessfulPayment: SuccessfulPayment option }
+
+
+let defaultChat = { Id = 0L; Type = ""; Chat.Title = None; Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = None; Photo = None; Description = None; InviteLink = None; PinnedMessage = None }
+
 let defaultMessage = { MessageId = 1L; From = None; Date = DateTime.MinValue; Chat = defaultChat; ForwardFrom = None; ForwardFromChat = None; 
   ForwardDate = None; ForwardFromMessageId = None; ReplyToMessage = None; EditDate = None; Text = None; Entities = None; Audio = None; 
   Document = None; Game = None; Photo = None; Sticker = None; Video = None; Voice = None; VideoNote = None; NewChatMembers = None; Caption = None; 
   Contact = None; Location = None; Venue = None; NewChatMember = None; LeftChatMember = None; NewChatTitle = None; NewChatPhoto = None; 
-  DeleteChatPhoto = None; GroupChatCreated = None; SupergroupChatCreated = None; ChannelChatCreated = None; MigrateToChatId = None; MigrateFromChatId = None; 
+  DeleteChatPhoto = None; GroupChatCreated = None; SupergroupChatCreated = None; ChannelChatCreated = None; MigrateToChatId = None; 
+  MigrateFromChatId = None; ForwardSignature = None; AuthorSignature = None;
   PinnedMessage = None; Invoice = None; SuccessfulPayment = None; }
 
 [<CLIMutable>]

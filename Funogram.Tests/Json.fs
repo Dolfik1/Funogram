@@ -44,3 +44,9 @@ let ``JSON serializing EditMessageResult 1`` () =
 [<Fact>]
 let ``JSON serializing EditMessageResult 2`` () =
         shouldEqual (Tools.toJsonString Constants.jsonTestEditResult2) Constants.jsonTestEditResult2String
+
+[<Fact>]
+let ``JSON deserializing MaskPosition`` () =
+        match Constants.jsonTestMaskPositionResult |> Tools.parseJson<MaskPosition> with
+        | Ok r -> shouldEqual r Constants.testMaskPosition
+        | Error e -> failwith(e.Description)

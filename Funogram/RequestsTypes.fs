@@ -411,3 +411,47 @@ type GetGameHighScoresReq =
       InlineMessageId: string option }
     interface IRequestBase<GameHighScore seq> with
         member x.MethodName = "getGameHighScores"
+
+// Stickers
+
+type GetStickerSetReq =
+    { Name: string }
+    interface IRequestBase<StickerSet> with
+        member x.MethodName = "getStickerSet"
+
+type UploadStickerFileReq =
+    { UserId: int64
+      PngSticker: File }
+    interface IRequestBase<File> with
+        member x.MethodName = "uploadStickerFile"
+
+type CreateNewStickerSetReq =
+    { UserId: int64
+      Name: string
+      Title: string
+      PngSticker: File
+      Emojis: string
+      ContainsMasks: bool option
+      MaskPosition: MaskPosition option }
+      interface IRequestBase<bool> with
+        member x.MethodName = "createNewStickerSet"
+
+type AddStickerToSetReq =
+    { UserId: int64
+      Name: string
+      PngSticker: File
+      Emojis: string
+      MaskPosition: MaskPosition option }
+      interface IRequestBase<bool> with
+        member x.MethodName = "addStickerToSet"
+
+type SetStickerPositionInSetReq =
+    { Sticker: string 
+      Position: int }
+    interface IRequestBase<bool> with
+        member x.MethodName = "setStickerPositionInSet"
+
+type DeleteStickerFromSet =
+    { Sticker: string }
+    interface IRequestBase<bool> with
+        member x.MethodName = "deleteStickerFromSet"

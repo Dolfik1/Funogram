@@ -241,3 +241,32 @@ let getGameHighScores userId chatId messageId =
 
 let getGameHighScoresInline userId inlineMessageId = 
     getGameHighScoresBase userId None None (Some inlineMessageId)
+
+// Stickers
+
+let getStickerSet name =
+    { GetStickerSetReq.Name = name }
+
+let uploadStickerFile userId pngSticker =
+    { UploadStickerFileReq.UserId = userId; PngSticker = pngSticker }
+
+let createNewStickerSetBase userId name title pngSticker emojis containsMasks maskPosition =
+    { CreateNewStickerSetReq.UserId = userId; Name = name; Title = title;
+    PngSticker = pngSticker; Emojis = emojis; ContainsMasks = containsMasks;
+    MaskPosition = maskPosition }
+
+let private addStickerToSetBase userId name pngSticker emojis maskPosition = 
+    { AddStickerToSetReq.UserId = userId; Name = name; PngSticker = pngSticker; 
+    Emojis = emojis; MaskPosition = maskPosition  }
+
+let addStickerToSet userId name pngSticker emojis =
+    addStickerToSetBase userId name pngSticker emojis None
+
+let addStickerToSetWithMask userId name pngSticker emojis maskPosition =
+    addStickerToSetBase userId name pngSticker emojis (Some maskPosition)
+
+let setStickerPositionInSet sticker position =
+    { SetStickerPositionInSetReq.Sticker = sticker; Position = position }
+
+let deleteStickerFromSet sticker =
+    { DeleteStickerFromSet.Sticker = sticker }
