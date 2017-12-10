@@ -616,7 +616,7 @@ type KeyboardButton =
 /// This object represents an inline keyboard that appears right next to the message it belongs to
 type InlineKeyboardMarkup =
   { /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
-    InlineKeyboard: (InlineKeyboardButton list * InlineKeyboardButton list) list }
+    InlineKeyboard: (InlineKeyboardButton seq) seq }
 
 /// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
 type ReplyKeyboardMarkup =
