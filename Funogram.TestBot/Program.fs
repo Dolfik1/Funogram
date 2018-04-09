@@ -89,7 +89,7 @@ let updateArrived ctx =
                 if x.IsNone then ()
                 else
                     let text = sprintf "Photos: %s" (x.Value.Photos 
-                                |> Seq.map (fun f -> f |> Seq.last) 
+                                |> Seq.map Seq.last
                                 |> Seq.map (fun f -> sprintf "%ix%i" f.Width f.Height)
                                 |> String.concat ",")
                     

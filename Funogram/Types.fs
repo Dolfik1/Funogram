@@ -121,7 +121,7 @@ and [<CLIMutable>] Document =
     /// File size
     FileSize: int option }
 
-and MaskPoint =
+and [<InSnakeCase>] MaskPoint =
   | Forehead
   | Eyes
   | Mouth
