@@ -1,7 +1,41 @@
 # Funogram
-F# Telegram Bot Api library
+F# Telegram Bot Api library!
 
-# Work in progress
+### Getting Started
+Firstly you need to install <a href="https://www.nuget.org/packages/Funogram">Funogram</a>. Installation for .NET Core users:
+```
+dotnet add package Funogram
+```
+Installation for .NET Framework users:
+```
+Install-Package Funogram
+```
+### Writing a Bot
+To get your first bot running just use *startBot* function from Funogram.Bot module. If you don't need any additional configuration, you can use *defaultConfig* constant that stores default settings. Note that you need to extend default config with your own bot token received from <a href="t.me/botfather">BotFather</a>. Here you go:
+```fsharp
+open Funogram.Bot
+
+startBot { defaultConfig with Token = "your token" } onUpdate None
+```
+Every update received from Telegram Bot API will be passed to *onUpdate* function. It should handle user input according to UpdateContext passed. Use *processCommands* function to process commands addressed to your Bot, *cmd* and *cmdScan* can help you.
+```fsharp
+let onUpdate (context: UpdateContext) =
+  processCommands context [
+    cmd "/start" onStart
+    cmd "/help" onHelp
+  ]
+```
+Use Funogram.Api module to communicate with Telegram API with the help of request builders implemented using curried functions, for example *sendMessage*, *sendPhoto* and so on.
+```fsharp
+"Hello, world!"
+|> sendMessage chatId
+|> api accessToken
+|> Async.RunSynchronously
+|> ignore (* or process API response somehow *)
+```
+So, that is it! Use Intellisence-driven development approach to explore all Funogram features! For further learning you may take a look at sample Telegram bots built using this library: <a href="https://github.com/Dolfik1/Funogram/tree/master/Funogram.TestBot">Test Bot</a>, <a href="https://github.com/worldbeater/Memes.Bot/tree/master/Memes">Memes Bot</a>
+
+# Work in Progress
 
 Old methods moved in `Funogram.Rest` module.
 New more functional api available in `Funogram.Api` module.
@@ -12,7 +46,7 @@ Not recommended to use functions who ends with `Base`, because it's may be chang
 - getUpdates
 - getMe
 - forwardMessage
-- ❕sendMessage (not tested ForceReply and Inline)
+- ❕sendMessage (not tested ForceReply)
 - getUserProfilePhotos
 - ❕getFile (not tested)
 - ❕kickChatMember (not tested)
