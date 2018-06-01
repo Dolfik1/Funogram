@@ -72,11 +72,11 @@ let internal (|SomeObj|_|) =
             else Some(v.GetValue(a, [||]))
         else None
 
-let mutable private clientLazy = lazy (new HttpClient())
+// let private clientLazy  =  lazy ( new HttpClient())
 
 [<AbstractClass>]
 type internal Api private () = 
-    static member private Client = clientLazy.Value
+    // static member private Client  = clientLazy.Value
     
     static member private ConvertParameterValue(value : obj) : HttpContent * string option = 
         let typeInfo = value.GetType().GetTypeInfo()
@@ -110,13 +110,14 @@ type internal Api private () =
                 else Some(v.GetValue(a, [||]))
             else None
     
-    static member internal MakeRequestAsync<'a>(token : string, 
+    static member internal MakeRequestAsync<'a>(client: HttpClient,
+                                                token : string, 
                                                 methodName : string, 
                                                 ?param : (string * obj) list) = 
         async { 
             let url = getUrl token methodName
             if param.IsNone || param.Value.Length = 0 then 
-                return Api.Client.GetStringAsync(url)
+                return client.GetStringAsync(url)
                        |> Async.AwaitTask
                        |> Async.RunSynchronously
                        |> parseJson<'a>
@@ -141,7 +142,7 @@ type internal Api private () =
                                                (content, name, fileName.Value)
                                        else form.Add(content, name))
                     let result = 
-                        Api.Client.PostAsync(url, form)
+                        client.PostAsync(url, form)
                         |> Async.AwaitTask
                         |> Async.RunSynchronously
                     return parseJson<'a> (result.Content.ReadAsStringAsync()
@@ -154,7 +155,7 @@ type internal Api private () =
                                           "application/json")
                     
                     let result = 
-                        Api.Client.PostAsync(url, result)
+                        client.PostAsync(url, result)
                         |> Async.AwaitTask
                         |> Async.RunSynchronously
                     return parseJson<'a> (result.Content.ReadAsStringAsync()

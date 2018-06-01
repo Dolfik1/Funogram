@@ -3,31 +3,36 @@ module Funogram.Bot
 open Funogram.Sscanf
 open Funogram.Types
 open Funogram.Api
+open System.Net.Http
 
 type BotConfig = 
     { Token : string
       Offset : int64 option
       Limit : int option
       Timeout : int option
-      AllowedUpdates : string seq option }
+      AllowedUpdates : string seq option
+      Client : HttpClient }
 
 let defaultConfig = 
     { Token = ""
       Offset = Some 0L
       Limit = Some 100
       Timeout = Some 60000
-      AllowedUpdates = None }
+      AllowedUpdates = None
+      Client = new HttpClient() }
 
 type UpdateContext = 
     { Update : Update
       Config : BotConfig
       Me : User }
 
-let private getTextForCommand (me : User) (text : string option) = 
-    let username() = "@" + me.Username.Value
-    if text.IsSome && text.Value.EndsWith(username()) then 
-        Some(text.Value.Replace(username(), ""))
-    else text
+let private getTextForCommand (me : User) = 
+    let username  = "@" + me.Username.Value
+    function  | Some (t:string) when t.EndsWith username -> (username, "") |> t.Replace |> Some
+              | t -> t
+    // if text.IsSome && text.Value.EndsWith(username) then 
+    //     Some(text.Value.Replace(username, ""))
+    // else text
 
 let cmd (command : string) (h : _ -> unit) = 
     let f (r : Message, me : User) = 
@@ -60,8 +65,7 @@ let cmdScan (pf : PrintfFormat<_, _, _, _, 't>) (h : 't -> unit) =
     f
 
 let private runBot config me updateArrived updatesArrived = 
-    let bot data = api config.Token data
-    
+    let bot data = api config.Client config.Token data
     let rec loopAsync offset = 
         async { 
             try 
@@ -99,7 +103,7 @@ let private runBot config me updateArrived updatesArrived =
 let startBot config updateArrived updatesArrived = 
     let meResult = 
         getMe
-        |> api config.Token
+        |> api config.Client config.Token
         |> Async.RunSynchronously
     match meResult with
     | Error e -> failwith (e.Description)

@@ -11,8 +11,8 @@ let private getArgs (body: IRequestBase<'a>) =
     let props = body.GetType().GetTypeInfo().GetProperties() |> Array.toList
     props |> List.map (fun f -> (getSnakeCaseName f.Name, f.GetValue(body)))
 
-let api (token: string) (body: IRequestBase<'a>) = 
-    Api.MakeRequestAsync<'a> (token, body.MethodName, (getArgs body))
+let api client (token: string) (body: IRequestBase<'a>) = 
+    Api.MakeRequestAsync<'a> (client, token, body.MethodName, (getArgs body))
 
 let getUpdatesBase offset limit timeout allowedUpdates =
     { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates }
