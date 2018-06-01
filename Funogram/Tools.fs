@@ -13,7 +13,6 @@ open System.Text
 do ()
 
 open Types
-open JsonHelpers
 
 let private getUrl token methodName = 
     sprintf "https://api.telegram.org/bot%s/%s" token methodName
@@ -132,7 +131,7 @@ type internal Api private () =
                                                None
                                            else Some(key, value))
                 if paramValues 
-                   |> Seq.exists (fun (a, b) -> (b :? Types.FileToSend)) then 
+                   |> Seq.exists (fun (_, b) -> (b :? Types.FileToSend)) then 
                     use form = new MultipartFormDataContent()
                     paramValues |> Seq.iter (fun (name, value) -> 
                                        let content, fileName = 

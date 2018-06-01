@@ -20,11 +20,11 @@ let getSnakeCaseName (name : string) =
 
 type OptionConverter() = 
     inherit JsonConverter()
-    override x.CanConvert(t) = 
+    override __.CanConvert(t) = 
         t.GetTypeInfo().IsGenericType 
         && t.GetGenericTypeDefinition() = typedefof<option<_>>
     
-    override x.WriteJson(writer, value, serializer) = 
+    override __.WriteJson(writer, value, serializer) = 
         let value = 
             if isNull (value) then null
             else 
@@ -33,7 +33,7 @@ type OptionConverter() =
                 fields.[0]
         serializer.Serialize(writer, value)
     
-    override x.ReadJson(reader, t, existingValue, serializer) = 
+    override __.ReadJson(reader, t, _ , serializer) = 
         let innerType = t.GetTypeInfo().GetGenericArguments().[0]
         
         let innerType = 
@@ -104,9 +104,9 @@ type DuConverter() =
                        isJsonObjectAndTypeEquals (getType f.Key) 
                            (f.Value :?> JObject) serializer)
     
-    override x.CanConvert(t) = FSharpType.IsUnion(t)
+    override __.CanConvert(t) = FSharpType.IsUnion(t)
     
-    override x.WriteJson(writer, value, serializer) = 
+    override __.WriteJson(writer, value, serializer) = 
         let t = value.GetType()
         let caseInfo, fieldValues = FSharpValue.GetUnionFields(value, t)
         
@@ -127,7 +127,7 @@ type DuConverter() =
         
         serializer.Serialize(writer, value)
     
-    override x.ReadJson(reader, t, existingValue, serializer) = 
+    override __.ReadJson(reader, t, _ , serializer) = 
         //let jObject = JObject.Load(reader);
         let cases = FSharpType.GetUnionCases t
         let casesTypes = getCasesTypes cases
@@ -135,9 +135,8 @@ type DuConverter() =
         if isSimpleDu && reader.ValueType = typedefof<string> then 
             let name = reader.Value :?> string
             match casesTypes |> Array.tryFind (fun (_, f) -> f.Name
-                                                             |> getSnakeCaseName
-                                                             = name) with
-            | Some(u, t) -> FSharpValue.MakeUnion(u, [||])
+                                                             |> getSnakeCaseName = name) with
+            | Some(u, _) -> FSharpValue.MakeUnion(u, [||])
             | None -> null
         else if reader.ValueType
                 |> isNull

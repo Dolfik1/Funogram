@@ -1,10 +1,8 @@
 module internal Funogram.JsonHelpers
 
 open Newtonsoft.Json
-open Newtonsoft.Json.Serialization
 open System
 open System.Reflection
-open FSharp.Reflection
 
 type InSnakeCaseAttribute() = 
     inherit System.Attribute()
@@ -17,9 +15,9 @@ type UnixDateTimeConverter() =
     let isOption (t : Type) = 
         t.GetTypeInfo().IsGenericType 
         && t.GetGenericTypeDefinition() = typedefof<option<_>>
-    override this.CanConvert objectType = objectType = typeof<DateTime>
+    override __.CanConvert objectType = objectType = typeof<DateTime>
     
-    override this.ReadJson(reader, objectType, existingValue, serializer) = 
+    override __.ReadJson(reader, objectType, _, _) = 
         if (isNull (reader.Value) && isOption objectType) then box None
         elif isNull (reader.Value) then box null
         else 
@@ -31,7 +29,7 @@ type UnixDateTimeConverter() =
             if isOption objectType then box (Some v)
             else box v
     
-    override this.WriteJson(writer, value, serializer) = 
+    override __.WriteJson(writer, value, serializer) = 
         let value = 
             if isNull value then null
             elif isOption (value.GetType()) then 

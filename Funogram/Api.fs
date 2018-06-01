@@ -4,7 +4,6 @@ open Funogram.Types
 open Funogram.RequestsTypes
 open Funogram.Tools
 
-open System
 open System.Reflection
 open JsonConverters
 

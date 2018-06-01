@@ -8,7 +8,7 @@ open Extensions
 
 [<Fact>]
 let ``JSON deserializing MessageEntity`` () =
-    let a = Tools.parseJson<MessageEntity>(Constants.jsonTestObjResultString)
+    let _ = Tools.parseJson<MessageEntity>(Constants.jsonTestObjResultString)
     
     match Tools.parseJson<MessageEntity>(Constants.jsonTestObjResultString) with
         | Ok r -> shouldEqual r Constants.jsonTestObj
