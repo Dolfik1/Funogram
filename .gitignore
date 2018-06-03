@@ -4,3 +4,4 @@ bin
 .vs
 packages
 Funogram.TestBot/token
+.idea/*
