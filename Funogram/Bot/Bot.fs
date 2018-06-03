@@ -32,10 +32,9 @@ let private getTextForCommand (me : User) (text : string option) =
 let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateContext) =
     context.Update.Message
     |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
-    |> Option.map (fun text -> if text = command then handler context; true else false)
-    |> function 
-    | Some value -> value
-    | None -> false
+    |> Option.filter ((=) command)
+    |> Option.map (fun _ -> handler context)
+    |> Option.isSome
 
 let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (context: UpdateContext) = 
     let scan command = 
@@ -46,9 +45,7 @@ let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (contex
     |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
     |> Option.bind scan
     |> Option.map handler
-    |> function 
-    | Some value -> true
-    | None -> false 
+    |> Option.isSome
 
 let private runBot config me updateArrived updatesArrived = 
     let bot data = api config.Token data
@@ -94,7 +91,6 @@ let startBot config updateArrived updatesArrived =
     |> function
     | Error error -> failwith error.Description
     | Ok me -> runBot config me updateArrived updatesArrived
-    |> ignore
 
 let processCommands (context: UpdateContext) =
     Seq.forall (fun command -> command context)
