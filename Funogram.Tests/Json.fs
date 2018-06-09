@@ -5,48 +5,60 @@ open Funogram.Types
 open Xunit
 open Extensions
 
-
 [<Fact>]
 let ``JSON deserializing MessageEntity`` () =
     let a = Tools.parseJson<MessageEntity>(Constants.jsonTestObjResultString)
     
     match a with
         | Ok r -> shouldEqual r Constants.jsonTestObj
-        | Error e -> failwith(e.Description)
+        | Error e -> failwith e.Description
 
 [<Fact>]
-let ``JSON serializing MessageEntity`` () =
-    Tools.toJsonString(Constants.jsonTestObj) |> shouldEqual Constants.jsonTestObjString
+let ``JSON serializing MessageEntity``() =
+    Constants.jsonTestObj
+    |> Tools.toJsonString
+    |> shouldEqual Constants.jsonTestObjString
 
 [<Fact>]
-let ``JSON deserializing User`` () =
-        match Tools.parseJson<User>(Constants.jsonTestObjUserResultString) with
-        | Ok r -> shouldEqual r Constants.jsonTestObjUser
-        | Error e -> failwith(e.Description)
-
+let ``JSON deserializing User``() =
+    Constants.jsonTestObjUserResultString
+    |> Tools.parseJson<User>
+    |> function
+    | Ok result -> shouldEqual result Constants.jsonTestObjUser
+    | Error error -> failwith error.Description
 
 [<Fact>]
-let ``JSON deserializing EditMessageResult 1`` () =
-        match Tools.parseJson<EditMessageResult>(Constants.jsonTestEditResult1ApiString) with
-        | Ok r -> shouldEqual r Constants.jsonTestEditResult1
-        | Error e -> failwith(e.Description)
+let ``JSON deserializing EditMessageResult 1``() =
+    Constants.jsonTestEditResult1ApiString
+    |> Tools.parseJson<EditMessageResult>
+    |> function
+    | Ok result -> shouldEqual result Constants.jsonTestEditResult1
+    | Error error -> failwith error.Description
 
 [<Fact>]
 let ``JSON deserializing EditMessageResult 2`` () =
-        match Tools.parseJson<EditMessageResult>(Constants.jsonTestEditResult2ApiString) with
-        | Ok r -> shouldEqual r Constants.jsonTestEditResult2
-        | Error e -> failwith(e.Description)
+    Constants.jsonTestEditResult2ApiString
+    |> Tools.parseJson<EditMessageResult>
+    |> function
+    | Ok result -> shouldEqual result Constants.jsonTestEditResult2
+    | Error error -> failwith error.Description
 
 [<Fact>]
 let ``JSON serializing EditMessageResult 1`` () =
-        shouldEqual (Tools.toJsonString Constants.jsonTestEditResult1) Constants.jsonTestEditResult1String
+    Constants.jsonTestEditResult1
+    |> Tools.toJsonString
+    |> shouldEqual Constants.jsonTestEditResult1String
 
 [<Fact>]
 let ``JSON serializing EditMessageResult 2`` () =
-        shouldEqual (Tools.toJsonString Constants.jsonTestEditResult2) Constants.jsonTestEditResult2String
+    Constants.jsonTestEditResult2
+    |> Tools.toJsonString
+    |> shouldEqual Constants.jsonTestEditResult2String
 
 [<Fact>]
 let ``JSON deserializing MaskPosition`` () =
-        match Constants.jsonTestMaskPositionResult |> Tools.parseJson<MaskPosition> with
-        | Ok r -> shouldEqual r Constants.testMaskPosition
-        | Error e -> failwith(e.Description)
+    Constants.jsonTestMaskPositionResult
+    |> Tools.parseJson<MaskPosition>
+    |> function
+    | Ok result -> shouldEqual result Constants.testMaskPosition
+    | Error error -> failwith error.Description
