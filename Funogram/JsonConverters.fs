@@ -136,6 +136,7 @@ type DuConverter() =
             let name = reader.Value :?> string
             match casesTypes |> Array.tryFind (fun (_, f) -> f.Name
                                                              |> getSnakeCaseName = name) with
+
             | Some(u, _) -> FSharpValue.MakeUnion(u, [||])
             | None -> null
         else if reader.ValueType

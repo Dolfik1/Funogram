@@ -27,35 +27,23 @@ let private getTextForCommand (me : User) =
     //     Some(text.Value.Replace(username, ""))
     // else text
 
-let cmd (command : string) (h : _ -> unit) = 
-    let f (r : Message, me : User) = 
-        match (getTextForCommand me r.Text) with
-        | Some text -> 
-            if text = command then 
-                h()
-                true
-            else false
-        | None -> false
-    f
+let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateContext) =
+    context.Update.Message
+    |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
+    |> Option.filter ((=) command)
+    |> Option.map (fun _ -> handler context)
+    |> Option.isSome
 
-let cmdScan (pf : PrintfFormat<_, _, _, _, 't>) (h : 't -> unit) = 
+let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (context: UpdateContext) = 
     let scan command = 
-        try 
-            let r = sscanf pf command
-            Some r
+        try Some (sscanf format command)
         with _ -> None
-    
-    let f (r : Message, me : User) = 
-        match (getTextForCommand me r.Text) with
-        | Some text -> 
-            match scan text with
-            | Some p -> 
-                h p |> ignore
-                true
-            | None -> false
-        | None -> false
-    
-    f
+
+    context.Update.Message
+    |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
+    |> Option.bind scan
+    |> Option.map handler
+    |> Option.isSome
 
 let private runBot config me updateArrived updatesArrived = 
     let bot data = api config data
@@ -101,13 +89,7 @@ let startBot config updateArrived updatesArrived =
     match meResult with
     | Error e -> failwith (e.Description)
     | Ok me -> runBot config me updateArrived updatesArrived
-    ()
 
-let processCommands (ctx : UpdateContext) 
-    (commands : (Message * User -> bool) seq) = 
-    match ctx.Update.Message with
-    | Some msg -> 
-        commands
-        |> Seq.map (fun f -> f (msg, ctx.Me))
-        |> Seq.exists id
-    | None -> false
+let processCommands (context: UpdateContext) =
+    Seq.forall (fun command -> command context)
+    
