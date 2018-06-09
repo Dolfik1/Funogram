@@ -1,7 +1,6 @@
 module internal Funogram.Sscanf
 
 open System
-open System.Text
 open System.Text.RegularExpressions
 open Microsoft.FSharp.Reflection
 
@@ -60,7 +59,7 @@ let rec getFormatters xs =
     | '%' :: x :: xr -> 
         if parsers.ContainsKey x then x :: getFormatters xr
         else failwithf "Unknown formatter %%%c" x
-    | x :: xr -> getFormatters xr
+    | _ :: xr -> getFormatters xr
     | [] -> []
 
 // Coerce integer types from int64
@@ -111,13 +110,13 @@ let sscanf (pf : PrintfFormat<_, _, _, _, 't>) s : 't =
 
 module private BasicTesting = 
     // some basic testing
-    let (a, b) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
-    let aaa : int32 = sscanf "aaaa%d" "aaaa4"
-    let bbb : int64 = sscanf "aaaa%d" "aaaa4"
-    let (x, y, z) = sscanf "%s-%s-%s" "test-this-string"
-    let (c, d, e : uint32, f, g, h, i) = 
+    let (_, _) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
+    let _ : int32 = sscanf "aaaa%d" "aaaa4"
+    let _ : int64 = sscanf "aaaa%d" "aaaa4"
+    let (_, _, _) = sscanf "%s-%s-%s" "test-this-string"
+    let (_, _, _ : uint32, _, _, _, _) = 
         sscanf "%b-%d-%i,%u,%x,%X,%o" "false-42--31,13,ff,FF,42"
-    let (j, k, l, m, n, o, p) = 
+    let (_, _, _, _, _, _, _) = 
         sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
 
 let aa = sscanf "(%s)" "(45.33)"

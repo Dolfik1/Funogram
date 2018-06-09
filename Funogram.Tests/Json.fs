@@ -6,12 +6,12 @@ open Xunit
 open Extensions
 
 [<Fact>]
-let ``JSON deserializing MessageEntity``() =
-    Constants.jsonTestObjResultString
-    |> Tools.parseJson<MessageEntity>
-    |> function
-    | Ok result -> shouldEqual result Constants.jsonTestObj
-    | Error error -> failwith error.Description
+let ``JSON deserializing MessageEntity`` () =
+    let a = Tools.parseJson<MessageEntity>(Constants.jsonTestObjResultString)
+    
+    match a with
+        | Ok r -> shouldEqual r Constants.jsonTestObj
+        | Error e -> failwith e.Description
 
 [<Fact>]
 let ``JSON serializing MessageEntity``() =

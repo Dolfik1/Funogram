@@ -12,11 +12,11 @@ type GetUpdatesReq =
       Timeout : int option
       AllowedUpdates : string seq }
     interface IRequestBase<Update seq> with
-        member x.MethodName = "getUpdates"
+        member __.MethodName = "getUpdates"
 
 type GetMeReq() = 
     interface IRequestBase<User> with
-        member x.MethodName = "getMe"
+        member __.MethodName = "getMe"
 
 type SendMessageReq = 
     { ChatId : ChatId
@@ -27,7 +27,7 @@ type SendMessageReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendMessage"
+        member __.MethodName = "sendMessage"
 
 let sendMessageReqBase = 
     { ChatId = ChatId.Int 0L
@@ -44,7 +44,7 @@ type ForwardMessageReq =
       MessageId : int64
       DisableNotification : bool option }
     interface IRequestBase<Message> with
-        member x.MethodName = "forwardMessage"
+        member __.MethodName = "forwardMessage"
 
 type SendPhotoReq = 
     { ChatId : ChatId
@@ -54,7 +54,7 @@ type SendPhotoReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendPhoto"
+        member __.MethodName = "sendPhoto"
 
 type SendAudioReq = 
     { ChatId : ChatId
@@ -67,7 +67,7 @@ type SendAudioReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendAudio"
+        member __.MethodName = "sendAudio"
 
 type SendDocumentReq = 
     { ChatId : ChatId
@@ -77,7 +77,7 @@ type SendDocumentReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendDocument"
+        member __.MethodName = "sendDocument"
 
 type SendStickerReq = 
     { ChatId : ChatId
@@ -86,7 +86,7 @@ type SendStickerReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendSticker"
+        member __.MethodName = "sendSticker"
 
 type SendVideoReq = 
     { ChatId : ChatId
@@ -99,7 +99,7 @@ type SendVideoReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendVideo"
+        member __.MethodName = "sendVideo"
 
 type SendVoiceReq = 
     { ChatId : ChatId
@@ -110,7 +110,7 @@ type SendVoiceReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendVoice"
+        member __.MethodName = "sendVoice"
 
 type SendVideoNoteReq = 
     { ChatId : ChatId
@@ -121,7 +121,7 @@ type SendVideoNoteReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendVideoNote"
+        member __.MethodName = "sendVideoNote"
 
 type SendLocationReq = 
     { ChatId : ChatId
@@ -131,7 +131,7 @@ type SendLocationReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendLocation"
+        member __.MethodName = "sendLocation"
 
 type SendVenueReq = 
     { ChatId : ChatId
@@ -144,7 +144,7 @@ type SendVenueReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendVenue"
+        member __.MethodName = "sendVenue"
 
 type SendContactReq = 
     { ChatId : ChatId
@@ -155,57 +155,57 @@ type SendContactReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendContact"
+        member __.MethodName = "sendContact"
 
 type SendChatActionReq = 
     { ChatId : ChatId
       Action : ChatAction }
     interface IRequestBase<bool> with
-        member x.MethodName = "sendChatAction"
+        member __.MethodName = "sendChatAction"
 
 type GetFileReq = 
     { FileId : string }
     interface IRequestBase<File> with
-        member x.MethodName = "getFile"
+        member __.MethodName = "getFile"
 
 type GetUserProfilePhotosReq = 
     { UserId : int64
       Offset : int option
       Limit : int option }
     interface IRequestBase<UserProfilePhotos> with
-        member x.MethodName = "getUserProfilePhotos"
+        member __.MethodName = "getUserProfilePhotos"
 
 type UnbanChatMemberReq = 
     { ChatId : ChatId
       UserId : int64 }
     interface IRequestBase<bool> with
-        member x.MethodName = "unbanChatMember"
+        member __.MethodName = "unbanChatMember"
 
 type LeaveChatReq = 
     { ChatId : ChatId }
     interface IRequestBase<bool> with
-        member x.MethodName = "leaveChat"
+        member __.MethodName = "leaveChat"
 
 type GetChatReq = 
     { ChatId : ChatId }
     interface IRequestBase<Chat> with
-        member x.MethodName = "getChat"
+        member __.MethodName = "getChat"
 
 type GetChatAdministratorsReq = 
     { ChatId : ChatId }
     interface IRequestBase<ChatMember seq> with
-        member x.MethodName = "getChatAdministrators"
+        member __.MethodName = "getChatAdministrators"
 
 type GetChatMembersCountReq = 
     { ChatId : ChatId }
     interface IRequestBase<int> with
-        member x.MethodName = "getChatMembersCount"
+        member __.MethodName = "getChatMembersCount"
 
 type GetChatMemberReq = 
     { ChatId : ChatId
       UserId : int64 }
     interface IRequestBase<ChatMember> with
-        member x.MethodName = "getChatMember"
+        member __.MethodName = "getChatMember"
 
 type RestrictChatMemberReq = 
     { ChatId : ChatId
@@ -216,7 +216,7 @@ type RestrictChatMemberReq =
       CanSendOtherMessages : bool option
       CanAddWebPagePreviews : bool option }
     interface IRequestBase<bool> with
-        member x.MethodName = "restrictChatMember"
+        member __.MethodName = "restrictChatMember"
 
 type PromoteChatMemberReq = 
     { ChatId : ChatId
@@ -230,54 +230,54 @@ type PromoteChatMemberReq =
       CanPinMessages : bool option
       CanPromoteMembers : bool option }
     interface IRequestBase<bool> with
-        member x.MethodName = "promoteChatMember"
+        member __.MethodName = "promoteChatMember"
 
 type KickChatMemberReq = 
     { ChatId : ChatId
       UserId : int64
       UntilDate : DateTime option }
     interface IRequestBase<bool> with
-        member x.MethodName = "kickChatMember"
+        member __.MethodName = "kickChatMember"
 
 type ExportChatInviteLinkReq = 
     { ChatId : ChatId }
     interface IRequestBase<string> with
-        member x.MethodName = "exportChatInviteLink"
+        member __.MethodName = "exportChatInviteLink"
 
 type SetChatPhotoReq = 
     { ChatId : ChatId
       Photo : FileToSend }
     interface IRequestBase<string> with
-        member x.MethodName = "setChatPhoto"
+        member __.MethodName = "setChatPhoto"
 
 type DeleteChatPhotoReq = 
     { ChatId : ChatId }
     interface IRequestBase<string> with
-        member x.MethodName = "deleteChatPhoto"
+        member __.MethodName = "deleteChatPhoto"
 
 type SetChatTitleReq = 
     { ChatId : ChatId
       Title : string }
     interface IRequestBase<string> with
-        member x.MethodName = "setChatTitle"
+        member __.MethodName = "setChatTitle"
 
 type SetChatDescriptionReq = 
     { ChatId : ChatId
       Description : string }
     interface IRequestBase<string> with
-        member x.MethodName = "setChatDescription"
+        member __.MethodName = "setChatDescription"
 
 type PinChatMessageReq = 
     { ChatId : ChatId
       MessageId : int64
       DisableNotification : bool option }
     interface IRequestBase<bool> with
-        member x.MethodName = "pinChatMessage"
+        member __.MethodName = "pinChatMessage"
 
 type UnpinChatMessageReq = 
     { ChatId : ChatId }
     interface IRequestBase<bool> with
-        member x.MethodName = "unpinChatMessage"
+        member __.MethodName = "unpinChatMessage"
 
 type AnswerCallbackQueryReq = 
     { CallbackQueryId : string option
@@ -286,7 +286,7 @@ type AnswerCallbackQueryReq =
       Url : string option
       CacheTime : int option }
     interface IRequestBase<bool> with
-        member x.MethodName = "answerCallbackQuery"
+        member __.MethodName = "answerCallbackQuery"
 
 type EditMessageTextReq = 
     { Text : string
@@ -297,7 +297,7 @@ type EditMessageTextReq =
       DisableWebPagePreview : bool option
       ReplyMarkup : InlineKeyboardMarkup option }
     interface IRequestBase<EditMessageResult> with
-        member x.MethodName = "editMessageText"
+        member __.MethodName = "editMessageText"
 
 type EditMessageCaptionReq = 
     { ChatId : ChatId option
@@ -306,7 +306,7 @@ type EditMessageCaptionReq =
       Caption : string option
       ReplyMarkup : InlineKeyboardMarkup option }
     interface IRequestBase<EditMessageResult> with
-        member x.MethodName = "editMessageCaption"
+        member __.MethodName = "editMessageCaption"
 
 type EditMessageReplyMarkupReq = 
     { ChatId : ChatId option
@@ -314,13 +314,13 @@ type EditMessageReplyMarkupReq =
       InlineMessageId : string option
       ReplyMarkup : InlineKeyboardMarkup option }
     interface IRequestBase<EditMessageResult> with
-        member x.MethodName = "editMessageReplyMarkup"
+        member __.MethodName = "editMessageReplyMarkup"
 
 type DeleteMessageReq = 
     { ChatId : ChatId
       MessageId : int64 }
     interface IRequestBase<EditMessageResult> with
-        member x.MethodName = "deleteMessage"
+        member __.MethodName = "deleteMessage"
 
 type AnswerInlineQueryReq = 
     { InlineQueryId : string
@@ -331,7 +331,7 @@ type AnswerInlineQueryReq =
       SwitchPmText : string option
       SwitchPmParameter : string option }
     interface IRequestBase<EditMessageResult> with
-        member x.MethodName = "answerInlineQuery"
+        member __.MethodName = "answerInlineQuery"
 
 type SendInvoiceReq = 
     { ChatId : int64
@@ -354,7 +354,7 @@ type SendInvoiceReq =
       ReplyToMessageId : int option
       ReplyMarkup : InlineKeyboardMarkup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendInvoice"
+        member __.MethodName = "sendInvoice"
 
 type SendInvoiceArgs = 
     { PhotoUrl : string option
@@ -390,14 +390,14 @@ type AnswerShippingQueryReq =
       ShippingOptions : ShippingOption seq option
       ErrorMessage : string option }
     interface IRequestBase<bool> with
-        member x.MethodName = "answerShippingQuery"
+        member __.MethodName = "answerShippingQuery"
 
 type AnswerPreCheckoutQueryReq = 
     { PreCheckoutQueryId : string
       Ok : bool
       ErrorMessage : string option }
     interface IRequestBase<bool> with
-        member x.MethodName = "answerPreCheckoutQuery"
+        member __.MethodName = "answerPreCheckoutQuery"
 
 type SendGameReq = 
     { ChatId : int64
@@ -406,7 +406,7 @@ type SendGameReq =
       ReplyToMessageId : int64 option
       ReplyMarkup : Markup option }
     interface IRequestBase<Message> with
-        member x.MethodName = "sendGame"
+        member __.MethodName = "sendGame"
 
 type SetGameScoreReq = 
     { UserId : int64
@@ -417,7 +417,7 @@ type SetGameScoreReq =
       MessageId : int64 option
       InlineMessageId : string option }
     interface IRequestBase<EditMessageResult> with
-        member x.MethodName = "setGameScore"
+        member __.MethodName = "setGameScore"
 
 type GetGameHighScoresReq = 
     { UserId : int64
@@ -425,19 +425,19 @@ type GetGameHighScoresReq =
       MessageId : int64 option
       InlineMessageId : string option }
     interface IRequestBase<GameHighScore seq> with
-        member x.MethodName = "getGameHighScores"
+        member __.MethodName = "getGameHighScores"
 
 // Stickers
 type GetStickerSetReq = 
     { Name : string }
     interface IRequestBase<StickerSet> with
-        member x.MethodName = "getStickerSet"
+        member __.MethodName = "getStickerSet"
 
 type UploadStickerFileReq = 
     { UserId : int64
       PngSticker : File }
     interface IRequestBase<File> with
-        member x.MethodName = "uploadStickerFile"
+        member __.MethodName = "uploadStickerFile"
 
 type CreateNewStickerSetReq = 
     { UserId : int64
@@ -448,7 +448,7 @@ type CreateNewStickerSetReq =
       ContainsMasks : bool option
       MaskPosition : MaskPosition option }
     interface IRequestBase<bool> with
-        member x.MethodName = "createNewStickerSet"
+        member __.MethodName = "createNewStickerSet"
 
 type AddStickerToSetReq = 
     { UserId : int64
@@ -457,15 +457,15 @@ type AddStickerToSetReq =
       Emojis : string
       MaskPosition : MaskPosition option }
     interface IRequestBase<bool> with
-        member x.MethodName = "addStickerToSet"
+        member __.MethodName = "addStickerToSet"
 
 type SetStickerPositionInSetReq = 
     { Sticker : string
       Position : int }
     interface IRequestBase<bool> with
-        member x.MethodName = "setStickerPositionInSet"
+        member __.MethodName = "setStickerPositionInSet"
 
 type DeleteStickerFromSet = 
     { Sticker : string }
     interface IRequestBase<bool> with
-        member x.MethodName = "deleteStickerFromSet"
+        member __.MethodName = "deleteStickerFromSet"

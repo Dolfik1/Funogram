@@ -3,31 +3,29 @@ module Funogram.Bot
 open Funogram.Sscanf
 open Funogram.Types
 open Funogram.Api
+open System.Net.Http
 
-type BotConfig = 
-    { Token : string
-      Offset : int64 option
-      Limit : int option
-      Timeout : int option
-      AllowedUpdates : string seq option }
 
 let defaultConfig = 
     { Token = ""
       Offset = Some 0L
       Limit = Some 100
       Timeout = Some 60000
-      AllowedUpdates = None }
+      AllowedUpdates = None
+      Client = new HttpClient() }
 
 type UpdateContext = 
     { Update : Update
       Config : BotConfig
       Me : User }
 
-let private getTextForCommand (me : User) (text : string option) = 
-    let username() = "@" + me.Username.Value
-    if text.IsSome && text.Value.EndsWith(username()) then 
-        Some(text.Value.Replace(username(), ""))
-    else text
+let private getTextForCommand (me : User) = 
+    let username  = "@" + me.Username.Value
+    function  | Some (t:string) when t.EndsWith username -> (username, "") |> t.Replace |> Some
+              | t -> t
+    // if text.IsSome && text.Value.EndsWith(username) then 
+    //     Some(text.Value.Replace(username, ""))
+    // else text
 
 let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateContext) =
     context.Update.Message
@@ -48,8 +46,7 @@ let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (contex
     |> Option.isSome
 
 let private runBot config me updateArrived updatesArrived = 
-    let bot data = api config.Token data
-    
+    let bot data = api config data
     let rec loopAsync offset = 
         async { 
             try 
@@ -85,11 +82,12 @@ let private runBot config me updateArrived updatesArrived =
     |> Async.RunSynchronously
 
 let startBot config updateArrived updatesArrived = 
-    getMe
-    |> api config.Token
-    |> Async.RunSynchronously
-    |> function
-    | Error error -> failwith error.Description
+    let meResult = 
+        getMe
+        |> api config
+        |> Async.RunSynchronously
+    match meResult with
+    | Error e -> failwith (e.Description)
     | Ok me -> runBot config me updateArrived updatesArrived
 
 let processCommands (context: UpdateContext) =
