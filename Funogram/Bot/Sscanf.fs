@@ -71,7 +71,7 @@ let coerce o =
 
 /// Parse the format in 'pf' from the string 's', failing and raising an exception
 /// otherwise
-let sscanf (pf : PrintfFormat<_, _, _, _, 't>) s : 't = 
+let sscanf (pf: PrintfFormat<_, _, _, _, 't>) s: 't = 
     let formatStr = pf.Value
     let constants = 
         formatStr.Split([| "%%" |], StringSplitOptions.None) 
@@ -111,10 +111,10 @@ let sscanf (pf : PrintfFormat<_, _, _, _, 't>) s : 't =
 module private BasicTesting = 
     // some basic testing
     let (_, _) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
-    let _ : int32 = sscanf "aaaa%d" "aaaa4"
-    let _ : int64 = sscanf "aaaa%d" "aaaa4"
+    let _: int32 = sscanf "aaaa%d" "aaaa4"
+    let _: int64 = sscanf "aaaa%d" "aaaa4"
     let (_, _, _) = sscanf "%s-%s-%s" "test-this-string"
-    let (_, _, _ : uint32, _, _, _, _) = 
+    let (_, _, _: uint32, _, _, _, _) = 
         sscanf "%b-%d-%i,%u,%x,%X,%o" "false-42--31,13,ff,FF,42"
     let (_, _, _, _, _, _, _) = 
         sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"

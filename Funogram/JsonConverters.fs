@@ -8,7 +8,7 @@ open Newtonsoft.Json.Linq
 open System.Collections.Generic
 open Newtonsoft.Json.Serialization
 
-let getSnakeCaseName (name : string) = 
+let getSnakeCaseName (name: string) = 
     let chars = 
         seq { 
             let chars = name.ToCharArray()
@@ -49,7 +49,7 @@ type OptionConverter() =
 type DuConverter() = 
     inherit JsonConverter()
     
-    let getCasesTypes (cases : UnionCaseInfo []) = 
+    let getCasesTypes (cases: UnionCaseInfo []) = 
         cases |> Array.map (fun f -> 
                      let fields = f.GetFields()
                      if fields
@@ -57,7 +57,7 @@ type DuConverter() =
                         || fields.Length = 0 then (f, null)
                      else (f, fields.[0].PropertyType))
     
-    let getTypeProps (t : Type) (serializer : JsonSerializer) = 
+    let getTypeProps (t: Type) (serializer: JsonSerializer) = 
         let props = t.GetTypeInfo().GetProperties()
         if serializer.ContractResolver :? DefaultContractResolver then 
             let cr = (serializer.ContractResolver :?> DefaultContractResolver)
@@ -69,12 +69,12 @@ type DuConverter() =
                     (props |> Seq.findBack (fun h -> h.Name = f.UnderlyingName))))
         else props |> Seq.map (fun f -> (f.Name, f))
     
-    let isRequiredType (t : Type) = 
+    let isRequiredType (t: Type) = 
         t.GetTypeInfo().IsGenericType 
         && t.GetGenericTypeDefinition() = typedefof<option<_>>
     
-    let rec isJsonObjectAndTypeEquals (t : Type) (jObject : JObject) 
-            (serializer : JsonSerializer) = 
+    let rec isJsonObjectAndTypeEquals (t: Type) (jObject: JObject) 
+            (serializer: JsonSerializer) = 
         let jsonProps = (jObject :> seq<KeyValuePair<string, JToken>>)
         let sourceProps = getTypeProps t serializer
         let isJsonEquals() = 
