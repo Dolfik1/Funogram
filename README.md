@@ -1,3 +1,5 @@
+![Travis build status](https://travis-ci.org/Dolfik1/Funogram.svg?branch=master)
+[![NuGet](https://img.shields.io/nuget/v/FunHttp.svg)](https://www.nuget.org/packages/Funogram/)
 # Funogram
 F# Telegram Bot Api library!
 
