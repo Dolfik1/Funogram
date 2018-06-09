@@ -38,7 +38,7 @@ let processMessageBuild config =
     let processResult (result: Result<'a, ApiResponseError>) =
         processResultWithValue result |> ignore
 
-    let botResult data = api config.Client config.Token data |> Async.RunSynchronously
+    let botResult data = api config data |> Async.RunSynchronously
     let bot data = botResult data |> processResult
 
 

@@ -6,13 +6,22 @@ open Funogram.Tools
 
 open System.Reflection
 open JsonConverters
+open System.Net.Http
+
+type BotConfig = 
+    { Token : string
+      Offset : int64 option
+      Limit : int option
+      Timeout : int option
+      AllowedUpdates : string seq option
+      Client : HttpClient }
 
 let private getArgs (body: IRequestBase<'a>) =
     let props = body.GetType().GetTypeInfo().GetProperties() |> Array.toList
     props |> List.map (fun f -> (getSnakeCaseName f.Name, f.GetValue(body)))
 
-let api client (token: string) (body: IRequestBase<'a>) = 
-    Api.MakeRequestAsync<'a> (client, token, body.MethodName, (getArgs body))
+let api config (body: IRequestBase<'a>) = 
+    Api.MakeRequestAsync<'a> (config.Client, config.Token, body.MethodName, (getArgs body))
 
 let getUpdatesBase offset limit timeout allowedUpdates =
     { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates }

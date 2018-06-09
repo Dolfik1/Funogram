@@ -5,13 +5,6 @@ open Funogram.Types
 open Funogram.Api
 open System.Net.Http
 
-type BotConfig = 
-    { Token : string
-      Offset : int64 option
-      Limit : int option
-      Timeout : int option
-      AllowedUpdates : string seq option
-      Client : HttpClient }
 
 let defaultConfig = 
     { Token = ""
@@ -65,7 +58,7 @@ let cmdScan (pf : PrintfFormat<_, _, _, _, 't>) (h : 't -> unit) =
     f
 
 let private runBot config me updateArrived updatesArrived = 
-    let bot data = api config.Client config.Token data
+    let bot data = api config data
     let rec loopAsync offset = 
         async { 
             try 
@@ -103,7 +96,7 @@ let private runBot config me updateArrived updatesArrived =
 let startBot config updateArrived updatesArrived = 
     let meResult = 
         getMe
-        |> api config.Client config.Token
+        |> api config
         |> Async.RunSynchronously
     match meResult with
     | Error e -> failwith (e.Description)
