@@ -5,7 +5,6 @@ open Funogram.Types
 open Funogram.Api
 open System.Net.Http
 
-
 let defaultConfig = 
     { Token = ""
       Offset = Some 0L
@@ -15,17 +14,16 @@ let defaultConfig =
       Client = new HttpClient() }
 
 type UpdateContext = 
-    { Update : Update
-      Config : BotConfig
-      Me : User }
+    { Update: Update
+      Config: BotConfig
+      Me: User }
 
-let private getTextForCommand (me : User) = 
+let private getTextForCommand (me: User) = 
     let username  = "@" + me.Username.Value
-    function  | Some (t:string) when t.EndsWith username -> (username, "") |> t.Replace |> Some
-              | t -> t
-    // if text.IsSome && text.Value.EndsWith(username) then 
-    //     Some(text.Value.Replace(username, ""))
-    // else text
+    function  
+    | Some (text: string) when text.EndsWith username -> 
+        text.Replace(username, "") |> Some
+    | text -> text
 
 let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateContext) =
     context.Update.Message
@@ -38,7 +36,6 @@ let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (contex
     let scan command = 
         try Some (sscanf format command)
         with _ -> None
-
     context.Update.Message
     |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
     |> Option.bind scan
@@ -82,12 +79,11 @@ let private runBot config me updateArrived updatesArrived =
     |> Async.RunSynchronously
 
 let startBot config updateArrived updatesArrived = 
-    let meResult = 
-        getMe
-        |> api config
-        |> Async.RunSynchronously
-    match meResult with
-    | Error e -> failwith (e.Description)
+    getMe
+    |> api config
+    |> Async.RunSynchronously
+    |> function
+    | Error error -> failwith error.Description
     | Ok me -> runBot config me updateArrived updatesArrived
 
 let processCommands (context: UpdateContext) =
