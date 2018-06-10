@@ -12,7 +12,7 @@ open System.Net.Http
 let TokenFileName = "token"
 let mutable botToken = "none"
 
-let processMessageBuild config = 
+let processMessageBuild config =
 
     let defaultText = """⭐️Available test commands:
     /send_message1 - Markdown test
@@ -31,10 +31,10 @@ let processMessageBuild config =
     let processResultWithValue (result: Result<'a, ApiResponseError>) =
         match result with
         | Ok v -> Some v
-        | Error e -> 
-            printfn "Error: %s" e.Description 
+        | Error e ->
+            printfn "Error: %s" e.Description
             None
-            
+
     let processResult (result: Result<'a, ApiResponseError>) =
         processResultWithValue result |> ignore
 
@@ -45,9 +45,9 @@ let processMessageBuild config =
     let getChatInfo msg =
         let result = botResult (getChat msg.Chat.Id)
         match result with
-        | Ok x -> 
-            botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type)) 
-            |> processResultWithValue 
+        | Ok x ->
+            botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type))
+            |> processResultWithValue
             |> ignore
         | Error e -> printf "Error: %s" e.Description
 
@@ -55,23 +55,23 @@ let processMessageBuild config =
         let image = Http.RequestStream("https://upload.wikimedia.org/wikipedia/commons/f/f5/Example_image.jpg")
         bot (sendPhoto msg.Chat.Id (FileToSend.File("example.jpg", image.ResponseStream)) "Example")
 
-    let updateArrived ctx = 
+    let updateArrived ctx =
         let fromId() = ctx.Update.Message.Value.From.Value.Id
-        let sayWithArgs text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup = 
+        let sayWithArgs text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup =
             bot (sendMessageBase (ChatId.Int (fromId())) text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup)
 
         let sendMessageFormatted text parseMode = bot (sendMessageBase (ChatId.Int(fromId())) text (Some parseMode) None None None None)
-        
+
         let result =
             processCommands ctx [
                 cmd "/send_message1" (fun _ -> sendMessageFormatted "Test *Markdown*" ParseMode.Markdown)
                 cmd "/send_message2" (fun _ -> sendMessageFormatted "Test <b>HTML</b>" ParseMode.HTML)
                 cmd "/send_message3" (fun _ -> sayWithArgs "@Dolfik! See http://fsharplang.ru - Russian F# Community" None (Some true) (Some true) None None)
                 cmd "/send_message4" (fun _ -> sayWithArgs "That's message with reply!" None None None (Some ctx.Update.Message.Value.MessageId) None)
-                cmd "/send_message5" (fun _ -> 
+                cmd "/send_message5" (fun _ ->
                 (
                     let keyboard = (Seq.init 2 (fun x -> Seq.init 2 (fun y -> { Text = y.ToString() + x.ToString(); RequestContact = None; RequestLocation = None })))
-                    let markup = Markup.ReplyKeyboardMarkup {  
+                    let markup = Markup.ReplyKeyboardMarkup {
                         Keyboard = keyboard
                         ResizeKeyboard = None
                         OneTimeKeyboard = None
@@ -85,16 +85,15 @@ let processMessageBuild config =
                     bot (sendMessageMarkup (fromId()) "Keyboard was removed!" markup)
                 ))
                 cmd "/forward_message" (fun _ -> bot (forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId))
-                cmd "/show_my_photos_sizes" (fun _ -> 
+                cmd "/show_my_photos_sizes" (fun _ ->
                 (
                     let x = botResult (getUserProfilePhotosAll (fromId())) |> processResultWithValue
                     if x.IsNone then ()
                     else
-                        let text = sprintf "Photos: %s" (x.Value.Photos 
+                        let text = sprintf "Photos: %s" (x.Value.Photos
                                     |> Seq.map (Seq.last >> (fun f -> sprintf "%ix%i" f.Width f.Height))
-                                    //|> Seq.map (fun f -> sprintf "%ix%i" f.Width f.Height)
                                     |> String.concat ",")
-                        
+
                         bot (sendMessage (fromId()) text)
                 ))
                 cmd "/get_chat_info" (fun _ -> getChatInfo ctx.Update.Message.Value)
@@ -103,7 +102,7 @@ let processMessageBuild config =
 
         if result then ()
         else bot (sendMessage (fromId()) defaultText)
-    updateArrived    
+    updateArrived
 
 let start token =
     (*
@@ -130,4 +129,4 @@ let main argv =
         let token = System.Console.ReadLine()
         File.WriteAllText(TokenFileName, token)
         start token
-    0 // return an integer exit code
+    0
