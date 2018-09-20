@@ -16,7 +16,7 @@ open Types
 
 let private getUrl token methodName = 
     sprintf "https://api.telegram.org/bot%s/%s" token methodName
-let internal getUnix (date : DateTime) = 
+let internal getUnix (date: DateTime) = 
     Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
 
 let private jsonOpts = 
@@ -38,7 +38,7 @@ let internal parseJson<'a> str =
         Error { Description = "Unknown error"
                 ErrorCode = -1 }
 
-let toJsonString (o : 'a) = JsonConvert.SerializeObject(o, jsonOpts)
+let toJsonString (o: 'a) = JsonConvert.SerializeObject(o, jsonOpts)
 
 let internal parseModeName parseMode = 
     match parseMode with
@@ -48,23 +48,23 @@ let internal parseModeName parseMode =
         | HTML -> Some "HTML"
         | Markdown -> Some "Markdown"
 
-let internal getChatIdString (chatId : Types.ChatId) = 
+let internal getChatIdString (chatId: Types.ChatId) = 
     match chatId with
     | Int v -> v |> string
     | String v -> v
 
-let internal getChatIdStringOption (chatId : Types.ChatId option) = 
+let internal getChatIdStringOption (chatId: Types.ChatId option) = 
     chatId
     |> Option.map getChatIdString
     |> Option.defaultValue ""
 
-let private isOption (t : Type) = 
+let private isOption (t: Type) = 
     t.GetTypeInfo().IsGenericType 
     && t.GetGenericTypeDefinition() = typedefof<option<_>>
 
 let internal (|SomeObj|_|) = 
     let ty = typedefof<option<_>>
-    fun (a : obj) -> 
+    fun (a: obj) -> 
         let aty = a.GetType().GetTypeInfo()
         let v = aty.GetProperty("Value")
         if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then 
@@ -78,7 +78,7 @@ let internal (|SomeObj|_|) =
 type internal Api private () = 
     // static member private Client  = clientLazy.Value
     
-    static member private ConvertParameterValue(value : obj) : HttpContent * string option = 
+    static member private ConvertParameterValue(value: obj): HttpContent * string option = 
         let typeInfo = value.GetType().GetTypeInfo()
         if value :? bool then 
             (new StringContent(value.ToString().ToLower()) :> HttpContent, None)
@@ -102,7 +102,7 @@ type internal Api private () =
     
     static member private DowncastOptionObj = 
         let ty = typedefof<option<_>>
-        fun (a : obj) -> 
+        fun (a: obj) -> 
             let aty = a.GetType().GetTypeInfo()
             let v = aty.GetProperty("Value")
             if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then 
@@ -111,9 +111,9 @@ type internal Api private () =
             else None
     
     static member internal MakeRequestAsync<'a>(client: HttpClient,
-                                                token : string, 
-                                                methodName : string, 
-                                                ?param : (string * obj) list) = 
+                                                token: string, 
+                                                methodName: string, 
+                                                ?param: (string * obj) list) = 
         async { 
             let url = getUrl token methodName
             if param.IsNone || param.Value.Length = 0 then 

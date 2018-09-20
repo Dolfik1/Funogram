@@ -10,9 +10,9 @@ type InSnakeCaseAttribute() =
 /// Used for convert Unix to DateTime
 type UnixDateTimeConverter() = 
     inherit JsonConverter()
-    let getUnix (date : DateTime) = 
+    let getUnix (date: DateTime) = 
         Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
-    let isOption (t : Type) = 
+    let isOption (t: Type) = 
         t.GetTypeInfo().IsGenericType 
         && t.GetGenericTypeDefinition() = typedefof<option<_>>
     override __.CanConvert objectType = objectType = typeof<DateTime>

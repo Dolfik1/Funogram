@@ -9,12 +9,12 @@ open JsonConverters
 open System.Net.Http
 
 type BotConfig = 
-    { Token : string
-      Offset : int64 option
-      Limit : int option
-      Timeout : int option
-      AllowedUpdates : string seq option
-      Client : HttpClient }
+    { Token: string
+      Offset: int64 option
+      Limit: int option
+      Timeout: int option
+      AllowedUpdates: string seq option
+      Client: HttpClient }
 
 let private getArgs (body: IRequestBase<'a>) =
     let props = body.GetType().GetTypeInfo().GetProperties() |> Array.toList
