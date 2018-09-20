@@ -1,5 +1,6 @@
 ﻿module internal Funogram.JsonConverters
 
+open Funogram.JsonHelpers
 open Microsoft.FSharp.Reflection
 open Newtonsoft.Json
 open System
@@ -115,7 +116,7 @@ type DuConverter() =
                 t.GetTypeInfo().CustomAttributes 
                 |> Seq.exists 
                        (fun f -> 
-                       f.AttributeType = typeof<SnakeCaseNamingStrategy>)
+                       f.AttributeType = typeof<InSnakeCaseAttribute>)
             if snakeCase then getSnakeCaseName caseInfo.Name
             else caseInfo.Name
         

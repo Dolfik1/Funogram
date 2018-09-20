@@ -5,6 +5,7 @@ open Funogram.Api
 open Funogram.Types
 open Funogram.Bot
 open FunHttp
+open Funogram.Types
 open System.Net.Http
 
 
@@ -21,6 +22,8 @@ let processMessageBuild config =
     /send_message4 - Test reply message
     /send_message5 - Test ReplyKeyboardMarkup
     /send_message6 - Test RemoveKeyboardMarkup
+    
+    /send_action - Test action
 
     /forward_message - Test forward message
     /show_my_photos_sizes - Test getUserProfilePhotos method
@@ -64,6 +67,10 @@ let processMessageBuild config =
         
         let result =
             processCommands ctx [
+                cmd "/send_action" (fun _ -> 
+                    printf "SEND ACTION"
+                    sendChatAction ctx.Update.Message.Value.Chat.Id ChatAction.UploadPhoto |> bot)
+                    
                 cmd "/send_message1" (fun _ -> sendMessageFormatted "Test *Markdown*" ParseMode.Markdown)
                 cmd "/send_message2" (fun _ -> sendMessageFormatted "Test <b>HTML</b>" ParseMode.HTML)
                 cmd "/send_message3" (fun _ -> sayWithArgs "@Dolfik! See http://fsharplang.ru - Russian F# Community" None (Some true) (Some true) None None)
