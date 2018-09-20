@@ -114,51 +114,53 @@ type internal Api private () =
                                                 token: string, 
                                                 methodName: string, 
                                                 ?param: (string * obj) list) = 
-        async { 
+        async {
             let url = getUrl token methodName
-            if param.IsNone || param.Value.Length = 0 then 
-                return client.GetStringAsync(url)
-                       |> Async.AwaitTask
-                       |> Async.RunSynchronously
-                       |> parseJson<'a>
+            if param.IsNone || param.Value.Length = 0 then
+                let! jsonString = client.GetStringAsync(url) |> Async.AwaitTask 
+                return jsonString |> parseJson<'a>
             else 
                 let paramValues = 
-                    param.Value |> List.choose (fun (key, value) -> 
-                                       match value with
-                                       | null -> None
-                                       | SomeObj(o) -> Some(key, o)
-                                       | _ -> 
-                                           if isOption (value.GetType()) then 
-                                               None
-                                           else Some(key, value))
+                    param.Value 
+                    |> List.choose (
+                        fun (key, value) -> 
+                        match value with
+                        | null -> None
+                        | SomeObj(o) -> Some(key, o)
+                        | _ -> 
+                            if isOption (value.GetType()) then 
+                                None
+                            else Some(key, value))
+
                 if paramValues 
                    |> Seq.exists (fun (_, b) -> (b :? Types.FileToSend)) then 
                     use form = new MultipartFormDataContent()
-                    paramValues |> Seq.iter (fun (name, value) -> 
-                                       let content, fileName = 
-                                           Api.ConvertParameterValue(value)
-                                       if fileName.IsSome then 
-                                           form.Add
-                                               (content, name, fileName.Value)
-                                       else form.Add(content, name))
-                    let result = 
+                    paramValues 
+                    |> Seq.iter (
+                        fun (name, value) -> 
+                        let content, fileName = Api.ConvertParameterValue(value)
+                        
+                        if fileName.IsSome then form.Add (content, name, fileName.Value)
+                        else form.Add(content, name))
+                        
+                    let! result = 
                         client.PostAsync(url, form)
                         |> Async.AwaitTask
-                        |> Async.RunSynchronously
-                    return parseJson<'a> (result.Content.ReadAsStringAsync()
-                                          |> Async.AwaitTask
-                                          |> Async.RunSynchronously)
+                        
+                    let! jsonString = result.Content.ReadAsStringAsync() |> Async.AwaitTask
+                    return parseJson<'a> jsonString
                 else 
                     let json = toJsonString (paramValues |> dict)
                     let result = 
                         new StringContent(json, Encoding.UTF8, 
                                           "application/json")
                     
-                    let result = 
+                    let! result = 
                         client.PostAsync(url, result)
                         |> Async.AwaitTask
-                        |> Async.RunSynchronously
-                    return parseJson<'a> (result.Content.ReadAsStringAsync()
-                                          |> Async.AwaitTask
-                                          |> Async.RunSynchronously)
+                        
+                    let! jsonString = result.Content.ReadAsStringAsync() 
+                                      |> Async.AwaitTask 
+                        
+                    return parseJson<'a> jsonString
         }

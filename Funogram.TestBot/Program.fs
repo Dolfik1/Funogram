@@ -126,11 +126,13 @@ let start token =
 [<EntryPoint>]
 let main argv =
     printfn "Bot started..."
-    if File.Exists(TokenFileName) then
-        start (File.ReadAllText(TokenFileName))
-    else
-        printf "Please, enter bot token: "
-        let token = System.Console.ReadLine()
-        File.WriteAllText(TokenFileName, token)
-        start token
+    let startBot = 
+        if File.Exists(TokenFileName) then
+            start (File.ReadAllText(TokenFileName))
+        else
+            printf "Please, enter bot token: "
+            let token = System.Console.ReadLine()
+            File.WriteAllText(TokenFileName, token)
+            start token
+    startBot |> Async.RunSynchronously
     0

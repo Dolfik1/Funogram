@@ -57,10 +57,12 @@ let private runBot config me updateArrived updatesArrived =
                         |> Seq.map (fun f -> f.UpdateId)
                         |> Seq.max
                         |> fun x -> x + 1L
-                    do updates |> Seq.iter (fun f ->
-                                      updateArrived { Update = f
-                                                      Config = config
-                                                      Me = me })
+                    do updates 
+                    |> Seq.iter (
+                        fun f ->
+                        updateArrived { Update = f
+                                        Config = config
+                                        Me = me })
                     match updatesArrived with
                     | Some updatesArrived -> do updates |> updatesArrived
                     | _ -> ()
@@ -75,15 +77,15 @@ let private runBot config me updateArrived updatesArrived =
             return! loopAsync offset
         }
     loopAsync (config.Offset |> Option.defaultValue 0L)
-    |> Async.RunSynchronously
 
 let startBot config updateArrived updatesArrived =
-    getMe
-    |> api config
-    |> Async.RunSynchronously
-    |> function
-    | Error error -> failwith error.Description
-    | Ok me -> runBot config me updateArrived updatesArrived
+    async {
+        let! me = getMe |> api config
+        return! me 
+        |> function
+        | Error error -> failwith error.Description
+        | Ok me -> runBot config me updateArrived updatesArrived
+    }
 
 let processCommands (context: UpdateContext) =
     Seq.forall (fun command -> command context)
