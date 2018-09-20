@@ -31,6 +31,7 @@ let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateConte
     |> Option.filter ((=) command)
     |> Option.map (fun _ -> handler context)
     |> Option.isSome
+    |> not
 
 let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (context: UpdateContext) =
     let scan command =
