@@ -2,11 +2,11 @@
 
 open Funogram.JsonHelpers
 open Microsoft.FSharp.Reflection
-open Newtonsoft.Json
 open System
 open System.Reflection
-open Newtonsoft.Json.Linq
 open System.Collections.Generic
+open Newtonsoft.Json
+open Newtonsoft.Json.Linq
 open Newtonsoft.Json.Serialization
 
 let getSnakeCaseName (name: string) =
@@ -105,12 +105,13 @@ type DuConverter() =
                        isJsonObjectAndTypeEquals (getType f.Key)
                            (f.Value :?> JObject) serializer)
 
-    override __.CanConvert(t) = FSharpType.IsUnion(t)
+    override __.CanConvert(t) = FSharpType.IsUnion(t) && (typeof<System.Collections.IEnumerable>.GetTypeInfo()
+                                                             .IsAssignableFrom(t) |> not)
 
     override __.WriteJson(writer, value, serializer) =
         let t = value.GetType()
         let caseInfo, fieldValues = FSharpValue.GetUnionFields(value, t)
-
+        
         let getCaseInfoName() =
             let snakeCase =
                 t.GetTypeInfo().CustomAttributes

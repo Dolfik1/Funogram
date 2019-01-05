@@ -4,8 +4,8 @@ open System.IO
 open Funogram.Api
 open Funogram.Types
 open Funogram.Bot
-open FunHttp
 open Funogram.Types
+open FunHttp
 open System.Net.Http
 
 
@@ -22,6 +22,7 @@ let processMessageBuild config =
     /send_message4 - Test reply message
     /send_message5 - Test ReplyKeyboardMarkup
     /send_message6 - Test RemoveKeyboardMarkup
+    /send_message7 - Test inline keyboard
     
     /send_action - Test action
 
@@ -87,6 +88,19 @@ let processMessageBuild config =
                 (
                     let markup = Markup.ReplyKeyboardRemove { RemoveKeyboard = true; Selective = None; }
                     bot (sendMessageMarkup (fromId()) "Keyboard was removed!" markup)
+                ))
+                cmd "/send_message7" (fun _ ->
+                (
+                    let keyboard = [[ {
+                      Text = "Test"
+                      CallbackData = Some("1234")
+                      Url = None
+                      CallbackGame = None
+                      SwitchInlineQuery = None
+                      SwitchInlineQueryCurrentChat = None
+                    } ] |> List.toSeq ]
+                    let markup = Markup.InlineKeyboardMarkup { InlineKeyboard = keyboard }
+                    (sendMessageMarkup (fromId()) "Thats inline keyboard!" markup) |> bot
                 ))
                 cmd "/forward_message" (fun _ -> bot (forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId))
                 cmd "/show_my_photos_sizes" (fun _ ->
