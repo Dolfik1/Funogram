@@ -16,7 +16,6 @@ type ChatId =
   | Int of int64
   | String of string
 
-
 [<CLIMutable>]
 /// This object represents a Telegram user or bot.
 type User =

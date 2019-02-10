@@ -3,8 +3,11 @@ module Funogram.RequestsTypes
 open Types
 open System
 
-type IRequestBase<'a> = 
+type IBotRequest =
     abstract MethodName: string
+
+type IRequestBase<'a> =
+    inherit IBotRequest
 
 type GetUpdatesReq = 
     { Offset: int64 option
