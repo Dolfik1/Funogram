@@ -16,11 +16,11 @@ type BotConfig =
       AllowedUpdates: string seq option
       Client: HttpClient }
 
-let private getArgs (body: IRequestBase<'a>) =
+let private getArgs (body: IBotRequest) =
     let props = body.GetType().GetTypeInfo().GetProperties() |> Array.toList
     props |> List.map (fun f -> (getSnakeCaseName f.Name, f.GetValue(body)))
 
-let api config (body: IRequestBase<'a>) = 
+let api config (body: IBotRequest) = 
     Api.MakeRequestAsync<'a> (config.Client, config.Token, body.MethodName, (getArgs body))
 
 let getUpdatesBase offset limit timeout allowedUpdates =
