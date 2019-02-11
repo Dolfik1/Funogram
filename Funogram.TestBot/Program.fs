@@ -50,7 +50,7 @@ let processMessageBuild config =
         let result = botResult (getChat msg.Chat.Id)
         match result with
         | Ok x ->
-            botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type))
+            botResult (sendMessage msg.Chat.Id (sprintf "Id: %s, Type: %s" x.Id x.Type))
             |> processResultWithValue
             |> ignore
         | Error e -> printf "Error: %s" e.Description
