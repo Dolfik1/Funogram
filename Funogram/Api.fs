@@ -20,7 +20,10 @@ let private getArgs (body: IBotRequest) =
     let props = body.GetType().GetTypeInfo().GetProperties() |> Array.toList
     props |> List.map (fun f -> (getSnakeCaseName f.Name, f.GetValue(body)))
 
-let api config (body: IBotRequest) = 
+let api config (body: IRequestBase<'a>) = 
+    Api.MakeRequestAsync<'a> (config.Client, config.Token, body.MethodName, (getArgs body))
+
+let apiUntyped config (body: IBotRequest) =
     Api.MakeRequestAsync<'a> (config.Client, config.Token, body.MethodName, (getArgs body))
 
 let getUpdatesBase offset limit timeout allowedUpdates =
