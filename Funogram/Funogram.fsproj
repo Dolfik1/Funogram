@@ -3,7 +3,7 @@
     <TargetFrameworks>net45;netstandard1.6</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
-    <VersionPrefix>1.2.8</VersionPrefix>
+    <VersionPrefix>1.2.9</VersionPrefix>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="JsonHelpers.fs" />
