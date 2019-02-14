@@ -74,36 +74,44 @@ type DuConverter() =
         t.GetTypeInfo().IsGenericType
         && t.GetGenericTypeDefinition() = typedefof<option<_>>
 
-    let rec isJsonObjectAndTypeEquals (t: Type) (jObject: JObject)
-            (serializer: JsonSerializer) =
-        let jsonProps = (jObject :> seq<KeyValuePair<string, JToken>>)
-        let sourceProps = getTypeProps t serializer
-        let isJsonEquals() =
-            jsonProps
-            |> Seq.forall
-                   (fun f ->
-                   not (sourceProps |> Seq.forall (fun (k, _) -> k <> f.Key)))
-
-        let isTypeEquals() =
-            sourceProps
-            |> Seq.where (fun (_, v) -> isRequiredType (v.GetType()))
-            |> Seq.forall
-                   (fun (k, _) ->
-                   not (jsonProps |> Seq.forall (fun v -> v.Key <> k)))
-        if not (isJsonEquals()) || not (isTypeEquals()) then false
+    let rec isJsonObjectAndTypeEquals (t: Type) (jObject: JObject) (serializer: JsonSerializer) =
+        if t.GetTypeInfo().IsPrimitive then
+            match jObject.Type with
+            | JTokenType.Date -> t = typeof<DateTime>
+            | JTokenType.Float -> t = typeof<float32> || t = typeof<float>
+            | JTokenType.String -> t = typeof<string>
+            | JTokenType.Boolean -> t = typeof<bool>
+            | JTokenType.Integer -> t = typeof<int>
+            | _ -> false
         else
-            let objs = jsonProps |> Seq.where (fun f -> f.Value.HasValues)
-            if objs |> Seq.isEmpty then true
-            else
-                let getType name =
-                    let _, x =
-                        sourceProps |> Seq.findBack (fun (k, _) -> k = name)
-                    x.PropertyType
-                objs
+            let jsonProps = (jObject :> seq<KeyValuePair<string, JToken>>)
+            let sourceProps = getTypeProps t serializer
+            let isJsonEquals() =
+                jsonProps
                 |> Seq.forall
                        (fun f ->
-                       isJsonObjectAndTypeEquals (getType f.Key)
-                           (f.Value :?> JObject) serializer)
+                       not (sourceProps |> Seq.forall (fun (k, _) -> k <> f.Key)))
+    
+            let isTypeEquals() =
+                sourceProps
+                |> Seq.where (fun (_, v) -> isRequiredType (v.GetType()))
+                |> Seq.forall
+                       (fun (k, _) ->
+                       not (jsonProps |> Seq.forall (fun v -> v.Key <> k)))
+            if not (isJsonEquals()) || not (isTypeEquals()) then false
+            else
+                let objs = jsonProps |> Seq.where (fun f -> f.Value.HasValues)
+                if objs |> Seq.isEmpty then true
+                else
+                    let getType name =
+                        let _, x =
+                            sourceProps |> Seq.findBack (fun (k, _) -> k = name)
+                        x.PropertyType
+                    objs
+                    |> Seq.forall
+                           (fun f ->
+                           isJsonObjectAndTypeEquals (getType f.Key)
+                               (f.Value :?> JObject) serializer)
 
     override __.CanConvert(t) = FSharpType.IsUnion(t) && (typeof<System.Collections.IEnumerable>.GetTypeInfo()
                                                              .IsAssignableFrom(t) |> not)
