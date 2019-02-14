@@ -44,6 +44,12 @@ let ``JSON deserializing EditMessageResult 2`` () =
     | Error error -> failwith error.Description
 
 [<Fact>]
+let ``JSON deserializing EditMessageResult 3`` () =
+    Constants.jsonTestEditResult3ApiString
+    |> Tools.parseJson<EditMessageResult>
+    |> ignore
+
+[<Fact>]
 let ``JSON serializing EditMessageResult 1`` () =
     Constants.jsonTestEditResult1
     |> Tools.toJsonString
