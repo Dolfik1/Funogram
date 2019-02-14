@@ -4,6 +4,17 @@
   </PropertyGroup>
   <PropertyGroup>
     <VersionPrefix>1.3.0</VersionPrefix>
+    <Authors>Nikolay Matyushin</Authors>
+    <Product>Funogram</Product>
+    <Description>Funogram is a functional Telegram Bot Api library for F#</Description>
+    <Summary>Funogram is a functional Telegram Bot Api library for F#</Summary>
+    <Title>Funogram</Title>
+    <PackageId>Funogram</PackageId>
+    <PackageTags>telegram</PackageTags>
+    <PackageIconUrl>https://github.com/Dolfik1/Funogram/docs/files/img/logo.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl> 
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="JsonHelpers.fs" />

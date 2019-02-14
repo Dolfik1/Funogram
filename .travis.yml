@@ -5,4 +5,4 @@ dist: trusty
 install:
   - dotnet restore
 script:
-- dotnet test Funogram.Tests/Funogram.Tests.fsproj
+- dotnet test src/Funogram.Tests/Funogram.Tests.fsproj

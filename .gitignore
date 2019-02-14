@@ -2,6 +2,7 @@ obj
 bin
 .vscode
 .vs
+.idea
 packages
-Funogram.TestBot/token
-.idea/*
+token
+*.DotSettings.user
