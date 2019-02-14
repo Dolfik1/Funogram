@@ -11,7 +11,7 @@
     <Title>Funogram</Title>
     <PackageId>Funogram</PackageId>
     <PackageTags>telegram</PackageTags>
-    <PackageIconUrl>https://github.com/Dolfik1/Funogram/docs/files/img/logo.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/Dolfik1/Funogram/master/docs/files/img/logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
