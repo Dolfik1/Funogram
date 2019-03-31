@@ -37,6 +37,11 @@ Use Funogram.Api module to communicate with Telegram API with the help of reques
 ```
 So, that is it! Use Intellisence-driven development approach to explore all Funogram features! For further learning you may take a look at sample Telegram bots built using this library: <a href="https://github.com/Dolfik1/Funogram/tree/master/Funogram.TestBot">Test Bot</a>, <a href="https://github.com/worldbeater/Memes.Bot/tree/master/Memes">Memes Bot</a>
 
+# Articles
+
+![Funogram: Writing Telegram Bots In F#](https://medium.com/@worldbeater/funogram-writing-telegram-bots-in-f-f27a873fa548)
+![Funogram.Keyboard: How to reserve seats on an airplane using F # and telegram](https://medium.com/@fsharpfan/funogram-keyboard-how-to-reserve-seats-on-an-airplane-using-f-and-telegram-6f7035e9c698)
+
 # Work in Progress
 
 Old methods moved in `Funogram.Rest` module.
