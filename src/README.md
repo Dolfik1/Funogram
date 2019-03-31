@@ -39,13 +39,13 @@ So, that is it! Use Intellisence-driven development approach to explore all Funo
 
 # Articles
 
-![Funogram: Writing Telegram Bots In F#](https://medium.com/@worldbeater/funogram-writing-telegram-bots-in-f-f27a873fa548)
+[Funogram: Writing Telegram Bots In F#](https://medium.com/@worldbeater/funogram-writing-telegram-bots-in-f-f27a873fa548)
 
-![Funogram.Keyboard: How to reserve seats on an airplane using F # and telegram](https://medium.com/@fsharpfan/funogram-keyboard-how-to-reserve-seats-on-an-airplane-using-f-and-telegram-6f7035e9c698)
+[Funogram.Keyboard: How to reserve seats on an airplane using F # and telegram](https://medium.com/@fsharpfan/funogram-keyboard-how-to-reserve-seats-on-an-airplane-using-f-and-telegram-6f7035e9c698)
 
 # Plugins and Extensions
 
-![Funogram.Keyboard](https://github.com/dohly/funogram.keyboard)
+[Funogram.Keyboard](https://github.com/dohly/funogram.keyboard)
 
 # Work in Progress
 
