@@ -43,6 +43,10 @@ So, that is it! Use Intellisence-driven development approach to explore all Funo
 
 ![Funogram.Keyboard: How to reserve seats on an airplane using F # and telegram](https://medium.com/@fsharpfan/funogram-keyboard-how-to-reserve-seats-on-an-airplane-using-f-and-telegram-6f7035e9c698)
 
+# Plugins and Extensions
+
+![Funogram.Keyboard](https://github.com/dohly/funogram.keyboard)
+
 # Work in Progress
 
 Old methods moved in `Funogram.Rest` module.
