@@ -103,7 +103,7 @@ module UnixDateTimeConverterTests =
                     
     [<Theory>]
     [<ClassData(typeof<Generators.DateTimeWriteTest>)>]
-    let ``UnixDateTimeConverter WriteJson DateTime as option, nullable and just DateTime`` (data: Generators.DateTimeWriteTestValue) =
+    let ``UnixDateTimeConverter WriteJson writes DateTime as an option, and DateTime`` (data: Generators.DateTimeWriteTestValue) =
         let converter = new Funogram.JsonHelpers.UnixDateTimeConverter()
         let builder = new StringBuilder()
         converter.WriteJson(new JsonTextWriter(new StringWriter(builder)), data.Time, new JsonSerializer())
@@ -118,7 +118,7 @@ module UnixDateTimeConverterTests =
         :?> 'T
         
     [<Fact>]
-    let ``UnixDateTimeConverter ReadJson reads DateTime as option, nullable and just DateTime`` () =
+    let ``UnixDateTimeConverter ReadJson reads DateTime as an option and DateTime`` () =
         let expected = DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc)
         let timestamp = string 946684800L
         let dateTime = readJson<DateTime> timestamp
