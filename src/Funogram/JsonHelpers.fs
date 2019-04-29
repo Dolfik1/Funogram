@@ -10,32 +10,72 @@ type InSnakeCaseAttribute() =
 /// Used for convert Unix to DateTime
 type UnixDateTimeConverter() = 
     inherit JsonConverter()
-    let getUnix (date: DateTime) = 
-        Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
+    
+    static let UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+    
+    let getUnixTime (time: DateTime) =
+        int64 (time.ToUniversalTime() - UnixEpoch).TotalSeconds
+        
     let isOption (t: Type) = 
         t.GetTypeInfo().IsGenericType 
         && t.GetGenericTypeDefinition() = typedefof<option<_>>
-    override __.CanConvert objectType = objectType = typeof<DateTime>
+        
+    let isNullable (t: Type) =
+        Nullable.GetUnderlyingType(t) <> null
+        
+    override __.CanConvert objectType =
+        if objectType = typeof<DateTime> ||
+           objectType = typeof<DateTime option> then
+            true
+        else
+            false
     
-    override __.ReadJson(reader, objectType, _, _) = 
-        if (isNull (reader.Value) && isOption objectType) then box None
-        elif isNull (reader.Value) then box null
-        else 
-            let v = 
-                (reader.Value
-                 |> string
-                 |> float
-                 |> DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds)
-            if isOption objectType then box (Some v)
-            else box v
+    override __.ReadJson(reader, objectType, _, _) =
+        let convertToDateTime (seconds: int64) =
+            if seconds > 0L then
+                let resultType =
+                    if isNullable objectType then
+                        Nullable.GetUnderlyingType(objectType)
+                    else
+                        objectType
+                let unixTime = UnixEpoch.AddSeconds(float seconds)
+                if isOption resultType then
+                    unixTime
+                    |> Some
+                    |> box
+                else
+                    unixTime
+                    |> box
+            else
+                null
+                
+        match reader.TokenType with
+        | JsonToken.Null ->
+            null
+        | JsonToken.Integer ->
+            convertToDateTime(unbox reader.Value)
+        | JsonToken.String ->
+            let success, value = Int64.TryParse(unbox reader.Value)
+            if success then
+                convertToDateTime(value)
+            else
+                null
+        | _ ->
+            null
     
-    override __.WriteJson(writer, value, serializer) = 
-        let value = 
-            if isNull value then null
-            elif isOption (value.GetType()) then 
-                let v = value :?> Option<DateTime>
-                match v with
-                | Some x -> box (getUnix x)
-                | _ -> null
-            else box (getUnix (value :?> DateTime))
+    override __.WriteJson(writer, value, serializer) =
+        let value =
+            match value with
+            | :? Option<DateTime> as date ->
+                match date with
+                | Some x ->
+                    getUnixTime x
+                    |> box
+                | None ->
+                    null
+            | :? DateTime as date ->
+                getUnixTime date
+                |> box
+            | _ ->
+                null
         serializer.Serialize(writer, value)
