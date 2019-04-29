@@ -1,10 +1,5 @@
 module Funogram.Tests.Json
 
-open System
-open System.Collections
-open System.Collections.Generic
-open System.IO
-open System.Text
 open Funogram
 open Funogram.Types
 open Xunit
@@ -75,6 +70,11 @@ let ``JSON deserializing MaskPosition`` () =
     | Error error -> failwith error.Description
 
 module UnixDateTimeConverterTests =
+    open System
+    open System.Collections
+    open System.Collections.Generic
+    open System.IO
+    open System.Text
     open Newtonsoft.Json
     
     module Generators =
