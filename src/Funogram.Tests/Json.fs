@@ -68,3 +68,61 @@ let ``JSON deserializing MaskPosition`` () =
     |> function
     | Ok result -> shouldEqual result Constants.testMaskPosition
     | Error error -> failwith error.Description
+
+module UnixDateTimeConverterTests =
+    open System
+    open System.Collections
+    open System.Collections.Generic
+    open System.IO
+    open System.Text
+    open Newtonsoft.Json
+    
+    module Generators =
+        type DateTimeWriteTestValue = {
+            Time: obj
+            UnixTime: int64
+        }
+        
+        type DateTimeWriteTest() =
+            interface IEnumerable<obj array> with
+                member __.GetEnumerator() =
+                    let time = DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+                    let seconds = 946684800L
+                    let s =
+                        seq {
+                            yield { Time = box time; UnixTime = seconds }
+                            yield { Time = box (Some time); UnixTime = seconds }
+                            yield { Time = box (time.ToLocalTime()); UnixTime = seconds }
+                        }
+                        |> Seq.map (fun i -> [|box i|])
+                    s.GetEnumerator()
+                    
+            interface IEnumerable with
+                member __.GetEnumerator() =
+                    (__ :> IEnumerable<_>).GetEnumerator() :> IEnumerator
+                    
+    [<Theory>]
+    [<ClassData(typeof<Generators.DateTimeWriteTest>)>]
+    let ``UnixDateTimeConverter WriteJson writes DateTime as an option, and DateTime`` (data: Generators.DateTimeWriteTestValue) =
+        let converter = new Funogram.JsonHelpers.UnixDateTimeConverter()
+        let builder = new StringBuilder()
+        converter.WriteJson(new JsonTextWriter(new StringWriter(builder)), data.Time, new JsonSerializer())
+        
+        shouldEqual data.UnixTime (int64 <| builder.ToString())
+        
+    let readJson<'T> value =
+        let converter = new Funogram.JsonHelpers.UnixDateTimeConverter()
+        let reader = new JsonTextReader(new StringReader(value))
+        reader.Read() |> ignore
+        converter.ReadJson(reader, typeof<'T>, value, new JsonSerializer())
+        :?> 'T
+        
+    [<Fact>]
+    let ``UnixDateTimeConverter ReadJson reads DateTime as an option and DateTime`` () =
+        let expected = DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+        let timestamp = string 946684800L
+        let dateTime = readJson<DateTime> timestamp
+        let dateTimeOption = readJson<DateTime option> timestamp
+        
+        shouldEqual expected dateTime
+        shouldEqual expected (Option.get dateTimeOption)
