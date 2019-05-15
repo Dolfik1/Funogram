@@ -2,15 +2,25 @@ module Funogram.Types
 
 open Funogram.JsonHelpers
 
+open System
 open System.IO
+open System.Net.Http
 open System.Runtime.CompilerServices
 
-open System
 open Newtonsoft.Json
 
 // Allow construct types to Funogram.Tests
 [<assembly: InternalsVisibleTo("Newtonsoft.Json")>]
 do()
+
+type BotConfig = 
+    { Token: string
+      Offset: int64 option
+      Limit: int option
+      Timeout: int option
+      AllowedUpdates: string seq option
+      TelegramServerUrl: Uri
+      Client: HttpClient }
 
 type ChatId = 
   | Int of int64
