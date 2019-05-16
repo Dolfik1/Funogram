@@ -14,8 +14,8 @@ do ()
 
 open Types
 
-let private getUrl token methodName = 
-    sprintf "https://api.telegram.org/bot%s/%s" token methodName
+let private getUrl (config: BotConfig) methodName = 
+    sprintf "%s%s/%s" (config.TelegramServerUrl |> string) config.Token methodName
 let internal getUnix (date: DateTime) = 
     Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
 
@@ -110,12 +110,13 @@ type internal Api private () =
                 else Some(v.GetValue(a, [||]))
             else None
     
-    static member internal MakeRequestAsync<'a>(client: HttpClient,
-                                                token: string, 
+    static member internal MakeRequestAsync<'a>(config: BotConfig,
                                                 methodName: string, 
                                                 ?param: (string * obj) list) = 
         async {
-            let url = getUrl token methodName
+            let client = config.Client
+
+            let url = getUrl config methodName
             if param.IsNone || param.Value.Length = 0 then
                 let! jsonString = client.GetStringAsync(url) |> Async.AwaitTask 
                 return jsonString |> parseJson<'a>

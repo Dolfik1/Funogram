@@ -4,6 +4,7 @@ open Funogram.Sscanf
 open Funogram.Types
 open Funogram.Api
 open System.Net.Http
+open System
 
 let defaultConfig =
     { Token = ""
@@ -11,7 +12,8 @@ let defaultConfig =
       Limit = Some 100
       Timeout = Some 60000
       AllowedUpdates = None
-      Client = new HttpClient() }
+      Client = new HttpClient()
+      TelegramServerUrl = new Uri("https://api.telegram.org/bot") }
 
 type UpdateContext =
     { Update: Update
