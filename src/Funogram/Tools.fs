@@ -116,7 +116,7 @@ type internal Api private () =
         async {
             let client = config.Client
 
-            let url = getUrl config.Token methodName
+            let url = getUrl config methodName
             if param.IsNone || param.Value.Length = 0 then
                 let! jsonString = client.GetStringAsync(url) |> Async.AwaitTask 
                 return jsonString |> parseJson<'a>
