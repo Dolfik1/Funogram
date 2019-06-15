@@ -126,6 +126,19 @@ type SendVideoNoteReq =
     interface IRequestBase<Message> with
         member __.MethodName = "sendVideoNote"
 
+type SendAnimationReq = 
+    { ChatId: ChatId
+      Animation: FileToSend
+      Duration: int option
+      Width: int option
+      Height: int option
+      Caption: string option
+      DisableNotification: bool option
+      ReplyToMessageId: int64 option
+      ReplyMarkup: Markup option }
+    interface IRequestBase<Message> with
+        member __.MethodName = "sendAnimation"
+
 type SendLocationReq = 
     { ChatId: ChatId
       Latitude: Double
