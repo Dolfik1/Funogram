@@ -256,6 +256,12 @@ and [<CLIMutable>] File =
 and [<CLIMutable>] Animation =
   {  /// Unique file identifier
     FileId: string
+    /// Animation width as defined by sender
+    Width: int
+    /// Animation height as defined by sender
+    Height: int
+    /// Duration of the animation in seconds as defined by sender
+    Duration: int
     /// Animation thumbnail as defined by sender
     Thumb: PhotoSize option
     /// Original animation filename as defined by sender
@@ -443,6 +449,8 @@ and [<CLIMutable>] Message =
     Sticker: Sticker option
     /// Message is a video, information about the video
     Video: Video option
+    /// Message is an animation message, information about the animation
+    Animation: Animation option
     /// Message is a voice message, information about the file
     Voice: Voice option
     /// Message is a video note, information about the video message
@@ -495,7 +503,7 @@ let defaultChat = { Id = 0L; Type = ""; Chat.Title = None; Username = None; Firs
 
 let defaultMessage = { MessageId = 1L; From = None; Date = DateTime.MinValue; Chat = defaultChat; ForwardFrom = None; ForwardFromChat = None; 
   ForwardDate = None; ForwardFromMessageId = None; ReplyToMessage = None; EditDate = None; Text = None; Entities = None; Audio = None; 
-  Document = None; Game = None; Photo = None; Sticker = None; Video = None; Voice = None; VideoNote = None; NewChatMembers = None; Caption = None; 
+  Document = None; Game = None; Photo = None; Sticker = None; Video = None; Animation = None; Voice = None; VideoNote = None; NewChatMembers = None; Caption = None; 
   Contact = None; Location = None; Venue = None; NewChatMember = None; LeftChatMember = None; NewChatTitle = None; NewChatPhoto = None; 
   DeleteChatPhoto = None; GroupChatCreated = None; SupergroupChatCreated = None; ChannelChatCreated = None; MigrateToChatId = None; 
   MigrateFromChatId = None; ForwardSignature = None; AuthorSignature = None;
