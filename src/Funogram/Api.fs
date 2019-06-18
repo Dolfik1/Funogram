@@ -70,6 +70,12 @@ let sendVideoBase chatId video duration width height caption disableNotification
     ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
 let sendVideo chatId video caption = sendVideoBase (ChatId.Int chatId) video None None None (Some caption) None None None
 
+let sendAnimationBase chatId animation duration width height caption disableNotification replyToMessageId replyMarkup =
+    { ChatId = chatId; Animation = animation; Duration = duration; Width = width; 
+    Height = height; Caption = caption; DisableNotification = disableNotification; 
+    ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
+let sendAnimation chatId animation caption = sendAnimationBase (ChatId.Int chatId) animation None None None (Some caption) None None None
+
 let sendVoiceBase chatId voice caption duration disableNotification replyToMessageId replyMarkup =
     { ChatId = chatId; Voice = voice; Caption = caption; Duration = duration;
     DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
