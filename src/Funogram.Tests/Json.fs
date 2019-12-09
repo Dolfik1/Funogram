@@ -88,5 +88,5 @@ let ``JSON deserializing ForwardMessage`` () =
     Constants.jsonMessageForwardDateApiString
     |> parseJson
     |> function
-    | Ok result -> shouldEqual result Constants.jsonMessageForwardDateString
+    | Ok result -> shouldEqual result Constants.jsonMessageForward
     | Error error -> failwith error.Description
