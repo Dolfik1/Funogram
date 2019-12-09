@@ -1,13 +1,10 @@
 module Funogram.Types
 
-open Funogram.JsonHelpers
-
 open System
 open System.IO
 open System.Net.Http
 open System.Runtime.CompilerServices
-
-open Newtonsoft.Json
+open System.Runtime.Serialization
 
 // Allow construct types to Funogram.Tests
 [<assembly: InternalsVisibleTo("Newtonsoft.Json")>]
@@ -130,7 +127,7 @@ and [<CLIMutable>] Document =
     /// File size
     FileSize: int option }
 
-and [<InSnakeCase>] MaskPoint =
+and MaskPoint =
   | Forehead
   | Eyes
   | Mouth
@@ -141,8 +138,10 @@ and [<CLIMutable>] MaskPosition =
   { /// The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
     Point: MaskPoint
     /// Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position.
+    [<DataMember(Name = "x_shift")>]
     XShift: float
     /// Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will place the mask just below the default mask position.
+    [<DataMember(Name = "y_shift")>]
     YShift: float
     /// Mask scaling coefficient. For example, 2.0 means double size.
     Scale: float
@@ -407,7 +406,6 @@ and [<CLIMutable>] Message =
     MessageId: int64
     /// Sender, can be empty for messages sent to channels
     From: User option
-    [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
     /// Date the message was sent in Unix time
     Date: DateTime
     /// Conversation the message belongs to
@@ -420,15 +418,12 @@ and [<CLIMutable>] Message =
     ForwardFromMessageId: int64 option
     /// For messages forwarded from channels, signature of the post author if present
     ForwardSignature: string option
-
-    [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
     /// For forwarded messages, date the original message
     ForwardDate: DateTime option
     /// For replies, the original message. 
     /// Note that the Message object in this field will not contain further 
     /// ReplyToMessage fields even if it itself is a reply.
     ReplyToMessage: Message option;
-    [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
     /// Date the message was last edited
     EditDate: DateTime option
     /// Signature of the post author for messages in channels
@@ -587,7 +582,6 @@ type ParseMode =
   | HTML
 
 /// Type of action to broadcast
-[<InSnakeCase>]
 type ChatAction =
   | Typing
   | UploadPhoto
@@ -668,7 +662,6 @@ type ChatMember =
     User: User
     /// The member's status in the chat. Can be “creator”, “administrator”, “member”, “left” or “kicked”
     Status: string 
-    [<JsonConverter(typeof<JsonHelpers.UnixDateTimeConverter>)>]
     /// Restictred and kicked only. Date when restrictions will be lifted for this user, unix time
     UntilDate: DateTime option
     /// Administrators only. True, if the bot is allowed to edit administrator privileges of that user
@@ -705,6 +698,7 @@ type Markup =
   | ForceReply of ForceReply
 
 /// Telegram Bot Api Response
+[<CLIMutable>]
 type ApiResponse<'a> = 
   { /// True if request success
     Ok: bool

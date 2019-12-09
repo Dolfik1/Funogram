@@ -4,9 +4,7 @@ open System.IO
 open Funogram.Api
 open Funogram.Types
 open Funogram.Bot
-open Funogram.Types
 open FunHttp
-open System.Net.Http
 
 
 [<Literal>]
