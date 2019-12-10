@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <VersionPrefix>4.4</VersionPrefix>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Types.fs" />
+        <Compile Include="RequestsTypes.fs" />
+        <Compile Include="Api.fs" />
+        <Compile Include="Sscanf.fs" />
+        <Compile Include="Bot.fs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Funogram\Funogram.fsproj" />
+    </ItemGroup>
+</Project>

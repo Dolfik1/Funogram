@@ -1,11 +1,9 @@
 module Funogram.Tests.Json
 
-open System
 open Funogram.Types
 open Xunit
 open Extensions
 open Helpers
-open Utf8Json
 
 [<Fact>]
 let ``JSON deserializing MessageEntity`` () =

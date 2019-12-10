@@ -2,9 +2,7 @@ module Funogram.Tools
 
 open System
 open System.Net.Http
-open System.Reflection
 open System.Runtime.CompilerServices
-open System.Text
 open Utf8Json
 open Utf8Json.Resolvers
 
@@ -12,10 +10,11 @@ open Utf8Json.Resolvers
 do ()
 
 open System.Collections.Concurrent
+open System.IO
 open System.Linq.Expressions
-open Funogram.RequestsTypes
+open Funogram.Types
 open Funogram.Resolvers
-open Types
+open TypeShape.Core
 open Utf8Json.FSharp
 
 let internal formatters: IJsonFormatter[] = [|
@@ -35,7 +34,7 @@ let internal resolver =
   )
 
 let private getUrl (config: BotConfig) methodName = 
-  sprintf "%s%s/%s" (config.TelegramServerUrl |> string) config.Token methodName
+  sprintf "%s%s/%s" (config.ApiEndpointUrl |> string) config.Token methodName
 
 let internal getUnix (date: DateTime) = 
   Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
@@ -64,8 +63,7 @@ let private generateSerializer tp =
   let convert = Expression.Convert(sourceParam, tp)
   let method = toJsonMethodInfo.MakeGenericMethod(tp)
   let call = Expression.Call(method, convert)
-  
-  Expression.Lambda<Func<IBotRequest, byte[]>>(call, [ sourceParam]).Compile()
+  Expression.Lambda<Func<IBotRequest, byte[]>>(call, [sourceParam]).Compile()
   
 let toJsonBotRequest (request: IBotRequest) =
   let toJson =
@@ -74,113 +72,126 @@ let toJsonBotRequest (request: IBotRequest) =
       Func<Type, Func<IBotRequest, byte[]>>(generateSerializer))
   toJson.Invoke(request)  
 
+module Api =
+  type FileType = (string * Stream)
+  
+  let fileFinders = ConcurrentDictionary<Type, IBotRequest -> FileType[]>()
+  
+  let mkBaseFinderMethod =
+    System.Reflection.Assembly.GetExecutingAssembly()
+      .GetType("Funogram.Tools")
+      .GetNestedType("Api")
+      .GetMethod("mkBaseFinder")
 
+  let generateFileFinder (tp: Type) =
+    let method = mkBaseFinderMethod.MakeGenericMethod(tp)
+    Expression.Lambda<Func<IBotRequest -> FileType[]>>(Expression.Call(method))
+      .Compile().Invoke()
+ 
+  let rec mkFindFiles<'T> () : 'T -> FileType[] =
+    let mkFindInMember (shape : IShapeMember<'DeclaringType>) =
+     shape.Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> FileType[]> with
+       member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
+         let inFieldFinder = mkFindFiles<'Field>()
+         inFieldFinder << shape.Get }
 
-let internal getChatIdString (chatId: Types.ChatId) = 
-  match chatId with
-  | Int v -> v |> string
-  | String v -> v
+    let wrap(p : 'a -> FileType[]) = unbox<'T -> FileType[]> p
+    match shapeof<'T> with
+    | Shape.FSharpOption s ->
+      s.Element.Accept {
+        new ITypeVisitor<'T -> FileType[]> with
+          member __.Visit<'a> () =
+            let tp = mkFindFiles<'a>()
+            wrap(function None -> [||] | Some t -> tp t)
+      }
+    | Shape.FSharpList s ->
+      s.Element.Accept {
+        new ITypeVisitor<'T -> FileType[]> with
+          member __.Visit<'a> () =
+            let tp = mkFindFiles<'a>()
+            wrap(fun ts -> ts |> List.map tp |> Array.concat)
+      }
+    | Shape.Array s when s.Rank = 1 ->
+      s.Element.Accept {
+        new ITypeVisitor<'T -> FileType[]> with
+          member __.Visit<'a> () =
+            let tp = mkFindFiles<'a> ()
+            wrap(fun ts -> ts |> Array.map tp |> Array.concat)
+        }
+        
+    // TUPLE
 
-let internal getChatIdStringOption (chatId: Types.ChatId option) = 
-  chatId
-  |> Option.map getChatIdString
-  |> Option.defaultValue ""
+    | Shape.FSharpSet s ->
+      s.Accept {
+        new IFSharpSetVisitor<'T -> FileType[]> with
+          member __.Visit<'a when 'a : comparison> () =
+            let tp = mkFindFiles<'a>()
+            wrap(fun (s:Set<'a>) -> s |> Seq.map tp |> Array.concat)
+     }
+    | Shape.FSharpUnion (:? ShapeFSharpUnion<'T> as shape) ->
+      let cases : ShapeFSharpUnionCase<'T> [] = shape.UnionCases // all union cases
+      let mkUnionCasePrinter (case : ShapeFSharpUnionCase<'T>) =
+        let fieldPrinters = case.Fields |> Array.map mkFindInMember
+        fun (u:'T) ->
+          fieldPrinters
+          |> Seq.map (fun fp -> fp u) 
+          |> Array.concat
 
-let private isOption (t: Type) = 
-  t.GetTypeInfo().IsGenericType 
-  && t.GetGenericTypeDefinition() = typedefof<option<_>>
+      let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
+      fun (u:'T) ->
+        let tag : int = shape.GetTag u // get the underlying tag for the union case
+        casePrinters.[tag] u
+     | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
+      let fieldPrinters : (string * ('T -> FileType[])) [] = 
+        shape.Fields |> Array.map (fun f -> f.Label, mkFindInMember f)
 
-let internal (|SomeObj|_|) = 
-  let ty = typedefof<option<_>>
-  fun (a: obj) -> 
-    let aty = a.GetType().GetTypeInfo()
-    let v = aty.GetProperty("Value")
-    if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then 
-      if isNull (a) then None else Some(v.GetValue(a, [||]))
-    else None
-
-module Api2 =
+      fun (r:'T) ->
+        fieldPrinters
+        |> Seq.map (fun (_, fp) -> fp r)
+        |> Array.concat
+    | _ ->
+      fun _ -> [||]
+  
+  let mkBaseFinder<'a when 'a :> IBotRequest> () =
+    let fn = mkFindFiles<'a> ()
+    fun (request: IBotRequest) -> fn (request :?> 'a)
+  
   let makeRequestAsync config (request: 'b when 'b :> IRequestBase<'a>) =
     async {
       let client = config.Client
       let url = getUrl config request.MethodName
       
-      let bytes = toJsonBotRequest request
-      let result = new ByteArrayContent(bytes)
-      result.Headers.Remove("Content-Type") |> ignore
-      result.Headers.Add("Content-Type", "application/json")
+      let findFiles =
+        fileFinders.GetOrAdd(
+          request.GetType(),
+          Func<Type, IBotRequest -> FileType[]>(generateFileFinder)
+        )
+
+      let files = findFiles request
+      let content =
+        if files.Length > 0 then
+          (*
+          use form = new MultipartFormDataContent()
+          files 
+          |> Seq.iter (
+            fun (name, value) -> 
+              let content, fileName = Api.ConvertParameterValue(value)
+                        
+              if fileName.IsSome then form.Add (content, name, fileName.Value)
+              else form.Add(content, name))
+          *)
+          failwith "Error"
+        else
+          let bytes = toJsonBotRequest request
+          let result = new ByteArrayContent(bytes)
+          result.Headers.Remove("Content-Type") |> ignore
+          result.Headers.Add("Content-Type", "application/json")
+          result :> HttpContent
                       
       let! result = 
-        client.PostAsync(url, result)
+        client.PostAsync(url, content)
         |> Async.AwaitTask
                          
-      let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
-      return parseJson<'a> bytes
-    }
-
-[<AbstractClass>]
-type internal ApiUnused private () =
-
-  static member private ConvertParameterValue(value: obj): HttpContent * string option = 
-      let isPrimitive = value.GetType().IsPrimitive
-      match value with
-      | :? bool as value ->
-        new StringContent(value.ToString().ToLower()) :> HttpContent, None
-      | :? string as value -> new StringContent(value) :> HttpContent, None
-      | :? DateTime as value -> new StringContent(getUnix value |> string) :> HttpContent, None
-      | :? Types.FileToSend as value ->
-        match value with
-        | Types.Url x -> 
-          (new StringContent(x.ToString()) :> HttpContent, None)
-        | Types.FileId x -> (new StringContent(x) :> HttpContent, None)
-        | Types.File(name, content) -> 
-          (new StreamContent(content) :> HttpContent, Some name)
-      | _ ->
-        if isPrimitive then (new StringContent(value.ToString(), Encoding.UTF8) :> HttpContent, None)
-        else new ByteArrayContent(toJson value) :> HttpContent, None
-    
-  static member private DowncastOptionObj = 
-    let ty = typedefof<option<_>>
-    fun (a: obj) -> 
-      let aty = a.GetType().GetTypeInfo()
-      let v = aty.GetProperty("Value")
-      if aty.IsGenericType && aty.GetGenericTypeDefinition() = ty then 
-        if isNull (a) then None else Some(v.GetValue(a, [||]))
-      else None
-    
-  static member internal MakeRequestAsync<'a>(config: BotConfig, request: IRequestBase<'a>) = 
-    async {
-      let client = config.Client
-      let url = getUrl config request.MethodName
-      (*
-      if paramValues |> Seq.exists (fun (_, b) -> (b :? Types.FileToSend)) then 
-        use form = new MultipartFormDataContent()
-        paramValues 
-        |> Seq.iter (
-          fun (name, value) -> 
-            let content, fileName = Api.ConvertParameterValue(value)
-                      
-            if fileName.IsSome then form.Add (content, name, fileName.Value)
-            else form.Add(content, name))
-                        
-        let! result = 
-          client.PostAsync(url, form)
-          |> Async.AwaitTask
-                        
-        let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
-        return parseJson<'a> bytes
-      else *)
-      
-      let bytes = toJson request
-      let text = Encoding.UTF8.GetString(bytes)
-      let result = new ByteArrayContent(bytes)
-      result.Headers.Remove("Content-Type") |> ignore
-      result.Headers.Add("Content-Type", "application/json")
-                    
-      let! result = 
-        client.PostAsync(url, result)
-        |> Async.AwaitTask
-                       
       let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
       return parseJson<'a> bytes
     }

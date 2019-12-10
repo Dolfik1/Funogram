@@ -3,7 +3,7 @@
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
   </PropertyGroup>
   <PropertyGroup>
-    <VersionPrefix>1.3.3</VersionPrefix>
+    <VersionPrefix>2.0.0-preview1</VersionPrefix>
     <Authors>Nikolay Matyushin</Authors>
     <Product>Funogram</Product>
     <Description>Funogram is a functional Telegram Bot Api library for F#</Description>
@@ -18,12 +18,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Types.fs" />
-    <Compile Include="RequestsTypes.fs" />
     <Compile Include="Resolvers.fs" />
     <Compile Include="Tools.fs" />
     <Compile Include="Api.fs" />
-    <Compile Include="Bot/Sscanf.fs" />
-    <Compile Include="Bot/Bot.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />

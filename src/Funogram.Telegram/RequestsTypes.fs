@@ -1,15 +1,8 @@
-module Funogram.RequestsTypes
+module Funogram.Telegram.RequestsTypes
 
+open Funogram.Types
 open Types
 open System
-open System.Runtime.Serialization
-
-type IBotRequest =
-    [<IgnoreDataMember>]
-    abstract MethodName: string
-
-type IRequestBase<'a> =
-    inherit IBotRequest
 
 type GetUpdatesReq = 
     { Offset: int64 option

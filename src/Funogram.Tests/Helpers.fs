@@ -1,4 +1,5 @@
 namespace Funogram.Tests
+
 open System.Text
 open Funogram
 

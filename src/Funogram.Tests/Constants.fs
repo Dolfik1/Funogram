@@ -1,8 +1,8 @@
 namespace Funogram.Tests
 
-open Funogram
 open System
-open RequestsTypes
+open Funogram.Telegram.RequestsTypes
+open Funogram.Telegram.Types
 
 module Constants =
     open Funogram.Types

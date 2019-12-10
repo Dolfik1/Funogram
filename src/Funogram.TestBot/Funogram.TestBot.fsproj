@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Program.fs" />
@@ -11,5 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Funogram/Funogram.fsproj" />
+    <ProjectReference Include="..\Funogram.Telegram\Funogram.Telegram.fsproj" />
   </ItemGroup>
 </Project>

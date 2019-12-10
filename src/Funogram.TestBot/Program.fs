@@ -3,7 +3,9 @@
 open System.IO
 open Funogram.Api
 open Funogram.Types
-open Funogram.Bot
+open Funogram.Telegram.Api
+open Funogram.Telegram.Types
+open Funogram.Telegram.Bot
 open FunHttp
 
 

@@ -1,4 +1,4 @@
-module internal Funogram.Sscanf
+﻿module internal Funogram.Telegram.Sscanf
 
 open System
 open System.Text.RegularExpressions
@@ -13,8 +13,9 @@ let private parseDecimal x =
     Decimal.Parse(x, System.Globalization.CultureInfo.InvariantCulture)
 
 /// The supported characters for the formatter
-let parsers = 
-    dict [ 'b', Boolean.Parse >> box
+let parsers =
+    let parseBool (s: string) = System.Boolean.Parse(s)
+    dict [ 'b', parseBool >> box
            'd', int64 >> box
            'i', int64 >> box
            's', box

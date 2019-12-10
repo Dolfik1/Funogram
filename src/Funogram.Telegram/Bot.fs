@@ -1,10 +1,12 @@
-module Funogram.Bot
+﻿module Funogram.Telegram.Bot
 
-open Funogram.Sscanf
+open System
+open System.Net.Http
+open Funogram.Telegram.Sscanf
+open Funogram.Telegram.Types
+open Funogram.Telegram.Api
 open Funogram.Types
 open Funogram.Api
-open System.Net.Http
-open System
 
 let defaultConfig =
     { Token = ""
@@ -13,7 +15,7 @@ let defaultConfig =
       Timeout = Some 60000
       AllowedUpdates = None
       Client = new HttpClient()
-      TelegramServerUrl = new Uri("https://api.telegram.org/bot") }
+      ApiEndpointUrl = new Uri("https://api.telegram.org/bot") }
 
 type UpdateContext =
     { Update: Update
