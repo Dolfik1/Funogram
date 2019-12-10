@@ -1,5 +1,6 @@
 module Funogram.Tests.Json
 
+open System
 open Funogram.Types
 open Xunit
 open Extensions
@@ -90,3 +91,15 @@ let ``JSON deserializing ForwardMessage`` () =
     |> function
     | Ok result -> shouldEqual result Constants.jsonMessageForward
     | Error error -> failwith error.Description
+    
+[<Fact>]
+let ``JSON serializing params dictionary`` () =
+    Constants.paramsDictionary
+    |> toJsonString
+    |> shouldEqual Constants.jsonParamsDictionary
+
+[<Fact>]
+let ``JSON serializing forward message request`` () =
+    Constants.forwardMessageReq
+    |> toJsonBotRequestString
+    |> shouldEqual Constants.jsonForwardMessageReq

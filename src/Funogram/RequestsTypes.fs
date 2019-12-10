@@ -2,8 +2,10 @@ module Funogram.RequestsTypes
 
 open Types
 open System
+open System.Runtime.Serialization
 
 type IBotRequest =
+    [<IgnoreDataMember>]
     abstract MethodName: string
 
 type IRequestBase<'a> =

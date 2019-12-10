@@ -1,4 +1,6 @@
 ﻿namespace Funogram
+
+open System
 open System.Runtime.CompilerServices
 open System.Text
 open Utf8Json
@@ -7,7 +9,6 @@ open Utf8Json
 do ()
 module internal Resolvers =
   
-  open System
   open TypeShape.Core
 
   let getSnakeCaseName (name: string) =
@@ -176,7 +177,7 @@ module internal Resolvers =
       member x.GetFormatter<'a>(): IJsonFormatter<'a> =
         match shapeof<'a> with
         | Shape.FSharpOption _ -> null
-        | Shape.FSharpUnion _ ->
+        | Shape.FSharpUnion _ ->    
           FunogramDiscriminatedUnionFormatter<'a>() :> IJsonFormatter<'a>
         | _ -> null
     

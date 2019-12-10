@@ -1,5 +1,8 @@
 namespace Funogram.Tests
+
+open Funogram
 open System
+open RequestsTypes
 
 module Constants =
     open Funogram.Types
@@ -40,6 +43,24 @@ module Constants =
     let jsonMessageForward = 
         { defaultMessage with MessageId = 1L;  Date = testDate; ForwardDate = Some testDate; Text = None; Chat = defaultChat }
     
-    let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":0,"type":""},"forward_date":%i}""" testDateUnix testDateUnix
-    
+    let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":0,"type":""},"forward_date":%i}""" testDateUnix testDateUnix    
     let jsonMessageForwardDateApiString = ok jsonMessageForwardDateString
+    
+    let paramsDictionary =
+      [
+        "offset", box 0
+        "limit", box 100
+        "timeout", box 600
+        "allowed_updates", box [||]
+      ] |> dict
+    let jsonParamsDictionary = """{"offset":0,"limit":100,"timeout":600,"allowed_updates":[]}"""
+    
+    let forwardMessageReq = 
+      {
+        ForwardMessageReq.ChatId = ChatId.String "Dolfik"
+        FromChatId = ChatId.Int 10L
+        MessageId = 10L
+        ForwardMessageReq.DisableNotification = None
+      } :> IBotRequest
+    let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
+   

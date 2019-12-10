@@ -4,21 +4,11 @@ open Funogram.Types
 open Funogram.RequestsTypes
 open Funogram.Tools
 
-open System
-open System.Reflection
-    
-let private getArgs (body: IBotRequest) =
-    let props = body.GetType().GetTypeInfo().GetProperties() |> Array.toList
-    props |> List.map (fun f -> (Resolvers.getSnakeCaseName f.Name, f.GetValue(body)))
-
-let api config (body: IRequestBase<'a>) = 
-    Api.MakeRequestAsync<'a> (config, body.MethodName, (getArgs body))
-
-let apiUntyped config (body: IBotRequest) =
-    Api.MakeRequestAsync<'a> (config, body.MethodName, (getArgs body))
+let api config (request: 'b when 'b :> IRequestBase<'a>) = 
+    Api2.makeRequestAsync config request
 
 let getUpdatesBase offset limit timeout allowedUpdates =
-    { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates }
+    { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates |> Seq.toArray }
 
 let getMe = GetMeReq()
 

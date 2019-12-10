@@ -11,6 +11,9 @@ open Utf8Json.Resolvers
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 do ()
 
+open System.Collections.Concurrent
+open System.Linq.Expressions
+open Funogram.RequestsTypes
 open Funogram.Resolvers
 open Types
 open Utf8Json.FSharp
@@ -47,7 +50,31 @@ let internal parseJson<'a> (data: byte[]) =
     Error { Description = "Unknown error"
             ErrorCode = -1 }
 
+[<ReflectedDefinition>]
 let toJson (o: 'a) = JsonSerializer.Serialize<'a>(o, resolver)
+
+let private toJsonMethodInfo =
+  System.Reflection.Assembly.GetExecutingAssembly()
+    .GetType("Funogram.Tools").GetMethod("toJson")
+
+// json request serializer
+let private serializers = ConcurrentDictionary<Type, Func<IBotRequest, byte[]>>()
+let private generateSerializer tp =
+  let sourceParam = Expression.Parameter(typeof<IBotRequest>)
+  let convert = Expression.Convert(sourceParam, tp)
+  let method = toJsonMethodInfo.MakeGenericMethod(tp)
+  let call = Expression.Call(method, convert)
+  
+  Expression.Lambda<Func<IBotRequest, byte[]>>(call, [ sourceParam]).Compile()
+  
+let toJsonBotRequest (request: IBotRequest) =
+  let toJson =
+    serializers.GetOrAdd(
+      request.GetType(),
+      Func<Type, Func<IBotRequest, byte[]>>(generateSerializer))
+  toJson.Invoke(request)  
+
+
 
 let internal getChatIdString (chatId: Types.ChatId) = 
   match chatId with
@@ -72,8 +99,27 @@ let internal (|SomeObj|_|) =
       if isNull (a) then None else Some(v.GetValue(a, [||]))
     else None
 
+module Api2 =
+  let makeRequestAsync config (request: 'b when 'b :> IRequestBase<'a>) =
+    async {
+      let client = config.Client
+      let url = getUrl config request.MethodName
+      
+      let bytes = toJsonBotRequest request
+      let result = new ByteArrayContent(bytes)
+      result.Headers.Remove("Content-Type") |> ignore
+      result.Headers.Add("Content-Type", "application/json")
+                      
+      let! result = 
+        client.PostAsync(url, result)
+        |> Async.AwaitTask
+                         
+      let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
+      return parseJson<'a> bytes
+    }
+
 [<AbstractClass>]
-type internal Api private () =
+type internal ApiUnused private () =
 
   static member private ConvertParameterValue(value: obj): HttpContent * string option = 
       let isPrimitive = value.GetType().IsPrimitive
@@ -102,52 +148,39 @@ type internal Api private () =
         if isNull (a) then None else Some(v.GetValue(a, [||]))
       else None
     
-  static member internal MakeRequestAsync<'a>(config: BotConfig,
-                                              methodName: string, 
-                                              ?param: (string * obj) list) = 
+  static member internal MakeRequestAsync<'a>(config: BotConfig, request: IRequestBase<'a>) = 
     async {
       let client = config.Client
-
-      let url = getUrl config methodName
-      if param.IsNone || param.Value.Length = 0 then
-        let! bytes = client.GetByteArrayAsync(url) |> Async.AwaitTask 
-        return bytes |> parseJson<'a>
-      else 
-        let paramValues = 
-          param.Value 
-          |> List.choose (
-            fun (key, value) -> 
-              match value with
-              | null -> None
-              | SomeObj(o) -> Some(key, o)
-              | _ -> 
-                if isOption (value.GetType()) then None else Some(key, value))
-        if paramValues  |> Seq.exists (fun (_, b) -> (b :? Types.FileToSend)) then 
-          use form = new MultipartFormDataContent()
-          paramValues 
-          |> Seq.iter (
-            fun (name, value) -> 
-              let content, fileName = Api.ConvertParameterValue(value)
+      let url = getUrl config request.MethodName
+      (*
+      if paramValues |> Seq.exists (fun (_, b) -> (b :? Types.FileToSend)) then 
+        use form = new MultipartFormDataContent()
+        paramValues 
+        |> Seq.iter (
+          fun (name, value) -> 
+            let content, fileName = Api.ConvertParameterValue(value)
+                      
+            if fileName.IsSome then form.Add (content, name, fileName.Value)
+            else form.Add(content, name))
                         
-              if fileName.IsSome then form.Add (content, name, fileName.Value)
-              else form.Add(content, name))
+        let! result = 
+          client.PostAsync(url, form)
+          |> Async.AwaitTask
                         
-          let! result = 
-            client.PostAsync(url, form)
-            |> Async.AwaitTask
-                        
-          let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
-          return parseJson<'a> bytes
-        else 
-          let bytes = toJson (paramValues |> dict)
-          let result = new ByteArrayContent(bytes)
-          result.Headers.Remove("Content-Type") |> ignore
-          result.Headers.Add("Content-Type", "application/json")
+        let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
+        return parseJson<'a> bytes
+      else *)
+      
+      let bytes = toJson request
+      let text = Encoding.UTF8.GetString(bytes)
+      let result = new ByteArrayContent(bytes)
+      result.Headers.Remove("Content-Type") |> ignore
+      result.Headers.Add("Content-Type", "application/json")
                     
-          let! result = 
-            client.PostAsync(url, result)
-            |> Async.AwaitTask
+      let! result = 
+        client.PostAsync(url, result)
+        |> Async.AwaitTask
                        
-          let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
-          return parseJson<'a> bytes
+      let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
+      return parseJson<'a> bytes
     }
