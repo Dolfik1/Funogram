@@ -1,9 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <VersionPrefix>4.4</VersionPrefix>
     </PropertyGroup>
-
+    <PropertyGroup>
+      <VersionPrefix>4.4</VersionPrefix>
+      <Authors>Nikolay Matyushin</Authors>
+      <Product>Funogram.Telegram</Product>
+      <Title>Funogram.Telegram</Title>
+      <PackageId>Funogram.Telegram</PackageId>
+      <PackageTags>telegram</PackageTags>
+      <PackageIconUrl>https://raw.githubusercontent.com/Dolfik1/Funogram/master/docs/files/img/logo.png</PackageIconUrl>
+      <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
+      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+      <PublishRepositoryUrl>true</PublishRepositoryUrl> 
+    </PropertyGroup>
     <ItemGroup>
         <Compile Include="Types.fs" />
         <Compile Include="RequestsTypes.fs" />
