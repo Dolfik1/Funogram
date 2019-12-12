@@ -1,7 +1,12 @@
 ![Travis build status](https://travis-ci.org/Dolfik1/Funogram.svg?branch=master)
 [![NuGet](https://img.shields.io/nuget/v/FunHttp.svg)](https://www.nuget.org/packages/Funogram/)
+
 # Funogram
 F# Telegram Bot Api library!
+
+# Breaking changes
+
+Funogram 2.0 has breaking changes. You should add two nuget packages: Funogram and Funogram.Telegram.
 
 ### Getting Started
 Firstly you need to install <a href="https://www.nuget.org/packages/Funogram">Funogram</a>. Installation for .NET Core users:
