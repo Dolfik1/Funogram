@@ -3,10 +3,16 @@ module Funogram.Telegram.Types
 open System
 open System.IO
 open System.Runtime.Serialization
+open Funogram.Types
 
 type ChatId = 
   | Int of int64
   | String of string
+  
+type FileToSend = 
+  | Url of Uri 
+  | File of string * Stream
+  | FileId of string
 
 [<CLIMutable>]
 /// This object represents a Telegram user or bot.
@@ -33,12 +39,340 @@ type ChatPhoto =
     BigFileId: string }
 
 [<CLIMutable>]
+/// Describes actions that a non-administrator user is allowed to take in a chat.
+type ChatPermissions =
+  {
+    /// True, if the user is allowed to send text messages, contacts, locations and venues
+    CanSendMessages: bool option
+    /// True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
+    CanSendMediaMessages: bool option
+    /// True, if the user is allowed to send polls, implies can_send_messages
+    CanSendPools: bool option
+    /// True, if the user is allowed to send animations, games, stickers and use inline bots, implies can_send_media_messages
+    CanSendOtherMessages: bool option
+    /// True, if the user is allowed to add web page previews to their messages, implies can_send_media_messages
+    CanAddWebPagePreviews: bool option
+    /// True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
+    CanChangeInfo: bool option
+    /// True, if the user is allowed to invite new users to the chat
+    CanInviteUsers: bool option
+    /// True, if the user is allowed to pin messages. Ignored in public supergroups
+    CanPinMessages: bool option
+  }
+
+type PassportElementType =
+| PersonalDetails
+| Passport
+| DriverLicense
+| IdentityCard
+| InternalPassport
+| Address
+| UtilityBill
+| BankStatement
+| RentalAgreement
+| PassportRegistration
+| TemporaryRegistration
+| PhoneNumber
+| Email
+
+/// This object represents a file uploaded to Telegram Passport. Currently all Telegram Passport files are in JPEG format when decrypted and don't exceed 10MB.
+[<CLIMutable>]
+type PassportFile =
+  {
+    /// Identifier for this file
+    FileId: string
+    /// File size
+    FileSize: int
+    /// DateTime when the file was uploaded
+    FileDate: DateTime
+  }
+
+/// Contains information about documents or other Telegram Passport elements shared with the bot by the user.
+[<CLIMutable>]
+type EncryptedPassportElement =
+  {
+    /// Element type
+    Type: PassportElementType
+    /// Base64-encoded encrypted Telegram Passport element data provided by the user, available for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
+    Data: string option
+    /// User's verified phone number, available only for “PhoneNumber” type
+    PhoneNumber: string option
+    /// User's verified email address, available only for “email” type
+    Email: string option
+    /// Array of encrypted files with documents provided by the user, available for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    Files: PassportFile[] option
+    /// Encrypted file with the front side of the document, provided by the user. Available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    FrontSide: PassportFile option
+    /// Encrypted file with the reverse side of the document, provided by the user. Available for “driver_license” and “identity_card”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    ReverseSide: PassportFile option
+    /// Encrypted file with the selfie of the user holding a document, provided by the user; available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    Selfie: PassportFile option
+    /// Array of encrypted files with translated versions of documents provided by the user. Available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    Translation: PassportFile[] option
+    /// Base64-encoded element hash for using in PassportElementErrorUnspecified
+    Hash: string }
+
+[<CLIMutable>]
+/// Contains data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport Documentation for a complete description of the data decryption and authentication processes.
+type EncryptedCredentials =
+  {
+    /// Base64-encoded encrypted JSON-serialized data with unique user's payload, data hashes and secrets required for EncryptedPassportElement decryption and authentication
+    Data: string
+    /// Base64-encoded data hash for data authentication
+    Hash: string
+    /// Base64-encoded secret, encrypted with the bot's public RSA key, required for data decryption
+    Secret: string }
+
+[<CLIMutable>]
+/// Contains information about Telegram Passport data shared with the bot by the user.
+type PassportData =
+  {
+    /// Array with information about documents and other Telegram Passport elements that was shared with the bot
+    Data: EncryptedPassportElement[]
+    /// Encrypted credentials required to decrypt the data
+    Credentials: EncryptedCredentials }
+
+[<CLIMutable>]
+/// Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes..
+type PassportElementErrorDataField =
+  {
+    /// The section of the user's Telegram Passport which has the error
+    Type: PassportElementType
+    /// Name of the data field which has the error
+    FieldName: string
+    /// Base64-encoded data hash
+    DataHash: string
+    /// Error message
+    Message: string }
+  member x.Source = "data"
+
+[<CLIMutable>]
+/// PassportElementErrorFrontSide
+type PassportElementErrorFrontSide =
+  { /// The section of the user's Telegram Passport which has the issue
+    Type: PassportElementType
+    /// Base64-encoded hash of the file with the front side of the document
+    FileHash: string
+    /// Error message
+    Message: string
+  }
+  member x.Source = "front_side"
+
+[<CLIMutable>]
+/// Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
+type PassportElementErrorReverseSide =
+  { /// The section of the user's Telegram Passport which has the issue, one of “driver_license”, “identity_card”
+    Type: PassportElementType
+    /// Base64-encoded hash of the file with the reverse side of the document
+    FileHash: string
+    /// Error message
+    Message: string }
+  member x.Source = "reverse_side"
+  
+/// Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
+[<CLIMutable>]
+type PassportElementErrorSelfie =
+  { /// The section of the user's Telegram Passport which has the issue.
+    Type: PassportElementType
+    /// Base64-encoded hash of the file with the selfie
+    FileHash: string
+    /// Error message
+    Message: string }
+  member x.Source = "selfie"
+  
+/// Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
+[<CLIMutable>]
+type PassportElementErrorFile =
+  { /// The section of the user's Telegram Passport which has the issue.
+    Type: PassportElementType
+    /// Base64-encoded hash of the file with the selfie
+    FileHash: string
+    /// Error message
+    Message: string }
+  member x.Source = "file"
+
+/// Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
+[<CLIMutable>]
+type PassportElementErrorFiles =
+  { /// The section of the user's Telegram Passport which has the issue.
+    Type: PassportElementType
+    /// List of base64-encoded file hashes
+    FileHashes: string[]
+    /// Error message
+    Message: string }
+  member x.Source = "files"
+
+[<CLIMutable>]
+/// Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
+type PassportElementErrorTranslationFile =
+  { /// The section of the user's Telegram Passport which has the issue.
+    Type: PassportElementType
+    /// List of base64-encoded file hashes
+    FileHashes: string[]
+    /// Error message
+    Message: string }
+  member x.Source = "translation_file"
+
+[<CLIMutable>]
+/// Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
+type PassportElementErrorTranslationFiles =
+  { /// The section of the user's Telegram Passport which has the issue.
+    Type: PassportElementType
+    /// List of base64-encoded file hashes
+    FileHashes: string[]
+    /// Error message
+    Message: string }
+  member x.Source = "translation_files"
+  
+[<CLIMutable>]
+/// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
+type PassportElementErrorUnspecified =
+  { /// Type of element of the user's Telegram Passport which has the issue
+    Type: PassportElementType
+    /// Base64-encoded element hash
+    ElementHash: string
+    /// Error message
+    Message: string
+  }
+  member x.Source = "unspecified"
+  
+type PassportElementError =
+| DataField of PassportElementErrorDataField
+| FrontSide of PassportElementErrorFrontSide
+| ReverseSide of PassportElementErrorReverseSide
+| Selfie of PassportElementErrorSelfie
+| File of PassportElementErrorFile
+| Files of PassportElementErrorFiles
+| TranslationFile of PassportElementErrorTranslationFile 
+| TranslationFiles of PassportElementErrorTranslationFiles
+| Unspecified of PassportElementErrorUnspecified
+
+type ChatType =
+| Private
+| Group
+| [<DataMember(Name = "supergroup")>] SuperGroup
+| Channel
+| Unknown
+
+[<CLIMutable>]
+/// This object contains information about one answer option in a poll.
+type PollOption =
+  {
+    /// Option text, 1-100 characters
+    Text: string
+    /// Number of users that voted for this option
+    VoterCount: int
+  }
+
+[<CLIMutable>]
+/// This object contains information about a poll
+type Poll =
+  {
+    /// Unique poll identifier
+    Id: string
+    /// Poll question, 1-255 characters
+    Question: string
+    /// List of poll options
+    Options: PollOption[]
+    /// True, if the poll is closed
+    IsClosed: bool
+  }
+
+[<CLIMutable>]
+/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in
+type LoginUrl =
+  {
+    /// An HTTP URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.
+    /// NOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.
+    Url: string
+    /// New text of the button in forwarded messages.
+    ForwardText: string option
+    /// Username of a bot, which will be used for user authorization. If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain linked with the bot.
+    BotUsername: string option
+    /// Pass True to request the permission for your bot to send messages to the user.
+    RequestWriteAccess: bool option
+  }
+  
+/// A placeholder, currently holds no information
+type CallbackGame() = class end
+
+[<CLIMutable>]
+/// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
+type InlineKeyboardButton = 
+  { /// Label text on the button
+    Text: string
+    /// HTTP url to be opened when button is pressed
+    Url: string option
+    /// An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
+    LoginUrl: LoginUrl option
+    /// Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
+    CallbackData: string option
+    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and 
+    /// insert the bot‘s username and the specified inline query in the input field. Can be empty, in which 
+    /// case just the bot’s username will be inserted.
+    SwitchInlineQuery: string option
+    /// If set, pressing the button will insert the bot‘s username and the specified inline query in the current 
+    /// chat's input field. Can be empty, in which case only the bot’s username will be inserted.
+    SwitchInlineQueryCurrentChat: string option
+    /// Description of the game that will be launched when the user presses the button.
+    CallbackGame: CallbackGame option
+    /// Specify True, to send a Pay button.
+    /// NOTE: This type of button must always be the first button in the first row.
+    Pay: bool option }
+
+[<CLIMutable>]
+/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields are mutually exclusive.
+type KeyboardButton = 
+  { /// Text of the button. If none of the optional fields are used, it will be sent to the bot as a message when the button is pressed
+    Text: string
+    /// If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
+    RequestContact: bool option
+    /// If True, the user's current location will be sent when the button is pressed. Available in private chats only
+    RequestLocation: bool option }
+
+[<CLIMutable>]
+/// This object represents an inline keyboard that appears right next to the message it belongs to
+type InlineKeyboardMarkup =
+  { /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
+    InlineKeyboard: (InlineKeyboardButton seq) seq }
+
+[<CLIMutable>]
+/// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
+type ReplyKeyboardMarkup =
+  {
+    /// Array of button rows, each represented by an Array of KeyboardButton objects
+    Keyboard: (KeyboardButton seq) seq
+    /// Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
+    ResizeKeyboard: bool option
+    /// Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat – the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
+    OneTimeKeyboard: bool option
+    /// Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message
+    Selective: bool option }
+
+[<CLIMutable>]
+/// Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup).
+type ReplyKeyboardRemove =
+  { /// Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
+    RemoveKeyboard: bool
+    /// Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+    Selective: bool option }
+
+[<CLIMutable>]
+/// Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot‘s message and tapped ’Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
+type ForceReply = 
+  { /// Shows reply interface to the user, as if they manually selected the bot‘s message and tapped ’Reply'
+    ForceReply: bool
+    /// Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the 
+    /// text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+    Selective: bool option }
+
+[<CLIMutable>]
 /// This object represents a chat.
 type Chat =
   {  /// Unique identifier for this chat.
     Id: int64
     /// Type of chat, can be either "private", "group", "supergroup" or "channel"
-    Type: string
+    Type: ChatType
     /// Title, for supergroups, channels and group chats
     Title: string option
     /// Username, for private chats, supergroups and channels if available
@@ -56,7 +390,13 @@ type Chat =
     /// Chat invite link, for supergroups and channel chats. Returned only in getChat.
     InviteLink: string option
     /// Pinned message, for supergroups. Returned only in getChat.
-    PinnedMessage: Message option }
+    PinnedMessage: Message option
+    /// Default chat member permissions, for groups and supergroups
+    Permissions: ChatPermissions option
+    /// For supergroups, name of group sticker set
+    StickerSetName: string option
+    /// True, if the bot can change the group sticker set.
+    CanSetStickerSet: bool option }
 
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 and [<CLIMutable>] MessageEntity =
@@ -86,7 +426,9 @@ and [<CLIMutable>] Audio =
     /// MIME type of the file as defined by sender
     MimeType: string option
     /// File size
-    FileSize: int option }
+    FileSize: int option
+    /// This object represents an audio file to be treated as music by the Telegram clients.
+    Thumb: PhotoSize option }
 
 /// This object represents one size of a photo or a file / sticker thumbnail.
 and [<CLIMutable>] PhotoSize =
@@ -140,6 +482,8 @@ and [<CLIMutable>] Sticker =
     Width: int
     /// Sticker height
     Height: int
+    /// True, if the sticker is animated
+    IsAnimated: bool
     /// Sticker thumbnail in .webp or .jpg format
     Thumb: PhotoSize option
     /// Emoji associated with the sticker
@@ -157,6 +501,8 @@ and [<CLIMutable>] StickerSet =
     Name: string
     /// Sticker set title
     Title: string
+    /// True, if the sticker set contains animated stickers
+    IsAnimated: bool
     /// True, if the sticker set contains masks
     ContainsMasks: bool
     /// List of all set stickers
@@ -199,7 +545,8 @@ and [<CLIMutable>] Contact =
     /// Contact's last name
     LastName: string option
     /// Contact's user identifier in Telegram
-    UserId: int option }
+    UserId: int option
+    VCard: string option }
 
 /// This object represents a point on the map
 and [<CLIMutable>] Location =
@@ -217,7 +564,8 @@ and [<CLIMutable>] Venue =
     /// Address of the venue
     Address: string
     /// Foursquare identifier of the venue
-    FoursquareId: string option }
+    FoursquareId: string option
+    FoursquareType: string option }
     
 /// This object represent a user's profile pictures.
 and [<CLIMutable>] UserProfilePhotos =
@@ -417,10 +765,14 @@ and [<CLIMutable>] Message =
     Text: string option
     /// For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
     Entities: MessageEntity seq option
+    /// For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
+    CaptionEntities: MessageEntity seq option
     /// Message is an audio file, information about the file
     Audio: Audio option
     /// Message is a general file, information about the file
     Document: Document option
+    /// Message is an animation message, information about the animation
+    Animation: Animation option
     /// Message is a game, information about the game
     Game: Game option
     /// Message is a photo, available sizes of the photo
@@ -429,14 +781,10 @@ and [<CLIMutable>] Message =
     Sticker: Sticker option
     /// Message is a video, information about the video
     Video: Video option
-    /// Message is an animation message, information about the animation
-    Animation: Animation option
     /// Message is a voice message, information about the file
     Voice: Voice option
     /// Message is a video note, information about the video message
     VideoNote: VideoNote option
-    /// New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
-    NewChatMembers: User seq option
     /// Caption for the document, photo or video, 0-200 characters
     Caption: string option
     /// Message is a shared contact, information about the contact
@@ -445,8 +793,10 @@ and [<CLIMutable>] Message =
     Location: Location option
     /// Message is a venue, information about the venue
     Venue: Venue option
-    /// A new member was added to the group, information about them (this member may be the bot itself)
-    NewChatMember: User option
+    /// Message is a native poll, information about the poll
+    Poll: Poll option
+    /// New members that were added to the group or supergroup and information about them (the bot itself may be one of these members)
+    NewChatMembers: User seq option
     /// A member was removed from the group, information about them (this member may be the bot itself)
     LeftChatMember: User option
     /// A chat title was changed to this value
@@ -476,18 +826,28 @@ and [<CLIMutable>] Message =
     /// Message is an invoice for a payment, information about the invoice
     Invoice: Invoice option
     /// Message is a service message about a successful payment, information about the payment
-    SuccessfulPayment: SuccessfulPayment option }
+    SuccessfulPayment: SuccessfulPayment option
+    /// The domain name of the website on which the user has logged in.
+    ConnectedWebsite: string option
+    /// Telegram Passport data
+    PassportData: PassportData option
+    /// Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons
+    ReplyMarkup: InlineKeyboardMarkup option }
 
-
-let defaultChat = { Id = 0L; Type = ""; Chat.Title = None; Username = None; FirstName = None; LastName = None; AllMembersAreAdministrators = None; Photo = None; Description = None; InviteLink = None; PinnedMessage = None }
+let defaultChat = {
+  Id = 0L; Type = ChatType.Private; Chat.Title = None; Username = None; FirstName = None
+  LastName = None; AllMembersAreAdministrators = None; Photo = None
+  Description = None; InviteLink = None; PinnedMessage = None; Permissions = None
+  StickerSetName = None; CanSetStickerSet = None
+}
 
 let defaultMessage = { MessageId = 1L; From = None; Date = DateTime.MinValue; Chat = defaultChat; ForwardFrom = None; ForwardFromChat = None; 
   ForwardDate = None; ForwardFromMessageId = None; ReplyToMessage = None; EditDate = None; Text = None; Entities = None; Audio = None; 
-  Document = None; Game = None; Photo = None; Sticker = None; Video = None; Animation = None; Voice = None; VideoNote = None; NewChatMembers = None; Caption = None; 
-  Contact = None; Location = None; Venue = None; NewChatMember = None; LeftChatMember = None; NewChatTitle = None; NewChatPhoto = None; 
+  Document = None; Game = None; Photo = None; Sticker = None; Video = None; Animation = None; Voice = None; VideoNote = None; Caption = None; 
+  Contact = None; Location = None; Venue = None; NewChatMembers = None; LeftChatMember = None; NewChatTitle = None; NewChatPhoto = None; 
   DeleteChatPhoto = None; GroupChatCreated = None; SupergroupChatCreated = None; ChannelChatCreated = None; MigrateToChatId = None; 
-  MigrateFromChatId = None; ForwardSignature = None; AuthorSignature = None;
-  PinnedMessage = None; Invoice = None; SuccessfulPayment = None; }
+  MigrateFromChatId = None; ForwardSignature = None; AuthorSignature = None; ConnectedWebsite = None; PassportData = None; ReplyMarkup = None;
+  PinnedMessage = None; Invoice = None; SuccessfulPayment = None; CaptionEntities = None; Poll = None; }
 
 [<CLIMutable>]
 /// This object represents an incoming inline query. 
@@ -557,7 +917,13 @@ type Update =
     /// The result of an inline query that was chosen by a user and sent to their chat partner.
     ChosenInlineResult: ChosenInlineResult option
     /// New incoming callback query
-    CallbackQuery: CallbackQuery option }
+    CallbackQuery: CallbackQuery option
+    /// New incoming shipping query. Only for invoices with flexible price
+    ShippingQuery: ShippingQuery option
+    /// New incoming pre-checkout query. Contains full information about checkout
+    PreCheckoutQuery: PreCheckoutQuery option
+    /// New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+    Poll: Poll option }
 
 /// Message text parsing mode
 type ParseMode = 
@@ -579,80 +945,25 @@ type ChatAction =
   | RecordVideoNote
   | UploadVideoNote
 
-/// A placeholder, currently holds no information
-type CallbackGame() = class end
-
-/// This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
-type InlineKeyboardButton = 
-  { /// Label text on the button
-    Text: string
-    /// HTTP url to be opened when button is pressed
-    Url: string option
-    /// Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
-    CallbackData: string option
-    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and 
-    /// insert the bot‘s username and the specified inline query in the input field. Can be empty, in which 
-    /// case just the bot’s username will be inserted.
-    SwitchInlineQuery: string option
-    /// If set, pressing the button will insert the bot‘s username and the specified inline query in the current 
-    /// chat's input field. Can be empty, in which case only the bot’s username will be inserted.
-    SwitchInlineQueryCurrentChat: string option
-    /// Description of the game that will be launched when the user presses the button.
-    CallbackGame: CallbackGame option }
-
-/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields are mutually exclusive.
-type KeyboardButton = 
-  { /// Text of the button. If none of the optional fields are used, it will be sent to the bot as a message when the button is pressed
-    Text: string
-    /// If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
-    RequestContact: bool option
-    /// If True, the user's current location will be sent when the button is pressed. Available in private chats only
-    RequestLocation: bool option }
-
-/// This object represents an inline keyboard that appears right next to the message it belongs to
-type InlineKeyboardMarkup =
-  { /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
-    InlineKeyboard: (InlineKeyboardButton seq) seq }
-
-/// This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
-type ReplyKeyboardMarkup =
-  {
-    /// Array of button rows, each represented by an Array of KeyboardButton objects
-    Keyboard: (KeyboardButton seq) seq
-    /// Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
-    ResizeKeyboard: bool option
-    /// Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat – the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
-    OneTimeKeyboard: bool option
-    /// Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message
-    Selective: bool option }
-      
-/// Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup).
-type ReplyKeyboardRemove =
-  { /// Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
-    RemoveKeyboard: bool
-    /// Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
-    Selective: bool option }
-
-/// Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot‘s message and tapped ’Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.
-type ForceReply = 
-  { /// Shows reply interface to the user, as if they manually selected the bot‘s message and tapped ’Reply'
-    ForceReply: bool
-    /// Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the 
-    /// text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
-    Selective: bool }
+type ChatMemberStatus =
+| Creator
+| Administrator
+| Member
+| Restricted
+| Left
+| Kicked
+| Unknown
     
 /// This object contains information about one member of the chat.
 type ChatMember = 
   { /// Information about the user
     User: User
     /// The member's status in the chat. Can be “creator”, “administrator”, “member”, “left” or “kicked”
-    Status: string 
+    Status: ChatMemberStatus 
     /// Restictred and kicked only. Date when restrictions will be lifted for this user, unix time
     UntilDate: DateTime option
     /// Administrators only. True, if the bot is allowed to edit administrator privileges of that user
     CanBeEdited: bool option
-    /// Administrators only. True, if the administrator can change the chat title, photo and other settings
-    CanChangeInfo: bool option
     /// Administrators only. True, if the administrator can post in the channel, channels only
     CanPostMessages: bool option
     /// Administrators only. True, if the administrator can edit messages of other users, channels only
@@ -667,15 +978,130 @@ type ChatMember =
     CanPinMessages: bool option
     /// Administrators only. True, if the administrator can add new administrators with a subset of his own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
     CanPromoteMembers: bool option
+    /// Administrators only. True, if the administrator can change the chat title, photo and other settings
+    CanChangeInfo: bool option
     /// Restricted only. True, if the user can send text messages, contacts, locations and venues
     CanSendMessages: bool option
     /// Restricted only. True, if the user can send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
     CanSendMediaMessages: bool option
+    /// Restricted only. True, if the user is allowed to send polls
+    CanSendPolls: bool option
     /// Restricted only. True, if the user can send animations, games, stickers and use inline bots, implies can_send_media_messages
     CanSendOtherMessages: bool option
     /// Optional. Restricted only. True, if user may add web page previews to his messages, implies can_send_media_messages
     CanAddWebPagePreviews: bool option }
-      
+
+[<CLIMutable>]
+/// Contains information about why a request was unsuccessful.
+type ResponseParameters =
+  {
+    /// The group has been migrated to a supergroup with the specified identifier. This number may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.
+    MigrateToChatId: int option
+    /// In case of exceeding flood control, the number of seconds left to wait before the request can be repeated
+    RetryAfter: int option
+  }
+
+/// Represents a photo to be sent.
+[<CLIMutable>]
+type InputMediaPhoto =
+  {
+    /// File to send.
+    Media: FileToSend
+    /// Caption of the photo to be sent, 0-1024 characters
+    Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
+  }
+  member x.Type = "photo"
+
+/// Represents a video to be sent.
+[<CLIMutable>]
+type InputMediaVideo =
+  {
+    /// File to send.
+    Media: FileToSend
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail‘s width and height should not exceed 320
+    Thumb: FileToSend option
+    /// Caption of the photo to be sent, 0-1024 characters
+    Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
+    /// Video width
+    Width: int option
+    /// Video height
+    Height: int option
+    /// Video duration
+    Duration: int option
+    /// Pass True, if the uploaded video is suitable for streaming
+    SupportsStreaming: bool option
+  }
+  member x.Type = "video"
+
+/// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
+[<CLIMutable>]
+type InputMediaAnimation =
+  {
+    /// File to send.
+    Media: FileToSend
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail‘s width and height should not exceed 320
+    Thumb: FileToSend option
+    /// Caption of the photo to be sent, 0-1024 characters
+    Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
+    /// Animation width
+    Width: int option
+    /// Animation height
+    Height: int option
+    /// Animation duration
+    Duration: int option
+  }
+  member x.Type = "animation"
+
+/// Represents an audio file to be treated as music to be sent.
+[<CLIMutable>]
+type InputMediaAudio =
+  {
+    /// File to send.
+    Media: FileToSend
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail‘s width and height should not exceed 320
+    Thumb: FileToSend option
+    /// Caption of the photo to be sent, 0-1024 characters
+    Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
+    /// Duration of the audio in seconds
+    Duration: int option
+    /// Performer of the audio
+    Performer: string option
+    /// Title of the audio
+    Title: string option
+  }
+  member x.Type = "audio"
+
+/// Represents a general file to be sent.
+[<CLIMutable>]
+type InputMediaDocument =
+  {
+    /// File to send.
+    Media: FileToSend
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail‘s width and height should not exceed 320
+    Thumb: FileToSend option
+    /// Caption of the photo to be sent, 0-1024 characters
+    Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
+  }
+  member x.Type = "document"
+
+/// This object represents the content of a media message to be sent
+type InputMedia =
+| Animation of InputMediaAnimation
+| Document of InputMediaDocument
+| Audio of InputMediaAudio
+| Photo of InputMediaPhoto
+| Video of InputMediaVideo
+
 type Markup = 
   | InlineKeyboardMarkup of InlineKeyboardMarkup 
   | ReplyKeyboardMarkup of ReplyKeyboardMarkup
@@ -720,7 +1146,9 @@ type InputLocationMessageContent =
   { /// Latitude of the location in degrees
     Latitude: float
     /// Longitude of the location in degrees
-    Longitude: float }
+    Longitude: float
+    /// Period in seconds for which the location can be updated, should be between 60 and 86400.
+    LivePeriod: int option }
 
 /// Represents the content of a venue message to be sent as the result of an inline query. 
 type InputVenueMessageContent =
@@ -733,7 +1161,9 @@ type InputVenueMessageContent =
     /// Address of the venue
     Address: string
     /// Foursquare identifier of the venue, if known
-    FoursquareId: string option }
+    FoursquareId: string option
+    /// Represents the content of a venue message to be sent as the result of an inline query.
+    FoursquareType: string option }
 
 /// Represents the content of a contact message to be sent as the result of an inline query. 
 type InputContactMessageContent =
@@ -742,7 +1172,9 @@ type InputContactMessageContent =
     /// Contact's first name
     FirstName: string
     /// Contact's last name
-    LastName: string option }
+    LastName: string option
+    /// Additional data about the contact in the form of a vCard, 0-2048 bytes
+    VCard: string option }
 
 /// This object represents the content of a message to be sent as a result of an inline query. Telegram clients currently support the following 4 types:
 type InputMessageContent =
@@ -754,9 +1186,7 @@ type InputMessageContent =
 
 /// Represents a link to an mp3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
 type InlineQueryResultCachedAudio = 
-  { /// Type of the result, must be audio
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier for the audio file
     AudioFileId: string
@@ -766,12 +1196,11 @@ type InlineQueryResultCachedAudio =
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the audio
     InputMessageContent: InputMessageContent option }
+  member x.Type = "audio"
 
 /// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
 type InlineQueryResultCachedDocument = 
-  { /// Type of the result, must be document
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// Title for the result
     Title: string
@@ -781,16 +1210,17 @@ type InlineQueryResultCachedDocument =
     Description: string option
     /// Caption of the document to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the file
     InputMessageContent: InputMessageContent option }
+  member x.Type = "document"
       
 /// Represents a link to an animated GIF file stored on the Telegram servers. By default, this animated GIF file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with specified content instead of the animation.
 type InlineQueryResultCachedGif =
-  { /// Type of the result, must be gif
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier for the GIF file
     GifFileId: string
@@ -798,16 +1228,17 @@ type InlineQueryResultCachedGif =
     Title: string option
     /// Caption of the GIF file to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the GIF animation
     InputMessageContent: InputMessageContent option }
+  member x.Type = "gif"
 
 /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound) stored on the Telegram servers. By default, this animated MPEG-4 file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
 type InlineQueryResultCachedMpeg4Gif =
-  { /// Type of the result, must be mpeg4_gif
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier for the MP4 file
     Mpeg4FileId: string
@@ -815,16 +1246,17 @@ type InlineQueryResultCachedMpeg4Gif =
     Title: string
     /// Caption of the MPEG-4 file to be sent, 0-200 characters
     Caption: string
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup
     /// Content of the message to be sent instead of the video animation
     InputMessageContent: InputMessageContent }
+  member x.Type = "mpeg4_gif"
 
 /// Represents a link to a photo stored on the Telegram servers. By default, this photo will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
 type InlineQueryResultCachedPhoto =
-  { /// Type of the result, must be photo
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier of the photo
     PhotoFileId: string
@@ -834,16 +1266,17 @@ type InlineQueryResultCachedPhoto =
     Description: string option
     /// Caption of the photo to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option 
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the photo
     InputMessageContent: InputMessageContent option }
+  member x.Type = "photo"
 
 /// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
 type InlineQueryResultCachedSticker =
-  { /// Type of the result, must be sticker
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier of the sticker
     StickerFileId: string
@@ -851,12 +1284,11 @@ type InlineQueryResultCachedSticker =
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the sticker
     InputMessageContent: InputMessageContent option }
+  member x.Type = "sticker"
 
 /// Represents a link to a video file stored on the Telegram servers. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
 type InlineQueryResultCachedVideo = 
-  { /// Type of the result, must be video
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier for the video file
     VideoFileId: string
@@ -866,16 +1298,17 @@ type InlineQueryResultCachedVideo =
     Description: string option
     /// Caption of the video to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the video
     InputMessageContent: InputMessageContent option }
+  member x.Type = "video"
 
 /// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
 type InlineQueryResultCachedVoice =
-  { /// Type of the result, must be voice
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid file identifier for the voice message
     VoiceFileId: string
@@ -883,16 +1316,17 @@ type InlineQueryResultCachedVoice =
     Title: string
     /// Caption, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the voice message
     InputMessageContent: InputMessageContent option }
+  member x.Type = "voice"
 
 /// Represents a link to an article or web page.
 type InlineQueryResultArticle =
-  { /// Type of the result, must be article
-    Type: string
-    /// Unique identifier for this result, 1-64 Bytes
+  { /// Unique identifier for this result, 1-64 Bytes
     Id: string
     /// Title of the result
     Title: string
@@ -912,12 +1346,11 @@ type InlineQueryResultArticle =
     ThumbWidth: int option
     /// Thumbnail height
     ThumbHeight: int option }
+  member x.Type = "article"
     
 /// Represents a link to an mp3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
 type InlineQueryResultAudio = 
-  { /// Type of the result, must be audio
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid URL for the audio file
     AudioUrl: string
@@ -925,6 +1358,8 @@ type InlineQueryResultAudio =
     Title: string
     /// Caption, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Performer
     Performer: string option
     /// Audio duration in seconds
@@ -933,12 +1368,11 @@ type InlineQueryResultAudio =
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the audio
     InputMessageContent: InputMessageContent option }
+  member x.Type = "audio"
 
 /// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
 type InlineQueryResultContact =
-  { /// Type of the result, must be contact
-    Type: string
-    /// Unique identifier for this result, 1-64 Bytes
+  { /// Unique identifier for this result, 1-64 Bytes
     Id: string
     /// Contact's phone number
     PhoneNumber: string
@@ -946,6 +1380,8 @@ type InlineQueryResultContact =
     FirstName: string
     /// Contact's last name
     LastName: string option
+    /// Additional data about the contact in the form of a vCard, 0-2048 bytes.
+    VCard: string option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the contact
@@ -956,28 +1392,28 @@ type InlineQueryResultContact =
     ThumbWidth: int option
     /// Thumbnail height
     ThumbHeight: int option }
+  member x.Type = "contact"
     
 /// Represents a Game.
 type InlineQueryResultGame = 
-  { /// Type of the result, must be game
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// Short name of the game
     GameShortName: string
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option }
+  member x.Type = "game"
     
 /// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
 type InlineQueryResultDocument =
-  { /// Type of the result, must be document
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// Title for the result
     Title: string
     /// Caption of the document to be sent, 0-200 characters
     Caption: string
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption
+    ParseMode: ParseMode option
     /// A valid URL for the file
     DocumentUrl: string
     /// Mime type of the content of the file, either “application/pdf” or “application/zip”
@@ -994,12 +1430,11 @@ type InlineQueryResultDocument =
     ThumbWidth: int option
     /// Thumbnail height
     ThumbHeight: int option }
+  member x.Type = "document"
 
 /// Represents a link to an animated GIF file. By default, this animated GIF file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation.
 type InlineQueryResultGif =
-  { /// Type of the result, must be gif
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid URL for the GIF file. File size must not exceed 1MB
     GifUrl: string
@@ -1015,16 +1450,17 @@ type InlineQueryResultGif =
     Title: string option
     /// Caption of the GIF file to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the GIF animation
     InputMessageContent: InputMessageContent option }
+  member x.Type = "gif"
 
 /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location
 type InlineQueryResultLocation =
-  { /// Type of the result, must be location
-    Type: string
-    /// Unique identifier for this result, 1-64 Bytes
+  { /// Unique identifier for this result, 1-64 Bytes
     Id: string
     /// Location latitude in degrees
     Latitude: float
@@ -1032,6 +1468,8 @@ type InlineQueryResultLocation =
     Longitude: float
     /// Location title
     Title: string
+    /// Period in seconds for which the location can be updated, should be between 60 and 86400
+    LivePeriod: int option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the location
@@ -1042,12 +1480,11 @@ type InlineQueryResultLocation =
     ThumbWidth: int option
     /// Thumbnail height
     ThumbHeight: int option }
+  member x.Type = "location"
     
 /// Represents a link to a video animation (H.264/MPEG-4 AVC video without sound). By default, this animated MPEG-4 file will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the animation
 type InlineQueryResultMpeg4Gif =
-  { /// Type of the result, must be mpeg4_gif
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid URL for the MP4 file. File size must not exceed 1MB
     Mpeg4Url: string
@@ -1063,16 +1500,17 @@ type InlineQueryResultMpeg4Gif =
     Title: string option
     /// Caption of the MPEG-4 file to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the video animation
     InputMessageContent: InputMessageContent option }
+  member x.Type = "mpeg4_gif"
 
 /// Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
 type InlineQueryResultPhoto =
-  { /// Type of the result, must be photo
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
     PhotoUrl: string
@@ -1088,16 +1526,17 @@ type InlineQueryResultPhoto =
     Description: string option
     /// Caption of the photo to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption
+    ParseMode: ParseMode option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the photo
     InputMessageContent: InputMessageContent option }
+  member x.Type = "photo"
     
 /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue
 type InlineQueryResultVenue =
-  { /// Type of the result, must be venue
-    Type: string
-    /// Unique identifier for this result, 1-64 Bytes
+  { /// Unique identifier for this result, 1-64 Bytes
     Id: string
     /// Latitude of the venue location in degrees
     Latitude: float
@@ -1109,6 +1548,8 @@ type InlineQueryResultVenue =
     Address: string
     /// Foursquare identifier of the venue if known
     FoursquareId: string option
+    /// Foursquare type of the venue, if known. (For example, “arts_entertainment/default”, “arts_entertainment/aquarium” or “food/icecream”.)
+    FoursquareType: string option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the venue
@@ -1119,12 +1560,11 @@ type InlineQueryResultVenue =
     ThumbWidth: int option
     /// Thumbnail height
     ThumbHeight: int option }
+  member x.Type = "venue"
 
 /// Represents a link to a page containing an embedded video player or a video file. By default, this video file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the video.
 type InlineQueryResultVideo =
-  { /// Type of the result, must be video
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid URL for the embedded video player or video file
     VideoUrl: string
@@ -1136,6 +1576,8 @@ type InlineQueryResultVideo =
     Title: string
     /// Caption of the video to be sent, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Video width
     VideoWidth: int option
     /// Video height
@@ -1148,12 +1590,11 @@ type InlineQueryResultVideo =
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the video
     InputMessageContent: InputMessageContent option }
+  member x.Type = "video"
 
 /// Represents a link to a voice recording in an .ogg container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
 type InlineQueryResultVoice =
-  { /// Type of the result, must be voice
-    Type: string
-    /// Unique identifier for this result, 1-64 bytes
+  { /// Unique identifier for this result, 1-64 bytes
     Id: string
     /// A valid URL for the voice recording
     VoiceUrl: string
@@ -1161,12 +1602,15 @@ type InlineQueryResultVoice =
     Title: string
     /// Caption, 0-200 characters
     Caption: string option
+    /// Send Markdown or HTML, if you want Telegram apps to show bold, italic, fixed-width text or inline URLs in the media caption.
+    ParseMode: ParseMode option
     /// Recording duration in seconds
     VoiceDuration: int option
     /// Inline keyboard attached to the message
     ReplyMarkup: InlineKeyboardMarkup option
     /// Content of the message to be sent instead of the voice recording
     InputMessageContent: InputMessageContent option }
+  member x.Type = "voice"
       
 /// This object represents one result of an inline query. Telegram clients currently support results of the 20 types
 type InlineQueryResult = 
@@ -1190,11 +1634,6 @@ type InlineQueryResult =
   | Venue of InlineQueryResultVenue
   | Video of InlineQueryResultVideo
   | Voice of InlineQueryResultVoice
-
-type FileToSend = 
-  | Url of Uri 
-  | File of string * Stream
-  | FileId of string
 
 /// This object represents one row of the high scores table for a game
 type GameHighScore =

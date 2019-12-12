@@ -23,7 +23,7 @@ module Constants =
     let jsonTestEditResult1String = "true"
     let jsonTestEditResult1ApiString = ok "true"
 
-    let jsonTestChat = { defaultChat with Id = 1L; Type = "group"; Title = (Some "Test group"); AllMembersAreAdministrators = (Some true) }
+    let jsonTestChat = { defaultChat with Id = 1L; Type = ChatType.Group; Title = (Some "Test group"); AllMembersAreAdministrators = (Some true) }
     let jsonTestMessage = 
         { defaultMessage with MessageId = 123L;  Date = testDate; Text = Some("abc"); Chat = jsonTestChat }
 

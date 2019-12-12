@@ -1,7 +1,9 @@
 ﻿namespace Funogram
 
 open System
+open System.IO
 open System.Runtime.CompilerServices
+open System.Runtime.Serialization
 open System.Text
 open Utf8Json
 
@@ -30,6 +32,7 @@ module internal Resolvers =
     String.Concat(chars).ToLower()
 
   let mkMemberSerializer (case : ShapeFSharpUnionCase<'DeclaringType>) =
+    let isFile = case.Fields |> Array.map (fun x -> x.Member.Type) = [|typeof<string>; typeof<Stream>|]
     if case.Fields.Length = 0 then
       fun _ _ -> Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
     else
@@ -37,8 +40,13 @@ module internal Resolvers =
         member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
           fun value resolver ->
             let mutable myWriter = new JsonWriter()
-            resolver.GetFormatterWithVerify<'Field>()
-              .Serialize(&myWriter, shape.Get value, resolver)
+            
+            if (isFile) then
+              let str = box (shape.Get value) |> unbox<string>
+              myWriter.WriteString(sprintf "attach://%s" str)
+            else
+              resolver.GetFormatterWithVerify<'Field>()
+                .Serialize(&myWriter, shape.Get value, resolver)
             myWriter.ToUtf8ByteArray()
       }
   
@@ -75,7 +83,17 @@ module internal Resolvers =
       union.UnionCases
       |> Seq.map (fun c ->
         if c.Fields.Length = 0 then
-          ([c.CaseInfo.Name |> getSnakeCaseName], None)
+          let dataMember =
+            c.CaseInfo.GetCustomAttributes(typeof<DataMemberAttribute>)
+            |> Seq.cast<DataMemberAttribute>
+            |> Seq.filter (fun x -> String.IsNullOrEmpty(x.Name) |> not)
+            |> Seq.toArray
+          
+          let name =
+            if dataMember.Length > 0
+            then dataMember.[0].Name
+            else c.CaseInfo.Name |> getSnakeCaseName
+          ([name], None)
         else
           let tp = c.Fields.[0].Member.Type
           if tp.IsPrimitive then ([], Some tp)
@@ -161,12 +179,14 @@ module internal Resolvers =
         reader.AdvanceOffset(newOffset - offset)
         value
 
+  let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+  let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
+  
   type FunogramUnixTimestampDateTimeFormatter() =
     let unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
     interface IJsonFormatter<DateTime> with
       member x.Serialize(writer, value, _) =
-        let ticks = (value.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
-        writer.WriteInt64(ticks)
+        writer.WriteInt64(toUnix value)
               
       member x.Deserialize(reader, _) =
         let v = reader.ReadInt64() |> float

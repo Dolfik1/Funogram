@@ -48,6 +48,7 @@ type SendPhotoReq =
     { ChatId: ChatId
       Photo: FileToSend
       Caption: string option
+      ParseMode: ParseMode option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -58,9 +59,11 @@ type SendAudioReq =
     { ChatId: ChatId
       Audio: FileToSend
       Caption: string option
+      ParseMode: ParseMode option
       Duration: int option
       Performer: string option
       Title: string option
+      Thumb: FileToSend option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -70,7 +73,9 @@ type SendAudioReq =
 type SendDocumentReq = 
     { ChatId: ChatId
       Document: FileToSend
+      Thumb: FileToSend  option
       Caption: string option
+      ParseMode: ParseMode option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -92,7 +97,9 @@ type SendVideoReq =
       Duration: int option
       Width: int option
       Height: int option
+      Thumb: FileToSend option
       Caption: string option
+      ParseMode: ParseMode option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -103,6 +110,7 @@ type SendVoiceReq =
     { ChatId: ChatId
       Voice: FileToSend
       Caption: string option
+      ParseMode: ParseMode option
       Duration: int option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
@@ -110,11 +118,21 @@ type SendVoiceReq =
     interface IRequestBase<Message> with
         member __.MethodName = "sendVoice"
 
+type SendMediaGroupReq = 
+    { ChatId: ChatId
+      Media: InputMedia[]
+      DisableNotification: bool option
+      ReplyToMessageId: int64 option }
+    interface IRequestBase<Message[]> with
+        member __.MethodName = "sendMediaGroup"
+
+
 type SendVideoNoteReq = 
     { ChatId: ChatId
       VideoNote: FileToSend
       Duration: int option
       Length: int option
+      Thumb: FileToSend option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -127,7 +145,9 @@ type SendAnimationReq =
       Duration: int option
       Width: int option
       Height: int option
+      Thumb: FileToSend option
       Caption: string option
+      ParseMode: ParseMode option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -138,11 +158,30 @@ type SendLocationReq =
     { ChatId: ChatId
       Latitude: Double
       Longitude: Double
+      LivePeriod: int option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
     interface IRequestBase<Message> with
         member __.MethodName = "sendLocation"
+
+type EditMessageLiveLocationReq = 
+    { ChatId: ChatId option
+      MessageId: int option
+      InlineMessageId: string option
+      Latitude: Double
+      Longitude: Double
+      ReplyMarkup: Markup option }
+    interface IRequestBase<EditMessageResult> with
+        member __.MethodName = "editMessageLiveLocation"
+
+type StopMessageLiveLocationReq = 
+    { ChatId: ChatId option
+      MessageId: int option
+      InlineMessageId: string option
+      ReplyMarkup: Markup option }
+    interface IRequestBase<EditMessageResult> with
+        member __.MethodName = "stopMessageLiveLocation"
 
 type SendVenueReq = 
     { ChatId: ChatId
@@ -151,6 +190,7 @@ type SendVenueReq =
       Title: string
       Address: string
       FoursquareId: string option
+      FoursquareType: string option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
@@ -162,11 +202,22 @@ type SendContactReq =
       PhoneNumber: string
       FirstName: string
       LastName: string option
+      VCard: string option
       DisableNotification: bool option
       ReplyToMessageId: int64 option
       ReplyMarkup: Markup option }
     interface IRequestBase<Message> with
         member __.MethodName = "sendContact"
+
+type SendPollReq = 
+    { ChatId: ChatId
+      Question: string
+      Options: string[]
+      DisableNotification: bool option
+      ReplyToMessageId: int64 option
+      ReplyMarkup: Markup option }
+    interface IRequestBase<Message> with
+        member __.MethodName = "sendPoll"
 
 type SendChatActionReq = 
     { ChatId: ChatId
@@ -221,11 +272,8 @@ type GetChatMemberReq =
 type RestrictChatMemberReq = 
     { ChatId: ChatId
       UserId: int64
-      UntilDate: DateTime option
-      CanSendMessages: bool option
-      CanSendMediaMessages: bool option
-      CanSendOtherMessages: bool option
-      CanAddWebPagePreviews: bool option }
+      Permissions: ChatPermissions
+      UntilDate: DateTime option }
     interface IRequestBase<bool> with
         member __.MethodName = "restrictChatMember"
 
@@ -242,6 +290,12 @@ type PromoteChatMemberReq =
       CanPromoteMembers: bool option }
     interface IRequestBase<bool> with
         member __.MethodName = "promoteChatMember"
+
+type SetChatPermissionsReq = 
+    { ChatId: ChatId
+      Permissions: ChatPermissions }
+    interface IRequestBase<bool> with
+        member __.MethodName = "setChatPermissions"
 
 type KickChatMemberReq = 
     { ChatId: ChatId
@@ -290,6 +344,17 @@ type UnpinChatMessageReq =
     interface IRequestBase<bool> with
         member __.MethodName = "unpinChatMessage"
 
+type SetChatStickerSetReq = 
+    { ChatId: ChatId
+      StickerSetName: string }
+    interface IRequestBase<bool> with
+        member __.MethodName = "setChatStickerSet"
+
+type DeleteChatStickerSet = 
+    { ChatId: ChatId }
+    interface IRequestBase<bool> with
+        member __.MethodName = "deleteChatStickerSet"
+
 type AnswerCallbackQueryReq = 
     { CallbackQueryId: string option
       Text: string option
@@ -319,6 +384,15 @@ type EditMessageCaptionReq =
     interface IRequestBase<EditMessageResult> with
         member __.MethodName = "editMessageCaption"
 
+type EditMessageMediaReq = 
+    { ChatId: ChatId option
+      MessageId: int64 option
+      InlineMessageId: string option
+      Media: InputMedia
+      ReplyMarkup: InlineKeyboardMarkup option }
+    interface IRequestBase<EditMessageResult> with
+        member __.MethodName = "editMessageMedia"
+
 type EditMessageReplyMarkupReq = 
     { ChatId: ChatId option
       MessageId: int64 option
@@ -326,6 +400,13 @@ type EditMessageReplyMarkupReq =
       ReplyMarkup: InlineKeyboardMarkup option }
     interface IRequestBase<EditMessageResult> with
         member __.MethodName = "editMessageReplyMarkup"
+
+type StopPollReq = 
+    { ChatId: ChatId option
+      MessageId: int64 option
+      ReplyMarkup: InlineKeyboardMarkup option }
+    interface IRequestBase<Poll> with
+        member __.MethodName = "stopPoll"
 
 type DeleteMessageReq = 
     { ChatId: ChatId
@@ -347,13 +428,14 @@ type AnswerInlineQueryReq =
 type SendInvoiceReq = 
     { ChatId: int64
       Title: string
+      Description: string option
       Payload: string
       ProviderToken: string
       StartParameter: string
       Currency: string
       Prices: LabeledPrice seq
+      ProviderData: string option
       PhotoUrl: string option
-      Description: string option
       PhotoSize: int option
       PhotoWidth: int option
       PhotoHeight: int option
@@ -377,6 +459,8 @@ type SendInvoiceArgs =
       NeedPhoneNumber: bool option
       NeedEmail: bool option
       NeedShippingAddress: bool option
+      SendPhoneNumberToProvider: bool option
+      SendEmailToProvider: bool option
       IsFlexible: bool option
       ReplyToMessageId: int option
       ReplyMarkup: InlineKeyboardMarkup option }
@@ -393,7 +477,9 @@ let defaultInvoiceArgs =
       NeedShippingAddress = None
       IsFlexible = None
       ReplyToMessageId = None
-      ReplyMarkup = None }
+      ReplyMarkup = None
+      SendPhoneNumberToProvider = None
+      SendEmailToProvider = None }
 
 type AnswerShippingQueryReq = 
     { ShippingQueryId: string
@@ -410,6 +496,12 @@ type AnswerPreCheckoutQueryReq =
     interface IRequestBase<bool> with
         member __.MethodName = "answerPreCheckoutQuery"
 
+type SetPassportDataErrorsReq = 
+    { UserId: int64
+      Errors: PassportElementError[] }
+    interface IRequestBase<bool> with
+        member __.MethodName = "setPassportDataErrors"
+
 type SendGameReq = 
     { ChatId: int64
       GameShortName: string
@@ -418,7 +510,6 @@ type SendGameReq =
       ReplyMarkup: Markup option }
     interface IRequestBase<Message> with
         member __.MethodName = "sendGame"
-
 type SetGameScoreReq = 
     { UserId: int64
       Score: uint32

@@ -77,7 +77,7 @@ let private runBot config me updateArrived updatesArrived =
                         e.Description e.ErrorCode
                     return! loopAsync offset
             with ex ->
-                printfn "Error: %s" ex.Message
+                printfn "Internal error: %s" ex.Message
                 return! loopAsync (offset + 1L)
             return! loopAsync offset
         }

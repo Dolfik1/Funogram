@@ -8,10 +8,10 @@ open Funogram.Telegram.Types
 open Funogram.Telegram.Bot
 open FunHttp
 
-
-[<Literal>]
-let TokenFileName = "token"
+let [<Literal>] TokenFileName = "token"
 let mutable botToken = "none"
+
+let [<Literal>] PhotoUrl = "https://upload.wikimedia.org/wikipedia/commons/f/f5/Example_image.jpg"
 
 let processMessageBuild config =
 
@@ -23,6 +23,7 @@ let processMessageBuild config =
     /send_message5 - Test ReplyKeyboardMarkup
     /send_message6 - Test RemoveKeyboardMarkup
     /send_message7 - Test inline keyboard
+    /send_message8 - Test multiple media
     
     /send_action - Test action
 
@@ -36,7 +37,7 @@ let processMessageBuild config =
         match result with
         | Ok v -> Some v
         | Error e ->
-            printfn "Error: %s" e.Description
+            printfn "Server error: %s" e.Description
             None
 
     let processResult (result: Result<'a, ApiResponseError>) =
@@ -50,17 +51,19 @@ let processMessageBuild config =
         let result = botResult (getChat msg.Chat.Id)
         match result with
         | Ok x ->
-            botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %s" x.Id x.Type))
+            botResult (sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %O" x.Id x.Type))
             |> processResultWithValue
             |> ignore
         | Error e -> printf "Error: %s" e.Description
 
     let sendPhoto msg =
-        let image = Http.RequestStream("https://upload.wikimedia.org/wikipedia/commons/f/f5/Example_image.jpg")
+        let image = Http.RequestStream(PhotoUrl)
         bot (sendPhoto msg.Chat.Id (FileToSend.File("example.jpg", image.ResponseStream)) "Example")
 
     let updateArrived ctx =
-        let fromId() = ctx.Update.Message.Value.From.Value.Id
+        let fromId () = ctx.Update.Message.Value.From.Value.Id
+        let fromChatId () = ChatId.Int(fromId ())
+            
         let sayWithArgs text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup =
             bot (sendMessageBase (ChatId.Int (fromId())) text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup)
 
@@ -98,10 +101,23 @@ let processMessageBuild config =
                       CallbackGame = None
                       SwitchInlineQuery = None
                       SwitchInlineQueryCurrentChat = None
+                      LoginUrl = None
+                      Pay = None
                     } ] |> List.toSeq ]
                     let markup = Markup.InlineKeyboardMarkup { InlineKeyboard = keyboard }
                     (sendMessageMarkup (fromId()) "Thats inline keyboard!" markup) |> bot
                 ))
+                cmd "/send_message8" (fun _ ->
+                (
+                    let pack name stream = InputMedia.Photo <| {
+                        InputMediaPhoto.Media = FileToSend.File(name, stream);
+                        Caption = Some name; ParseMode = None
+                    }
+                    let image1 = Http.RequestStream(PhotoUrl).ResponseStream
+                    let image2 = Http.RequestStream(PhotoUrl).ResponseStream
+                    let media = [ pack "Image 1" image1; pack "Image 2" image2 ]
+                    sendMediaGroup (fromChatId()) media |> bot 
+                 ))
                 cmd "/forward_message" (fun _ -> bot (forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId))
                 cmd "/show_my_photos_sizes" (fun _ ->
                 (
