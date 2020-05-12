@@ -37,15 +37,16 @@ let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateConte
     |> Option.isSome
     |> not
 
-let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> unit) (context: UpdateContext) =
+let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> UpdateContext -> unit) (context: UpdateContext) =
     let scan command =
         try Some (sscanf format command)
         with _ -> None
     context.Update.Message
     |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
     |> Option.bind scan
-    |> Option.map handler
+    |> Option.map (fun x -> handler x context)
     |> Option.isSome
+    |> not
 
 let private runBot config me updateArrived updatesArrived =
     let bot data = api config data

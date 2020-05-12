@@ -30,7 +30,8 @@ let processMessageBuild config =
     /forward_message - Test forward message
     /show_my_photos_sizes - Test getUserProfilePhotos method
     /get_chat_info - Returns id and type of current chat
-    /send_photo - Send example photo"""
+    /send_photo - Send example photo
+    /cmdscan stringA stringB - Test cmdScan, concatenate stringA and stringB"""
 
 
     let processResultWithValue (result: Result<'a, ApiResponseError>) =
@@ -71,6 +72,8 @@ let processMessageBuild config =
 
         let result =
             processCommands ctx [
+                cmdScan "/cmdscan %s %s" (fun (a, b) _ -> 
+                  sendMessageFormatted (sprintf "%s %s" a b) ParseMode.Markdown)
                 cmd "/send_action" (fun _ -> sendChatAction ctx.Update.Message.Value.Chat.Id ChatAction.UploadPhoto |> bot)
                 cmd "/send_message1" (fun _ -> sendMessageFormatted "Test *Markdown*" ParseMode.Markdown)
                 cmd "/send_message2" (fun _ -> sendMessageFormatted "Test <b>HTML</b>" ParseMode.HTML)
