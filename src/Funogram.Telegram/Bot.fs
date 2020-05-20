@@ -22,7 +22,7 @@ type UpdateContext =
       Config: BotConfig
       Me: User }
 
-let private getTextForCommand (me: User) =
+let getTextForCommand (me: User) =
     let username  = "@" + me.Username.Value
     function
     | Some (text: string) when text.EndsWith username ->

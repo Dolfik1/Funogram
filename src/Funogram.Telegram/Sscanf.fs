@@ -1,4 +1,4 @@
-﻿module internal Funogram.Telegram.Sscanf
+﻿module Funogram.Telegram.Sscanf
 
 open System
 open System.Text.RegularExpressions
