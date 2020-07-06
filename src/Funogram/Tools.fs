@@ -40,14 +40,19 @@ let internal getUnix (date: DateTime) =
   Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
 
 let internal parseJson<'a> (data: byte[]) =
-  match (JsonSerializer.Deserialize<Types.ApiResponse<'a>>(data, resolver)) with
-  | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
-  | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-    Error { Description = x.Description.Value
-            ErrorCode = x.ErrorCode.Value }
-  | _ -> 
-    Error { Description = "Unknown error"
-            ErrorCode = -1 }
+  try
+    match (JsonSerializer.Deserialize<Types.ApiResponse<'a>>(data, resolver)) with
+    | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
+    | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
+      Error { Description = x.Description.Value
+              ErrorCode = x.ErrorCode.Value }
+    | _ -> 
+      Error { Description = "Unknown error"
+              ErrorCode = -1 }
+  with ex ->
+    let json = System.Text.Encoding.UTF8.GetString data
+    let message = sprintf "%s in %s" ex.Message json
+    ArgumentException(message, ex) |> raise
 
 [<ReflectedDefinition>]
 let toJson (o: 'a) = JsonSerializer.Serialize<'a>(o, resolver)
