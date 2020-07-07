@@ -1,4 +1,4 @@
-![Travis build status](https://travis-ci.org/Dolfik1/Funogram.svg?branch=master)
+![.NET Core](https://github.com/Dolfik1/Funogram/workflows/.NET%20Core/badge.svg)
 [![NuGet](https://img.shields.io/nuget/v/FunHttp.svg)](https://www.nuget.org/packages/Funogram/)
 
 # Funogram
