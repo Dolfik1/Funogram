@@ -601,7 +601,7 @@ and [<CLIMutable>] Animation =
     /// MIME type of the file as defined by sender
     MimeType: string option
     /// File size
-    FileSize: string option }
+    FileSize: int option }
 
 /// This object represents a game. Use BotFather to create and edit games, their short names will act as unique identifiers
 and [<CLIMutable>] Game = 
