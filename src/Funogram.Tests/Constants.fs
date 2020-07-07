@@ -43,7 +43,7 @@ module Constants =
     let jsonMessageForward = 
         { defaultMessage with MessageId = 1L;  Date = testDate; ForwardDate = Some testDate; Text = None; Chat = defaultChat }
     
-    let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":0,"type":""},"forward_date":%i}""" testDateUnix testDateUnix    
+    let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":0,"type":"private"},"forward_date":%i}""" testDateUnix testDateUnix    
     let jsonMessageForwardDateApiString = ok jsonMessageForwardDateString
     
     let paramsDictionary =
