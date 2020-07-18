@@ -416,7 +416,7 @@ type DeleteMessageReq =
 
 type AnswerInlineQueryReq = 
     { InlineQueryId: string
-      Results: InlineQueryResult
+      Results: InlineQueryResult[]
       CacheTime: int option
       IsPersonal: bool option
       NextOffset: string option
