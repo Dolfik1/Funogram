@@ -3,7 +3,6 @@ module Funogram.Telegram.Types
 open System
 open System.IO
 open System.Runtime.Serialization
-open Funogram.Types
 
 type ChatId = 
   | Int of int64
@@ -13,6 +12,26 @@ type FileToSend =
   | Url of Uri 
   | File of string * Stream
   | FileId of string
+
+[<CLIMutable>]
+/// Contains information about the current status of a webhook.
+type WebhookInfo =
+  {
+    /// Webhook URL, may be empty if webhook is not set up
+    Url: string
+    /// True, if a custom certificate was provided for webhook certificate checks
+    HasCustomCertificate: bool
+    /// Number of updates awaiting delivery
+    PendingUpdateCount: int
+    /// DateTime for the most recent error that happened when trying to deliver an update via webhook
+    LastErrorDate: DateTime option
+    /// Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
+    LastErrorMessage: string option
+    /// Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
+    MaxConnections: int option
+    /// A list of update types the bot is subscribed to. Defaults to all update types
+    AllowedUpdates: string[] option
+  }
 
 [<CLIMutable>]
 /// This object represents a Telegram user or bot.

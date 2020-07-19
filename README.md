@@ -42,6 +42,37 @@ Use Funogram.Api module to communicate with Telegram API with the help of reques
 ```
 So, that is it! Use Intellisence-driven development approach to explore all Funogram features! For further learning you may take a look at sample Telegram bots built using this library: <a href="https://github.com/Dolfik1/Funogram/tree/master/Funogram.TestBot">Test Bot</a>, <a href="https://github.com/worldbeater/Memes.Bot/tree/master/Memes">Memes Bot</a>
 
+# Getting updates via webhooks
+If you want to use webhooks, you should start application with admin privileges.
+
+
+
+To get updates via webhooks you need send your endpoint address to Telegram server:
+```fsharp
+let! hook = setWebhookBase webSocketEndpoint None None None |> api config
+```
+You can use (ngrok)[https://ngrok.com/] service to test webhooks on your local machine that no have public address.
+
+Then you should set `WebHook` field in `BotConfig`. `WebHook` field have `BotWebHook` type that contains two fields: `Listener` and `ValidateRequest`:
+```fsharp
+let apiPath = sprintf "/%s" config.Token
+let webSocketEndpoint = sprintf "https://1c0860ec2320.ngrok.io/%s" webSocketEndpoint apiPath
+let! hook = setWebhookBase webSocketEndpoint None None None |> api config
+match hook with
+| Ok ->
+  use listener = new HttpListener()
+  listener.Prefixes.Add("http://*:4444/")
+  listener.Start()
+
+  let webhook = { Listener = listener; ValidateRequest = (fun req -> req.Url.LocalPath = apiPath) }
+  return! startBot { config with WebHook = Some webhook } updateArrived None
+
+| Error e -> 
+  printf "Can't set webhook: %A" e
+  return ()
+```
+Telegram (recommend)[https://core.telegram.org/bots/api#setwebhook] using a secret path in URL with your bot's token. You can validate telegram request in `ValidateRequest` function.
+
 # Articles
 
 [Funogram: Writing Telegram Bots In F#](https://medium.com/@worldbeater/funogram-writing-telegram-bots-in-f-f27a873fa548)
