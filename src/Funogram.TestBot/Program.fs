@@ -166,7 +166,7 @@ let start token =
       let webSocketEndpoint = sprintf "%s%s" webSocketEndpoint apiPath
       let! hook = setWebhookBase webSocketEndpoint None None None |> api config
       match hook with
-      | Ok ->
+      | Ok _ ->
         use listener = new HttpListener()
         listener.Prefixes.Add("http://*:4444/")
         listener.Start()
