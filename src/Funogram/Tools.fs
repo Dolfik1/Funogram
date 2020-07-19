@@ -7,6 +7,7 @@ open Utf8Json
 open Utf8Json.Resolvers
 
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
+[<assembly:InternalsVisibleTo("Funogram.Telegram")>]
 do ()
 
 open System.Collections.Concurrent
@@ -53,6 +54,31 @@ let internal parseJson<'a> (data: byte[]) =
     let json = System.Text.Encoding.UTF8.GetString data
     let message = sprintf "%s in %s" ex.Message json
     ArgumentException(message, ex) |> raise
+
+let internal parseJsonStream<'a> (data: Stream) =
+  try
+    JsonSerializer.Deserialize<'a>(data, resolver) |> Ok
+  with ex ->
+    if data.CanSeek then 
+      data.Seek(0L, SeekOrigin.Begin) |> ignore
+      use sr = new StreamReader(data)
+      let message = sprintf "%s in %s" ex.Message (sr.ReadToEnd())
+      ArgumentException(message, ex) :> Exception |> Result.Error
+    else
+      Exception("Can't parse json") |> Result.Error
+
+let internal parseJsonStreamApiResponse<'a> (data: Stream) =
+  match parseJsonStream<Types.ApiResponse<'a>> data with
+  | Ok x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
+
+  | Ok x when x.Description.IsSome && x.ErrorCode.IsSome -> 
+    Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
+
+  | Error e -> 
+    Error { Description = e.Message; ErrorCode = -1 }
+
+  | _ -> 
+    Error { Description = "Unknown error"; ErrorCode = -1 }
 
 [<ReflectedDefinition>]
 let toJson (o: 'a) = JsonSerializer.Serialize<'a>(o, resolver)
@@ -362,6 +388,6 @@ module Api =
         if hasData then client.PostAsync(url, content) |> Async.AwaitTask
         else client.GetAsync(url) |> Async.AwaitTask
   
-      let! bytes = result.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
-      return parseJson<'a> bytes
+      use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
+      return parseJsonStreamApiResponse<'a> stream
     }
