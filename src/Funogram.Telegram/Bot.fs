@@ -1,10 +1,7 @@
 ﻿module Funogram.Telegram.Bot
 
 open System
-open System.IO
-open System.Net
 open System.Net.Http
-open System.Net.WebSockets
 open Funogram.Telegram.Sscanf
 open Funogram.Telegram.Types
 open Funogram.Telegram.Api
@@ -117,33 +114,3 @@ let startBot config updateArrived updatesArrived =
 
 let processCommands (context: UpdateContext) =
   Seq.forall (fun command -> command context)
-
-(*
-async {
-     if not listener.IsListening then listener.Start()
-
-     while listener.IsListening do
-       let! context = listener.GetContextAsync() |> Async.AwaitTask
-       if context.Request.IsWebSocketRequest then
-         let! wsContext = context.AcceptWebSocketAsync(null) |> Async.AwaitTask
-         use ws = wsContext.WebSocket
-         
-         let buffer = ArraySegment<byte>(Array.zeroCreate 1024)
-         use ms = new MemoryStream()
-
-         while ws.State = WebSocketState.Open do
-           let! result = ws.ReceiveAsync(buffer, Async.DefaultCancellationToken) |> Async.AwaitTask
-           do! ms.AsyncWrite(buffer.Array, buffer.Offset, buffer.Count)
-
-           if result.EndOfMessage then
-             match Funogram.Tools.parseJsonStream<Update seq> ms with
-             | Ok updates -> processUpdates updates
-             | Error e -> config.OnError e
-             ms.Flush()
-       else
-         match Funogram.Tools.parseJsonStream<Update> context.Request.InputStream with
-         | Ok updates -> processUpdates (seq { updates })
-         | Error e -> config.OnError e
-         
-   }
-*)
