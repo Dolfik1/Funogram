@@ -770,6 +770,8 @@ and [<CLIMutable>] Message =
     ForwardFromMessageId: int64 option
     /// For messages forwarded from channels, signature of the post author if present
     ForwardSignature: string option
+    /// Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
+    ForwardSenderName: string option
     /// For forwarded messages, date the original message
     ForwardDate: DateTime option
     /// For replies, the original message. 
@@ -865,7 +867,7 @@ let defaultMessage = { MessageId = 1L; From = None; Date = DateTime.MinValue; Ch
   Document = None; Game = None; Photo = None; Sticker = None; Video = None; Animation = None; Voice = None; VideoNote = None; Caption = None; 
   Contact = None; Location = None; Venue = None; NewChatMembers = None; LeftChatMember = None; NewChatTitle = None; NewChatPhoto = None; 
   DeleteChatPhoto = None; GroupChatCreated = None; SupergroupChatCreated = None; ChannelChatCreated = None; MigrateToChatId = None; 
-  MigrateFromChatId = None; ForwardSignature = None; AuthorSignature = None; ConnectedWebsite = None; PassportData = None; ReplyMarkup = None;
+  MigrateFromChatId = None; ForwardSignature = None; ForwardSenderName = None; AuthorSignature = None; ConnectedWebsite = None; PassportData = None; ReplyMarkup = None;
   PinnedMessage = None; Invoice = None; SuccessfulPayment = None; CaptionEntities = None; Poll = None; }
 
 [<CLIMutable>]
