@@ -69,7 +69,7 @@ let processMessageBuild config =
     let sayWithArgs text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup =
         bot (sendMessageBase (ChatId.Int (fromId())) text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup)
 
-    let sendMessageFormatted text parseMode = (sendMessageBase (ChatId.Int(fromId())) text (Some parseMode) None None None None) |> bot
+    let sendMessageFormatted parseMode text = (sendMessageFormatted (fromId()) text parseMode) |> bot
 
     let result =
       processCommands ctx [
