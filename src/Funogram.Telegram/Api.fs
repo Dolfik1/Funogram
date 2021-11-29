@@ -19,16 +19,24 @@ let getMe = GetMeReq()
 
 let sendMessage chatId text =
   { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text }
+let sendMessageFormatted chatId parseMode text =
+  { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ParseMode = Some parseMode }
 let sendMessageByChatName chatName text =
   { sendMessageReqBase with ChatId = ChatId.String chatName; Text = text }
+let sendMessageByChatNameFormatted chatName parseMode text =
+  { sendMessageReqBase with ChatId = ChatId.String chatName; Text = text; ParseMode = Some parseMode }
 let sendMessageBase chatId text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup =
   { ChatId = chatId; Text = text; ParseMode = parseMode; 
   DisableWebPagePreview = disableWebPagePreview; DisableNotification = disableNotification; 
   ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
 let sendMessageMarkup chatId text replyMarkup =
   { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ReplyMarkup = Some replyMarkup }
+let sendMessageMarkupFormatted chatId parseMode text replyMarkup =
+  { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ReplyMarkup = Some replyMarkup; ParseMode = Some parseMode }
 let sendMessageReply chatId text replyToMessageId =
   { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ReplyToMessageId = replyToMessageId }
+let sendMessageReplyFormatted chatId parseMode text replyToMessageId =
+  { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ReplyToMessageId = replyToMessageId; ParseMode = Some parseMode }
 
 let forwardMessageBase chatId fromChatId messageId disableNotification =
   { ChatId = chatId; FromChatId = fromChatId; MessageId = messageId; DisableNotification = disableNotification }
