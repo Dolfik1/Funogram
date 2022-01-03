@@ -495,8 +495,10 @@ and [<CLIMutable>] MaskPosition =
 
 /// This object represents a sticker.
 and [<CLIMutable>] Sticker =
-  {  /// Unique identifier for this file
+  {  /// Identifier for this file, which can be used to download or reuse the file
     FileId: string
+    /// Unique identifier for this file. Can't be used to download or reuse the file
+    FileUniqueId: string
     /// Sticker width
     Width: int
     /// Sticker height
