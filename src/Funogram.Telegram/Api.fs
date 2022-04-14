@@ -320,3 +320,30 @@ let setStickerPositionInSet sticker position =
 
 let deleteStickerFromSet sticker =
   { DeleteStickerFromSet.Sticker = sticker }
+
+let private setMyCommandsBase commands languageCode = 
+  { SetMyCommandsReq.Commands = commands; SetMyCommandsReq.LaungeageCode = languageCode }
+
+let setMyCommands commands =
+  setMyCommandsBase commands None
+
+let setMyCommandsWithLanguageCode commands languageCode =
+  setMyCommandsBase commands (Some languageCode)
+
+let private getMyCommandsBase languageCode = 
+  { GetMyCommandsReq.LaungeageCode = languageCode }
+
+let getMyCommands() =
+  getMyCommandsBase None
+
+let getMyCommandsWithLanguageCode languageCode =
+  getMyCommandsBase (Some languageCode)
+
+let private deleteMyCommandsBase languageCode = 
+  { DeleteMyCommandsReq.LaungeageCode = languageCode }
+
+let deleteMyCommands() =
+  deleteMyCommandsBase None
+
+let deleteMyCommandsWithLanguageCode languageCode =
+  deleteMyCommandsBase (Some languageCode)
