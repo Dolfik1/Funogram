@@ -588,3 +588,19 @@ type DeleteStickerFromSet =
   { Sticker: string }
   interface IRequestBase<bool> with
     member __.MethodName = "deleteStickerFromSet"
+
+type SetMyCommandsReq =
+  { Commands: BotCommand array
+    LaungeageCode: string option }
+  interface IRequestBase<bool> with
+    member __.MethodName = "setMyCommands"
+
+type DeleteMyCommandsReq =
+  { LaungeageCode: string option }
+  interface IRequestBase<bool> with
+    member __.MethodName = "deleteMyCommands"
+
+type GetMyCommandsReq =
+  { LaungeageCode: string option }
+  interface IRequestBase<BotCommand array> with
+    member __.MethodName = "getMyCommands"
