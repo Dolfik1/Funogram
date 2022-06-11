@@ -976,7 +976,8 @@ type ChatMemberStatus =
 | Left
 | Kicked
 | Unknown
-    
+
+[<CLIMutable>]    
 /// This object contains information about one member of the chat.
 type ChatMember = 
   { /// Information about the user
