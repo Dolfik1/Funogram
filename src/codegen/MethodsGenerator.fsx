@@ -227,12 +227,13 @@ open System
 let codeResult =
   apiMethods
   |> Seq.fold (fun code tp ->
+    let typeName = sprintf "%sReq" (Helpers.toPascalCase tp.Name)
 
     let typeStr =
       if tp.Fields.Length = 0 then
-        (sprintf "type %sReq() =" (Helpers.toPascalCase tp.Name))
+        (sprintf "type %s() =" typeName)
       else
-        (sprintf "type %sReq =" (Helpers.toPascalCase tp.Name))
+        (sprintf "type %s =" typeName)
     
     let code =
       code
@@ -256,6 +257,25 @@ let codeResult =
         |> Code.printNewLine "}"
       else
         code
+
+    let code = code |> Code.printNewLine "static member Make("
+    let code =
+      if tp.Fields.Length = 0 then
+        code |> Code.print (sprintf ") = %s()" typeName)
+      else
+        let fields = tp.Fields |> Array.sortBy (fun x -> x.Optional)
+        fields
+        |> Seq.fold (fun code tp ->
+          let o = if tp.Optional then "?" else ""
+          let c = if fields.[0] <> tp then ", " else ""
+
+          let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
+          let argType = Helpers.convertTLTypeToFSharpType tp.FieldType tp.Description false
+
+          code
+          |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
+        ) code
+        |> Code.print ") = ()"
 
     code
     |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType tp.ReturnType "" false))

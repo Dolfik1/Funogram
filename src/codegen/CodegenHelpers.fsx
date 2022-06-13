@@ -2,6 +2,11 @@ open System
 open System.Text
 
 module Helpers =
+  let reservedKeywords =
+    [
+      "type"
+    ] |> Set.ofList
+
   let typeMap =
     [ 
       "Integer", "int64"
@@ -27,7 +32,20 @@ module Helpers =
         if c <> '_' then c
         prev <- c
     } |> Array.ofSeq |> String
+
+  let toCamelCase (str: string) =
+    let mutable prev = '0'
+    seq {
+      for c in str do
+        let c = if prev = '_' then Char.ToUpper c else c
+        if c <> '_' then c
+        prev <- c
+    } |> Array.ofSeq |> String
   
+  let fixReservedKeywords (name: string) =
+    if reservedKeywords |> Set.contains name then sprintf "``%s``" name
+    else name
+
   let private convertTLTypeToFSharpTypeInner (typeName: string) (description: string) =
     let isArray = typeName.StartsWith("Array of ")
     let isArrayOfArray = typeName.StartsWith("Array of Array of ")

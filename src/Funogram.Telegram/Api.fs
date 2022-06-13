@@ -1,52 +1,27 @@
 module Funogram.Telegram.Api
 
+open Funogram.Telegram.RequestsTypes
 open Types
 open RequestsTypes
-
-let getUpdatesBase offset limit timeout allowedUpdates =
-  { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates }
-
-let setWebhookBase url certificate ipAddress maxConnections allowedUpdates dropPendingUpdates =
-  { Url = url; Certificate = certificate; IpAddress = ipAddress; MaxConnections = maxConnections; AllowedUpdates = allowedUpdates; DropPendingUpdates = dropPendingUpdates }
-
-let getWebhookInfoBase () =
-  GetWebhookInfoReq()
 
 let deleteWebhookBase () =
   GetWebhookInfoReq()
 
 let getMe = GetMeReq()
 
-let sendMessage chatId text =
-  { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text }
-let sendMessageByChatName chatName text =
-  { sendMessageReqBase with ChatId = ChatId.String chatName; Text = text }
-let sendMessageBase chatId text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Text = text; ParseMode = parseMode; 
-  DisableWebPagePreview = disableWebPagePreview; DisableNotification = disableNotification; 
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
-let sendMessageMarkup chatId text replyMarkup =
-  { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ReplyMarkup = Some replyMarkup }
-let sendMessageReply chatId text replyToMessageId =
-  { sendMessageReqBase with ChatId = ChatId.Int chatId; Text = text; ReplyToMessageId = replyToMessageId }
+let sendMessage chatId text = SendMessageReq.Make(chatId, text)
+  
+let sendMessageByChatName chatName text = SendMessageReq.Make(ChatId.String chatName, text)
 
-let forwardMessageBase chatId fromChatId messageId disableNotification =
-  { ChatId = chatId; FromChatId = fromChatId; MessageId = messageId; DisableNotification = disableNotification }
-let forwardMessage chatId fromChatId messageId = 
-  forwardMessageBase (ChatId.Int chatId) (ChatId.Int fromChatId) messageId None
+let sendMessageMarkup chatId text replyMarkup = SendMessageReq.Make(ChatId.Int chatId, text, replyMarkup = replyMarkup)
 
-let sendPhotoBase chatId photo caption parseMode disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Photo = photo; Caption = caption;
-  DisableNotification = disableNotification; ParseMode = parseMode;
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
-let sendPhoto chatId photo caption =
-  sendPhotoBase (ChatId.Int chatId) photo (Some caption) None None None None
+let sendMessageReply chatId text replyToMessageId = SendMessageReq.Make(ChatId.Int chatId, text, replyToMessageId = replyToMessageId)
 
-let sendAudioBase chatId audio caption parseMode duration performer title thumb disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Audio = audio; Caption = caption; Duration = duration; 
-  Performer = performer; Title = title; DisableNotification = disableNotification;
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; ParseMode = parseMode; Thumb = thumb; }
-let sendAudio chatId audio caption = sendAudioBase (ChatId.Int chatId) audio (Some caption) None None None None None None
+let forwardMessage chatId fromChatId messageId = ForwardMessageReq.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId)
+
+let sendPhoto chatId photo caption = SendPhotoReq.Make(ChatId.Int chatId, photo, caption)
+
+let sendAudio chatId audio caption = SendAudioReq.Make(ChatId.Int chatId, audio, caption)
 
 let sendDocumentBase chatId document thumb caption parseMode disableNotification replyToMessageId replyMarkup =
   { ChatId = chatId; Document = document; Caption = caption; DisableNotification = disableNotification;
