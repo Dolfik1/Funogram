@@ -1,56 +1,56 @@
 module Funogram.Telegram.Types
 
-open System
-open System.IO
-open System.Runtime.Serialization
+  open System
+  open System.IO
+  open System.Runtime.Serialization
+      
+
+  type ChatId = 
+    | Int of int64
+    | String of string
     
+  type FileToSend = 
+    | Url of Uri 
+    | File of string * Stream
+    | FileId of string
 
-type ChatId = 
-  | Int of int64
-  | String of string
-  
-type FileToSend = 
-  | Url of Uri 
-  | File of string * Stream
-  | FileId of string
-
-type ChatType =
-  | Private
-  | Group
-  | [<DataMember(Name = "supergroup")>] SuperGroup
-  | Channel
-  | Unknown
+  type ChatType =
+    | Private
+    | Group
+    | [<DataMember(Name = "supergroup")>] SuperGroup
+    | Channel
+    | Unknown
 
 
-/// Message text parsing mode
-type ParseMode = 
-  /// Markdown parse syntax
-  | Markdown
-  /// Html parse syntax
-  | HTML
+  /// Message text parsing mode
+  type ParseMode = 
+    /// Markdown parse syntax
+    | Markdown
+    /// Html parse syntax
+    | HTML
 
-/// Type of action to broadcast
-type ChatAction =
-  | Typing
-  | UploadPhoto
-  | RecordVideo
-  | UploadVideo
-  | RecordAudio
-  | UploadAudio
-  | UploadDocument
-  | FindLocation
-  | RecordVideoNote
-  | UploadVideoNote
+  /// Type of action to broadcast
+  type ChatAction =
+    | Typing
+    | UploadPhoto
+    | RecordVideo
+    | UploadVideo
+    | RecordAudio
+    | UploadAudio
+    | UploadDocument
+    | FindLocation
+    | RecordVideoNote
+    | UploadVideoNote
 
-type ChatMemberStatus =
-  | Creator
-  | Administrator
-  | Member
-  | Restricted
-  | Left
-  | Kicked
-  | Unknown
-    
+  type ChatMemberStatus =
+    | Creator
+    | Administrator
+    | Member
+    | Restricted
+    | Left
+    | Kicked
+    | Unknown
+      
 // This object represents an incoming update.
 // At most one of the optional parameters can be present in any given update.
 and [<CLIMutable>] Update =
@@ -170,7 +170,7 @@ and [<CLIMutable>] Chat =
     Id: int64
     // Type of chat, can be either “private”, “group”, “supergroup” or “channel”
     [<DataMember(Name = "type")>]
-    Type: string
+    Type: ChatType
     // Title, for supergroups, channels and group chats
     [<DataMember(Name = "title")>]
     Title: string option
@@ -1380,7 +1380,7 @@ and [<CLIMutable>] InputMediaPhoto =
     Caption: string option
     // Mode for parsing entities in the photo caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1403,7 +1403,7 @@ and [<CLIMutable>] InputMediaVideo =
     Caption: string option
     // Mode for parsing entities in the video caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1438,7 +1438,7 @@ and [<CLIMutable>] InputMediaAnimation =
     Caption: string option
     // Mode for parsing entities in the animation caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1470,7 +1470,7 @@ and [<CLIMutable>] InputMediaAudio =
     Caption: string option
     // Mode for parsing entities in the audio caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1502,7 +1502,7 @@ and [<CLIMutable>] InputMediaDocument =
     Caption: string option
     // Mode for parsing entities in the document caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1603,7 +1603,7 @@ and [<CLIMutable>] InlineQuery =
     Offset: string
     // Type of the chat, from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
     [<DataMember(Name = "chat_type")>]
-    ChatType: string option
+    ChatType: ChatType option
     // Sender location, only for bots that request user location
     [<DataMember(Name = "location")>]
     Location: Location option
@@ -1703,7 +1703,7 @@ and [<CLIMutable>] InlineQueryResultPhoto =
     Caption: string option
     // Mode for parsing entities in the photo caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1750,7 +1750,7 @@ and [<CLIMutable>] InlineQueryResultGif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1797,7 +1797,7 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1835,7 +1835,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
     Caption: string option
     // Mode for parsing entities in the video caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1880,7 +1880,7 @@ and [<CLIMutable>] InlineQueryResultAudio =
     Caption: string option
     // Mode for parsing entities in the audio caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1919,7 +1919,7 @@ and [<CLIMutable>] InlineQueryResultVoice =
     Caption: string option
     // Mode for parsing entities in the voice message caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1952,7 +1952,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
     Caption: string option
     // Mode for parsing entities in the document caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2161,7 +2161,7 @@ and [<CLIMutable>] InlineQueryResultCachedPhoto =
     Caption: string option
     // Mode for parsing entities in the photo caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2193,7 +2193,7 @@ and [<CLIMutable>] InlineQueryResultCachedGif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2225,7 +2225,7 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2282,7 +2282,7 @@ and [<CLIMutable>] InlineQueryResultCachedDocument =
     Caption: string option
     // Mode for parsing entities in the document caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2317,7 +2317,7 @@ and [<CLIMutable>] InlineQueryResultCachedVideo =
     Caption: string option
     // Mode for parsing entities in the video caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2350,7 +2350,7 @@ and [<CLIMutable>] InlineQueryResultCachedVoice =
     Caption: string option
     // Mode for parsing entities in the voice message caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2380,7 +2380,7 @@ and [<CLIMutable>] InlineQueryResultCachedAudio =
     Caption: string option
     // Mode for parsing entities in the audio caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2408,7 +2408,7 @@ and [<CLIMutable>] InputTextMessageContent =
     MessageText: string
     // Mode for parsing entities in the message text. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in message text, which can be specified instead of parse_mode
     [<DataMember(Name = "entities")>]
     Entities: MessageEntity[] option

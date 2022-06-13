@@ -15,7 +15,7 @@ let defaultConfig =
     Timeout = Some 60000
     AllowedUpdates = None
     Client = new HttpClient()
-    ApiEndpointUrl = new Uri("https://api.telegram.org/bot")
+    ApiEndpointUrl = Uri("https://api.telegram.org/bot")
     WebHook = None
     OnError = (fun e -> printfn "%A" e) }
 
