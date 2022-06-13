@@ -8,7 +8,7 @@ open Xunit
 
 let botUser: User =
   {
-     Id = 0
+     Id = 0L
      IsBot = true
      FirstName = "TestBot"
      LastName = None
