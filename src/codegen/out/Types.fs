@@ -1,56 +1,70 @@
 module Funogram.Telegram.Types
 
-  open System
-  open System.IO
-  open System.Runtime.Serialization
+open System
+open System.IO
+open System.Runtime.Serialization
       
 
-  type ChatId = 
-    | Int of int64
-    | String of string
+type ChatId = 
+  | Int of int64
+  | String of string
     
-  type FileToSend = 
-    | Url of Uri 
-    | File of string * Stream
-    | FileId of string
+type InputFile = 
+  | Url of Uri 
+  | File of string * Stream
+  | FileId of string
 
-  type ChatType =
-    | Private
-    | Group
-    | [<DataMember(Name = "supergroup")>] SuperGroup
-    | Channel
-    | Unknown
+type ChatType =
+  | Private
+  | Group
+  | [<DataMember(Name = "supergroup")>] SuperGroup
+  | Channel
+  | Unknown
 
 
-  /// Message text parsing mode
-  type ParseMode = 
-    /// Markdown parse syntax
-    | Markdown
-    /// Html parse syntax
-    | HTML
+/// Message text parsing mode
+type ParseMode = 
+  /// Markdown parse syntax
+  | Markdown
+  /// Html parse syntax
+  | HTML
 
-  /// Type of action to broadcast
-  type ChatAction =
-    | Typing
-    | UploadPhoto
-    | RecordVideo
-    | UploadVideo
-    | RecordAudio
-    | UploadAudio
-    | UploadDocument
-    | FindLocation
-    | RecordVideoNote
-    | UploadVideoNote
+/// Type of action to broadcast
+type ChatAction =
+  | Typing
+  | UploadPhoto
+  | RecordVideo
+  | UploadVideo
+  | RecordAudio
+  | UploadAudio
+  | UploadDocument
+  | FindLocation
+  | RecordVideoNote
+  | UploadVideoNote
+  | ChooseSticker
 
-  type ChatMemberStatus =
-    | Creator
-    | Administrator
-    | Member
-    | Restricted
-    | Left
-    | Kicked
-    | Unknown
-      
+type ChatMemberStatus =
+  | Creator
+  | Administrator
+  | Member
+  | Restricted
+  | Left
+  | Kicked
+  | Unknown
+
+type Markup = 
+  | InlineKeyboardMarkup of InlineKeyboardMarkup 
+  | ReplyKeyboardMarkup of ReplyKeyboardMarkup
+  | ReplyKeyboardRemove of ReplyKeyboardRemove
+  | ForceReply of ForceReply
+
+/// If edited message is sent by the bot, used Message, otherwise Success.
+and EditMessageResult = 
+  /// Message sent by the bot
+  | Message of Message
+  /// Message sent via the bot or another...
+  | Success of bool
+
 // This object represents an incoming update.
 // At most one of the optional parameters can be present in any given update.
 and [<CLIMutable>] Update =
@@ -125,6 +139,9 @@ and [<CLIMutable>] WebhookInfo =
     // Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
     [<DataMember(Name = "last_error_message")>]
     LastErrorMessage: string option
+    // Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
+    [<DataMember(Name = "last_synchronization_error_date")>]
+    LastSynchronizationErrorDate: int64 option
     // Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
     [<DataMember(Name = "max_connections")>]
     MaxConnections: int64 option
@@ -392,18 +409,21 @@ and [<CLIMutable>] Message =
     // Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
     [<DataMember(Name = "proximity_alert_triggered")>]
     ProximityAlertTriggered: ProximityAlertTriggered option
-    // Service message: voice chat scheduled
-    [<DataMember(Name = "voice_chat_scheduled")>]
-    VoiceChatScheduled: VoiceChatScheduled option
-    // Service message: voice chat started
-    [<DataMember(Name = "voice_chat_started")>]
-    VoiceChatStarted: VoiceChatStarted option
-    // Service message: voice chat ended
-    [<DataMember(Name = "voice_chat_ended")>]
-    VoiceChatEnded: VoiceChatEnded option
-    // Service message: new participants invited to a voice chat
-    [<DataMember(Name = "voice_chat_participants_invited")>]
-    VoiceChatParticipantsInvited: VoiceChatParticipantsInvited option
+    // Service message: video chat scheduled
+    [<DataMember(Name = "video_chat_scheduled")>]
+    VideoChatScheduled: VideoChatScheduled option
+    // Service message: video chat started
+    [<DataMember(Name = "video_chat_started")>]
+    VideoChatStarted: VideoChatStarted option
+    // Service message: video chat ended
+    [<DataMember(Name = "video_chat_ended")>]
+    VideoChatEnded: VideoChatEnded option
+    // Service message: new participants invited to a video chat
+    [<DataMember(Name = "video_chat_participants_invited")>]
+    VideoChatParticipantsInvited: VideoChatParticipantsInvited option
+    // Service message: data sent by a Web App
+    [<DataMember(Name = "web_app_data")>]
+    WebAppData: WebAppData option
     // Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
@@ -771,6 +791,17 @@ and [<CLIMutable>] Venue =
     GooglePlaceType: string option
   }
 
+// Contains data sent from a Web App to the bot.
+and [<CLIMutable>] WebAppData =
+  {
+    // The data. Be aware that a bad client can send arbitrary data in this field.
+    [<DataMember(Name = "data")>]
+    Data: string
+    // Text of the web_app keyboard button, from which the Web App was opened. Be aware that a bad client can send arbitrary data in this field.
+    [<DataMember(Name = "button_text")>]
+    ButtonText: string
+  }
+
 // This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
 and [<CLIMutable>] ProximityAlertTriggered =
   {
@@ -793,32 +824,32 @@ and [<CLIMutable>] MessageAutoDeleteTimerChanged =
     MessageAutoDeleteTime: int64
   }
 
-// This object represents a service message about a voice chat scheduled in the chat.
-and [<CLIMutable>] VoiceChatScheduled =
+// This object represents a service message about a video chat scheduled in the chat.
+and [<CLIMutable>] VideoChatScheduled =
   {
-    // Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat administrator
+    // Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator
     [<DataMember(Name = "start_date")>]
     StartDate: int64
   }
 
-// This object represents a service message about a voice chat started in the chat. Currently holds no information.
-and VoiceChatStarted =
+// This object represents a service message about a video chat started in the chat. Currently holds no information.
+and VideoChatStarted =
   class end
 
-// This object represents a service message about a voice chat ended in the chat.
-and [<CLIMutable>] VoiceChatEnded =
+// This object represents a service message about a video chat ended in the chat.
+and [<CLIMutable>] VideoChatEnded =
   {
-    // Voice chat duration in seconds
+    // Video chat duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64
   }
 
-// This object represents a service message about new members invited to a voice chat.
-and [<CLIMutable>] VoiceChatParticipantsInvited =
+// This object represents a service message about new members invited to a video chat.
+and [<CLIMutable>] VideoChatParticipantsInvited =
   {
-    // New members that were invited to the voice chat
+    // New members that were invited to the video chat
     [<DataMember(Name = "users")>]
-    Users: User[] option
+    Users: User[]
   }
 
 // This object represent a user's profile pictures.
@@ -849,6 +880,14 @@ and [<CLIMutable>] File =
     FilePath: string option
   }
 
+// Contains information about a Web App.
+and [<CLIMutable>] WebAppInfo =
+  {
+    // An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps
+    [<DataMember(Name = "url")>]
+    Url: string
+  }
+
 // This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
 and [<CLIMutable>] ReplyKeyboardMarkup =
   {
@@ -871,23 +910,27 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     Selective: bool option
   }
 
-// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields request_contact, request_location, and request_poll are mutually exclusive.
+// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
 // Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 // Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
+// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
 and [<CLIMutable>] KeyboardButton =
   {
     // Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
     [<DataMember(Name = "text")>]
     Text: string
-    // If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
+    // If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_contact")>]
     RequestContact: bool option
-    // If True, the user's current location will be sent when the button is pressed. Available in private chats only
+    // If True, the user's current location will be sent when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_location")>]
     RequestLocation: bool option
-    // If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only
+    // If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_poll")>]
     RequestPoll: KeyboardButtonPollType option
+    // If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo option
   }
 
 // This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
@@ -929,12 +972,15 @@ and [<CLIMutable>] InlineKeyboardButton =
     // HTTP or tg:// url to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.
     [<DataMember(Name = "url")>]
     Url: string option
-    // An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
-    [<DataMember(Name = "login_url")>]
-    LoginUrl: LoginUrl option
     // Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
     [<DataMember(Name = "callback_data")>]
     CallbackData: string option
+    // Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo option
+    // An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
+    [<DataMember(Name = "login_url")>]
+    LoginUrl: LoginUrl option
     // If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. Can be empty, in which case just the bot's username will be inserted.
     // 
     // Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions – in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
@@ -995,7 +1041,7 @@ and [<CLIMutable>] CallbackQuery =
     // Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games.
     [<DataMember(Name = "chat_instance")>]
     ChatInstance: string
-    // Data associated with the callback button. Be aware that a bad client can send arbitrary data in this field.
+    // Data associated with the callback button. Be aware that the message, which originated the query, can contain no callback buttons with this data.
     [<DataMember(Name = "data")>]
     Data: string option
     // Short name of a Game to be returned, serves as the unique identifier for the game
@@ -1066,6 +1112,44 @@ and [<CLIMutable>] ChatInviteLink =
     PendingJoinRequestCount: int64 option
   }
 
+// Represents the rights of an administrator in a chat.
+and [<CLIMutable>] ChatAdministratorRights =
+  {
+    // True, if the user's presence in the chat is hidden
+    [<DataMember(Name = "is_anonymous")>]
+    IsAnonymous: bool
+    // True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    [<DataMember(Name = "can_manage_chat")>]
+    CanManageChat: bool
+    // True, if the administrator can delete messages of other users
+    [<DataMember(Name = "can_delete_messages")>]
+    CanDeleteMessages: bool
+    // True, if the administrator can manage video chats
+    [<DataMember(Name = "can_manage_video_chats")>]
+    CanManageVideoChats: bool
+    // True, if the administrator can restrict, ban or unban chat members
+    [<DataMember(Name = "can_restrict_members")>]
+    CanRestrictMembers: bool
+    // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
+    [<DataMember(Name = "can_promote_members")>]
+    CanPromoteMembers: bool
+    // True, if the user is allowed to change the chat title, photo and other settings
+    [<DataMember(Name = "can_change_info")>]
+    CanChangeInfo: bool
+    // True, if the user is allowed to invite new users to the chat
+    [<DataMember(Name = "can_invite_users")>]
+    CanInviteUsers: bool
+    // True, if the administrator can post in the channel; channels only
+    [<DataMember(Name = "can_post_messages")>]
+    CanPostMessages: bool option
+    // True, if the administrator can edit messages of other users and can pin messages; channels only
+    [<DataMember(Name = "can_edit_messages")>]
+    CanEditMessages: bool option
+    // True, if the user is allowed to pin messages; groups and supergroups only
+    [<DataMember(Name = "can_pin_messages")>]
+    CanPinMessages: bool option
+  }
+
 // This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
 and ChatMember =
   | Owner of ChatMemberOwner
@@ -1113,9 +1197,9 @@ and [<CLIMutable>] ChatMemberAdministrator =
     // True, if the administrator can delete messages of other users
     [<DataMember(Name = "can_delete_messages")>]
     CanDeleteMessages: bool
-    // True, if the administrator can manage voice chats
-    [<DataMember(Name = "can_manage_voice_chats")>]
-    CanManageVoiceChats: bool
+    // True, if the administrator can manage video chats
+    [<DataMember(Name = "can_manage_video_chats")>]
+    CanManageVideoChats: bool
     // True, if the administrator can restrict, ban or unban chat members
     [<DataMember(Name = "can_restrict_members")>]
     CanRestrictMembers: bool
@@ -1391,6 +1475,43 @@ and [<CLIMutable>] BotCommandScopeChatMember =
     UserId: int64
   }
 
+// This object describes the bot's menu button in a private chat. It should be one of
+// If a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
+and MenuButton =
+  | Commands of MenuButtonCommands
+  | WebApp of MenuButtonWebApp
+  | Default of MenuButtonDefault
+
+// Represents a menu button, which opens the bot's list of commands.
+and [<CLIMutable>] MenuButtonCommands =
+  {
+    // Type of the button, must be commands
+    [<DataMember(Name = "type")>]
+    Type: string
+  }
+
+// Represents a menu button, which launches a Web App.
+and [<CLIMutable>] MenuButtonWebApp =
+  {
+    // Type of the button, must be web_app
+    [<DataMember(Name = "type")>]
+    Type: string
+    // Text on the button
+    [<DataMember(Name = "text")>]
+    Text: string
+    // Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo
+  }
+
+// Describes that no specific value for the menu button was set.
+and [<CLIMutable>] MenuButtonDefault =
+  {
+    // Type of the button, must be default
+    [<DataMember(Name = "type")>]
+    Type: string
+  }
+
 // Contains information about why a request was unsuccessful.
 and [<CLIMutable>] ResponseParameters =
   {
@@ -1441,7 +1562,7 @@ and [<CLIMutable>] InputMediaVideo =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the video to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -1476,7 +1597,7 @@ and [<CLIMutable>] InputMediaAnimation =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the animation to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -1508,7 +1629,7 @@ and [<CLIMutable>] InputMediaAudio =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the audio to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -1540,7 +1661,7 @@ and [<CLIMutable>] InputMediaDocument =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the document to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -2603,7 +2724,6 @@ and [<CLIMutable>] InputInvoiceMessageContent =
 
 // Represents a result of an inline query that was chosen by the user and sent to their chat partner.
 // Note: It is necessary to enable inline feedback via @Botfather in order to receive these objects in updates.
-// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
 and [<CLIMutable>] ChosenInlineResult =
   {
     // The unique identifier for the result that was chosen
@@ -2621,6 +2741,15 @@ and [<CLIMutable>] ChosenInlineResult =
     // The query that was used to obtain the result
     [<DataMember(Name = "query")>]
     Query: string
+  }
+
+// Contains information about an inline message sent by a Web App on behalf of a user.
+// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
+and [<CLIMutable>] SentWebAppMessage =
+  {
+    // Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
+    [<DataMember(Name = "inline_message_id")>]
+    InlineMessageId: string option
   }
 
 // This object represents a portion of the price for goods or services.

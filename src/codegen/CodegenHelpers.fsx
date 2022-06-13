@@ -5,13 +5,18 @@ module Helpers =
   let typeMap =
     [ 
       "Integer", "int64"
+      "Int", "int"
       "Boolean", "bool"
       "String", "string"
       "True", "bool"
       "Integer or String", "ChatId"
-      "InputFile or String", "FileToSend"
+      "InputFile or String", "InputFile"
       "Float", "float"
       "Float number", "float"
+      "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply", "Markup"
+      "array of Messages", "Message[]"
+      "InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo", "InputMedia"
+      "Message or True", "EditMessageResult"
     ] |> Map.ofList
     
   let toPascalCase (str: string) =
@@ -33,7 +38,7 @@ module Helpers =
     |> Map.tryFind typeName
     |> Option.orElseWith (fun _ ->
       if description.Contains "File to send" then
-        Some "FileToSend"
+        Some "InputFile"
       else
         None
     )

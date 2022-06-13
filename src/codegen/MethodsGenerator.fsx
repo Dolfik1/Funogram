@@ -7,7 +7,6 @@ open System
 open System.IO
 open System.Text
 open System.Text.RegularExpressions
-open System.Collections.Generic
 open System.Diagnostics
 
 type ApiTypeField =
@@ -225,17 +224,6 @@ open Types
 open System
     """
 
-(*
-
-type GetUpdatesReq = 
-  { Offset: int64 option
-    Limit: int option
-    Timeout: int option
-    AllowedUpdates: string seq }
-  interface IRequestBase<Update seq> with
-    member __.MethodName = "getUpdates"
-*)
-
 let codeResult =
   apiMethods
   |> Seq.fold (fun code tp ->
@@ -268,17 +256,11 @@ let codeResult =
         |> Code.printNewLine "}"
       else
         code
-    
-    (*
-    
-  interface IRequestBase<User> with
-    member __.MethodName = "getMe"
-    *)
-    
+
     code
     |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType tp.ReturnType "" false))
     |> Code.setIndent 2
-    |> Code.printNewLine (sprintf "member _.MethodName = \"%s\"" tp.ReturnType)
+    |> Code.printNewLine (sprintf "member _.MethodName = \"%s\"" tp.Name)
     |> Code.printNewLine ""
     
   ) code

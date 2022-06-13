@@ -3,13 +3,13 @@ module Funogram.Telegram.Types
 open System
 open System.IO
 open System.Runtime.Serialization
-    
+      
 
 type ChatId = 
   | Int of int64
   | String of string
-  
-type FileToSend = 
+    
+type InputFile = 
   | Url of Uri 
   | File of string * Stream
   | FileId of string
@@ -41,6 +41,7 @@ type ChatAction =
   | FindLocation
   | RecordVideoNote
   | UploadVideoNote
+  | ChooseSticker
 
 type ChatMemberStatus =
   | Creator
@@ -50,7 +51,20 @@ type ChatMemberStatus =
   | Left
   | Kicked
   | Unknown
-    
+
+type Markup = 
+  | InlineKeyboardMarkup of InlineKeyboardMarkup 
+  | ReplyKeyboardMarkup of ReplyKeyboardMarkup
+  | ReplyKeyboardRemove of ReplyKeyboardRemove
+  | ForceReply of ForceReply
+
+/// If edited message is sent by the bot, used Message, otherwise Success.
+and EditMessageResult = 
+  /// Message sent by the bot
+  | Message of Message
+  /// Message sent via the bot or another...
+  | Success of bool
+
 // This object represents an incoming update.
 // At most one of the optional parameters can be present in any given update.
 and [<CLIMutable>] Update =
@@ -97,6 +111,9 @@ and [<CLIMutable>] Update =
     // A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify “chat_member” in the list of allowed_updates to receive these updates.
     [<DataMember(Name = "chat_member")>]
     ChatMember: ChatMemberUpdated option
+    // A request to join the chat has been sent. The bot must have the can_invite_users administrator right in the chat to receive these updates.
+    [<DataMember(Name = "chat_join_request")>]
+    ChatJoinRequest: ChatJoinRequest option
   }
 
 // Contains information about the current status of a webhook.
@@ -122,6 +139,9 @@ and [<CLIMutable>] WebhookInfo =
     // Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook
     [<DataMember(Name = "last_error_message")>]
     LastErrorMessage: string option
+    // Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
+    [<DataMember(Name = "last_synchronization_error_date")>]
+    LastSynchronizationErrorDate: int64 option
     // Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
     [<DataMember(Name = "max_connections")>]
     MaxConnections: int64 option
@@ -170,7 +190,7 @@ and [<CLIMutable>] Chat =
     Id: int64
     // Type of chat, can be either “private”, “group”, “supergroup” or “channel”
     [<DataMember(Name = "type")>]
-    Type: string
+    Type: ChatType
     // Title, for supergroups, channels and group chats
     [<DataMember(Name = "title")>]
     Title: string option
@@ -189,6 +209,9 @@ and [<CLIMutable>] Chat =
     // Bio of the other party in a private chat. Returned only in getChat.
     [<DataMember(Name = "bio")>]
     Bio: string option
+    // True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat.
+    [<DataMember(Name = "has_private_forwards")>]
+    HasPrivateForwards: bool option
     // Description, for groups, supergroups and channel chats. Returned only in getChat.
     [<DataMember(Name = "description")>]
     Description: string option
@@ -201,12 +224,15 @@ and [<CLIMutable>] Chat =
     // Default chat member permissions, for groups and supergroups. Returned only in getChat.
     [<DataMember(Name = "permissions")>]
     Permissions: ChatPermissions option
-    // For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user. Returned only in getChat.
+    // For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user; in seconds. Returned only in getChat.
     [<DataMember(Name = "slow_mode_delay")>]
     SlowModeDelay: int64 option
     // The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in getChat.
     [<DataMember(Name = "message_auto_delete_time")>]
     MessageAutoDeleteTime: int64 option
+    // True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
+    [<DataMember(Name = "has_protected_content")>]
+    HasProtectedContent: bool option
     // For supergroups, name of group sticker set. Returned only in getChat.
     [<DataMember(Name = "sticker_set_name")>]
     StickerSetName: string option
@@ -227,10 +253,10 @@ and [<CLIMutable>] Message =
     // Unique message identifier inside this chat
     [<DataMember(Name = "message_id")>]
     MessageId: int64
-    // Sender, empty for messages sent to channels
+    // Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     [<DataMember(Name = "from")>]
     From: User option
-    // Sender of the message, sent on behalf of a chat. The channel itself for channel messages. The supergroup itself for messages from anonymous group administrators. The linked channel for messages automatically forwarded to the discussion group
+    // Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     [<DataMember(Name = "sender_chat")>]
     SenderChat: Chat option
     // Date the message was sent in Unix time
@@ -248,7 +274,7 @@ and [<CLIMutable>] Message =
     // For messages forwarded from channels, identifier of the original message in the channel
     [<DataMember(Name = "forward_from_message_id")>]
     ForwardFromMessageId: int64 option
-    // For messages forwarded from channels, signature of the post author if present
+    // For forwarded messages that were originally sent in channels or by an anonymous chat administrator, signature of the message sender if present
     [<DataMember(Name = "forward_signature")>]
     ForwardSignature: string option
     // Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
@@ -257,6 +283,9 @@ and [<CLIMutable>] Message =
     // For forwarded messages, date the original message was sent in Unix time
     [<DataMember(Name = "forward_date")>]
     ForwardDate: int64 option
+    // True, if the message is a channel post that was automatically forwarded to the connected discussion group
+    [<DataMember(Name = "is_automatic_forward")>]
+    IsAutomaticForward: bool option
     // For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
     [<DataMember(Name = "reply_to_message")>]
     ReplyToMessage: Message option
@@ -266,6 +295,9 @@ and [<CLIMutable>] Message =
     // Date the message was last edited in Unix time
     [<DataMember(Name = "edit_date")>]
     EditDate: int64 option
+    // True, if the message can't be forwarded
+    [<DataMember(Name = "has_protected_content")>]
+    HasProtectedContent: bool option
     // The unique identifier of a media message group this message belongs to
     [<DataMember(Name = "media_group_id")>]
     MediaGroupId: string option
@@ -377,18 +409,21 @@ and [<CLIMutable>] Message =
     // Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
     [<DataMember(Name = "proximity_alert_triggered")>]
     ProximityAlertTriggered: ProximityAlertTriggered option
-    // Service message: voice chat scheduled
-    [<DataMember(Name = "voice_chat_scheduled")>]
-    VoiceChatScheduled: VoiceChatScheduled option
-    // Service message: voice chat started
-    [<DataMember(Name = "voice_chat_started")>]
-    VoiceChatStarted: VoiceChatStarted option
-    // Service message: voice chat ended
-    [<DataMember(Name = "voice_chat_ended")>]
-    VoiceChatEnded: VoiceChatEnded option
-    // Service message: new participants invited to a voice chat
-    [<DataMember(Name = "voice_chat_participants_invited")>]
-    VoiceChatParticipantsInvited: VoiceChatParticipantsInvited option
+    // Service message: video chat scheduled
+    [<DataMember(Name = "video_chat_scheduled")>]
+    VideoChatScheduled: VideoChatScheduled option
+    // Service message: video chat started
+    [<DataMember(Name = "video_chat_started")>]
+    VideoChatStarted: VideoChatStarted option
+    // Service message: video chat ended
+    [<DataMember(Name = "video_chat_ended")>]
+    VideoChatEnded: VideoChatEnded option
+    // Service message: new participants invited to a video chat
+    [<DataMember(Name = "video_chat_participants_invited")>]
+    VideoChatParticipantsInvited: VideoChatParticipantsInvited option
+    // Service message: data sent by a Web App
+    [<DataMember(Name = "web_app_data")>]
+    WebAppData: WebAppData option
     // Inline keyboard attached to the message. login_url buttons are represented as ordinary url buttons.
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
@@ -405,7 +440,7 @@ and [<CLIMutable>] MessageId =
 // This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 and [<CLIMutable>] MessageEntity =
   {
-    // Type of the entity. Can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames)
+    // Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames)
     [<DataMember(Name = "type")>]
     Type: string
     // Offset in UTF-16 code units to the start of the entity
@@ -440,7 +475,7 @@ and [<CLIMutable>] PhotoSize =
     // Photo height
     [<DataMember(Name = "height")>]
     Height: int64
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -472,7 +507,7 @@ and [<CLIMutable>] Animation =
     // MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -501,7 +536,7 @@ and [<CLIMutable>] Audio =
     // MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
     // Thumbnail of the album cover to which the music file belongs
@@ -527,7 +562,7 @@ and [<CLIMutable>] Document =
     // MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -559,7 +594,7 @@ and [<CLIMutable>] Video =
     // Mime type of a file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -582,7 +617,7 @@ and [<CLIMutable>] VideoNote =
     // Video thumbnail
     [<DataMember(Name = "thumb")>]
     Thumb: PhotoSize option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -602,7 +637,7 @@ and [<CLIMutable>] Voice =
     // MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -719,7 +754,7 @@ and [<CLIMutable>] Location =
     // The radius of uncertainty for the location, measured in meters; 0-1500
     [<DataMember(Name = "horizontal_accuracy")>]
     HorizontalAccuracy: float option
-    // Time relative to the message sending date, during which the location can be updated, in seconds. For active live locations only.
+    // Time relative to the message sending date, during which the location can be updated; in seconds. For active live locations only.
     [<DataMember(Name = "live_period")>]
     LivePeriod: int64 option
     // The direction in which user is moving, in degrees; 1-360. For active live locations only.
@@ -756,6 +791,17 @@ and [<CLIMutable>] Venue =
     GooglePlaceType: string option
   }
 
+// Contains data sent from a Web App to the bot.
+and [<CLIMutable>] WebAppData =
+  {
+    // The data. Be aware that a bad client can send arbitrary data in this field.
+    [<DataMember(Name = "data")>]
+    Data: string
+    // Text of the web_app keyboard button, from which the Web App was opened. Be aware that a bad client can send arbitrary data in this field.
+    [<DataMember(Name = "button_text")>]
+    ButtonText: string
+  }
+
 // This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.
 and [<CLIMutable>] ProximityAlertTriggered =
   {
@@ -773,37 +819,37 @@ and [<CLIMutable>] ProximityAlertTriggered =
 // This object represents a service message about a change in auto-delete timer settings.
 and [<CLIMutable>] MessageAutoDeleteTimerChanged =
   {
-    // New auto-delete time for messages in the chat
+    // New auto-delete time for messages in the chat; in seconds
     [<DataMember(Name = "message_auto_delete_time")>]
     MessageAutoDeleteTime: int64
   }
 
-// This object represents a service message about a voice chat scheduled in the chat.
-and [<CLIMutable>] VoiceChatScheduled =
+// This object represents a service message about a video chat scheduled in the chat.
+and [<CLIMutable>] VideoChatScheduled =
   {
-    // Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat administrator
+    // Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator
     [<DataMember(Name = "start_date")>]
     StartDate: int64
   }
 
-// This object represents a service message about a voice chat started in the chat. Currently holds no information.
-and VoiceChatStarted =
+// This object represents a service message about a video chat started in the chat. Currently holds no information.
+and VideoChatStarted =
   class end
 
-// This object represents a service message about a voice chat ended in the chat.
-and [<CLIMutable>] VoiceChatEnded =
+// This object represents a service message about a video chat ended in the chat.
+and [<CLIMutable>] VideoChatEnded =
   {
-    // Voice chat duration; in seconds
+    // Video chat duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64
   }
 
-// This object represents a service message about new members invited to a voice chat.
-and [<CLIMutable>] VoiceChatParticipantsInvited =
+// This object represents a service message about new members invited to a video chat.
+and [<CLIMutable>] VideoChatParticipantsInvited =
   {
-    // New members that were invited to the voice chat
+    // New members that were invited to the video chat
     [<DataMember(Name = "users")>]
-    Users: User[] option
+    Users: User[]
   }
 
 // This object represent a user's profile pictures.
@@ -826,12 +872,20 @@ and [<CLIMutable>] File =
     // Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     [<DataMember(Name = "file_unique_id")>]
     FileUniqueId: string
-    // File size, if known
+    // File size in bytes, if known
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
     // File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
     [<DataMember(Name = "file_path")>]
     FilePath: string option
+  }
+
+// Contains information about a Web App.
+and [<CLIMutable>] WebAppInfo =
+  {
+    // An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps
+    [<DataMember(Name = "url")>]
+    Url: string
   }
 
 // This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).
@@ -856,23 +910,27 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     Selective: bool option
   }
 
-// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields request_contact, request_location, and request_poll are mutually exclusive.
+// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
 // Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 // Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
+// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
 and [<CLIMutable>] KeyboardButton =
   {
     // Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
     [<DataMember(Name = "text")>]
     Text: string
-    // If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only
+    // If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_contact")>]
     RequestContact: bool option
-    // If True, the user's current location will be sent when the button is pressed. Available in private chats only
+    // If True, the user's current location will be sent when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_location")>]
     RequestLocation: bool option
-    // If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only
+    // If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_poll")>]
     RequestPoll: KeyboardButtonPollType option
+    // If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a “web_app_data” service message. Available in private chats only.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo option
   }
 
 // This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
@@ -911,15 +969,18 @@ and [<CLIMutable>] InlineKeyboardButton =
     // Label text on the button
     [<DataMember(Name = "text")>]
     Text: string
-    // HTTP or tg:// url to be opened when button is pressed
+    // HTTP or tg:// url to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.
     [<DataMember(Name = "url")>]
     Url: string option
-    // An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
-    [<DataMember(Name = "login_url")>]
-    LoginUrl: LoginUrl option
     // Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
     [<DataMember(Name = "callback_data")>]
     CallbackData: string option
+    // Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo option
+    // An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
+    [<DataMember(Name = "login_url")>]
+    LoginUrl: LoginUrl option
     // If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. Can be empty, in which case just the bot's username will be inserted.
     // 
     // Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions – in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
@@ -937,7 +998,7 @@ and [<CLIMutable>] InlineKeyboardButton =
     CallbackGame: CallbackGame option
     // Specify True, to send a Pay button.
     // 
-    // NOTE: This type of button must always be the first button in the first row.
+    // NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
     [<DataMember(Name = "pay")>]
     Pay: bool option
   }
@@ -980,7 +1041,7 @@ and [<CLIMutable>] CallbackQuery =
     // Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games.
     [<DataMember(Name = "chat_instance")>]
     ChatInstance: string
-    // Data associated with the callback button. Be aware that a bad client can send arbitrary data in this field.
+    // Data associated with the callback button. Be aware that the message, which originated the query, can contain no callback buttons with this data.
     [<DataMember(Name = "data")>]
     Data: string option
     // Short name of a Game to be returned, serves as the unique identifier for the game
@@ -1028,18 +1089,65 @@ and [<CLIMutable>] ChatInviteLink =
     // Creator of the link
     [<DataMember(Name = "creator")>]
     Creator: User
+    // True, if users joining the chat via the link need to be approved by chat administrators
+    [<DataMember(Name = "creates_join_request")>]
+    CreatesJoinRequest: bool
     // True, if the link is primary
     [<DataMember(Name = "is_primary")>]
     IsPrimary: bool
     // True, if the link is revoked
     [<DataMember(Name = "is_revoked")>]
     IsRevoked: bool
+    // Invite link name
+    [<DataMember(Name = "name")>]
+    Name: string option
     // Point in time (Unix timestamp) when the link will expire or has been expired
     [<DataMember(Name = "expire_date")>]
     ExpireDate: int64 option
     // Maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
     [<DataMember(Name = "member_limit")>]
     MemberLimit: int64 option
+    // Number of pending join requests created using this link
+    [<DataMember(Name = "pending_join_request_count")>]
+    PendingJoinRequestCount: int64 option
+  }
+
+// Represents the rights of an administrator in a chat.
+and [<CLIMutable>] ChatAdministratorRights =
+  {
+    // True, if the user's presence in the chat is hidden
+    [<DataMember(Name = "is_anonymous")>]
+    IsAnonymous: bool
+    // True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    [<DataMember(Name = "can_manage_chat")>]
+    CanManageChat: bool
+    // True, if the administrator can delete messages of other users
+    [<DataMember(Name = "can_delete_messages")>]
+    CanDeleteMessages: bool
+    // True, if the administrator can manage video chats
+    [<DataMember(Name = "can_manage_video_chats")>]
+    CanManageVideoChats: bool
+    // True, if the administrator can restrict, ban or unban chat members
+    [<DataMember(Name = "can_restrict_members")>]
+    CanRestrictMembers: bool
+    // True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
+    [<DataMember(Name = "can_promote_members")>]
+    CanPromoteMembers: bool
+    // True, if the user is allowed to change the chat title, photo and other settings
+    [<DataMember(Name = "can_change_info")>]
+    CanChangeInfo: bool
+    // True, if the user is allowed to invite new users to the chat
+    [<DataMember(Name = "can_invite_users")>]
+    CanInviteUsers: bool
+    // True, if the administrator can post in the channel; channels only
+    [<DataMember(Name = "can_post_messages")>]
+    CanPostMessages: bool option
+    // True, if the administrator can edit messages of other users and can pin messages; channels only
+    [<DataMember(Name = "can_edit_messages")>]
+    CanEditMessages: bool option
+    // True, if the user is allowed to pin messages; groups and supergroups only
+    [<DataMember(Name = "can_pin_messages")>]
+    CanPinMessages: bool option
   }
 
 // This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
@@ -1089,9 +1197,9 @@ and [<CLIMutable>] ChatMemberAdministrator =
     // True, if the administrator can delete messages of other users
     [<DataMember(Name = "can_delete_messages")>]
     CanDeleteMessages: bool
-    // True, if the administrator can manage voice chats
-    [<DataMember(Name = "can_manage_voice_chats")>]
-    CanManageVoiceChats: bool
+    // True, if the administrator can manage video chats
+    [<DataMember(Name = "can_manage_video_chats")>]
+    CanManageVideoChats: bool
     // True, if the administrator can restrict, ban or unban chat members
     [<DataMember(Name = "can_restrict_members")>]
     CanRestrictMembers: bool
@@ -1218,6 +1326,26 @@ and [<CLIMutable>] ChatMemberUpdated =
     InviteLink: ChatInviteLink option
   }
 
+// Represents a join request sent to a chat.
+and [<CLIMutable>] ChatJoinRequest =
+  {
+    // Chat to which the request was sent
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    // User that sent the join request
+    [<DataMember(Name = "from")>]
+    From: User
+    // Date the request was sent in Unix time
+    [<DataMember(Name = "date")>]
+    Date: int64
+    // Bio of the user.
+    [<DataMember(Name = "bio")>]
+    Bio: string option
+    // Chat invite link that was used by the user to send the join request
+    [<DataMember(Name = "invite_link")>]
+    InviteLink: ChatInviteLink option
+  }
+
 // Describes actions that a non-administrator user is allowed to take in a chat.
 and [<CLIMutable>] ChatPermissions =
   {
@@ -1261,10 +1389,10 @@ and [<CLIMutable>] ChatLocation =
 // This object represents a bot command.
 and [<CLIMutable>] BotCommand =
   {
-    // Text of the command, 1-32 characters. Can contain only lowercase English letters, digits and underscores.
+    // Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores.
     [<DataMember(Name = "command")>]
     Command: string
-    // Description of the command, 3-256 characters.
+    // Description of the command; 1-256 characters.
     [<DataMember(Name = "description")>]
     Description: string
   }
@@ -1347,6 +1475,43 @@ and [<CLIMutable>] BotCommandScopeChatMember =
     UserId: int64
   }
 
+// This object describes the bot's menu button in a private chat. It should be one of
+// If a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
+and MenuButton =
+  | Commands of MenuButtonCommands
+  | WebApp of MenuButtonWebApp
+  | Default of MenuButtonDefault
+
+// Represents a menu button, which opens the bot's list of commands.
+and [<CLIMutable>] MenuButtonCommands =
+  {
+    // Type of the button, must be commands
+    [<DataMember(Name = "type")>]
+    Type: string
+  }
+
+// Represents a menu button, which launches a Web App.
+and [<CLIMutable>] MenuButtonWebApp =
+  {
+    // Type of the button, must be web_app
+    [<DataMember(Name = "type")>]
+    Type: string
+    // Text on the button
+    [<DataMember(Name = "text")>]
+    Text: string
+    // Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo
+  }
+
+// Describes that no specific value for the menu button was set.
+and [<CLIMutable>] MenuButtonDefault =
+  {
+    // Type of the button, must be default
+    [<DataMember(Name = "type")>]
+    Type: string
+  }
+
 // Contains information about why a request was unsuccessful.
 and [<CLIMutable>] ResponseParameters =
   {
@@ -1380,7 +1545,7 @@ and [<CLIMutable>] InputMediaPhoto =
     Caption: string option
     // Mode for parsing entities in the photo caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1397,13 +1562,13 @@ and [<CLIMutable>] InputMediaVideo =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the video to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
     // Mode for parsing entities in the video caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1413,7 +1578,7 @@ and [<CLIMutable>] InputMediaVideo =
     // Video height
     [<DataMember(Name = "height")>]
     Height: int64 option
-    // Video duration
+    // Video duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64 option
     // Pass True, if the uploaded video is suitable for streaming
@@ -1432,13 +1597,13 @@ and [<CLIMutable>] InputMediaAnimation =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the animation to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
     // Mode for parsing entities in the animation caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1448,7 +1613,7 @@ and [<CLIMutable>] InputMediaAnimation =
     // Animation height
     [<DataMember(Name = "height")>]
     Height: int64 option
-    // Animation duration
+    // Animation duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64 option
   }
@@ -1464,13 +1629,13 @@ and [<CLIMutable>] InputMediaAudio =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the audio to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
     // Mode for parsing entities in the audio caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1496,17 +1661,17 @@ and [<CLIMutable>] InputMediaDocument =
     Media: string
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
-    Thumb: FileToSend option
+    Thumb: InputFile option
     // Caption of the document to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
     // Mode for parsing entities in the document caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
-    // Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always true, if the document is sent as part of an album.
+    // Disables automatic server-side content type detection for files uploaded using multipart/form-data. Always True, if the document is sent as part of an album.
     [<DataMember(Name = "disable_content_type_detection")>]
     DisableContentTypeDetection: bool option
   }
@@ -1529,6 +1694,9 @@ and [<CLIMutable>] Sticker =
     // True, if the sticker is animated
     [<DataMember(Name = "is_animated")>]
     IsAnimated: bool
+    // True, if the sticker is a video sticker
+    [<DataMember(Name = "is_video")>]
+    IsVideo: bool
     // Sticker thumbnail in the .WEBP or .JPG format
     [<DataMember(Name = "thumb")>]
     Thumb: PhotoSize option
@@ -1541,7 +1709,7 @@ and [<CLIMutable>] Sticker =
     // For mask stickers, the position where the mask should be placed
     [<DataMember(Name = "mask_position")>]
     MaskPosition: MaskPosition option
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -1558,13 +1726,16 @@ and [<CLIMutable>] StickerSet =
     // True, if the sticker set contains animated stickers
     [<DataMember(Name = "is_animated")>]
     IsAnimated: bool
+    // True, if the sticker set contains video stickers
+    [<DataMember(Name = "is_video")>]
+    IsVideo: bool
     // True, if the sticker set contains masks
     [<DataMember(Name = "contains_masks")>]
     ContainsMasks: bool
     // List of all set stickers
     [<DataMember(Name = "stickers")>]
     Stickers: Sticker[]
-    // Sticker set thumbnail in the .WEBP or .TGS format
+    // Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
     [<DataMember(Name = "thumb")>]
     Thumb: PhotoSize option
   }
@@ -1603,7 +1774,7 @@ and [<CLIMutable>] InlineQuery =
     Offset: string
     // Type of the chat, from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
     [<DataMember(Name = "chat_type")>]
-    ChatType: string option
+    ChatType: ChatType option
     // Sender location, only for bots that request user location
     [<DataMember(Name = "location")>]
     Location: Location option
@@ -1680,7 +1851,7 @@ and [<CLIMutable>] InlineQueryResultPhoto =
     // Unique identifier for this result, 1-64 bytes
     [<DataMember(Name = "id")>]
     Id: string
-    // A valid URL of the photo. Photo must be in jpeg format. Photo size must not exceed 5MB
+    // A valid URL of the photo. Photo must be in JPEG format. Photo size must not exceed 5MB
     [<DataMember(Name = "photo_url")>]
     PhotoUrl: string
     // URL of the thumbnail for the photo
@@ -1703,7 +1874,7 @@ and [<CLIMutable>] InlineQueryResultPhoto =
     Caption: string option
     // Mode for parsing entities in the photo caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1733,7 +1904,7 @@ and [<CLIMutable>] InlineQueryResultGif =
     // Height of the GIF
     [<DataMember(Name = "gif_height")>]
     GifHeight: int64 option
-    // Duration of the GIF
+    // Duration of the GIF in seconds
     [<DataMember(Name = "gif_duration")>]
     GifDuration: int64 option
     // URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
@@ -1750,7 +1921,7 @@ and [<CLIMutable>] InlineQueryResultGif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1780,7 +1951,7 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     // Video height
     [<DataMember(Name = "mpeg4_height")>]
     Mpeg4Height: int64 option
-    // Video duration
+    // Video duration in seconds
     [<DataMember(Name = "mpeg4_duration")>]
     Mpeg4Duration: int64 option
     // URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
@@ -1797,7 +1968,7 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1824,7 +1995,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
     // Mime type of the content of video url, “text/html” or “video/mp4”
     [<DataMember(Name = "mime_type")>]
     MimeType: string
-    // URL of the thumbnail (jpeg only) for the video
+    // URL of the thumbnail (JPEG only) for the video
     [<DataMember(Name = "thumb_url")>]
     ThumbUrl: string
     // Title for the result
@@ -1835,7 +2006,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
     Caption: string option
     // Mode for parsing entities in the video caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1880,7 +2051,7 @@ and [<CLIMutable>] InlineQueryResultAudio =
     Caption: string option
     // Mode for parsing entities in the audio caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1919,7 +2090,7 @@ and [<CLIMutable>] InlineQueryResultVoice =
     Caption: string option
     // Mode for parsing entities in the voice message caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1952,7 +2123,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
     Caption: string option
     // Mode for parsing entities in the document caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -1971,7 +2142,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
     // Content of the message to be sent instead of the file
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
-    // URL of the thumbnail (jpeg only) for the file
+    // URL of the thumbnail (JPEG only) for the file
     [<DataMember(Name = "thumb_url")>]
     ThumbUrl: string option
     // Thumbnail width
@@ -2161,7 +2332,7 @@ and [<CLIMutable>] InlineQueryResultCachedPhoto =
     Caption: string option
     // Mode for parsing entities in the photo caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2193,7 +2364,7 @@ and [<CLIMutable>] InlineQueryResultCachedGif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2225,7 +2396,7 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
     Caption: string option
     // Mode for parsing entities in the caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2282,7 +2453,7 @@ and [<CLIMutable>] InlineQueryResultCachedDocument =
     Caption: string option
     // Mode for parsing entities in the document caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2317,7 +2488,7 @@ and [<CLIMutable>] InlineQueryResultCachedVideo =
     Caption: string option
     // Mode for parsing entities in the video caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2350,7 +2521,7 @@ and [<CLIMutable>] InlineQueryResultCachedVoice =
     Caption: string option
     // Mode for parsing entities in the voice message caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2380,7 +2551,7 @@ and [<CLIMutable>] InlineQueryResultCachedAudio =
     Caption: string option
     // Mode for parsing entities in the audio caption. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
@@ -2408,7 +2579,7 @@ and [<CLIMutable>] InputTextMessageContent =
     MessageText: string
     // Mode for parsing entities in the message text. See formatting options for more details.
     [<DataMember(Name = "parse_mode")>]
-    ParseMode: string option
+    ParseMode: ParseMode option
     // List of special entities that appear in message text, which can be specified instead of parse_mode
     [<DataMember(Name = "entities")>]
     Entities: MessageEntity[] option
@@ -2553,7 +2724,6 @@ and [<CLIMutable>] InputInvoiceMessageContent =
 
 // Represents a result of an inline query that was chosen by the user and sent to their chat partner.
 // Note: It is necessary to enable inline feedback via @Botfather in order to receive these objects in updates.
-// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
 and [<CLIMutable>] ChosenInlineResult =
   {
     // The unique identifier for the result that was chosen
@@ -2571,6 +2741,15 @@ and [<CLIMutable>] ChosenInlineResult =
     // The query that was used to obtain the result
     [<DataMember(Name = "query")>]
     Query: string
+  }
+
+// Contains information about an inline message sent by a Web App on behalf of a user.
+// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
+and [<CLIMutable>] SentWebAppMessage =
+  {
+    // Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
+    [<DataMember(Name = "inline_message_id")>]
+    InlineMessageId: string option
   }
 
 // This object represents a portion of the price for goods or services.
@@ -2748,7 +2927,7 @@ and [<CLIMutable>] PassportFile =
     // Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     [<DataMember(Name = "file_unique_id")>]
     FileUniqueId: string
-    // File size
+    // File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64
     // Unix time when the file was uploaded

@@ -144,6 +144,12 @@
             "Optional": true
           },
           {
+            "Name": "last_synchronization_error_date",
+            "Description": "Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters",
+            "FieldType": "Integer",
+            "Optional": true
+          },
+          {
             "Name": "max_connections",
             "Description": "Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery",
             "FieldType": "Integer",
@@ -681,27 +687,33 @@
             "Optional": true
           },
           {
-            "Name": "voice_chat_scheduled",
-            "Description": "Service message: voice chat scheduled",
-            "FieldType": "VoiceChatScheduled",
+            "Name": "video_chat_scheduled",
+            "Description": "Service message: video chat scheduled",
+            "FieldType": "VideoChatScheduled",
             "Optional": true
           },
           {
-            "Name": "voice_chat_started",
-            "Description": "Service message: voice chat started",
-            "FieldType": "VoiceChatStarted",
+            "Name": "video_chat_started",
+            "Description": "Service message: video chat started",
+            "FieldType": "VideoChatStarted",
             "Optional": true
           },
           {
-            "Name": "voice_chat_ended",
-            "Description": "Service message: voice chat ended",
-            "FieldType": "VoiceChatEnded",
+            "Name": "video_chat_ended",
+            "Description": "Service message: video chat ended",
+            "FieldType": "VideoChatEnded",
             "Optional": true
           },
           {
-            "Name": "voice_chat_participants_invited",
-            "Description": "Service message: new participants invited to a voice chat",
-            "FieldType": "VoiceChatParticipantsInvited",
+            "Name": "video_chat_participants_invited",
+            "Description": "Service message: new participants invited to a video chat",
+            "FieldType": "VideoChatParticipantsInvited",
+            "Optional": true
+          },
+          {
+            "Name": "web_app_data",
+            "Description": "Service message: data sent by a Web App",
+            "FieldType": "WebAppData",
             "Optional": true
           },
           {
@@ -1455,6 +1467,29 @@
     }
   },
   {
+    "Name": "WebAppData",
+    "Description": "Contains data sent from a Web App to the bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "data",
+            "Description": "The data. Be aware that a bad client can send arbitrary data in this field.",
+            "FieldType": "String",
+            "Optional": false
+          },
+          {
+            "Name": "button_text",
+            "Description": "Text of the web_app keyboard button, from which the Web App was opened. Be aware that a bad client can send arbitrary data in this field.",
+            "FieldType": "String",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ProximityAlertTriggered",
     "Description": "This object represents the content of a service message, sent whenever a user in the chat triggers a proximity alert set by another user.",
     "Kind": {
@@ -1501,15 +1536,15 @@
     }
   },
   {
-    "Name": "VoiceChatScheduled",
-    "Description": "This object represents a service message about a voice chat scheduled in the chat.",
+    "Name": "VideoChatScheduled",
+    "Description": "This object represents a service message about a video chat scheduled in the chat.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
         [
           {
             "Name": "start_date",
-            "Description": "Point in time (Unix timestamp) when the voice chat is supposed to be started by a chat administrator",
+            "Description": "Point in time (Unix timestamp) when the video chat is supposed to be started by a chat administrator",
             "FieldType": "Integer",
             "Optional": false
           }
@@ -1518,22 +1553,22 @@
     }
   },
   {
-    "Name": "VoiceChatStarted",
-    "Description": "This object represents a service message about a voice chat started in the chat. Currently holds no information.",
+    "Name": "VideoChatStarted",
+    "Description": "This object represents a service message about a video chat started in the chat. Currently holds no information.",
     "Kind": {
       "Case": "Stub"
     }
   },
   {
-    "Name": "VoiceChatEnded",
-    "Description": "This object represents a service message about a voice chat ended in the chat.",
+    "Name": "VideoChatEnded",
+    "Description": "This object represents a service message about a video chat ended in the chat.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
         [
           {
             "Name": "duration",
-            "Description": "Voice chat duration in seconds",
+            "Description": "Video chat duration in seconds",
             "FieldType": "Integer",
             "Optional": false
           }
@@ -1542,17 +1577,17 @@
     }
   },
   {
-    "Name": "VoiceChatParticipantsInvited",
-    "Description": "This object represents a service message about new members invited to a voice chat.",
+    "Name": "VideoChatParticipantsInvited",
+    "Description": "This object represents a service message about new members invited to a video chat.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
         [
           {
             "Name": "users",
-            "Description": "New members that were invited to the voice chat",
+            "Description": "New members that were invited to the video chat",
             "FieldType": "Array of User",
-            "Optional": true
+            "Optional": false
           }
         ]
       ]
@@ -1617,6 +1652,23 @@
     }
   },
   {
+    "Name": "WebAppInfo",
+    "Description": "Contains information about a Web App.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "url",
+            "Description": "An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps",
+            "FieldType": "String",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ReplyKeyboardMarkup",
     "Description": "This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).",
     "Kind": {
@@ -1659,7 +1711,7 @@
   },
   {
     "Name": "KeyboardButton",
-    "Description": "This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields request_contact, request_location, and request_poll are mutually exclusive.\r\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.",
+    "Description": "This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.\r\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -1672,20 +1724,26 @@
           },
           {
             "Name": "request_contact",
-            "Description": "If True, the user\u0027s phone number will be sent as a contact when the button is pressed. Available in private chats only",
+            "Description": "If True, the user\u0027s phone number will be sent as a contact when the button is pressed. Available in private chats only.",
             "FieldType": "Boolean",
             "Optional": true
           },
           {
             "Name": "request_location",
-            "Description": "If True, the user\u0027s current location will be sent when the button is pressed. Available in private chats only",
+            "Description": "If True, the user\u0027s current location will be sent when the button is pressed. Available in private chats only.",
             "FieldType": "Boolean",
             "Optional": true
           },
           {
             "Name": "request_poll",
-            "Description": "If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only",
+            "Description": "If specified, the user will be asked to create a poll and send it to the bot when the button is pressed. Available in private chats only.",
             "FieldType": "KeyboardButtonPollType",
+            "Optional": true
+          },
+          {
+            "Name": "web_app",
+            "Description": "If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a \u201Cweb_app_data\u201D service message. Available in private chats only.",
+            "FieldType": "WebAppInfo",
             "Optional": true
           }
         ]
@@ -1769,15 +1827,21 @@
             "Optional": true
           },
           {
-            "Name": "login_url",
-            "Description": "An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.",
-            "FieldType": "LoginUrl",
-            "Optional": true
-          },
-          {
             "Name": "callback_data",
             "Description": "Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes",
             "FieldType": "String",
+            "Optional": true
+          },
+          {
+            "Name": "web_app",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.",
+            "FieldType": "WebAppInfo",
+            "Optional": true
+          },
+          {
+            "Name": "login_url",
+            "Description": "An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.",
+            "FieldType": "LoginUrl",
             "Optional": true
           },
           {
@@ -1882,7 +1946,7 @@
           },
           {
             "Name": "data",
-            "Description": "Data associated with the callback button. Be aware that a bad client can send arbitrary data in this field.",
+            "Description": "Data associated with the callback button. Be aware that the message, which originated the query, can contain no callback buttons with this data.",
             "FieldType": "String",
             "Optional": true
           },
@@ -2026,6 +2090,83 @@
     }
   },
   {
+    "Name": "ChatAdministratorRights",
+    "Description": "Represents the rights of an administrator in a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "is_anonymous",
+            "Description": "True, if the user\u0027s presence in the chat is hidden",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_manage_chat",
+            "Description": "True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_delete_messages",
+            "Description": "True, if the administrator can delete messages of other users",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_manage_video_chats",
+            "Description": "True, if the administrator can manage video chats",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_restrict_members",
+            "Description": "True, if the administrator can restrict, ban or unban chat members",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_promote_members",
+            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_change_info",
+            "Description": "True, if the user is allowed to change the chat title, photo and other settings",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_invite_users",
+            "Description": "True, if the user is allowed to invite new users to the chat",
+            "FieldType": "Boolean",
+            "Optional": false
+          },
+          {
+            "Name": "can_post_messages",
+            "Description": "True, if the administrator can post in the channel; channels only",
+            "FieldType": "Boolean",
+            "Optional": true
+          },
+          {
+            "Name": "can_edit_messages",
+            "Description": "True, if the administrator can edit messages of other users and can pin messages; channels only",
+            "FieldType": "Boolean",
+            "Optional": true
+          },
+          {
+            "Name": "can_pin_messages",
+            "Description": "True, if the user is allowed to pin messages; groups and supergroups only",
+            "FieldType": "Boolean",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ChatMember",
     "Description": "This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:",
     "Kind": {
@@ -2139,8 +2280,8 @@
             "Optional": false
           },
           {
-            "Name": "can_manage_voice_chats",
-            "Description": "True, if the administrator can manage voice chats",
+            "Name": "can_manage_video_chats",
+            "Description": "True, if the administrator can manage video chats",
             "FieldType": "Boolean",
             "Optional": false
           },
@@ -2723,6 +2864,92 @@
             "Name": "user_id",
             "Description": "Unique identifier of the target user",
             "FieldType": "Integer",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MenuButton",
+    "Description": "This object describes the bot\u0027s menu button in a private chat. It should be one of\r\nIf a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Commands",
+            "CaseType": "MenuButtonCommands"
+          },
+          {
+            "Name": "WebApp",
+            "CaseType": "MenuButtonWebApp"
+          },
+          {
+            "Name": "Default",
+            "CaseType": "MenuButtonDefault"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MenuButtonCommands",
+    "Description": "Represents a menu button, which opens the bot\u0027s list of commands.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "type",
+            "Description": "Type of the button, must be commands",
+            "FieldType": "String",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MenuButtonWebApp",
+    "Description": "Represents a menu button, which launches a Web App.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "type",
+            "Description": "Type of the button, must be web_app",
+            "FieldType": "String",
+            "Optional": false
+          },
+          {
+            "Name": "text",
+            "Description": "Text on the button",
+            "FieldType": "String",
+            "Optional": false
+          },
+          {
+            "Name": "web_app",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.",
+            "FieldType": "WebAppInfo",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MenuButtonDefault",
+    "Description": "Describes that no specific value for the menu button was set.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "type",
+            "Description": "Type of the button, must be default",
+            "FieldType": "String",
             "Optional": false
           }
         ]
@@ -5244,7 +5471,7 @@
   },
   {
     "Name": "ChosenInlineResult",
-    "Description": "Represents a result of an inline query that was chosen by the user and sent to their chat partner.\r\nNote: It is necessary to enable inline feedback via @Botfather in order to receive these objects in updates.\r\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).",
+    "Description": "Represents a result of an inline query that was chosen by the user and sent to their chat partner.\r\nNote: It is necessary to enable inline feedback via @Botfather in order to receive these objects in updates.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5278,6 +5505,23 @@
             "Description": "The query that was used to obtain the result",
             "FieldType": "String",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SentWebAppMessage",
+    "Description": "Contains information about an inline message sent by a Web App on behalf of a user.\r\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "Name": "inline_message_id",
+            "Description": "Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.",
+            "FieldType": "String",
+            "Optional": true
           }
         ]
       ]

@@ -4,10 +4,10 @@ open Types
 open RequestsTypes
 
 let getUpdatesBase offset limit timeout allowedUpdates =
-  { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates |> Seq.toArray }
+  { Offset = offset; Limit = limit; Timeout = timeout; AllowedUpdates = allowedUpdates }
 
-let setWebhookBase url certificate maxConnections allowedUpdates =
-  { Url = url; Certificate = certificate; MaxConnections = maxConnections; AllowedUpdates = allowedUpdates }
+let setWebhookBase url certificate ipAddress maxConnections allowedUpdates dropPendingUpdates =
+  { Url = url; Certificate = certificate; IpAddress = ipAddress; MaxConnections = maxConnections; AllowedUpdates = allowedUpdates; DropPendingUpdates = dropPendingUpdates }
 
 let getWebhookInfoBase () =
   GetWebhookInfoReq()

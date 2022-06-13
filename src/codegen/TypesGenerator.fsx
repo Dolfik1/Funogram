@@ -257,59 +257,73 @@ let generate () =
     |> Code.print "module Funogram.Telegram.Types"
     |> Code.printNewLine 
      """
-  open System
-  open System.IO
-  open System.Runtime.Serialization
+open System
+open System.IO
+open System.Runtime.Serialization
       """
 
     |> Code.printNewLine 
       """
-  type ChatId = 
-    | Int of int64
-    | String of string
+type ChatId = 
+  | Int of int64
+  | String of string
     
-  type FileToSend = 
-    | Url of Uri 
-    | File of string * Stream
-    | FileId of string
+type InputFile = 
+  | Url of Uri 
+  | File of string * Stream
+  | FileId of string
 
-  type ChatType =
-    | Private
-    | Group
-    | [<DataMember(Name = "supergroup")>] SuperGroup
-    | Channel
-    | Unknown
+type ChatType =
+  | Private
+  | Group
+  | [<DataMember(Name = "supergroup")>] SuperGroup
+  | Channel
+  | Unknown
 
 
-  /// Message text parsing mode
-  type ParseMode = 
-    /// Markdown parse syntax
-    | Markdown
-    /// Html parse syntax
-    | HTML
+/// Message text parsing mode
+type ParseMode = 
+  /// Markdown parse syntax
+  | Markdown
+  /// Html parse syntax
+  | HTML
 
-  /// Type of action to broadcast
-  type ChatAction =
-    | Typing
-    | UploadPhoto
-    | RecordVideo
-    | UploadVideo
-    | RecordAudio
-    | UploadAudio
-    | UploadDocument
-    | FindLocation
-    | RecordVideoNote
-    | UploadVideoNote
+/// Type of action to broadcast
+type ChatAction =
+  | Typing
+  | UploadPhoto
+  | RecordVideo
+  | UploadVideo
+  | RecordAudio
+  | UploadAudio
+  | UploadDocument
+  | FindLocation
+  | RecordVideoNote
+  | UploadVideoNote
+  | ChooseSticker
 
-  type ChatMemberStatus =
-    | Creator
-    | Administrator
-    | Member
-    | Restricted
-    | Left
-    | Kicked
-    | Unknown
-      """
+type ChatMemberStatus =
+  | Creator
+  | Administrator
+  | Member
+  | Restricted
+  | Left
+  | Kicked
+  | Unknown
+
+type Markup = 
+  | InlineKeyboardMarkup of InlineKeyboardMarkup 
+  | ReplyKeyboardMarkup of ReplyKeyboardMarkup
+  | ReplyKeyboardRemove of ReplyKeyboardRemove
+  | ForceReply of ForceReply
+
+/// If edited message is sent by the bot, used Message, otherwise Success.
+and EditMessageResult = 
+  /// Message sent by the bot
+  | Message of Message
+  /// Message sent via the bot or another...
+  | Success of bool
+"""
   let codeResult =
     types
     |> Seq.filter (fun tp -> ignoreTypes |> Set.contains tp.Name |> not)
