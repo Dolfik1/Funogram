@@ -62,28 +62,6 @@ module Constants =
     } :> IBotRequest
   let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
   
-  let jsonTestObjChatMember = { User =
-                                  { Id = 600000000L
-                                    IsBot = false
-                                    FirstName = "firstName"
-                                    LastName = Some "lastName"
-                                    Username = Some "userName"
-                                    LanguageCode = Some "ru" }
-                                Status = Member
-                                UntilDate = None
-                                CanBeEdited = None
-                                CanPostMessages = None
-                                CanEditMessages = None
-                                CanDeleteMessages = None
-                                CanInviteUsers = None
-                                CanRestrictMembers = None
-                                CanPinMessages = None
-                                CanPromoteMembers = None
-                                CanChangeInfo = None
-                                CanSendMessages = None
-                                CanSendMediaMessages = None
-                                CanSendPolls = None
-                                CanSendOtherMessages = None
-                                CanAddWebPagePreviews = None }
-  let jsonTestObjChatMemberResultString = """{"ok":true,"result":{"user":{"id":600000000,"is_bot":false,"first_name":"firstName","last_name":"lastName","username":"userName","language_code":"ru"},"status":"member"}}"""
+  let jsonTestObjChatMember = ChatMemberMember.Create("member", User.Create(600000000L, false, "firstName", "lastName", "userName", "ru"))
+  let jsonTestObjChatMemberResultString = """{"ok":true,"result":{"status":"member","user":{"id":600000000,"is_bot":false,"first_name":"firstName","last_name":"lastName","username":"userName","language_code":"ru"}}}"""
    

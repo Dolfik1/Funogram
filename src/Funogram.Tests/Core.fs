@@ -6,15 +6,7 @@ open Types
 
 open Xunit
 
-let botUser: User =
-  {
-     Id = 0L
-     IsBot = true
-     FirstName = "TestBot"
-     LastName = None
-     Username = Some "testbot"
-     LanguageCode = None
-  }
+let botUser = User.Create(0L, true, "TestBot", username = "testbot")
 
 [<Fact>]
 let ``Simple command test`` () =
