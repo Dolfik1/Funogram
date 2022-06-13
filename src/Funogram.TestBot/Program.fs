@@ -84,14 +84,8 @@ let processMessageBuild config =
         cmd "/send_message4" (fun _ -> sayWithArgs "That's message with reply!" None None None (Some ctx.Update.Message.Value.MessageId) None)
         cmd "/send_message5" (fun _ ->
         (
-          let keyboard = (Array.init 2 (fun x -> Array.init 2 (fun y -> { Text = y.ToString() + x.ToString(); RequestContact = None; RequestLocation = None; RequestPoll = None; WebApp = None })))
-          let markup = Markup.ReplyKeyboardMarkup {
-            Keyboard = keyboard
-            ResizeKeyboard = None
-            OneTimeKeyboard = None
-            Selective = None
-            InputFieldPlaceholder = None
-          }
+          let keyboard = Array.init 2 (fun x -> Array.init 2 (fun y -> KeyboardButton.Create(y.ToString() + x.ToString())))
+          let markup = Markup.ReplyKeyboardMarkup (ReplyKeyboardMarkup.Create(keyboard))
           bot (sendMessageMarkup (fromId()) "That's keyboard!" markup)
         ))
         cmd "/send_message6" (fun _ ->
@@ -103,19 +97,7 @@ let processMessageBuild config =
         (
           let keyboard =
             [|
-               [|
-                  {
-                    Text = "Test"
-                    CallbackData = Some("1234")
-                    Url = None
-                    CallbackGame = None
-                    SwitchInlineQuery = None
-                    SwitchInlineQueryCurrentChat = None
-                    LoginUrl = None
-                    Pay = None
-                    WebApp = None
-                }
-               |]
+               [| InlineKeyboardButton.Create("Test", "1234") |]
             |]
           let markup = Markup.InlineKeyboardMarkup { InlineKeyboard = keyboard }
           (sendMessageMarkup (fromId()) "Thats inline keyboard!" markup) |> bot
