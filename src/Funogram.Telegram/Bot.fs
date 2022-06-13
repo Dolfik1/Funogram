@@ -24,12 +24,30 @@ type UpdateContext =
     Config: BotConfig
     Me: User }
 
-let getTextForCommand (me: User) =
-  let username  = "@" + me.Username.Value
-  function
-  | Some (text: string) when text.EndsWith username ->
-    text.Replace(username, "") |> Some
-  | text -> text
+// Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores.
+let inline private isAllowedChar (c: char) = Char.IsLetter c || Char.IsDigit c || c = '_'
+
+// returns -1 if the command is not valid otherwise index of last character 
+let private validateCommand (text: string) =
+  let rec iter (text: string) i len =
+    if i >= len || isAllowedChar text.[i] |> not then
+      (i - 1)
+    else
+      iter text (i + 1) len
+  
+  if text.Length <= 1 || text.[0] <> '/' then -1
+  else iter text 1 text.Length
+  
+let getTextForCommand (me: User) (textOriginal: string option) =
+  match me.Username, textOriginal with
+  | Some username, Some text when text.Length > 0 && text.[0] = '/' ->
+    match validateCommand text with
+    | -1 -> textOriginal
+    | idx when text.Length = idx + 1 -> Some text
+    | idx when text.[idx + 1] = '@' && text.IndexOf(username, idx + 1) = idx + 2 ->
+      text.Remove(idx + 1, username.Length + 1) |> Some
+    | _ -> textOriginal
+  | _ -> textOriginal
 
 let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateContext) =
   context.Update.Message
