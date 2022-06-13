@@ -40,7 +40,7 @@ Use Funogram.Api module to communicate with Telegram API with the help of reques
 |> Async.RunSynchronously
 |> ignore (* or process API response somehow *)
 ```
-So, that is it! Use Intellisence-driven development approach to explore all Funogram features! For further learning you may take a look at sample Telegram bots built using this library: [Test Bot](src/Funogram.TestBot/), <a href="https://github.com/worldbeater/Memes.Bot/tree/master/Memes">Memes Bot</a>
+So, that is it! Use Intellisence-driven development approach to explore all Funogram features! For further learning you may take a look at sample Telegram bots built using this library: [Test Bot](src/Funogram.TestBot/), <a href="https://github.com/worldbeater/Memes.Bot/tree/master/Memes">Memes Bot (deprecated)</a>
 
 # Getting updates via webhooks
 If you want to use webhooks, you should start application with admin privileges.
