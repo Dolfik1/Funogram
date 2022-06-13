@@ -65,7 +65,7 @@ module Constants =
   let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
   
   let jsonTestObjChatMember = { User =
-                                  { Id = 600000000
+                                  { Id = 600000000L
                                     IsBot = false
                                     FirstName = "firstName"
                                     LastName = Some "lastName"
