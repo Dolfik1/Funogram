@@ -89,62 +89,7 @@
   {
     "Name": "getWebhookInfo",
     "Description": "Use this method to get current webhook status. Requires no parameters. On success, returns a WebhookInfo object. If the bot is using getUpdates, will return an object with the url field empty.",
-    "Fields": [
-      {
-        "Name": "url",
-        "Description": "Webhook URL, may be empty if webhook is not set up",
-        "FieldType": "String",
-        "Optional": false
-      },
-      {
-        "Name": "has_custom_certificate",
-        "Description": "True, if a custom certificate was provided for webhook certificate checks",
-        "FieldType": "Boolean",
-        "Optional": false
-      },
-      {
-        "Name": "pending_update_count",
-        "Description": "Number of updates awaiting delivery",
-        "FieldType": "Integer",
-        "Optional": false
-      },
-      {
-        "Name": "ip_address",
-        "Description": "Optional. Currently used webhook IP address",
-        "FieldType": "String",
-        "Optional": true
-      },
-      {
-        "Name": "last_error_date",
-        "Description": "Optional. Unix time for the most recent error that happened when trying to deliver an update via webhook",
-        "FieldType": "Integer",
-        "Optional": true
-      },
-      {
-        "Name": "last_error_message",
-        "Description": "Optional. Error message in human-readable format for the most recent error that happened when trying to deliver an update via webhook",
-        "FieldType": "String",
-        "Optional": true
-      },
-      {
-        "Name": "last_synchronization_error_date",
-        "Description": "Optional. Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters",
-        "FieldType": "Integer",
-        "Optional": true
-      },
-      {
-        "Name": "max_connections",
-        "Description": "Optional. Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery",
-        "FieldType": "Integer",
-        "Optional": true
-      },
-      {
-        "Name": "allowed_updates",
-        "Description": "Optional. A list of update types the bot is subscribed to. Defaults to all update types except chat_member",
-        "FieldType": "Array of String",
-        "Optional": true
-      }
-    ],
+    "Fields": [],
     "ReturnType": "WebhookInfo"
   },
   {

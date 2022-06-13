@@ -103,42 +103,49 @@ let inline defaultFieldValue v =
     ""
 
 let parseFields (table: HtmlNode) =
-  let columns = 
-    table.CssSelect("thead > tr > th")
-    |> Seq.mapi (fun i n -> n.DirectInnerText(), i)
-    |> Map.ofSeq
+  let columns = table.CssSelect("thead > tr > th")
+  let firstHeaderColumnName = columns |> List.tryHead |> Option.map (fun x -> x.DirectInnerText())
 
-  table.CssSelect("tbody > tr")
-  |> Seq.map (fun node ->
-    let tryFindField = tryFindField (node.Elements()) columns
-    let parameter = 
-      tryFindField "Parameter" 
-      |> Option.orElseWith (fun _ -> tryFindField "Field")
-      |> defaultFieldValue
-      
+  match firstHeaderColumnName with
+  | Some "Field" -> Array.empty
+  | _ ->
+    let columns = 
+      columns
+      |> Seq.mapi (fun i n -> n.DirectInnerText(), i)
+      |> Map.ofSeq
 
-    let tp = tryFindField "Type" |> defaultFieldValue
-    let description = tryFindField "Description" |> defaultFieldValue
 
-    let required = 
-      match tryFindField "Required" with
-      | Some required -> required
-      | None -> 
-        if description.Contains("Optional") then "Optional" else "Yes"
+    table.CssSelect("tbody > tr")
+    |> Seq.map (fun node ->
+      let tryFindField = tryFindField (node.Elements()) columns
+      let parameter = 
+        tryFindField "Parameter" 
+        |> Option.orElseWith (fun _ -> tryFindField "Field")
+        |> defaultFieldValue
+        
 
-    {
-      Name = parameter
-      FieldType = tp
-      Description = description
-      Optional =
-        match required with
-        | "Yes" -> false
-        | "Optional" -> true
-        | _ ->
-          printfn "WARN: Unknown `required` field value: %A (count %A)" required (node.Name())
-          false
-    }
-  ) |> Array.ofSeq
+      let tp = tryFindField "Type" |> defaultFieldValue
+      let description = tryFindField "Description" |> defaultFieldValue
+
+      let required = 
+        match tryFindField "Required" with
+        | Some required -> required
+        | None -> 
+          if description.Contains("Optional") then "Optional" else "Yes"
+
+      {
+        Name = parameter
+        FieldType = tp
+        Description = description
+        Optional =
+          match required with
+          | "Yes" -> false
+          | "Optional" -> true
+          | _ ->
+            printfn "WARN: Unknown `required` field value: %A (count %A)" required (node.Name())
+            false
+      }
+    ) |> Array.ofSeq
 
 printfn "Fetching HTML page..."
 
@@ -264,18 +271,37 @@ let codeResult =
         code |> Code.print (sprintf ") = %s()" typeName)
       else
         let fields = tp.Fields |> Array.sortBy (fun x -> x.Optional)
-        fields
-        |> Seq.fold (fun code tp ->
-          let o = if tp.Optional then "?" else ""
-          let c = if fields.[0] <> tp then ", " else ""
+        
+        let code =
+          fields
+          |> Seq.fold (fun code tp ->
+            let o = if tp.Optional then "?" else ""
+            let c = if fields.[0] <> tp then ", " else ""
 
-          let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
-          let argType = Helpers.convertTLTypeToFSharpType tp.FieldType tp.Description false
+            let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
+            let argType = Helpers.convertTLTypeToFSharpType tp.FieldType tp.Description false
 
+            code
+            |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
+          ) code
+          |> Code.print ") = "
+        
+        
+        let code =
           code
-          |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
+          |> Code.setIndent 2
+          |> Code.printNewLine "{"
+          |> Code.setIndent 3
+
+        tp.Fields
+        |> Seq.fold (fun code tp ->
+          code
+          |> Code.printNewLine (sprintf "%s = %s" (Helpers.toPascalCase tp.Name) (Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords))
         ) code
-        |> Code.print ") = ()"
+        |> Code.setIndent 2
+        |> Code.printNewLine "}"
+        |> Code.setIndent 1
+        
 
     code
     |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType tp.ReturnType "" false))
