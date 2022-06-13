@@ -12,12 +12,12 @@ module Constants =
   let testDate = System.DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
   let testDateUnix = 4651649271L
     
-  let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None }
+  let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None; Language = None }
   let jsonTestObjString = """{"type":"italic","offset":0,"length":100,"url":"http://github.com"}"""
-  let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null} }"""
+  let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null,"language":null} }"""
 
-  let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; }
-  let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather","is_bot":false}}"""
+  let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; CanJoinGroups = None; CanReadAllGroupMessages = None; SupportsInlineQueries = None }
+  let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather","is_bot":false;"can_join_groups":null,"can_read_all_group_messages":null,"supports_inline_queries":null}}"""
 
   let jsonTestEditResult1 = EditMessageResult.Success(true)
   let jsonTestEditResult1String = "true"
