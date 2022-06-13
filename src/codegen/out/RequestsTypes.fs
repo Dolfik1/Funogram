@@ -77,7 +77,7 @@ type SendMessageReq =
   {
     ChatId: ChatId
     Text: string
-    ParseMode: string option
+    ParseMode: ParseMode option
     Entities: MessageEntity[] option
     DisableWebPagePreview: bool option
     DisableNotification: bool option
@@ -86,7 +86,7 @@ type SendMessageReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, text: string, ?parseMode: string, ?entities: MessageEntity[], ?disableWebPagePreview: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?disableWebPagePreview: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Text = text
@@ -127,7 +127,7 @@ type CopyMessageReq =
     FromChatId: ChatId
     MessageId: int64
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     DisableNotification: bool option
     ProtectContent: bool option
@@ -135,7 +135,7 @@ type CopyMessageReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, fromChatId: ChatId, messageId: int64, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, fromChatId: ChatId, messageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       FromChatId = fromChatId
@@ -157,7 +157,7 @@ type SendPhotoReq =
     ChatId: ChatId
     Photo: InputFile
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     DisableNotification: bool option
     ProtectContent: bool option
@@ -165,7 +165,7 @@ type SendPhotoReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, photo: InputFile, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, photo: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Photo = photo
@@ -186,7 +186,7 @@ type SendAudioReq =
     ChatId: ChatId
     Audio: InputFile
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     Duration: int64 option
     Performer: string option
@@ -198,7 +198,7 @@ type SendAudioReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, audio: InputFile, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, audio: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Audio = audio
@@ -224,7 +224,7 @@ type SendDocumentReq =
     Document: InputFile
     Thumb: InputFile option
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     DisableContentTypeDetection: bool option
     DisableNotification: bool option
@@ -233,7 +233,7 @@ type SendDocumentReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, document: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, document: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Document = document
@@ -260,7 +260,7 @@ type SendVideoReq =
     Height: int64 option
     Thumb: InputFile option
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     SupportsStreaming: bool option
     DisableNotification: bool option
@@ -269,7 +269,7 @@ type SendVideoReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, video: InputFile, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?supportsStreaming: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, video: InputFile, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?supportsStreaming: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Video = video
@@ -299,7 +299,7 @@ type SendAnimationReq =
     Height: int64 option
     Thumb: InputFile option
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     DisableNotification: bool option
     ProtectContent: bool option
@@ -307,7 +307,7 @@ type SendAnimationReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, animation: InputFile, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, animation: InputFile, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Animation = animation
@@ -332,7 +332,7 @@ type SendVoiceReq =
     ChatId: ChatId
     Voice: InputFile
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     Duration: int64 option
     DisableNotification: bool option
@@ -341,7 +341,7 @@ type SendVoiceReq =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, voice: InputFile, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?duration: int64, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, voice: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       Voice = voice
@@ -622,9 +622,9 @@ type SendDiceReq =
 type SendChatActionReq =
   {
     ChatId: ChatId
-    Action: string
+    Action: ChatAction
   }
-  static member Make(chatId: ChatId, action: string) = 
+  static member Make(chatId: ChatId, action: ChatAction) = 
     {
       ChatId = chatId
       Action = action
@@ -1170,12 +1170,12 @@ type EditMessageTextReq =
     MessageId: int64 option
     InlineMessageId: string option
     Text: string
-    ParseMode: string option
+    ParseMode: ParseMode option
     Entities: MessageEntity[] option
     DisableWebPagePreview: bool option
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Make(text: string, ?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?parseMode: string, ?entities: MessageEntity[], ?disableWebPagePreview: bool, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Make(text: string, ?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?disableWebPagePreview: bool, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       ChatId = chatId
       MessageId = messageId
@@ -1195,11 +1195,11 @@ type EditMessageCaptionReq =
     MessageId: int64 option
     InlineMessageId: string option
     Caption: string option
-    ParseMode: string option
+    ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Make(?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?caption: string, ?parseMode: string, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Make(?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
     {
       ChatId = chatId
       MessageId = messageId

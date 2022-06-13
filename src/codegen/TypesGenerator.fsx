@@ -112,6 +112,10 @@ let convertType (tp: ApiType) (field: ApiTypeField) =
      
     | _, { Name = "parse_mode" } ->
       "ParseMode"
+
+    | _, { Name = "media" } when field.Description.Contains("File to send") ->
+      "InputFile"
+
     | _ -> field.FieldType
   
   Helpers.convertTLTypeToFSharpType typeString field.Description field.Optional

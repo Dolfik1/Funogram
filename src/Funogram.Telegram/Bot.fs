@@ -2,6 +2,7 @@
 
 open System
 open System.Net.Http
+open Funogram.Telegram.RequestsTypes
 open Funogram.Telegram.Sscanf
 open Funogram.Telegram.Types
 open Funogram.Telegram.Api
@@ -64,7 +65,7 @@ let private runBot config me updateArrived updatesArrived =
       async {
         try
           let! updatesResult =
-            getUpdatesBase (Some offset) (config.Limit) config.Timeout []
+            GetUpdatesReq.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
             |> bot
 
           match updatesResult with
@@ -95,7 +96,7 @@ let private runBot config me updateArrived updatesArrived =
         
         if validateRequest context.Request then
           match Funogram.Tools.parseJsonStream<Update> context.Request.InputStream with
-          | Ok updates -> processUpdates (seq { updates })
+          | Ok updates -> processUpdates [| updates |]
           | Error e -> config.OnError e
         else
           context.Response.StatusCode <- 403

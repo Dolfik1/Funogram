@@ -9,7 +9,7 @@ let deleteWebhookBase () =
 
 let getMe = GetMeReq()
 
-let sendMessage chatId text = SendMessageReq.Make(chatId, text)
+let sendMessage chatId text = SendMessageReq.Make(ChatId.Int chatId, text)
   
 let sendMessageByChatName chatName text = SendMessageReq.Make(ChatId.String chatName, text)
 
@@ -23,82 +23,30 @@ let sendPhoto chatId photo caption = SendPhotoReq.Make(ChatId.Int chatId, photo,
 
 let sendAudio chatId audio caption = SendAudioReq.Make(ChatId.Int chatId, audio, caption)
 
-let sendDocumentBase chatId document thumb caption parseMode disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Document = document; Caption = caption; DisableNotification = disableNotification;
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; Thumb = thumb; ParseMode = parseMode }
-let sendDocument chatId document caption = sendDocumentBase (ChatId.Int chatId) document None (Some caption) None None None None
+let sendDocument chatId document caption = SendDocumentReq.Make(ChatId.Int chatId, document, caption = caption)
 
-let sendStickerBase chatId sticker disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Sticker = sticker; DisableNotification = disableNotification; 
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; }
-let sendSticker chatId sticker = sendStickerBase (ChatId.Int chatId) sticker None None None
+let sendSticker chatId sticker = SendStickerReq.Make(ChatId.Int chatId, sticker)
 
-let sendVideoBase chatId video duration width height thumb caption parseMode disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Video = video; Duration = duration; Width = width; 
-  Height = height; Caption = caption; DisableNotification = disableNotification; 
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; Thumb = thumb; ParseMode = parseMode }
-let sendVideo chatId video caption = sendVideoBase (ChatId.Int chatId) video None None None None (Some caption) None None None None
+let sendVideo chatId video caption = SendVideoReq.Make(ChatId.Int chatId, video, caption = caption)
 
-let sendAnimationBase chatId animation duration width height thumb caption parseMode disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Animation = animation; Duration = duration; Width = width; 
-  Height = height; Caption = caption; DisableNotification = disableNotification; 
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; Thumb = thumb; ParseMode = parseMode }
-let sendAnimation chatId animation caption = sendAnimationBase (ChatId.Int chatId) animation None None None None (Some caption) None None None None
+let sendAnimation chatId animation caption = SendAnimationReq.Make(ChatId.Int chatId, animation, caption = caption)
 
-let sendVoiceBase chatId voice caption parseMode duration disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Voice = voice; Caption = caption; Duration = duration;
-  DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup;
-  ParseMode = parseMode }
-let sendVoice chatId voice caption = sendVoiceBase (ChatId.Int chatId) voice (Some caption) None None None None None
+let sendVoice chatId voice caption = SendVoiceReq.Make(ChatId.Int chatId, voice, caption = caption)
 
-let sendVideoNoteBase chatId videoNote duration length thumb disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; VideoNote = videoNote; Duration = duration; Length = length; 
-  DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; Thumb = thumb }
-let sendVideoNote chatId videoNote = sendVideoNoteBase (ChatId.Int chatId) videoNote None None None None None None
+let sendVideoNote chatId videoNote = SendVideoNoteReq.Make(ChatId.Int chatId, videoNote)
 
-let sendMediaGroupBase chatId media disableNotification replyToMessageId =
-  { ChatId = chatId; Media = media |> Seq.toArray; DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId }
+let sendMediaGroup chatId media = SendMediaGroupReq.Make(ChatId.Int chatId, media)
+
+let sendLocation chatId latitude longitude = SendLocationReq.Make(ChatId.Int chatId, latitude, longitude)
+
+let sendVenue chatId latitude longitude title address =  SendVenueReq.Make(ChatId.Int chatId, latitude, longitude, title, address)
+
+let sendContact chatId phoneNumber firstName lastName = SendContactReq.Make(ChatId.Int chatId, phoneNumber, firstName, ?lastName = lastName)
   
-let sendMediaGroup chatId media =
-  sendMediaGroupBase chatId media None None
+let sendPoll chatId question options = SendPollReq.Make(ChatId.Int chatId, question, options)
 
-let sendLocationBase chatId latitude longitude livePeriod disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Latitude = latitude; Longitude = longitude; LivePeriod = livePeriod; DisableNotification = disableNotification; 
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
-  
-let sendLocation chatId latitude longitude = sendLocationBase (ChatId.Int chatId) latitude longitude None None None None
-
-let editMessageLiveLocationBase chatId messageId inlineMessageId latitude longitude replyMarkup =
-  { ChatId = chatId; MessageId = messageId; InlineMessageId = inlineMessageId
-    Latitude = latitude; Longitude = longitude; ReplyMarkup = replyMarkup }  
-
-let stopMessageLiveLocationBase chatId messageId inlineMessageId replyMarkup =
-  { ChatId = chatId; MessageId = messageId; InlineMessageId = inlineMessageId; ReplyMarkup = replyMarkup  }
-
-let sendVenueBase chatId latitude longitude title address foursquareId foursquareType disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Latitude = latitude; Longitude = longitude; Title = title;
-  Address = address; FoursquareId = foursquareId; DisableNotification = disableNotification; 
-  ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup; FoursquareType = foursquareType }
-
-let sendVenue chatId latitude longitude title address = 
-  sendVenueBase (ChatId.Int chatId) latitude longitude title address None None None None None
-
-let sendContactBase chatId phoneNumber firstName lastName vCard disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; PhoneNumber = phoneNumber; FirstName = firstName; LastName = lastName;
-  DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup;
-  VCard = vCard }
-let sendContact chatId phoneNumber firstName lastName =
-  sendContactBase (ChatId.Int chatId) phoneNumber firstName lastName None None None None
-
-let sendPollBase chatId question options disableNotification replyToMessageId replyMarkup =
-  { ChatId = chatId; Question = question; Options = options; DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId;
-    ReplyMarkup = replyMarkup }
-  
-let sendPoll chatId question options = sendPollBase chatId question options
-
-let private sendChatActionBase chatId action = { ChatId = chatId; Action = action }
-let sendChatAction chatId action = sendChatActionBase (ChatId.Int chatId) action
-let sendChatActionByChatName chatName action = sendChatActionBase (ChatId.String chatName) action
+let sendChatAction chatId action = SendChatActionReq.Make(ChatId.Int chatId, action)
+let sendChatActionByChatName chatName action = SendChatActionReq.Make(ChatId.String chatName, action)
 
 let private getUserProfilePhotosBase userId offset limit = { UserId = userId; Offset = offset; Limit = limit; }
 let getUserProfilePhotos userId offset limit = getUserProfilePhotosBase userId (Some offset) (Some limit)
@@ -106,95 +54,61 @@ let getUserProfilePhotosAll userId = getUserProfilePhotosBase userId None None
 
 let getFile fileId = { GetFileReq.FileId = fileId }
 
-let private kickChatMemberBase chatId userId untilDate = { ChatId = chatId; UserId = userId; UntilDate = untilDate }
-let kickChatMember chatId userId = kickChatMemberBase (ChatId.Int chatId) userId None
-let kickChatMemberUntil chatId userId untilDate = kickChatMemberBase (ChatId.Int chatId) userId (Some untilDate)
-let kickChatMemberByChatName chatName userId = kickChatMemberBase (ChatId.String chatName) userId None
-let kickChatMemberByChatNameUntil chatName userId untilDate = kickChatMemberBase (ChatId.String chatName) userId (Some untilDate)
+let banChatMember chatId userId = BanChatMemberReq.Make(ChatId.Int chatId, userId)
+let banChatMemberUntil chatId userId untilDate = BanChatMemberReq.Make(ChatId.Int chatId, userId, untilDate = untilDate)
+let banChatMemberByChatName chatName userId = BanChatMemberReq.Make(ChatId.String chatName, userId) 
+let banChatMemberByChatNameUntil chatName userId untilDate = BanChatMemberReq.Make(ChatId.String chatName, userId, untilDate = untilDate)
 
-let private unbanChatMemberBase chatId userId = { ChatId = chatId; UserId = userId; }
-let unbanChatMember chatId userId = unbanChatMemberBase (ChatId.Int chatId) userId
-let unbanChatMemberByChatName chatName userId = unbanChatMemberBase (ChatId.String chatName) userId
+let unbanChatMember chatId userId = UnbanChatMemberReq.Make(ChatId.Int chatId, userId)
+let unbanChatMemberByChatName chatName userId = UnbanChatMemberReq.Make(ChatId.String chatName, userId)
 
-let restrictChatMemberBase chatId userId permissions untilDate =
-  { ChatId = chatId; UserId = userId; UntilDate = untilDate; Permissions = permissions  }
+let restrictChatMember chatId userId permissions untilDate = RestrictChatMemberReq.Make(ChatId.Int chatId, userId, permissions)
 
-let promoteChatMemberBase chatId userId canChangeInfo canPostMessages canEditMessages canDeleteMessages canInviteUsers canRestrictMembers canPinMessages canPromoteMembers =
-  { ChatId = chatId; UserId = userId; CanChangeInfo = canChangeInfo; CanPostMessages = canPostMessages;
-  CanEditMessages = canEditMessages;  CanDeleteMessages = canDeleteMessages; CanInviteUsers = canInviteUsers;
-  CanRestrictMembers = canRestrictMembers; CanPinMessages = canPinMessages; CanPromoteMembers = canPromoteMembers }
+let setChatPermission chatId permissions = SetChatPermissionsReq.Make(ChatId.Int chatId, permissions)
 
-let setChatPermissionsBase chatId permissions =
-  { ChatId = chatId; Permissions = permissions }
+let exportChatInviteLink chatId = ExportChatInviteLinkReq.Make(ChatId.Int chatId)
+let exportChatInviteLinkByChatName chatName = ExportChatInviteLinkReq.Make(ChatId.String chatName)
 
-let private exportChatInviteLinkBase chatId = { ExportChatInviteLinkReq.ChatId = chatId }
-let exportChatInviteLink chatId = exportChatInviteLinkBase (ChatId.Int chatId)
-let exportChatInviteLinkByChatName chatName = exportChatInviteLinkBase (ChatId.String chatName)
+let setChatPhoto chatId photo = SetChatPhotoReq.Make(ChatId.Int chatId, photo)
+let setChatPhotoByChatName chatName photo = SetChatPhotoReq.Make(ChatId.String chatName, photo)
 
-let private setChatPhotoBase chatId photo = { ChatId = chatId; Photo = photo }
-let setChatPhoto chatId photo = setChatPhotoBase (ChatId.Int chatId) photo
-let setChatPhotoByChatName chatName photo = setChatPhotoBase (ChatId.String chatName) photo
+let deleteChatPhoto chatId = DeleteChatPhotoReq.Make(ChatId.Int chatId)
+let deleteChatPhotoByChatName chatName = DeleteChatPhotoReq.Make(ChatId.String chatName)
 
-let private deleteChatPhotoBase chatId = { DeleteChatPhotoReq.ChatId = chatId }
-let deleteChatPhoto chatId = deleteChatPhotoBase (ChatId.Int chatId)
-let deleteChatPhotoByChatName chatName = deleteChatPhotoBase (ChatId.String chatName)
+let setChatTitle chatId title = SetChatTitleReq.Make(ChatId.Int chatId, title)
+let setChatTitleByChatName chatName title = SetChatTitleReq.Make(ChatId.String chatName, title)
 
-let private setChatTitleBase chatId title = { SetChatTitleReq.ChatId = chatId; Title = title }
-let setChatTitle chatId title = setChatTitleBase (ChatId.Int chatId) title
-let setChatTitleByChatName chatName title = setChatTitleBase (ChatId.String chatName) title
+let setChatDescription chatId description = SetChatDescriptionReq.Make(ChatId.Int chatId, description)
+let rec setChatDescriptionByChatName chatName description = SetChatDescriptionReq.Make(ChatId.String chatName, description)
 
-let private setChatDescriptionBase chatId description = { SetChatDescriptionReq.ChatId = chatId; Description = description }
-let setChatDescription chatId description = setChatDescriptionBase (ChatId.Int chatId) description
-let setChatDescriptionByChatName chatName description = setChatDescriptionBase (ChatId.String chatName) description
+let pinChatMessage chatId messageId = PinChatMessageReq.Make(ChatId.Int chatId, messageId)
+let pinChatMessageByName chatName messageId = PinChatMessageReq.Make(ChatId.String chatName, messageId)
+let pinChatMessageNotify chatId messageId disableNotification = PinChatMessageReq.Make(ChatId.Int chatId, messageId, disableNotification)
+let pinChatMessageByNameNotify chatName messageId disableNotification = PinChatMessageReq.Make(ChatId.String chatName, messageId, disableNotification)
 
-let private pinChatMessageBase chatId messageId disableNotification =
-  { PinChatMessageReq.ChatId = chatId; MessageId = messageId; DisableNotification = disableNotification }
-let pinChatMessage chatId messageId = pinChatMessageBase (ChatId.Int chatId) messageId None
-let pinChatMessageByName chatName messageId = pinChatMessageBase (ChatId.String chatName) messageId None
-let pinChatMessageNotify chatId messageId disableNotification = pinChatMessageBase (ChatId.Int chatId) messageId (Some disableNotification)
-let pinChatMessageByNameNotify chatName messageId disableNotification = pinChatMessageBase (ChatId.String chatName) messageId (Some disableNotification)
+let unpinChatMessage chatId = UnpinChatMessageReq.Make(ChatId.Int chatId)
+let unpinChatMessageByChatName chatName = UnpinChatMessageReq.Make(ChatId.String chatName)
 
-let private unpinChatMessageBase chatId = { UnpinChatMessageReq.ChatId = chatId }
-let unpinChatMessage chatId = unpinChatMessageBase (ChatId.Int chatId)
-let unpinChatMessageByChatName chatName = unpinChatMessageBase (ChatId.String chatName)
+let leaveChat chatId = LeaveChatReq.Make(ChatId.Int chatId)
+let leaveChatByChatName chatName = LeaveChatReq.Make(ChatId.String chatName)
 
-let private leaveChatBase chatId = { LeaveChatReq.ChatId = chatId }
-let leaveChat chatId = leaveChatBase (ChatId.Int chatId)
-let leaveChatByChatName chatName = leaveChatBase (ChatId.String chatName)
+let getChat chatId = GetChatReq.Make(ChatId.Int chatId)
+let getChatByName chatUsername = GetChatReq.Make(ChatId.String chatUsername)
 
-let private getChatBase chatId =  { GetChatReq.ChatId = chatId }
-let getChat chatId = getChatBase (ChatId.Int chatId)
-let getChatByName chatUsername = getChatBase (ChatId.String chatUsername)
-
-let private getChatAdministratorsBase chatId = { GetChatAdministratorsReq.ChatId = chatId }
-let getChatAdministrators chatId = getChatAdministratorsBase (ChatId.Int chatId)
-let getChatAdministratorsByChatName chatName = getChatAdministratorsBase (ChatId.String chatName)
+let getChatAdministrators chatId = GetChatAdministratorsReq.Make(ChatId.Int chatId)
+let getChatAdministratorsByChatName chatName = GetChatAdministratorsReq.Make(ChatId.String chatName)
 
 
-let private getChatMembersCountBase chatId = { GetChatMembersCountReq.ChatId = chatId }
-let getChatMembersCount chatId = getChatMembersCountBase (ChatId.Int chatId)
-let getChatMembersCountByChatName chatName = getChatMembersCountBase (ChatId.String chatName)
+let getChatMembersCount chatId = GetChatMemberCountReq.Make(ChatId.Int chatId)
+let getChatMembersCountByChatName chatName = GetChatMemberCountReq.Make(ChatId.String chatName)
 
-let private getChatMemberBase chatId userId = { GetChatMemberReq.ChatId = chatId; UserId = userId }
-let getChatMember chatId userId = getChatMemberBase (ChatId.Int chatId) userId
-let getChatMemberByChatName chatName userId = getChatMemberBase (ChatId.String chatName) userId
+let getChatMember chatId userId = GetChatMemberReq.Make(ChatId.Int chatId, userId)
+let getChatMemberByChatName chatName userId = GetChatMemberReq.Make(ChatId.String chatName, userId)
 
-let setChatStickerSet chatId stickerSetName =
-  { ChatId = chatId; StickerSetName = stickerSetName }
-let deleteChatStickerSet chatId =
-  { DeleteChatStickerSet.ChatId = chatId }
+let rec setChatStickerSet chatId stickerSetName = SetChatStickerSetReq.Make(ChatId.Int chatId, stickerSetName)
+let deleteChatStickerSet chatId = DeleteChatStickerSetReq.Make(ChatId.Int chatId)
 
-let answerCallbackQueryBase callbackQueryId text showAlert url cacheTime =
-  { AnswerCallbackQueryReq.CallbackQueryId = callbackQueryId; Text = text; 
-  ShowAlert = showAlert; Url = url; CacheTime = cacheTime }
-
-let editMessageTextBase chatId messageId inlineMessageId text parseMode disableWebPagePreview replyMarkup =
-  { EditMessageTextReq.ChatId = chatId; MessageId = messageId; InlineMessageId = inlineMessageId; 
-  Text = text; ParseMode = parseMode; DisableWebPagePreview = disableWebPagePreview; ReplyMarkup = replyMarkup }
-
-let editMessageCaptionBase chatId messageId inlineMessageId caption replyMarkup =
-  { EditMessageCaptionReq.ChatId = chatId; MessageId = messageId; InlineMessageId = inlineMessageId;
-  Caption = caption; ReplyMarkup = replyMarkup }
+let answerCallbackQuery callbackQueryId text showAlert url cacheTime = AnswerCallbackQueryReq.Make(callbackQueryId, text, showAlert, url, cacheTime)
 
 let editMessageMediaBase chatId messageId inlineMessageId media replyMarkup =
   { ChatId = chatId; MessageId = messageId; InlineMessageId = inlineMessageId; Media = media; ReplyMarkup = replyMarkup }
@@ -215,14 +129,6 @@ let answerInlineQueryBase inlineQueryId results cacheTime isPersonal nextOffset 
   { AnswerInlineQueryReq.InlineQueryId = inlineQueryId; Results = results; CacheTime = cacheTime;
   IsPersonal = isPersonal; NextOffset = nextOffset; SwitchPmText = switchPmText; SwitchPmParameter = switchPmParameter }
 
-let sendInvoice chatId title payload providerToken startParameter currency prices providerData invoiceArgs =
-  { SendInvoiceReq.ChatId = chatId; Title = title; Payload = payload; ProviderToken = providerToken;
-  StartParameter = startParameter; Currency = currency; Prices = prices; PhotoUrl = invoiceArgs.PhotoUrl;
-  Description = invoiceArgs.Description; PhotoSize = invoiceArgs.PhotoSize; PhotoWidth = invoiceArgs.PhotoWidth;
-  PhotoHeight = invoiceArgs.PhotoHeight; NeedName = invoiceArgs.NeedName; NeedPhoneNumber = invoiceArgs.NeedPhoneNumber;
-  NeedEmail = invoiceArgs.NeedEmail; NeedShippingAddress = invoiceArgs.NeedShippingAddress; IsFlexible = invoiceArgs.IsFlexible;
-  ReplyToMessageId = invoiceArgs.ReplyToMessageId; ReplyMarkup = invoiceArgs.ReplyMarkup; ProviderData = providerData }
-
 let private answerShippingQueryBase shippingQueryId ok shippingOptions errorMessage = 
   { AnswerShippingQueryReq.ShippingQueryId = shippingQueryId; Ok = ok; 
   ShippingOptions = shippingOptions; ErrorMessage = errorMessage }
@@ -240,10 +146,6 @@ let answerPreCheckoutQueryError preCheckoutQueryId errorMessage =
 
 let setPassportDataErrors userId errors =
   { SetPassportDataErrorsReq.UserId = userId; Errors = errors }
-
-let sendGameBase chatId gameShortName disableNotification replyToMessageId replyMarkup =
-  { SendGameReq.ChatId = chatId; GameShortName = gameShortName; 
-  DisableNotification = disableNotification; ReplyToMessageId = replyToMessageId; ReplyMarkup = replyMarkup }
 
 let setGameScoreBase userId score force disableEditMessage chatId messageId inlineMessageId =
   { SetGameScoreReq.UserId = userId; Score = score; Force = force; DisableEditMessage = disableEditMessage;
@@ -266,24 +168,5 @@ let getStickerSet name =
 
 let uploadStickerFile userId pngSticker =
   { UploadStickerFileReq.UserId = userId; PngSticker = pngSticker }
-
-let createNewStickerSetBase userId name title pngSticker emojis containsMasks maskPosition =
-  { CreateNewStickerSetReq.UserId = userId; Name = name; Title = title;
-  PngSticker = pngSticker; Emojis = emojis; ContainsMasks = containsMasks;
-  MaskPosition = maskPosition }
-
-let private addStickerToSetBase userId name pngSticker emojis maskPosition = 
-  { AddStickerToSetReq.UserId = userId; Name = name; PngSticker = pngSticker; 
-  Emojis = emojis; MaskPosition = maskPosition  }
-
-let addStickerToSet userId name pngSticker emojis =
-  addStickerToSetBase userId name pngSticker emojis None
-
-let addStickerToSetWithMask userId name pngSticker emojis maskPosition =
-  addStickerToSetBase userId name pngSticker emojis (Some maskPosition)
-
 let setStickerPositionInSet sticker position =
   { SetStickerPositionInSetReq.Sticker = sticker; Position = position }
-
-let deleteStickerFromSet sticker =
-  { DeleteStickerFromSet.Sticker = sticker }

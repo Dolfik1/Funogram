@@ -50,7 +50,7 @@ module Helpers =
     let isArray = typeName.StartsWith("Array of ")
     let isArrayOfArray = typeName.StartsWith("Array of Array of ")
 
-    let typeName = typeName.Replace("Array of Array of", "").Replace("Array of ", "")
+    let typeName = typeName.Replace("Array of Array of", "").Replace("Array of ", "").Trim(' ')
 
     typeMap
     |> Map.tryFind typeName
@@ -62,8 +62,8 @@ module Helpers =
     )
     |> Option.defaultValue typeName
     |> (
-        if isArray  then sprintf "%s[]" 
-        elif isArrayOfArray then sprintf "%s[][]"
+        if isArrayOfArray then sprintf "%s[][]"
+        elif isArray  then sprintf "%s[]"
         else id
       )
   

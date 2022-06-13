@@ -10,8 +10,8 @@ type BotWebHook = { Listener: HttpListener; ValidateRequest: HttpListenerRequest
 type BotConfig = 
   { Token: string
     Offset: int64 option
-    Limit: int option
-    Timeout: int option
+    Limit: int64 option
+    Timeout: int64 option
     AllowedUpdates: string seq option
     OnError: Exception -> unit
     ApiEndpointUrl: Uri

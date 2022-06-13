@@ -860,7 +860,7 @@ and [<CLIMutable>] UserProfilePhotos =
     TotalCount: int64
     // Requested profile pictures (in up to 4 sizes each)
     [<DataMember(Name = "photos")>]
-    Photos:  PhotoSize[]
+    Photos: PhotoSize[][]
   }
 
 // This object represents a file ready to be downloaded. The file can be downloaded via the link https://api.telegram.org/file/bot<token>/<file_path>. It is guaranteed that the link will be valid for at least 1 hour. When the link expires, a new one can be requested by calling getFile.
@@ -893,7 +893,7 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
   {
     // Array of button rows, each represented by an Array of KeyboardButton objects
     [<DataMember(Name = "keyboard")>]
-    Keyboard:  KeyboardButton[]
+    Keyboard: KeyboardButton[][]
     // Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
     [<DataMember(Name = "resize_keyboard")>]
     ResizeKeyboard: bool option
@@ -960,7 +960,7 @@ and [<CLIMutable>] InlineKeyboardMarkup =
   {
     // Array of button rows, each represented by an Array of InlineKeyboardButton objects
     [<DataMember(Name = "inline_keyboard")>]
-    InlineKeyboard:  InlineKeyboardButton[]
+    InlineKeyboard: InlineKeyboardButton[][]
   }
 
 // This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
@@ -1539,7 +1539,7 @@ and [<CLIMutable>] InputMediaPhoto =
     Type: string
     // File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
     [<DataMember(Name = "media")>]
-    Media: string
+    Media: InputFile
     // Caption of the photo to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -1559,7 +1559,7 @@ and [<CLIMutable>] InputMediaVideo =
     Type: string
     // File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
     [<DataMember(Name = "media")>]
-    Media: string
+    Media: InputFile
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
@@ -1594,7 +1594,7 @@ and [<CLIMutable>] InputMediaAnimation =
     Type: string
     // File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
     [<DataMember(Name = "media")>]
-    Media: string
+    Media: InputFile
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
@@ -1626,7 +1626,7 @@ and [<CLIMutable>] InputMediaAudio =
     Type: string
     // File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
     [<DataMember(Name = "media")>]
-    Media: string
+    Media: InputFile
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
@@ -1658,7 +1658,7 @@ and [<CLIMutable>] InputMediaDocument =
     Type: string
     // File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
     [<DataMember(Name = "media")>]
-    Media: string
+    Media: InputFile
     // Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option

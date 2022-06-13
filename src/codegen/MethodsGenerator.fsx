@@ -63,6 +63,16 @@ let returnTypeRegexes =
     Regex("\s([A|a]rray of \w+|\w+)\sis returned")
   |]
 
+
+let convertType (tp: ApiType) (field: ApiTypeField) =
+  let typeString =
+    match tp, field with
+    | { Name = "sendChatAction" }, { Name = "action" } -> "ChatAction"
+    | _, { Name = "parse_mode" } -> "ParseMode"
+    | _ -> field.FieldType
+  
+  Helpers.convertTLTypeToFSharpType typeString field.Description
+
 let parseReturnType (str: string) =
   let m =
     returnTypeRegexes
@@ -233,11 +243,11 @@ open System
 
 let codeResult =
   apiMethods
-  |> Seq.fold (fun code tp ->
-    let typeName = sprintf "%sReq" (Helpers.toPascalCase tp.Name)
+  |> Seq.fold (fun code apiType ->
+    let typeName = sprintf "%sReq" (Helpers.toPascalCase apiType.Name)
 
     let typeStr =
-      if tp.Fields.Length = 0 then
+      if apiType.Fields.Length = 0 then
         (sprintf "type %s() =" typeName)
       else
         (sprintf "type %s =" typeName)
@@ -249,16 +259,16 @@ let codeResult =
       |> Code.setIndent 1
     
     let code =
-      if tp.Fields.Length > 0 then
+      if apiType.Fields.Length > 0 then
         let code =
           code
           |> Code.printNewLine "{"
           |> Code.setIndent 2
 
-        tp.Fields
+        apiType.Fields
         |> Seq.fold (fun code tp ->
           code
-          |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase tp.Name) (Helpers.convertTLTypeToFSharpType tp.FieldType tp.Description tp.Optional))
+          |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase tp.Name) (convertType apiType tp tp.Optional))
         ) code
         |> Code.setIndent 1
         |> Code.printNewLine "}"
@@ -267,10 +277,10 @@ let codeResult =
 
     let code = code |> Code.printNewLine "static member Make("
     let code =
-      if tp.Fields.Length = 0 then
+      if apiType.Fields.Length = 0 then
         code |> Code.print (sprintf ") = %s()" typeName)
       else
-        let fields = tp.Fields |> Array.sortBy (fun x -> x.Optional)
+        let fields = apiType.Fields |> Array.sortBy (fun x -> x.Optional)
         
         let code =
           fields
@@ -279,7 +289,7 @@ let codeResult =
             let c = if fields.[0] <> tp then ", " else ""
 
             let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
-            let argType = Helpers.convertTLTypeToFSharpType tp.FieldType tp.Description false
+            let argType = convertType apiType tp false
 
             code
             |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
@@ -293,7 +303,7 @@ let codeResult =
           |> Code.printNewLine "{"
           |> Code.setIndent 3
 
-        tp.Fields
+        apiType.Fields
         |> Seq.fold (fun code tp ->
           code
           |> Code.printNewLine (sprintf "%s = %s" (Helpers.toPascalCase tp.Name) (Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords))
@@ -304,9 +314,9 @@ let codeResult =
         
 
     code
-    |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType tp.ReturnType "" false))
+    |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType apiType.ReturnType "" false))
     |> Code.setIndent 2
-    |> Code.printNewLine (sprintf "member _.MethodName = \"%s\"" tp.Name)
+    |> Code.printNewLine (sprintf "member _.MethodName = \"%s\"" apiType.Name)
     |> Code.printNewLine ""
     
   ) code

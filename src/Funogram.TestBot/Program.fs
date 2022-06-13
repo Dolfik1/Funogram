@@ -2,6 +2,7 @@
 
 open System.IO
 open Funogram.Api
+open Funogram.Telegram.RequestsTypes
 open Funogram.Types
 open Funogram.Telegram.Api
 open Funogram.Telegram.Types
@@ -12,7 +13,7 @@ open System.Net
 let [<Literal>] TokenFileName = "token"
 let mutable botToken = "none"
 
-let [<Literal>] PhotoUrl = "https://upload.wikimedia.org/wikipedia/commons/f/f5/Example_image.jpg"
+let [<Literal>] PhotoUrl = "https://www.w3.org/People/mimasa/test/imgformat/img/w3c_home.jpg"
 
 let processMessageBuild config =
 
@@ -49,7 +50,7 @@ let processMessageBuild config =
   let bot data = botResult data |> processResult
 
 
-  let getChatInfo msg =
+  let getChatInfo (msg: Message) =
     let result = botResult (getChat msg.Chat.Id)
     match result with
     | Ok x ->
@@ -58,35 +59,38 @@ let processMessageBuild config =
       |> ignore
     | Error e -> printf "Error: %s" e.Description
 
-  let sendPhoto msg =
+  let sendPhoto (msg: Message) =
     let image = Http.RequestStream(PhotoUrl)
-    bot (sendPhoto msg.Chat.Id (FileToSend.File("example.jpg", image.ResponseStream)) "Example")
+    bot (sendPhoto msg.Chat.Id (InputFile.File("example.jpg", image.ResponseStream)) "Example")
 
   let updateArrived ctx =
     let fromId () = ctx.Update.Message.Value.From.Value.Id
-    let fromChatId () = ChatId.Int(fromId ())
             
     let sayWithArgs text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup =
-        bot (sendMessageBase (ChatId.Int (fromId())) text parseMode disableWebPagePreview disableNotification replyToMessageId replyMarkup)
+        SendMessageReq.Make(ChatId.Int (fromId ()), text, ?parseMode = parseMode, ?disableWebPagePreview = disableWebPagePreview, ?disableNotification = disableNotification, ?replyToMessageId = replyToMessageId, ?replyMarkup = replyMarkup)
+        |> bot
 
-    let sendMessageFormatted text parseMode = (sendMessageBase (ChatId.Int(fromId())) text (Some parseMode) None None None None) |> bot
+    let sendMessageFormatted text parseMode = SendMessageReq.Make(ChatId.Int (fromId ()), text, parseMode = parseMode) |> bot
 
     let result =
-      processCommands ctx [
+      processCommands ctx [|
         cmdScan "/cmdscan %s %s" (fun (a, b) _ ->  sendMessageFormatted (sprintf "%s %s" a b) ParseMode.Markdown)
+        
         cmd "/send_action" (fun _ -> sendChatAction ctx.Update.Message.Value.Chat.Id ChatAction.UploadPhoto |> bot)
+        
         cmd "/send_message1" (fun _ -> sendMessageFormatted "Test *Markdown*" ParseMode.Markdown)
         cmd "/send_message2" (fun _ -> sendMessageFormatted "Test <b>HTML</b>" ParseMode.HTML)
         cmd "/send_message3" (fun _ -> sayWithArgs "@Dolfik! See http://fsharplang.ru - Russian F# Community" None (Some true) (Some true) None None)
         cmd "/send_message4" (fun _ -> sayWithArgs "That's message with reply!" None None None (Some ctx.Update.Message.Value.MessageId) None)
         cmd "/send_message5" (fun _ ->
         (
-          let keyboard = (Seq.init 2 (fun x -> Seq.init 2 (fun y -> { Text = y.ToString() + x.ToString(); RequestContact = None; RequestLocation = None })))
+          let keyboard = (Array.init 2 (fun x -> Array.init 2 (fun y -> { Text = y.ToString() + x.ToString(); RequestContact = None; RequestLocation = None; RequestPoll = None; WebApp = None })))
           let markup = Markup.ReplyKeyboardMarkup {
             Keyboard = keyboard
             ResizeKeyboard = None
             OneTimeKeyboard = None
             Selective = None
+            InputFieldPlaceholder = None
           }
           bot (sendMessageMarkup (fromId()) "That's keyboard!" markup)
         ))
@@ -97,47 +101,58 @@ let processMessageBuild config =
         ))
         cmd "/send_message7" (fun _ ->
         (
-          let keyboard = [[ {
-              Text = "Test"
-              CallbackData = Some("1234")
-              Url = None
-              CallbackGame = None
-              SwitchInlineQuery = None
-              SwitchInlineQueryCurrentChat = None
-              LoginUrl = None
-              Pay = None
-          } ] |> List.toSeq ]
+          let keyboard =
+            [|
+               [|
+                  {
+                    Text = "Test"
+                    CallbackData = Some("1234")
+                    Url = None
+                    CallbackGame = None
+                    SwitchInlineQuery = None
+                    SwitchInlineQueryCurrentChat = None
+                    LoginUrl = None
+                    Pay = None
+                    WebApp = None
+                }
+               |]
+            |]
           let markup = Markup.InlineKeyboardMarkup { InlineKeyboard = keyboard }
           (sendMessageMarkup (fromId()) "Thats inline keyboard!" markup) |> bot
-        ))
+         ))
+         
         cmd "/send_message8" (fun _ ->
-        (
-          let pack name stream = InputMedia.Photo <| {
-            InputMediaPhoto.Media = FileToSend.File(name, stream);
-            Caption = Some name; ParseMode = None
-          }
-          let image1 = Http.RequestStream(PhotoUrl).ResponseStream
-          let image2 = Http.RequestStream(PhotoUrl).ResponseStream
-          let media = [ pack "Image 1" image1; pack "Image 2" image2 ]
-          sendMediaGroup (fromChatId()) media |> bot 
-        ))
-        cmd "/forward_message" (fun _ -> bot (forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId))
+         (
+           let pack name stream = InputMedia.Photo <| {
+             InputMediaPhoto.Media = InputFile.File(name, stream)
+             
+             Type = "photo"; Caption = Some name; ParseMode = None; CaptionEntities = None
+           }
+           let image1 = Http.RequestStream(PhotoUrl).ResponseStream
+           let image2 = Http.RequestStream(PhotoUrl).ResponseStream
+           let media = [| pack "Image 1" image1; pack "Image 2" image2 |]
+           sendMediaGroup (fromId()) media |> bot 
+         ))
+         
+        cmd "/forward_message" (fun _ -> forwardMessage (fromId()) (fromId()) ctx.Update.Message.Value.MessageId |> bot)
+         
         cmd "/show_my_photos_sizes" (fun _ ->
-        (
-          let x = botResult (getUserProfilePhotosAll (fromId())) |> processResultWithValue
-          if x.IsNone then ()
-          else
-            let text =
-              sprintf "Photos: %s" 
-                (x.Value.Photos
-                  |> Seq.map (Seq.last >> (fun f -> sprintf "%ix%i" f.Width f.Height))
-                  |> String.concat ",")
-
-            bot (sendMessage (fromId()) text)
-        ))
+         (
+           let x = botResult (getUserProfilePhotosAll (fromId())) |> processResultWithValue
+           if x.IsNone then ()
+           else
+             let text =
+               sprintf "Photos: %s" 
+                 (x.Value.Photos
+                   |> Seq.map (Seq.last >> (fun f -> sprintf "%ix%i" f.Width f.Height))
+                   |> String.concat ",")
+ 
+             bot (sendMessage (fromId()) text)
+         ))
+         
         cmd "/get_chat_info" (fun _ -> getChatInfo ctx.Update.Message.Value)
         cmd "/send_photo" (fun _ -> sendPhoto ctx.Update.Message.Value)
-      ]
+      |]
 
     if result then ()
     else bot (sendMessage (fromId()) defaultText)
@@ -164,7 +179,7 @@ let start token =
     async {
       let apiPath = sprintf "/%s" config.Token
       let webSocketEndpoint = sprintf "%s%s" webSocketEndpoint apiPath
-      let! hook = setWebhookBase webSocketEndpoint None None None |> api config
+      let! hook = SetWebhookReq.Make(webSocketEndpoint) |> api config
       match hook with
       | Ok _ ->
         use listener = new HttpListener()
