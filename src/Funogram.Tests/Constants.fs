@@ -3,10 +3,9 @@ namespace Funogram.Tests
 open System
 open Funogram.Telegram.RequestsTypes
 open Funogram.Telegram.Types
+open Funogram.Types
 
 module Constants =
-  open Funogram.Types
-    
   let private ok = sprintf """{"ok":true,"result":%s}"""
     
   let testDate = System.DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
@@ -17,18 +16,17 @@ module Constants =
   let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null,"language":null} }"""
 
   let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; CanJoinGroups = None; CanReadAllGroupMessages = None; SupportsInlineQueries = None }
-  let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather","is_bot":false;"can_join_groups":null,"can_read_all_group_messages":null,"supports_inline_queries":null}}"""
+  let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather","language_code":null,"is_bot":false,"can_join_groups":null,"can_read_all_group_messages":null,"supports_inline_queries":null}}"""
 
   let jsonTestEditResult1 = EditMessageResult.Success(true)
   let jsonTestEditResult1String = "true"
   let jsonTestEditResult1ApiString = ok "true"
 
-  let jsonTestChat = { defaultChat with Id = 1L; Type = ChatType.Group; Title = (Some "Test group"); AllMembersAreAdministrators = (Some true) }
-  let jsonTestMessage = 
-        { defaultMessage with MessageId = 123L;  Date = testDate; Text = Some("abc"); Chat = jsonTestChat }
+  let jsonTestChat = Chat.Create(1L, ChatType.Group, title = "Test group")
+  let jsonTestMessage =  Message.Create(123L, testDate, jsonTestChat, text = "abc")
 
   let jsonTestEditResult2 = EditMessageResult.Message(jsonTestMessage)
-  let jsonTestEditResult2String = sprintf """{"message_id":123,"date":%i,"chat":{"id":1,"type":"group","title":"Test group","all_members_are_administrators":true},"text":"abc"}""" testDateUnix
+  let jsonTestEditResult2String = sprintf """{"message_id":123,"date":%i,"chat":{"id":1,"type":"group","title":"Test group"},"text":"abc"}""" testDateUnix
   let jsonTestEditResult2ApiString = ok jsonTestEditResult2String
    
   let jsonTestEditResult3ApiString = """{"ok":true,"result":{"message_id":123,"from":{"id":321,"is_bot":true,"first_name":"FSharpBot","username":"FSharpBot"},"chat":{"id":123,"first_name":"Test","last_name":"Test","username":"test","type":"private"},"date":4651649271,"edit_date":4651649271,"text":"Updated"}}"""
@@ -38,12 +36,11 @@ module Constants =
   let jsonTestMaskPosition = """{"point":"eyes","x_shift":0,"y_shift":0,"scale":0}"""
   let jsonTestMaskPositionResult = ok jsonTestMaskPosition
     
-  let jsonMessageForwardDate = { defaultMessage with Date = testDate; ForwardDate = Some testDate }
+  let jsonMessageForwardDate = Message.Create(1L, testDate, jsonTestChat, text = "abc", forwardDate = testDate)
     
-  let jsonMessageForward = 
-      { defaultMessage with MessageId = 1L;  Date = testDate; ForwardDate = Some testDate; Text = None; Chat = defaultChat }
+  let jsonMessageForward = Message.Create(1L, testDate, jsonTestChat, forwardDate = testDate, text = "abc")
     
-  let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":0,"type":"private"},"forward_date":%i}""" testDateUnix testDateUnix    
+  let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":1,"type":"group","title":"Test group"},"forward_date":%i,"text":"abc"}""" testDateUnix testDateUnix    
   let jsonMessageForwardDateApiString = ok jsonMessageForwardDateString
     
   let paramsDictionary =
@@ -60,7 +57,8 @@ module Constants =
       ForwardMessageReq.ChatId = ChatId.String "Dolfik"
       FromChatId = ChatId.Int 10L
       MessageId = 10L
-      ForwardMessageReq.DisableNotification = None
+      DisableNotification = None
+      ProtectContent = None
     } :> IBotRequest
   let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
    

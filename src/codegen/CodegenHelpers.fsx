@@ -125,5 +125,5 @@ module Code =
   let printNewLineComment (comment: string) code =
     comment.Split("\n")
     |> Seq.fold (fun code comment ->
-      printNewLine (sprintf "// %s" comment) code
+      printNewLine (sprintf "/// %s" comment) code
     ) code

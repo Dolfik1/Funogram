@@ -115,10 +115,16 @@ let convertType (tp: ApiType) (field: ApiTypeField) =
 
     | _, { Name = "media" } when field.Description.Contains("File to send") ->
       "InputFile"
+    
+    | _, { Name = "date" }
+    | _, { Name = "until_date" }
+    | _, { Name = "forward_date" } -> "DateTime"
 
+    | { Name = "MaskPosition" }, { Name = "point" } -> "MaskPoint"
+    
     | _ -> field.FieldType
   
-  Helpers.convertTLTypeToFSharpType typeString field.Description field.Optional
+  Helpers.convertTLTypeToFSharpType typeString field.Description
  
 let generateFieldsBody tp (fields: ApiTypeField[]) code =
   let code =
@@ -133,12 +139,47 @@ let generateFieldsBody tp (fields: ApiTypeField[]) code =
     code
     |> Code.printNewLineComment field.Description
     |> Code.printNewLine (sprintf "[<DataMember(Name = \"%s\")>]" field.Name)
-    |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase field.Name) (convertType tp field))
+    |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase field.Name) (convertType tp field field.Optional))
   ) code
 
   |> Code.setIndent 1
   |> Code.printNewLine "}"
  
+let generateFieldsCreateMember tp (fields: ApiTypeField[]) code =
+  let code =
+    code
+    |> Code.setIndent 1
+    |> Code.printNewLine "static member Create("
+    |> Code.setIndent 2
+
+  let fields = fields |> Array.sortBy (fun x -> x.Optional)
+  let firstField = fields |> Array.tryHead
+  
+  fields
+  |> Seq.fold (fun code field ->
+    let o = if field.Optional then "?" else ""
+    let c = if field = firstField.Value then "" else ", "
+    let propName = Helpers.toCamelCase field.Name |> Helpers.fixReservedKeywords
+    let fieldType = convertType tp field false
+    code
+    |> Code.print (sprintf "%s%s%s: %s" c o propName fieldType)
+  ) code
+  |> Code.print ") = "
+  |> Code.setIndent 2
+  |> Code.printNewLine "{"
+    |> Code.setIndent 3
+  |> (fun code ->
+    fields
+    |> Seq.fold (fun code field ->
+      
+      let fieldName = Helpers.toPascalCase field.Name
+      let propName = Helpers.toCamelCase field.Name |> Helpers.fixReservedKeywords
+      code |> Code.printNewLine (sprintf "%s = %s" fieldName propName)
+    ) code
+  )
+  |> Code.setIndent 2
+  |> Code.printNewLine "}"
+  
 let generateCasesBody (cases: ApiTypeCase[]) code =
   let code = code |> Code.setIndent 1
 
@@ -315,6 +356,12 @@ type ChatMemberStatus =
   | Kicked
   | Unknown
 
+type MaskPoint =
+  | Forehead
+  | Eyes
+  | Mouth
+  | Chin
+
 type Markup = 
   | InlineKeyboardMarkup of InlineKeyboardMarkup 
   | ReplyKeyboardMarkup of ReplyKeyboardMarkup
@@ -341,7 +388,7 @@ and EditMessageResult =
         match tp.Kind with
         | Stub -> code |> Code.setIndent 1 |> Code.printNewLine "class end"
         | Cases cases -> generateCasesBody cases code
-        | Fields fields -> generateFieldsBody tp fields code)
+        | Fields fields -> code |> generateFieldsBody tp fields |> generateFieldsCreateMember tp fields)
 
       |> Code.setIndent 0
       |> Code.printNewLine ""
