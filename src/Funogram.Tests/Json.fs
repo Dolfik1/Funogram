@@ -101,3 +101,11 @@ let ``JSON serializing forward message request`` () =
   Constants.forwardMessageReq
   |> toJsonBotRequestString
   |> shouldEqual Constants.jsonForwardMessageReq
+  
+[<Fact>]
+let ``JSON deserializing ChatMember``() =
+  Constants.jsonTestObjChatMemberResultString
+  |> parseJson
+  |> function
+  | Ok result -> shouldEqual result Constants.jsonTestObjChatMember
+  | Error error -> failwith error.Description
