@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Core.fs" />
+    <Compile Include="Commands\TextMessages.fs" />
+    <Compile Include="Commands\Markup.fs" />
+    <Compile Include="Commands\Files.fs" />
+    <Compile Include="Commands\Other.fs" />
+    <Compile Include="Commands\Base.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FunHttp" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Funogram/Funogram.fsproj" />
+    <ProjectReference Include="../../Funogram.Telegram/Funogram.Telegram.fsproj" />
+  </ItemGroup>
+</Project>

@@ -5,11 +5,13 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram", "Funogram\Funogram.fsproj", "{A6B87761-16D9-40DB-BFCA-8D019DED838F}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram.TestBot", "Funogram.TestBot\Funogram.TestBot.fsproj", "{07AC5DF8-9F33-4DC8-BAE9-10468131DEBA}"
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram.TestBot", "examples\Funogram.TestBot\Funogram.TestBot.fsproj", "{07AC5DF8-9F33-4DC8-BAE9-10468131DEBA}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram.Tests", "Funogram.Tests\Funogram.Tests.fsproj", "{6F9DE494-4C92-4328-B7E5-3E196313653E}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram.Telegram", "Funogram.Telegram\Funogram.Telegram.fsproj", "{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{729C6749-1BE9-4153-B8CF-71EBCDFABE88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -72,5 +74,8 @@ Global
 		{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}.Release|x64.Build.0 = Release|Any CPU
 		{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{07AC5DF8-9F33-4DC8-BAE9-10468131DEBA} = {729C6749-1BE9-4153-B8CF-71EBCDFABE88}
 	EndGlobalSection
 EndGlobal
