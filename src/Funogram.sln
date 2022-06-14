@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram.Telegram", "Funogr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{729C6749-1BE9-4153-B8CF-71EBCDFABE88}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Funogram.Examples.WebSocket", "examples\Funogram.Examples.WebSocket\Funogram.Examples.WebSocket.fsproj", "{48AFE02B-52E8-47EE-B374-85D12A36F734}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,8 +76,21 @@ Global
 		{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}.Release|x64.Build.0 = Release|Any CPU
 		{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD617E32-CE7E-4EA0-AC70-392B7A0BB2F1}.Release|x86.Build.0 = Release|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Debug|x64.Build.0 = Debug|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Debug|x86.Build.0 = Debug|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Release|x64.ActiveCfg = Release|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Release|x64.Build.0 = Release|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Release|x86.ActiveCfg = Release|Any CPU
+		{48AFE02B-52E8-47EE-B374-85D12A36F734}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{07AC5DF8-9F33-4DC8-BAE9-10468131DEBA} = {729C6749-1BE9-4153-B8CF-71EBCDFABE88}
+		{48AFE02B-52E8-47EE-B374-85D12A36F734} = {729C6749-1BE9-4153-B8CF-71EBCDFABE88}
 	EndGlobalSection
 EndGlobal
