@@ -241,82 +241,98 @@ open Types
 open System
     """
 
-let codeResult =
-  apiMethods
-  |> Seq.fold (fun code apiType ->
-    let typeName = sprintf "%sReq" (Helpers.toPascalCase apiType.Name)
+let getTypeName apiType = sprintf "%sReq" (Helpers.toPascalCase apiType.Name)
 
-    let typeStr =
-      if apiType.Fields.Length = 0 then
-        (sprintf "type %s() =" typeName)
-      else
-        (sprintf "type %s =" typeName)
+let generateTypeRecord apiType code =
+  let typeName = getTypeName apiType
+
+  let typeStr =
+    if apiType.Fields.Length = 0 then
+      (sprintf "type %s() =" typeName)
+    else
+      (sprintf "type %s =" typeName)
+  
+  let code =
+    code
+    |> Code.setIndent 0
+    |> Code.printNewLine typeStr
+    |> Code.setIndent 1
+  
+  if apiType.Fields.Length > 0 then
+    let code =
+      code
+      |> Code.printNewLine "{"
+      |> Code.setIndent 2
+
+    apiType.Fields
+    |> Seq.fold (fun code tp ->
+      code
+      |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase tp.Name) (convertType apiType tp tp.Optional))
+    ) code
+    |> Code.setIndent 1
+    |> Code.printNewLine "}"
+  else
+    code
+  
+
+let generateMakeMethod apiType code =
+  let typeName = getTypeName apiType
+
+  let code =
+    code
+    |> Code.printNewLine "static member Make("
+    
+  if apiType.Fields.Length = 0 then
+    code |> Code.print (sprintf ") = %s()" typeName)
+  else
+    let fields = apiType.Fields |> Array.sortBy (fun x -> x.Optional)
+    
+    let code =
+      fields
+      |> Seq.fold (fun code tp ->
+        let o = if tp.Optional then "?" else ""
+        let c = if fields.[0] <> tp then ", " else ""
+
+        let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
+        let argType = convertType apiType tp false
+
+        code
+        |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
+      ) code
+      |> Code.print ") = "
+    
     
     let code =
       code
-      |> Code.setIndent 0
-      |> Code.printNewLine typeStr
-      |> Code.setIndent 1
-    
-    let code =
-      if apiType.Fields.Length > 0 then
-        let code =
-          code
-          |> Code.printNewLine "{"
-          |> Code.setIndent 2
+      |> Code.setIndent 2
+      |> Code.printNewLine "{"
+      |> Code.setIndent 3
 
-        apiType.Fields
-        |> Seq.fold (fun code tp ->
-          code
-          |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase tp.Name) (convertType apiType tp tp.Optional))
-        ) code
-        |> Code.setIndent 1
-        |> Code.printNewLine "}"
-      else
-        code
+    apiType.Fields
+    |> Seq.fold (fun code tp ->
+      code
+      |> Code.printNewLine (sprintf "%s = %s" (Helpers.toPascalCase tp.Name) (Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords))
+    ) code
+    |> Code.setIndent 2
+    |> Code.printNewLine "}"
+    |> Code.setIndent 1
 
-    let code = code |> Code.printNewLine "static member Make("
-    let code =
-      if apiType.Fields.Length = 0 then
-        code |> Code.print (sprintf ") = %s()" typeName)
-      else
-        let fields = apiType.Fields |> Array.sortBy (fun x -> x.Optional)
-        
-        let code =
-          fields
-          |> Seq.fold (fun code tp ->
-            let o = if tp.Optional then "?" else ""
-            let c = if fields.[0] <> tp then ", " else ""
+let generateInterface apiType code =
+  code
+  |> Code.setIndent 1
+  |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType apiType.ReturnType "" false))
+  |> Code.setIndent 2
+  |> Code.printNewLine (sprintf "member _.MethodName = \"%s\"" apiType.Name)
+  
 
-            let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
-            let argType = convertType apiType tp false
-
-            code
-            |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
-          ) code
-          |> Code.print ") = "
-        
-        
-        let code =
-          code
-          |> Code.setIndent 2
-          |> Code.printNewLine "{"
-          |> Code.setIndent 3
-
-        apiType.Fields
-        |> Seq.fold (fun code tp ->
-          code
-          |> Code.printNewLine (sprintf "%s = %s" (Helpers.toPascalCase tp.Name) (Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords))
-        ) code
-        |> Code.setIndent 2
-        |> Code.printNewLine "}"
-        |> Code.setIndent 1
-        
+let codeResult =
+  apiMethods
+  |> Seq.fold (fun code apiType ->
 
     code
-    |> Code.printNewLine (sprintf "interface IRequestBase<%s> with" (Helpers.convertTLTypeToFSharpType apiType.ReturnType "" false))
-    |> Code.setIndent 2
-    |> Code.printNewLine (sprintf "member _.MethodName = \"%s\"" apiType.Name)
+    |> generateTypeRecord apiType
+    |> generateMakeMethod apiType
+    |> generateInterface apiType
     |> Code.printNewLine ""
     
   ) code
