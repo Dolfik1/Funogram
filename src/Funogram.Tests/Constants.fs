@@ -1,7 +1,7 @@
 namespace Funogram.Tests
 
 open System
-open Funogram.Telegram.RequestsTypes
+open Funogram.Telegram
 open Funogram.Telegram.Types
 open Funogram.Types
 
@@ -53,13 +53,13 @@ module Constants =
   let jsonParamsDictionary = """{"offset":0,"limit":100,"timeout":600,"allowed_updates":[]}"""
     
   let forwardMessageReq = 
-    {
-      ForwardMessageReq.ChatId = ChatId.String "Dolfik"
+    ({
+      ChatId = ChatId.String "Dolfik"
       FromChatId = ChatId.Int 10L
       MessageId = 10L
       DisableNotification = None
       ProtectContent = None
-    } :> IBotRequest
+    }: Req.ForwardMessage) :> IBotRequest
   let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
   
   let jsonTestObjChatMember = ChatMemberMember.Create("member", User.Create(600000000L, false, "firstName", "lastName", "userName", "ru"))

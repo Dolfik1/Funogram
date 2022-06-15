@@ -32,11 +32,11 @@
   },
   {
     "Name": "setWebhook",
-    "Description": "Use this method to specify a url and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified url, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.",
+    "Description": "Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.",
     "Fields": [
       {
         "Name": "url",
-        "Description": "HTTPS url to send updates to. Use an empty string to remove webhook integration",
+        "Description": "HTTPS URL to send updates to. Use an empty string to remove webhook integration",
         "FieldType": "String",
         "Optional": false
       },
@@ -2103,7 +2103,7 @@
       },
       {
         "Name": "url",
-        "Description": "URL that will be opened by the user\u0027s client. If you have created a Game and accepted the conditions via @Botfather, specify the URL that opens your game \u2014 note that this will only work if the query comes from a callback_game button.\n\nOtherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.",
+        "Description": "URL that will be opened by the user\u0027s client. If you have created a Game and accepted the conditions via @BotFather, specify the URL that opens your game \u2014 note that this will only work if the query comes from a callback_game button.\n\nOtherwise, you may use links like t.me/your_bot?start=XXXX that open your bot with a parameter.",
         "FieldType": "String",
         "Optional": true
       },
@@ -2805,7 +2805,7 @@
       },
       {
         "Name": "provider_token",
-        "Description": "Payments provider token, obtained via Botfather",
+        "Description": "Payment provider token, obtained via @BotFather",
         "FieldType": "String",
         "Optional": false
       },
@@ -2841,7 +2841,7 @@
       },
       {
         "Name": "provider_data",
-        "Description": "A JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of required fields should be provided by the payment provider.",
+        "Description": "JSON-serialized data about the invoice, which will be shared with the payment provider. A detailed description of required fields should be provided by the payment provider.",
         "FieldType": "String",
         "Optional": true
       },
@@ -2853,7 +2853,7 @@
       },
       {
         "Name": "photo_size",
-        "Description": "Photo size",
+        "Description": "Photo size in bytes",
         "FieldType": "Integer",
         "Optional": true
       },
@@ -2895,13 +2895,13 @@
       },
       {
         "Name": "send_phone_number_to_provider",
-        "Description": "Pass True, if user\u0027s phone number should be sent to provider",
+        "Description": "Pass True, if the user\u0027s phone number should be sent to provider",
         "FieldType": "Boolean",
         "Optional": true
       },
       {
         "Name": "send_email_to_provider",
-        "Description": "Pass True, if user\u0027s email address should be sent to provider",
+        "Description": "Pass True, if the user\u0027s email address should be sent to provider",
         "FieldType": "Boolean",
         "Optional": true
       },
@@ -3031,7 +3031,7 @@
       },
       {
         "Name": "game_short_name",
-        "Description": "Short name of the game, serves as the unique identifier for the game. Set up your games via Botfather.",
+        "Description": "Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.",
         "FieldType": "String",
         "Optional": false
       },

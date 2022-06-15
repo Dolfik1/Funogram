@@ -1,24 +1,41 @@
 ﻿module Funogram.Telegram.Bot
 
 open System
+open System.IO
 open System.Net.Http
-open Funogram.Telegram.RequestsTypes
+open Funogram.Telegram
 open Funogram.Telegram.Sscanf
 open Funogram.Telegram.Types
-open Funogram.Telegram.Api
 open Funogram.Types
 open Funogram.Api
 
-let defaultConfig =
-  { Token = ""
-    Offset = Some 0L
-    Limit = Some 100
-    Timeout = Some 60000
-    AllowedUpdates = None
-    Client = new HttpClient()
-    ApiEndpointUrl = Uri("https://api.telegram.org/bot")
-    WebHook = None
-    OnError = (fun e -> printfn "%A" e) }
+[<Literal>]
+let TokenFileName = "token"
+
+[<RequireQualifiedAccess>]
+module Config =
+  let defaultConfig =
+    { Token = ""
+      Offset = Some 0L
+      Limit = Some 100
+      Timeout = Some 60000
+      AllowedUpdates = None
+      Client = new HttpClient()
+      ApiEndpointUrl = Uri("https://api.telegram.org/bot")
+      WebHook = None
+      OnError = (fun e -> printfn "%A" e) }
+
+  let withReadTokenFromFile config =
+    if File.Exists(TokenFileName) then
+      { config with Token = File.ReadAllText(TokenFileName) }
+    else
+      printf "Please, enter bot token: "
+      let token = System.Console.ReadLine()
+      File.WriteAllText(TokenFileName, token)
+      { config with Token = token }
+
+  let withReadTokenFromEnv envName config =
+    { config with Token = Environment.GetEnvironmentVariable(envName) }
 
 type UpdateContext =
   { Update: Update
@@ -49,7 +66,12 @@ let getTextForCommand (me: User) (textOriginal: string option) =
       text.Remove(idx + 1, username.Length + 1) |> Some
     | _ -> textOriginal
   | _ -> textOriginal
-
+  
+let checkCommand (context: UpdateContext) (command: string) =
+  match context.Update.Message with
+  | Some { Text = text } when (getTextForCommand context.Me text) = Some command -> true
+  | _ -> false
+    
 let cmd (command: string) (handler: UpdateContext -> unit) (context: UpdateContext) =
   context.Update.Message
   |> Option.bind (fun message -> getTextForCommand context.Me message.Text)
@@ -83,7 +105,7 @@ let private runBot config me updateArrived updatesArrived =
       async {
         try
           let! updatesResult =
-            GetUpdatesReq.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
+            Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
             |> bot
 
           match updatesResult with
@@ -124,7 +146,7 @@ let private runBot config me updateArrived updatesArrived =
     
 let startBot config updateArrived updatesArrived =
   async {
-    let! me = getMe |> api config
+    let! me = Api.getMe |> api config
     return! me 
     |> function
     | Error error -> failwith error.Description

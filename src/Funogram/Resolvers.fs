@@ -17,7 +17,7 @@ module internal Resolvers =
     let chars =
       seq {
         let chars = name.ToCharArray()
-        for i in 0..chars.Length - 1 do
+        for i in 0 .. chars.Length - 1 do
           let c = chars.[i]
           if Char.IsUpper(c) then
             if i = 0 then
@@ -31,7 +31,7 @@ module internal Resolvers =
     }
     String.Concat(chars).ToLower()
 
-  let mkMemberSerializer (case : ShapeFSharpUnionCase<'DeclaringType>) =
+  let mkMemberSerializer (case: ShapeFSharpUnionCase<'DeclaringType>) =
     let isFile = case.Fields |> Array.map (fun x -> x.Member.Type) = [|typeof<string>; typeof<Stream>|]
     if case.Fields.Length = 0 then
       fun _ _ -> Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
@@ -39,9 +39,9 @@ module internal Resolvers =
       case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> IJsonFormatterResolver -> byte[]> with
         member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
           fun value resolver ->
-            let mutable myWriter = new JsonWriter()
+            let mutable myWriter = JsonWriter()
             
-            if (isFile) then
+            if isFile then
               let str = box (shape.Get value) |> unbox<string>
               myWriter.WriteString(sprintf "attach://%s" str)
             else
@@ -53,7 +53,7 @@ module internal Resolvers =
   let mkMemberDeserializer (case: ShapeFSharpUnionCase<'DeclaringType>) (init: unit -> 'DeclaringType) =
     if case.Fields.Length = 0 then
       fun value offset _ ->
-        let mutable myReader = new JsonReader(value, offset)
+        let mutable myReader = JsonReader(value, offset)
         myReader.ReadNext()
         let offset = myReader.GetCurrentOffsetUnsafe()
         (init(), offset)
@@ -61,7 +61,7 @@ module internal Resolvers =
       case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, byte[] -> int -> IJsonFormatterResolver -> ('DeclaringType * int)> with
         member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
           fun value offset resolver ->
-            let mutable myReader = new JsonReader(value, offset)
+            let mutable myReader = JsonReader(value, offset)
             let v =
               resolver.GetFormatterWithVerify<'Field>()
                 .Deserialize(&myReader, resolver)

@@ -1,7 +1,7 @@
 module Funogram.TestBot.Commands.Base
 
 open Funogram.Telegram.Bot
-open Funogram.Telegram.Api
+open Funogram.Telegram
 open Funogram.Telegram.Types
 open Funogram.TestBot.Core
 
@@ -54,4 +54,4 @@ let updateArrived (ctx: UpdateContext) =
 
   if result then ()
   else
-    sendMessage (fromId()) defaultText |> bot ctx.Config
+    Api.sendMessage (fromId()) defaultText |> bot ctx.Config

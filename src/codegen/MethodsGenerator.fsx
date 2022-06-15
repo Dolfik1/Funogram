@@ -233,7 +233,8 @@ sw.Start()
 
 let code = 
   Code.code
-  |> Code.print "module Funogram.Telegram.RequestsTypes"
+  |> Code.print "[<Microsoft.FSharp.Core.RequireQualifiedAccess>]"
+  |> Code.printNewLine "module Funogram.Telegram.Req"
   |> Code.printNewLine 
    """
 open Funogram.Types
@@ -241,7 +242,7 @@ open Types
 open System
     """
 
-let getTypeName apiType = sprintf "%sReq" (Helpers.toPascalCase apiType.Name)
+let getTypeName apiType = Helpers.toPascalCase apiType.Name
 
 let generateTypeRecord apiType code =
   let typeName = getTypeName apiType
@@ -273,37 +274,91 @@ let generateTypeRecord apiType code =
     |> Code.printNewLine "}"
   else
     code
+
+let sortFields fields = fields |> Array.sortBy (fun x -> x.Optional)
+
+let generateMakeMethodSignature apiType (fields: ApiTypeField[]) convertTypeFn code =
+  let code =
+    code
+    |> Code.setIndent 1
+    |> Code.printNewLine "static member Make("
+    
+  fields
+  |> Seq.fold (fun code tp ->
+    let o = if tp.Optional then "?" else ""
+    let c = if fields.[0] <> tp then ", " else ""
+
+    let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
+    let argType = convertTypeFn apiType tp false
+
+    code
+    |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
+  ) code
+  |> Code.print ") = "
+
+let generateMakeMethodInvocation apiType (fields: ApiTypeField[]) convertArgSet code =
+  let typeName = getTypeName apiType
   
+  let code =
+    code
+    |> Code.setIndent 2
+    |> Code.printNewLine (sprintf "%s.Make(" typeName)
+    
+  fields
+  |> Seq.fold (fun code tp ->
+    let c = if fields.[0] <> tp then ", " else ""
+
+    let argNameOriginal = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
+    let argName = argNameOriginal |> convertArgSet apiType tp tp.Optional
+    if tp.Optional then
+      code
+      |> Code.print (sprintf "%s?%s = %s" c argNameOriginal argName)
+    else
+      code
+      |> Code.print (sprintf "%s%s" c argName)
+
+  ) code
+  |> Code.print ")"
+
+let generateMakeMethodOverloads apiType (fields: ApiTypeField[]) code =
+  if fields.Length = 0 || (convertType apiType fields.[0] false <> "ChatId") then
+    code
+  else
+    let convertTypeFn replaceTypeName apiType tp optional =
+      let typeName = convertType apiType tp false
+      if typeName = "ChatId" then replaceTypeName
+      elif not optional then typeName
+      else convertType apiType tp optional
+      
+    let convertArgSet convert apiType tp optional argName =
+      let typeName = convertType apiType tp false
+      if typeName = "ChatId" then
+        if optional then
+          sprintf "(%s |> Option.map %s)" argName convert
+        else
+          sprintf "%s %s" convert argName
+      else argName
+    
+    
+    seq { "int64", "ChatId.Int"; "string", "ChatId.String" }
+    |> Seq.fold (fun code (replaceType, convert) ->
+      code
+      |> generateMakeMethodSignature apiType fields (convertTypeFn replaceType)
+      |> generateMakeMethodInvocation apiType fields (convertArgSet convert)
+    ) code
 
 let generateMakeMethod apiType code =
   let typeName = getTypeName apiType
-
-  let code =
-    code
-    |> Code.printNewLine "static member Make("
-    
   if apiType.Fields.Length = 0 then
-    code |> Code.print (sprintf ") = %s()" typeName)
+    code
+    |> generateMakeMethodSignature apiType apiType.Fields convertType
+    |> Code.print (sprintf "%s()" typeName)
   else
-    let fields = apiType.Fields |> Array.sortBy (fun x -> x.Optional)
-    
-    let code =
-      fields
-      |> Seq.fold (fun code tp ->
-        let o = if tp.Optional then "?" else ""
-        let c = if fields.[0] <> tp then ", " else ""
-
-        let argName = Helpers.toCamelCase tp.Name |> Helpers.fixReservedKeywords
-        let argType = convertType apiType tp false
-
-        code
-        |> Code.print (sprintf "%s%s%s: %s" c o argName argType)
-      ) code
-      |> Code.print ") = "
-    
+    let fields = apiType.Fields |> sortFields
     
     let code =
       code
+      |> generateMakeMethodSignature apiType fields convertType
       |> Code.setIndent 2
       |> Code.printNewLine "{"
       |> Code.setIndent 3
@@ -316,6 +371,8 @@ let generateMakeMethod apiType code =
     |> Code.setIndent 2
     |> Code.printNewLine "}"
     |> Code.setIndent 1
+    
+    |> generateMakeMethodOverloads apiType fields
 
 let generateInterface apiType code =
   code

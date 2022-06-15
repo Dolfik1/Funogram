@@ -1,10 +1,10 @@
 module Funogram.TestBot.Commands.Markup
 
-open Funogram.Telegram.RequestsTypes
+open Funogram.Telegram
 open Funogram.Telegram.Types
 open Funogram.TestBot.Core
 
-let private sendMessageMarkup text replyMarkup config chatId = SendMessageReq.Make(ChatId.Int chatId, text, replyMarkup = replyMarkup) |> bot config
+let private sendMessageMarkup text replyMarkup config (chatId: int64) = Req.SendMessage.Make(chatId, text, replyMarkup = replyMarkup) |> bot config
 
 let testReplyKeyboard config chatId =
   let keyboard = Array.init 2 (fun x -> Array.init 2 (fun y -> KeyboardButton.Create(y.ToString() + x.ToString())))

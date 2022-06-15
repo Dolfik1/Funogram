@@ -42,7 +42,7 @@ let internal getUnix (date: DateTime) =
 
 let internal parseJson<'a> (data: byte[]) =
   try
-    match (JsonSerializer.Deserialize<Types.ApiResponse<'a>>(data, resolver)) with
+    match JsonSerializer.Deserialize<ApiResponse<'a>>(data, resolver) with
     | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
     | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
       Error { Description = x.Description.Value
@@ -387,6 +387,22 @@ module Api =
       let! result =
         if hasData then client.PostAsync(url, content) |> Async.AwaitTask
         else client.GetAsync(url) |> Async.AwaitTask
+  
+      use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
+      return parseJsonStreamApiResponse<'a> stream
+    }
+    
+
+  let makeJsonBodyRequestAsync config (request: IRequestBase<'a>) =
+    async {
+      let client = config.Client
+      let url = getUrl config request.MethodName
+      
+      use ms = new MemoryStream()
+      JsonSerializer.Serialize(ms, request, resolver)
+      
+      use content = new StreamContent(ms)
+      let! result = client.PostAsync(url, content) |> Async.AwaitTask
   
       use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
       return parseJsonStreamApiResponse<'a> stream
