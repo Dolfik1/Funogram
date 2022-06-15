@@ -30,12 +30,12 @@ Install-Package Funogram.Telegram
 ```
 
 ## Examples
-You may start learning Funogram from [example apps](https://github.com/Dolfik1/Funogram/src/examples).
+You may start learning Funogram from [example bots](https://github.com/Dolfik1/Funogram/tree/master/src/examples).
 
 ## Hello, world!
 First of all you need to get an API key. See [Telegram Bot API documentation](https://core.telegram.org/bots#6-botfather).
 
-When Bot API token is registered you may start to write your first bot. Let's write simple bot that sends "Hello, world!" in reply to any message. You can find source code of the bot [here](https://github.com/Dolfik1/Funogram/src/examples/Funogram.Examples.HelloWorld).
+When Bot API token is registered you may start to write your first bot. Let's write simple bot that sends "Hello, world!" in reply to any message. You can find source code of the bot [here](https://github.com/Dolfik1/Funogram/tree/master/src/examples/Funogram.Examples.HelloWorld).
 
 Let's open the necessary namespaces:
 ```f#
@@ -161,10 +161,10 @@ Commands processor also correctly process commands with bot username. For exampl
 
 when @MyExampleFSharpBot is bot's username.
 
-You also may write your own command function with custom logic (if required) which may check text for keywords instead of command (see [Bot.fs](https://github.com/Dolfik1/Funogram/src/Funogram.Telegram/Bot.fs) for reference) 
+You also may write your own command function with custom logic (if required) which may check text for keywords instead of command (see [Bot.fs](https://github.com/Dolfik1/Funogram/tree/master/src/Funogram.Telegram/Bot.fs) for reference) 
 
 ## Configure WebSockets
-If you want to use webhooks, you should start application with admin privileges. The sample app is located [here](https://github.com/Dolfik1/Funogram/src/examples/Funogram.Examples.WebSocket).
+If you want to use webhooks, you should start application with admin privileges. The sample app is located [here](https://github.com/Dolfik1/Funogram/tree/master/src/examples/Funogram.Examples.WebSocket).
 
 To get updates via webhooks you need send your endpoint address to Telegram server:
 ```f#
