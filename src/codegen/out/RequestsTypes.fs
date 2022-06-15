@@ -3,6 +3,7 @@ module Funogram.Telegram.Req
 
 open Funogram.Types
 open Types
+open System
     
 type GetUpdates =
   {

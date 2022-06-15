@@ -6,3 +6,5 @@ bin
 packages
 token
 *.DotSettings.user
+.fake
+.ionide
