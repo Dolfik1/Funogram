@@ -3802,7 +3802,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the photo caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -3861,7 +3861,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the video caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -3952,7 +3952,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the animation caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -4035,7 +4035,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the audio caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -4118,7 +4118,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the document caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -4698,7 +4698,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the photo caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -4821,7 +4821,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -4944,7 +4944,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -5043,7 +5043,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the video caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -5158,7 +5158,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the audio caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -5257,7 +5257,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the voice message caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -5340,7 +5340,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the document caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -5875,7 +5875,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the photo caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -5958,7 +5958,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -6041,7 +6041,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -6183,7 +6183,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the document caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -6274,7 +6274,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the video caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -6357,7 +6357,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the voice message caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -6432,7 +6432,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the audio caption. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {
@@ -6514,7 +6514,7 @@
             "ConvertedName": "ParseMode",
             "Description": "Mode for parsing entities in the message text. See formatting options for more details.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ParseMode",
             "Optional": true
           },
           {

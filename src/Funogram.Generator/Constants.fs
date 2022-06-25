@@ -16,4 +16,8 @@ let CacheDir = "cache"
 [<Literal>]
 let MethodsFileName = "RequestsTypes.fs"
 
+[<Literal>]
+let TypesFileName = "Types.fs"
+
+
 

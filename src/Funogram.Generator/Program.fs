@@ -30,6 +30,9 @@ let processAsync (args: CliArguments list) =
       |> TypesParser.withResultPath (Path.Combine(Constants.OutputDir, "types.json"))
       |> TypesParser.loadRemapData "./RemapTypes.json"
       |> TypesParser.parse
+      
+      |> TypesGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.TypesFileName))
+      |> TypesGenerator.generate
 
     ()
   }

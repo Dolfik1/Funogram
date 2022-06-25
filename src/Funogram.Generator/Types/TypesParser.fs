@@ -92,7 +92,11 @@ let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
   |> Array.map (fun tp ->
       remapTypes
       |> Array.fold (fun tp remapTp ->
-        if Helpers.compareWildcard remapTp.Name tp.Name || Helpers.compareWildcard remapTp.Description tp.Description then
+        let matched =
+          (String.IsNullOrEmpty remapTp.Name || Helpers.compareWildcard remapTp.Name tp.Name)
+          && (String.IsNullOrEmpty remapTp.Description || Helpers.compareWildcard remapTp.Description tp.Description)
+        
+        if matched then
           match tp.Kind, remapTp.Kind with
           | ApiTypeKind.Stub, ApiTypeKind.Stub -> tp
           | ApiTypeKind.Fields fields, ApiTypeKind.Fields remapFields ->
@@ -101,10 +105,6 @@ let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
               |> Array.map (fun field ->
                 remapFields
                 |> Array.fold (fun field remapField ->
-                  let originalNameMatched = Helpers.compareWildcard remapField.OriginalName field.OriginalName
-                  let descriptionMatched = Helpers.compareWildcard remapField.Description field.Description
-                  let originalFieldTypeMatched = Helpers.compareWildcard remapField.OriginalFieldType field.OriginalFieldType
-                  
                   let matched =
                     (String.IsNullOrEmpty remapField.OriginalName || Helpers.compareWildcard remapField.OriginalName field.OriginalName)
                     && (String.IsNullOrEmpty remapField.Description || Helpers.compareWildcard remapField.Description field.Description)

@@ -3,7 +3,6 @@ module Funogram.Telegram.Types
 open System
 open System.IO
 open System.Runtime.Serialization
-      
 
 type ChatId = 
   | Int of int64
@@ -20,7 +19,6 @@ type ChatType =
   | [<DataMember(Name = "supergroup")>] SuperGroup
   | Channel
   | Unknown
-
 
 /// Message text parsing mode
 type ParseMode = 

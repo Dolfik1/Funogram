@@ -6,7 +6,7 @@
       "Fields": [
         [
           {
-            "OriginalFieldType": "parse_mode",
+            "OriginalName": "parse_mode",
             "ConvertedFieldType": "ParseMode"
           }
         ]
