@@ -101,15 +101,21 @@ let sscanf (pf:PrintfFormat<_,_,_,_,'t>) s : 't =
 /// Parse the format in 'pf' from the string 's' regardless of casing, failing and raising an exception
 /// otherwise
 let sscanfci (pf:PrintfFormat<_,_,_,_,'t>) s : 't =
-  let formatStr  = pf.Value
-  let constants  = formatStr.Split([|"%%"|], StringSplitOptions.None)
-                   |> Array.map (fun x -> x.Split(separators, StringSplitOptions.None))
-  let regexStr   = constants
-                   |> Array.map (fun c -> c |> Array.map Regex.Escape |> String.concat "(.*?)")
-                   |> String.concat "%"
-  let regex      = Regex("^" + regexStr + "$", RegexOptions.IgnoreCase)
-  let formatters = formatStr.ToCharArray() // need original string here (possibly with "%%"s)
-                   |> Array.toList |> getFormatters
+  let formatStr = pf.Value
+  let constants = 
+    formatStr.Split([|"%%"|], StringSplitOptions.None)
+    |> Array.map (fun x -> x.Split(separators, StringSplitOptions.None))
+
+  let regexStr = 
+    constants
+    |> Array.map (fun c -> c |> Array.map Regex.Escape |> String.concat "(.*?)")
+    |> String.concat "%"
+
+  let regex = Regex("^" + regexStr + "$", RegexOptions.IgnoreCase)
+  let formatters = 
+    formatStr.ToCharArray() // need original string here (possibly with "%%"s)
+    |> Array.toList |> getFormatters
+
   let groups =
     regex.Match(s).Groups
     |> Seq.cast<Group>
@@ -124,9 +130,7 @@ let sscanfci (pf:PrintfFormat<_,_,_,_,'t>) s : 't =
     coerce matches.[0] typeof<'t> :?> 't
   else
     let tupleTypes = FSharpType.GetTupleElements(typeof<'t>)
-    let matches =
-      (matches,tupleTypes)
-      ||> Array.map2 ( fun a b -> coerce a b)
+    let matches = (matches, tupleTypes) ||> Array.map2 ( fun a b -> coerce a b)
     FSharpValue.MakeTuple(matches, typeof<'t>) :?> 't
 
 module private BasicTesting =
@@ -134,17 +138,17 @@ module private BasicTesting =
   let a, b = sscanf "(%%%s,%M)" "(%hello, 4.53)"
   let i16a: int16 = sscanf "aaaa%d" "aaaa4"
   let i32a: int32 = sscanf "aaaa%d" "aaaa4"
-  let i64a : int64 = sscanf "aaaa%d" "aaaa4"
+  let i64a: int64 = sscanf "aaaa%d" "aaaa4"
   let i16b: int16 = sscanf "aaaa%i" "aaaa4"
   let i32b: int32 = sscanf "aaaa%i" "aaaa4"
-  let i64b : int64 = sscanf "aaaa%i" "aaaa4"
+  let i64b: int64 = sscanf "aaaa%i" "aaaa4"
   let ui16: uint16 = sscanf "aaaa%u" "aaaa4"
   let ui32: uint32 = sscanf "aaaa%u" "aaaa4"
   let ui64: uint64 = sscanf "aaaa%u" "aaaa4"
 
-  let x,y,z = sscanf "%s-%s-%s" "test-this-string"
+  let x, y, z = sscanf "%s-%s-%s" "test-this-string"
 
   let c, d, (e: int), (f: uint32), (g: int16), h, (i: int64) = sscanf "%b-%d-%i,%u,%x,%X,%o" "false-42--31,13,ff,FF,42"
 
   let j, k, l, m, n, o, p = sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
-  let aa              = sscanf "(%s)" "(45.33)"
+  let aa = sscanf "(%s)" "(45.33)"
