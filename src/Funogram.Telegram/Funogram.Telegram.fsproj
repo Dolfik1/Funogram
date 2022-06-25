@@ -9,7 +9,7 @@
       <Title>Funogram.Telegram</Title>
       <PackageId>Funogram.Telegram</PackageId>
       <PackageTags>telegram;funogram;F#;bot</PackageTags>
-      <PackageIconUrl>https://raw.githubusercontent.com/Dolfik1/Funogram/master/docs/files/img/logo.png</PackageIconUrl>
+      <PackageIcon>logo.png</PackageIcon>
       <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
       <PublishRepositoryUrl>true</PublishRepositoryUrl> 
@@ -21,8 +21,10 @@
         <Compile Include="Sscanf.fs" />
         <Compile Include="Bot.fs" />
     </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Funogram\Funogram.fsproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
 </Project>

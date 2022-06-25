@@ -11,7 +11,7 @@
     <Title>Funogram</Title>
     <PackageId>Funogram</PackageId>
     <PackageTags>telegram;funogram;F#;bot</PackageTags>
-    <PackageIconUrl>https://raw.githubusercontent.com/Dolfik1/Funogram/master/docs/files/img/logo.png</PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
@@ -28,5 +28,8 @@
     <PackageReference Include="TypeShape" Version="8.0.1" />
     <PackageReference Include="Utf8Json" Version="1.3.7" />
     <PackageReference Include="Utf8Json.FSharpExtensions" Version="0.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
