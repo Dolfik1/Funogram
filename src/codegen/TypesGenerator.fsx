@@ -23,11 +23,16 @@ type ApiTypeNodeInfo =
 
 type ApiTypeField =
   {
-    Name: string
+    OriginalName: string
+    ConvertedName: string
     Description: string
-    FieldType: string
+    OriginalFieldType: string
+    ConvertedFieldType: string
     Optional: bool
   }
+  member x.VisibleFieldType =
+    if not x.Optional then x.ConvertedFieldType
+    else sprintf "%s option" x.ConvertedFieldType
 
 type ApiTypeCase =
   {
@@ -73,7 +78,30 @@ let splitCaseNameAndType (typeName: string) (nameAndType: string) =
 
   try nameAndType.Substring(typeName.Length) with | _ -> "ERROR!"
 
-let parseApiTypeFields (node: HtmlNode) =
+let setConvertedFieldType apiTypeName (field: ApiTypeField) =
+  let typeString =
+    match apiTypeName, field with
+    | "Chat", { OriginalName = "type" }
+    | "InlineQuery", { OriginalName = "chat_type" } ->
+      "ChatType"
+     
+    | _, { OriginalName = "parse_mode" } ->
+      "ParseMode"
+
+    | _, { OriginalName = "media" } when field.Description.Contains("File to send") ->
+      "InputFile"
+    
+    | _, { OriginalName = "date" }
+    | _, { OriginalName = "until_date" }
+    | _, { OriginalName = "forward_date" } -> "DateTime"
+
+    | "MaskPosition", { OriginalName = "point" } -> "MaskPoint"
+    
+    | _ -> field.OriginalFieldType
+  
+  { field with ConvertedFieldType = Helpers.convertTLTypeToFSharpType typeString field.Description false }
+
+let parseApiTypeFields apiTypeName (node: HtmlNode) =
   node.CssSelect("tr")
   |> Seq.skip 1 // skip the header
   |> Seq.map (fun n -> n.Elements()) 
@@ -83,11 +111,13 @@ let parseApiTypeFields (node: HtmlNode) =
     let optionalIndex = desc.IndexOf("Optional. ") 
     let trimmedDesc = if optionalIndex >= 0 then desc.Substring(10) else desc
     {
-      Name = elements.[0].InnerText()
+      OriginalName = elements.[0].InnerText()
+      ConvertedName = elements.[0].InnerText() |> Helpers.toPascalCase
       Description = trimmedDesc
-      FieldType = elements.[1].InnerText()
+      OriginalFieldType = elements.[1].InnerText()
+      ConvertedFieldType = ""
       Optional = optionalIndex >= 0
-    }
+    } |> setConvertedFieldType apiTypeName
   )
   |> Array.ofSeq
 
@@ -105,29 +135,6 @@ let parseApiTypeCases (typeName: string) (node: HtmlNode) =
 let isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
   let name = typeNodeInfo.TypeName.InnerText()
   Char.IsUpper name.[0] && (name.Replace(" ", "").Length = name.Length)
-
-let convertType (tp: ApiType) (field: ApiTypeField) =
-  let typeString =
-    match tp, field with
-    | { Name = "Chat" }, { Name = "type" }
-    | { Name = "InlineQuery" }, { Name = "chat_type" } ->
-      "ChatType"
-     
-    | _, { Name = "parse_mode" } ->
-      "ParseMode"
-
-    | _, { Name = "media" } when field.Description.Contains("File to send") ->
-      "InputFile"
-    
-    | _, { Name = "date" }
-    | _, { Name = "until_date" }
-    | _, { Name = "forward_date" } -> "DateTime"
-
-    | { Name = "MaskPosition" }, { Name = "point" } -> "MaskPoint"
-    
-    | _ -> field.FieldType
-  
-  Helpers.convertTLTypeToFSharpType typeString field.Description
  
 let generateFieldsBody tp (fields: ApiTypeField[]) code =
   let code =
@@ -141,8 +148,8 @@ let generateFieldsBody tp (fields: ApiTypeField[]) code =
   |> Seq.fold (fun code field ->
     code
     |> Code.printNewLineComment field.Description
-    |> Code.printNewLine (sprintf "[<DataMember(Name = \"%s\")>]" field.Name)
-    |> Code.printNewLine (sprintf "%s: %s" (Helpers.toPascalCase field.Name) (convertType tp field field.Optional))
+    |> Code.printNewLine (sprintf "[<DataMember(Name = \"%s\")>]" field.OriginalName)
+    |> Code.printNewLine (sprintf "%s: %s" field.ConvertedName field.VisibleFieldType)
   ) code
 
   |> Code.setIndent 1
@@ -162,8 +169,8 @@ let generateFieldsCreateMember tp (fields: ApiTypeField[]) code =
   |> Seq.fold (fun code field ->
     let o = if field.Optional then "?" else ""
     let c = if field = firstField.Value then "" else ", "
-    let propName = Helpers.toCamelCase field.Name |> Helpers.fixReservedKeywords
-    let fieldType = convertType tp field false
+    let propName = Helpers.toCamelCase field.OriginalName |> Helpers.fixReservedKeywords
+    let fieldType = field.ConvertedFieldType
     code
     |> Code.print (sprintf "%s%s%s: %s" c o propName fieldType)
   ) code
@@ -174,10 +181,8 @@ let generateFieldsCreateMember tp (fields: ApiTypeField[]) code =
   |> (fun code ->
     fields
     |> Seq.fold (fun code field ->
-      
-      let fieldName = Helpers.toPascalCase field.Name
-      let propName = Helpers.toCamelCase field.Name |> Helpers.fixReservedKeywords
-      code |> Code.printNewLine (sprintf "%s = %s" fieldName propName)
+      let propName = Helpers.toCamelCase field.OriginalName |> Helpers.fixReservedKeywords
+      code |> Code.printNewLine (sprintf "%s = %s" field.ConvertedName propName)
     ) code
   )
   |> Code.setIndent 2
@@ -269,7 +274,7 @@ let generate () =
         Kind = 
           match node.TypeFields, node.TypeCases with
           | Some fields, _ -> 
-            parseApiTypeFields fields
+            parseApiTypeFields typeName fields
             |> ApiTypeKind.Fields
 
           | _, Some cases -> 

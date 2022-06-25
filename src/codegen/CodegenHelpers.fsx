@@ -122,6 +122,12 @@ module Code =
           code.StringBuilder.Append(line)
     }
 
+  let printNewLineFormatted (line: string, args: Object[]) code =
+    { (code |> appendLine |> appendIndent) with
+        StringBuilder =
+          code.StringBuilder.AppendFormat(line, args)
+    }
+
   let printNewLineComment (comment: string) code =
     comment.Split("\n")
     |> Seq.fold (fun code comment ->
