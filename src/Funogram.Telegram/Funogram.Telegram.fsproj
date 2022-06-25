@@ -3,12 +3,12 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <PropertyGroup>
-      <VersionPrefix>6.0.0.1-preview</VersionPrefix>
+      <VersionPrefix>6.0.0.2</VersionPrefix>
       <Authors>Nikolay Matyushin</Authors>
       <Product>Funogram.Telegram</Product>
       <Title>Funogram.Telegram</Title>
       <PackageId>Funogram.Telegram</PackageId>
-      <PackageTags>telegram</PackageTags>
+      <PackageTags>telegram;funogram;F#;bot</PackageTags>
       <PackageIconUrl>https://raw.githubusercontent.com/Dolfik1/Funogram/master/docs/files/img/logo.png</PackageIconUrl>
       <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>

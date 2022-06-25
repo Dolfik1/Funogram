@@ -10,7 +10,7 @@
     <Summary>Funogram is a functional Telegram Bot Api library for F#</Summary>
     <Title>Funogram</Title>
     <PackageId>Funogram</PackageId>
-    <PackageTags>telegram</PackageTags>
+    <PackageTags>telegram;funogram;F#;bot</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/Dolfik1/Funogram/master/docs/files/img/logo.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
