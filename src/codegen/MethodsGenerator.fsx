@@ -29,13 +29,13 @@ type ApiType =
 let ApiUri = "https://core.telegram.org/bots/api"
 
 [<Literal>]
+let CodeOutputDir = "../Funogram.Telegram/"
+
+[<Literal>]
 let OutputDir = "out"
 
 [<Literal>]
 let GeneratedMethodsTypesFileName = "RequestsTypes.fs"
-
-[<Literal>]
-let GeneratedMethodsSourceFileName = "Api.fs"
 
 let typesJsonPath = Path.Combine(OutputDir, "methods.json")
 
@@ -225,7 +225,7 @@ let serializedTypes = Json.JsonSerializer.Serialize(apiMethods, serializerOption
 File.WriteAllText(typesJsonPath, serializedTypes)
 
 
-let methodsTypesCodePath = Path.Combine(OutputDir, GeneratedMethodsTypesFileName)
+let methodsTypesCodePath = Path.Combine(CodeOutputDir, GeneratedMethodsTypesFileName)
 
 printfn "Generating methods types source code..."
 sw.Reset()

@@ -51,6 +51,9 @@ type ApiType =
 let ApiUri = "https://core.telegram.org/bots/api"
 
 [<Literal>]
+let CodeOutputDir = "../Funogram.Telegram/"
+
+[<Literal>]
 let OutputDir = "out"
 
 [<Literal>]
@@ -291,7 +294,7 @@ let generate () =
   File.WriteAllText(typesJsonPath, serializedTypes)
 
 
-  let typesCodePath = Path.Combine(OutputDir, GeneratedTypesFileName)
+  let typesCodePath = Path.Combine(CodeOutputDir, GeneratedTypesFileName)
 
   printfn "Generating source code..."
   sw.Reset()

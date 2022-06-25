@@ -3,6 +3,7 @@ module Funogram.Telegram.Req
 
 open Funogram.Types
 open Types
+open System
     
 type GetUpdates =
   {
@@ -29,8 +30,9 @@ type SetWebhook =
     MaxConnections: int64 option
     AllowedUpdates: string[] option
     DropPendingUpdates: bool option
+    SecretToken: string option
   }
-  static member Make(url: string, ?certificate: InputFile, ?ipAddress: string, ?maxConnections: int64, ?allowedUpdates: string[], ?dropPendingUpdates: bool) = 
+  static member Make(url: string, ?certificate: InputFile, ?ipAddress: string, ?maxConnections: int64, ?allowedUpdates: string[], ?dropPendingUpdates: bool, ?secretToken: string) = 
     {
       Url = url
       Certificate = certificate
@@ -38,6 +40,7 @@ type SetWebhook =
       MaxConnections = maxConnections
       AllowedUpdates = allowedUpdates
       DropPendingUpdates = dropPendingUpdates
+      SecretToken = secretToken
     }
   interface IRequestBase<bool> with
     member _.MethodName = "setWebhook"
@@ -1718,6 +1721,55 @@ type SendInvoice =
     SendInvoice.Make(ChatId.String chatId, title, description, payload, providerToken, currency, prices, ?replyToMessageId = replyToMessageId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?isFlexible = isFlexible, ?sendEmailToProvider = sendEmailToProvider, ?sendPhoneNumberToProvider = sendPhoneNumberToProvider, ?needShippingAddress = needShippingAddress, ?needEmail = needEmail, ?needPhoneNumber = needPhoneNumber, ?photoWidth = photoWidth, ?photoHeight = photoHeight, ?allowSendingWithoutReply = allowSendingWithoutReply, ?photoSize = photoSize, ?photoUrl = photoUrl, ?providerData = providerData, ?startParameter = startParameter, ?suggestedTipAmounts = suggestedTipAmounts, ?maxTipAmount = maxTipAmount, ?needName = needName, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendInvoice"
+    
+type CreateInvoiceLink =
+  {
+    Title: string
+    Description: string
+    Payload: string
+    ProviderToken: string
+    Currency: string
+    Prices: LabeledPrice[]
+    MaxTipAmount: int64 option
+    SuggestedTipAmounts: int64[] option
+    ProviderData: string option
+    PhotoUrl: string option
+    PhotoSize: int64 option
+    PhotoWidth: int64 option
+    PhotoHeight: int64 option
+    NeedName: bool option
+    NeedPhoneNumber: bool option
+    NeedEmail: bool option
+    NeedShippingAddress: bool option
+    SendPhoneNumberToProvider: bool option
+    SendEmailToProvider: bool option
+    IsFlexible: bool option
+  }
+  static member Make(title: string, description: string, payload: string, providerToken: string, currency: string, prices: LabeledPrice[], ?sendPhoneNumberToProvider: bool, ?needShippingAddress: bool, ?needEmail: bool, ?needPhoneNumber: bool, ?needName: bool, ?photoHeight: int64, ?photoUrl: string, ?photoSize: int64, ?sendEmailToProvider: bool, ?providerData: string, ?suggestedTipAmounts: int64[], ?maxTipAmount: int64, ?photoWidth: int64, ?isFlexible: bool) = 
+    {
+      Title = title
+      Description = description
+      Payload = payload
+      ProviderToken = providerToken
+      Currency = currency
+      Prices = prices
+      MaxTipAmount = maxTipAmount
+      SuggestedTipAmounts = suggestedTipAmounts
+      ProviderData = providerData
+      PhotoUrl = photoUrl
+      PhotoSize = photoSize
+      PhotoWidth = photoWidth
+      PhotoHeight = photoHeight
+      NeedName = needName
+      NeedPhoneNumber = needPhoneNumber
+      NeedEmail = needEmail
+      NeedShippingAddress = needShippingAddress
+      SendPhoneNumberToProvider = sendPhoneNumberToProvider
+      SendEmailToProvider = sendEmailToProvider
+      IsFlexible = isFlexible
+    }
+  interface IRequestBase<created> with
+    member _.MethodName = "createInvoiceLink"
     
 type AnswerShippingQuery =
   {
