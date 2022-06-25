@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Constants.fs" />
+        <Compile Include="Helpers.fs" />
+        <Compile Include="Code.fs" />
+        <Compile Include="Loader.fs" />
+        <Compile Include="Methods\MethodsParser.fs" />
+        <Compile Include="Methods\MethodsGenerator.fs" />
+        <Compile Include="Types\Types.fs" />
+        <Compile Include="Types\TypesParser.fs" />
+        <Compile Include="Types\TypesGenerator.fs" />
+        <Compile Include="Program.fs" />
+        <Content Include="RemapTypes.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Argu" Version="6.1.1" />
+      <PackageReference Include="FSharp.Data" Version="4.2.8" />
+      <PackageReference Include="FSharp.SystemTextJson" Version="0.19.13" />
+    </ItemGroup>
+
+</Project>

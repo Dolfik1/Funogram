@@ -25,9 +25,6 @@ type IBotRequest =
 type IRequestBase<'a> =
   inherit IBotRequest
 
-type IApiType =
-  abstract GetFiles: (string * Stream) list option -> (string * Stream) list option
-
 /// Bot Api Response
 [<CLIMutable>]
 type ApiResponse<'a> = 

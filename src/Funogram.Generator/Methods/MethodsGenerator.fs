@@ -1,0 +1,2 @@
+module Funogram.Generator.MethodsGenerator
+

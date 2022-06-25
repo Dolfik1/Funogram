@@ -1,0 +1,44 @@
+[
+  {
+    "Name": "*",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalFieldType": "parse_mode",
+            "ConvertedFieldType": "ParseMode"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "Chat",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedFieldType": "ChatType"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InlineQuery",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat_type",
+            "ConvertedFieldType": "ChatType"
+          }
+        ]
+      ]
+    }
+  }
+]
