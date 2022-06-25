@@ -40,5 +40,76 @@
         ]
       ]
     }
+  },
+  {
+    "Name": "*",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "media",
+            "Description": "*File to send*",
+            "ConvertedFieldType": "InputFile"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "*",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "date",
+            "ConvertedFieldType": "DateTime"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "*",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "until_date",
+            "ConvertedFieldType": "DateTime"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "*",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "forward_date",
+            "ConvertedFieldType": "DateTime"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MaskPosition",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "point",
+            "ConvertedFieldType": "MaskPoint"
+          }
+        ]
+      ]
+    }
   }
 ]

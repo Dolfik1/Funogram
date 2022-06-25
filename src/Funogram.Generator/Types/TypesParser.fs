@@ -105,22 +105,16 @@ let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
                   let descriptionMatched = Helpers.compareWildcard remapField.Description field.Description
                   let originalFieldTypeMatched = Helpers.compareWildcard remapField.OriginalFieldType field.OriginalFieldType
                   
-                  if originalNameMatched || descriptionMatched || originalFieldTypeMatched then
-                    { OriginalName =
-                        if originalNameMatched then field.OriginalName
-                        else remapField.OriginalName |> Option.ofObj |> Option.defaultValue field.OriginalName
-                          
-                      ConvertedName = remapField.ConvertedName |> Option.ofObj |> Option.defaultValue field.ConvertedName
-                      Description =
-                        if descriptionMatched then field.Description
-                        else remapField.Description |> Option.ofObj |> Option.defaultValue field.Description
-
-                      OriginalFieldType =
-                        if originalFieldTypeMatched then field.OriginalFieldType
-                        else remapField.OriginalFieldType |> Option.ofObj |> Option.defaultValue field.OriginalFieldType
-
-                      ConvertedFieldType = remapField.ConvertedFieldType |> Option.ofObj |> Option.defaultValue field.ConvertedFieldType
-                      Optional = remapField.Optional |> Option.orElse field.Optional }
+                  let matched =
+                    (String.IsNullOrEmpty remapField.OriginalName || Helpers.compareWildcard remapField.OriginalName field.OriginalName)
+                    && (String.IsNullOrEmpty remapField.Description || Helpers.compareWildcard remapField.Description field.Description)
+                    && (String.IsNullOrEmpty remapField.OriginalFieldType || Helpers.compareWildcard remapField.OriginalFieldType field.OriginalFieldType)
+                  
+                  if matched then
+                    { field with
+                        ConvertedName = remapField.ConvertedName |> Option.ofObj |> Option.defaultValue field.ConvertedName
+                        ConvertedFieldType = remapField.ConvertedFieldType |> Option.ofObj |> Option.defaultValue field.ConvertedFieldType
+                        Optional = remapField.Optional |> Option.orElse field.Optional }
                   else
                     field
                 ) field
@@ -209,6 +203,8 @@ let parse (config: ParseConfig) =
   
   printfn "Types are read successfully in %i ms!" sw.ElapsedMilliseconds
 
+  let types = types |> remap config.RemapTypes
+  
   match config.ParseResultPath with
   | Some parseResultPath ->
     let dir = Path.GetDirectoryName parseResultPath
@@ -224,4 +220,4 @@ let parse (config: ParseConfig) =
   | None ->
     ()
     
-  types |> remap config.RemapTypes
+  types

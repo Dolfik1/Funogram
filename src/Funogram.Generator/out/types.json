@@ -332,7 +332,7 @@
             "ConvertedName": "Type",
             "Description": "Type of chat, can be either \u201Cprivate\u201D, \u201Cgroup\u201D, \u201Csupergroup\u201D or \u201Cchannel\u201D",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ChatType",
             "Optional": false
           },
           {
@@ -535,7 +535,7 @@
             "ConvertedName": "Date",
             "Description": "Date the message was sent in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
+            "ConvertedFieldType": "DateTime",
             "Optional": false
           },
           {
@@ -591,7 +591,7 @@
             "ConvertedName": "ForwardDate",
             "Description": "For forwarded messages, date the original message was sent in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
+            "ConvertedFieldType": "DateTime",
             "Optional": true
           },
           {
@@ -3100,7 +3100,7 @@
             "ConvertedName": "UntilDate",
             "Description": "Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
+            "ConvertedFieldType": "DateTime",
             "Optional": false
           }
         ]
@@ -3162,7 +3162,7 @@
             "ConvertedName": "UntilDate",
             "Description": "Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned forever",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
+            "ConvertedFieldType": "DateTime",
             "Optional": false
           }
         ]
@@ -3197,7 +3197,7 @@
             "ConvertedName": "Date",
             "Description": "Date the change was done in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
+            "ConvertedFieldType": "DateTime",
             "Optional": false
           },
           {
@@ -3256,7 +3256,7 @@
             "ConvertedName": "Date",
             "Description": "Date the request was sent in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
+            "ConvertedFieldType": "DateTime",
             "Optional": false
           },
           {
@@ -3786,7 +3786,7 @@
             "ConvertedName": "Media",
             "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "InputFile",
             "Optional": false
           },
           {
@@ -3837,7 +3837,7 @@
             "ConvertedName": "Media",
             "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "InputFile",
             "Optional": false
           },
           {
@@ -3928,7 +3928,7 @@
             "ConvertedName": "Media",
             "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "InputFile",
             "Optional": false
           },
           {
@@ -4011,7 +4011,7 @@
             "ConvertedName": "Media",
             "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "InputFile",
             "Optional": false
           },
           {
@@ -4094,7 +4094,7 @@
             "ConvertedName": "Media",
             "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "InputFile",
             "Optional": false
           },
           {
@@ -4334,7 +4334,7 @@
             "ConvertedName": "Point",
             "Description": "The part of the face relative to which the mask should be placed. One of \u201Cforehead\u201D, \u201Ceyes\u201D, \u201Cmouth\u201D, or \u201Cchin\u201D.",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "MaskPoint",
             "Optional": false
           },
           {
@@ -4409,7 +4409,7 @@
             "ConvertedName": "ChatType",
             "Description": "Type of the chat from which the inline query was sent. Can be either \u201Csender\u201D for a private chat with the inline query sender, \u201Cprivate\u201D, \u201Cgroup\u201D, \u201Csupergroup\u201D, or \u201Cchannel\u201D. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat",
             "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
+            "ConvertedFieldType": "ChatType",
             "Optional": true
           },
           {
