@@ -75,16 +75,16 @@ and EditMessageResult =
 /// At most one of the optional parameters can be present in any given update.
 and [<CLIMutable>] Update =
   {
-    /// The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using Webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    /// The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     [<DataMember(Name = "update_id")>]
     UpdateId: int64
-    /// New incoming message of any kind — text, photo, sticker, etc.
+    /// New incoming message of any kind - text, photo, sticker, etc.
     [<DataMember(Name = "message")>]
     Message: Message option
     /// New version of a message that is known to the bot and was edited
     [<DataMember(Name = "edited_message")>]
     EditedMessage: Message option
-    /// New incoming channel post of any kind — text, photo, sticker, etc.
+    /// New incoming channel post of any kind - text, photo, sticker, etc.
     [<DataMember(Name = "channel_post")>]
     ChannelPost: Message option
     /// New version of a channel post that is known to the bot and was edited
@@ -140,7 +140,7 @@ and [<CLIMutable>] Update =
       ChatJoinRequest = chatJoinRequest
     }
 
-/// Contains information about the current status of a webhook.
+/// Describes the current status of a webhook.
 /// All types used in the Bot API responses are represented as JSON-objects.
 /// It is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.
 and [<CLIMutable>] WebhookInfo =
@@ -166,7 +166,7 @@ and [<CLIMutable>] WebhookInfo =
     /// Unix time of the most recent error that happened when trying to synchronize available updates with Telegram datacenters
     [<DataMember(Name = "last_synchronization_error_date")>]
     LastSynchronizationErrorDate: int64 option
-    /// Maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
+    /// The maximum allowed number of simultaneous HTTPS connections to the webhook for update delivery
     [<DataMember(Name = "max_connections")>]
     MaxConnections: int64 option
     /// A list of update types the bot is subscribed to. Defaults to all update types except chat_member
@@ -207,6 +207,12 @@ and [<CLIMutable>] User =
     /// IETF language tag of the user's language
     [<DataMember(Name = "language_code")>]
     LanguageCode: string option
+    /// True, if this user is a Telegram Premium user
+    [<DataMember(Name = "is_premium")>]
+    IsPremium: bool option
+    /// True, if this user added the bot to the attachment menu
+    [<DataMember(Name = "added_to_attachment_menu")>]
+    AddedToAttachmentMenu: bool option
     /// True, if the bot can be invited to groups. Returned only in getMe.
     [<DataMember(Name = "can_join_groups")>]
     CanJoinGroups: bool option
@@ -217,7 +223,7 @@ and [<CLIMutable>] User =
     [<DataMember(Name = "supports_inline_queries")>]
     SupportsInlineQueries: bool option
   }
-  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool) = 
+  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool) = 
     {
       Id = id
       IsBot = isBot
@@ -225,6 +231,8 @@ and [<CLIMutable>] User =
       LastName = lastName
       Username = username
       LanguageCode = languageCode
+      IsPremium = isPremium
+      AddedToAttachmentMenu = addedToAttachmentMenu
       CanJoinGroups = canJoinGroups
       CanReadAllGroupMessages = canReadAllGroupMessages
       SupportsInlineQueries = supportsInlineQueries
@@ -260,6 +268,12 @@ and [<CLIMutable>] Chat =
     /// True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat.
     [<DataMember(Name = "has_private_forwards")>]
     HasPrivateForwards: bool option
+    /// True, if users need to join the supergroup before they can send messages. Returned only in getChat.
+    [<DataMember(Name = "join_to_send_messages")>]
+    JoinToSendMessages: bool option
+    /// True, if all users directly joining the supergroup need to be approved by supergroup administrators. Returned only in getChat.
+    [<DataMember(Name = "join_by_request")>]
+    JoinByRequest: bool option
     /// Description, for groups, supergroups and channel chats. Returned only in getChat.
     [<DataMember(Name = "description")>]
     Description: string option
@@ -294,7 +308,7 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?hasPrivateForwards: bool, ?bio: string, ?photo: ChatPhoto, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?photo: ChatPhoto, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
@@ -307,6 +321,8 @@ and [<CLIMutable>] Chat =
       PinnedMessage = pinnedMessage
       InviteLink = inviteLink
       Description = description
+      JoinByRequest = joinByRequest
+      JoinToSendMessages = joinToSendMessages
       HasPrivateForwards = hasPrivateForwards
       Bio = bio
       Photo = photo
@@ -375,7 +391,7 @@ and [<CLIMutable>] Message =
     /// Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
     [<DataMember(Name = "author_signature")>]
     AuthorSignature: string option
-    /// For text messages, the actual UTF-8 text of the message, 0-4096 characters
+    /// For text messages, the actual UTF-8 text of the message
     [<DataMember(Name = "text")>]
     Text: string option
     /// For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
@@ -405,7 +421,7 @@ and [<CLIMutable>] Message =
     /// Message is a voice message, information about the file
     [<DataMember(Name = "voice")>]
     Voice: Voice option
-    /// Caption for the animation, audio, document, photo, video or voice, 0-1024 characters
+    /// Caption for the animation, audio, document, photo, video or voice
     [<DataMember(Name = "caption")>]
     Caption: string option
     /// For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
@@ -586,7 +602,7 @@ and [<CLIMutable>] MessageEntity =
     /// Length of the entity in UTF-16 code units
     [<DataMember(Name = "length")>]
     Length: int64
-    /// For “text_link” only, url that will be opened after user taps on the text
+    /// For “text_link” only, URL that will be opened after user taps on the text
     [<DataMember(Name = "url")>]
     Url: string option
     /// For “text_mention” only, the mentioned user
@@ -661,7 +677,7 @@ and [<CLIMutable>] Animation =
     /// MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    /// File size in bytes
+    /// File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -702,7 +718,7 @@ and [<CLIMutable>] Audio =
     /// MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    /// File size in bytes
+    /// File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
     /// Thumbnail of the album cover to which the music file belongs
@@ -740,7 +756,7 @@ and [<CLIMutable>] Document =
     /// MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    /// File size in bytes
+    /// File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -778,10 +794,10 @@ and [<CLIMutable>] Video =
     /// Original filename as defined by sender
     [<DataMember(Name = "file_name")>]
     FileName: string option
-    /// Mime type of a file as defined by sender
+    /// MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    /// File size in bytes
+    /// File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -845,7 +861,7 @@ and [<CLIMutable>] Voice =
     /// MIME type of the file as defined by sender
     [<DataMember(Name = "mime_type")>]
     MimeType: string option
-    /// File size in bytes
+    /// File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
@@ -1016,7 +1032,7 @@ and [<CLIMutable>] Location =
     /// The direction in which user is moving, in degrees; 1-360. For active live locations only.
     [<DataMember(Name = "heading")>]
     Heading: int64 option
-    /// Maximum distance for proximity alerts about approaching another chat member, in meters. For sent live locations only.
+    /// The maximum distance for proximity alerts about approaching another chat member, in meters. For sent live locations only.
     [<DataMember(Name = "proximity_alert_radius")>]
     ProximityAlertRadius: int64 option
   }
@@ -1066,13 +1082,13 @@ and [<CLIMutable>] Venue =
       GooglePlaceType = googlePlaceType
     }
 
-/// Contains data sent from a Web App to the bot.
+/// Describes data sent from a Web App to the bot.
 and [<CLIMutable>] WebAppData =
   {
     /// The data. Be aware that a bad client can send arbitrary data in this field.
     [<DataMember(Name = "data")>]
     Data: string
-    /// Text of the web_app keyboard button, from which the Web App was opened. Be aware that a bad client can send arbitrary data in this field.
+    /// Text of the web_app keyboard button from which the Web App was opened. Be aware that a bad client can send arbitrary data in this field.
     [<DataMember(Name = "button_text")>]
     ButtonText: string
   }
@@ -1179,7 +1195,7 @@ and [<CLIMutable>] File =
     /// Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     [<DataMember(Name = "file_unique_id")>]
     FileUniqueId: string
-    /// File size in bytes, if known
+    /// File size in bytes. It can be bigger than 2^31 and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this value.
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
     /// File path. Use https://api.telegram.org/file/bot<token>/<file_path> to get the file.
@@ -1194,7 +1210,7 @@ and [<CLIMutable>] File =
       FilePath = filePath
     }
 
-/// Contains information about a Web App.
+/// Describes a Web App.
 and [<CLIMutable>] WebAppInfo =
   {
     /// An HTTPS URL of a Web App to be opened with additional data as specified in Initializing Web Apps
@@ -1215,7 +1231,7 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     /// Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
     [<DataMember(Name = "resize_keyboard")>]
     ResizeKeyboard: bool option
-    /// Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat – the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
+    /// Requests clients to hide the keyboard as soon as it's been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to false.
     [<DataMember(Name = "one_time_keyboard")>]
     OneTimeKeyboard: bool option
     /// The placeholder to be shown in the input field when the keyboard is active; 1-64 characters
@@ -1316,7 +1332,7 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// Label text on the button
     [<DataMember(Name = "text")>]
     Text: string
-    /// HTTP or tg:// url to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.
+    /// HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.
     [<DataMember(Name = "url")>]
     Url: string option
     /// Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
@@ -1325,17 +1341,17 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
-    /// An HTTP URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
+    /// An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
     [<DataMember(Name = "login_url")>]
     LoginUrl: LoginUrl option
-    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. Can be empty, in which case just the bot's username will be inserted.
+    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.
     /// 
-    /// Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions – in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
+    /// Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
     [<DataMember(Name = "switch_inline_query")>]
     SwitchInlineQuery: string option
-    /// If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. Can be empty, in which case only the bot's username will be inserted.
+    /// If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
     /// 
-    /// This offers a quick way for the user to open your bot in inline mode in the same chat – good for selecting something from multiple options.
+    /// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.
     [<DataMember(Name = "switch_inline_query_current_chat")>]
     SwitchInlineQueryCurrentChat: string option
     /// Description of the game that will be launched when the user presses the button.
@@ -1407,7 +1423,7 @@ and [<CLIMutable>] CallbackQuery =
     /// Global identifier, uniquely corresponding to the chat to which the message with the callback button was sent. Useful for high scores in games.
     [<DataMember(Name = "chat_instance")>]
     ChatInstance: string
-    /// Data associated with the callback button. Be aware that the message, which originated the query, can contain no callback buttons with this data.
+    /// Data associated with the callback button. Be aware that the message originated the query can contain no callback buttons with this data.
     [<DataMember(Name = "data")>]
     Data: string option
     /// Short name of a Game to be returned, serves as the unique identifier for the game
@@ -1493,7 +1509,7 @@ and [<CLIMutable>] ChatInviteLink =
     /// Point in time (Unix timestamp) when the link will expire or has been expired
     [<DataMember(Name = "expire_date")>]
     ExpireDate: int64 option
-    /// Maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
+    /// The maximum number of users that can be members of the chat simultaneously after joining the chat via this invite link; 1-99999
     [<DataMember(Name = "member_limit")>]
     MemberLimit: int64 option
     /// Number of pending join requests created using this link
@@ -2067,7 +2083,7 @@ and [<CLIMutable>] MenuButtonDefault =
       Type = ``type``
     }
 
-/// Contains information about why a request was unsuccessful.
+/// Describes why a request was unsuccessful.
 and [<CLIMutable>] ResponseParameters =
   {
     /// The group has been migrated to a supergroup with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
@@ -2097,7 +2113,7 @@ and [<CLIMutable>] InputMediaPhoto =
     /// Type of the result, must be photo
     [<DataMember(Name = "type")>]
     Type: string
-    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
+    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
     [<DataMember(Name = "media")>]
     Media: InputFile
     /// Caption of the photo to be sent, 0-1024 characters after entities parsing
@@ -2125,10 +2141,10 @@ and [<CLIMutable>] InputMediaVideo =
     /// Type of the result, must be video
     [<DataMember(Name = "type")>]
     Type: string
-    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
+    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
     [<DataMember(Name = "media")>]
     Media: InputFile
-    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
     /// Caption of the video to be sent, 0-1024 characters after entities parsing
@@ -2173,10 +2189,10 @@ and [<CLIMutable>] InputMediaAnimation =
     /// Type of the result, must be animation
     [<DataMember(Name = "type")>]
     Type: string
-    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
+    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
     [<DataMember(Name = "media")>]
     Media: InputFile
-    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
     /// Caption of the animation to be sent, 0-1024 characters after entities parsing
@@ -2217,10 +2233,10 @@ and [<CLIMutable>] InputMediaAudio =
     /// Type of the result, must be audio
     [<DataMember(Name = "type")>]
     Type: string
-    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
+    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
     [<DataMember(Name = "media")>]
     Media: InputFile
-    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
     /// Caption of the audio to be sent, 0-1024 characters after entities parsing
@@ -2261,10 +2277,10 @@ and [<CLIMutable>] InputMediaDocument =
     /// Type of the result, must be document
     [<DataMember(Name = "type")>]
     Type: string
-    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More info on Sending Files »
+    /// File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
     [<DataMember(Name = "media")>]
     Media: InputFile
-    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More info on Sending Files »
+    /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumb")>]
     Thumb: InputFile option
     /// Caption of the document to be sent, 0-1024 characters after entities parsing
@@ -2321,6 +2337,9 @@ and [<CLIMutable>] Sticker =
     /// Name of the sticker set to which the sticker belongs
     [<DataMember(Name = "set_name")>]
     SetName: string option
+    /// Premium animation for the sticker, if the sticker is premium
+    [<DataMember(Name = "premium_animation")>]
+    PremiumAnimation: File option
     /// For mask stickers, the position where the mask should be placed
     [<DataMember(Name = "mask_position")>]
     MaskPosition: MaskPosition option
@@ -2328,7 +2347,7 @@ and [<CLIMutable>] Sticker =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumb: PhotoSize, ?emoji: string, ?setName: string, ?maskPosition: MaskPosition, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumb: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -2339,6 +2358,7 @@ and [<CLIMutable>] Sticker =
       Thumb = thumb
       Emoji = emoji
       SetName = setName
+      PremiumAnimation = premiumAnimation
       MaskPosition = maskPosition
       FileSize = fileSize
     }
@@ -2418,7 +2438,7 @@ and [<CLIMutable>] InlineQuery =
     /// Offset of the results to be returned, can be controlled by the bot
     [<DataMember(Name = "offset")>]
     Offset: string
-    /// Type of the chat, from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
+    /// Type of the chat from which the inline query was sent. Can be either “sender” for a private chat with the inline query sender, “private”, “group”, “supergroup”, or “channel”. The chat type should be always known for requests sent from official clients and most third-party clients, unless the request was sent from a secret chat
     [<DataMember(Name = "chat_type")>]
     ChatType: ChatType option
     /// Sender location, only for bots that request user location
@@ -2644,7 +2664,7 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     /// Unique identifier for this result, 1-64 bytes
     [<DataMember(Name = "id")>]
     Id: string
-    /// A valid URL for the MP4 file. File size must not exceed 1MB
+    /// A valid URL for the MPEG4 file. File size must not exceed 1MB
     [<DataMember(Name = "mpeg4_url")>]
     Mpeg4Url: string
     /// Video width
@@ -2711,7 +2731,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
     /// A valid URL for the embedded video player or video file
     [<DataMember(Name = "video_url")>]
     VideoUrl: string
-    /// Mime type of the content of video url, “text/html” or “video/mp4”
+    /// MIME type of the content of the video URL, “text/html” or “video/mp4”
     [<DataMember(Name = "mime_type")>]
     MimeType: string
     /// URL of the thumbnail (JPEG only) for the video
@@ -2894,7 +2914,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
     /// A valid URL for the file
     [<DataMember(Name = "document_url")>]
     DocumentUrl: string
-    /// Mime type of the content of the file, either “application/pdf” or “application/zip”
+    /// MIME type of the content of the file, either “application/pdf” or “application/zip”
     [<DataMember(Name = "mime_type")>]
     MimeType: string
     /// Short description of the result
@@ -3247,7 +3267,7 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
     /// Unique identifier for this result, 1-64 bytes
     [<DataMember(Name = "id")>]
     Id: string
-    /// A valid file identifier for the MP4 file
+    /// A valid file identifier for the MPEG4 file
     [<DataMember(Name = "mpeg4_file_id")>]
     Mpeg4FileId: string
     /// Title for the result
@@ -3634,7 +3654,7 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     /// Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
     [<DataMember(Name = "payload")>]
     Payload: string
-    /// Payment provider token, obtained via Botfather
+    /// Payment provider token, obtained via @BotFather
     [<DataMember(Name = "provider_token")>]
     ProviderToken: string
     /// Three-letter ISO 4217 currency code, see more on currencies
@@ -3652,10 +3672,10 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     /// A JSON-serialized object for data about the invoice, which will be shared with the payment provider. A detailed description of the required fields should be provided by the payment provider.
     [<DataMember(Name = "provider_data")>]
     ProviderData: string option
-    /// URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service. People like it better when they see what they are paying for.
+    /// URL of the product photo for the invoice. Can be a photo of the goods or a marketing image for a service.
     [<DataMember(Name = "photo_url")>]
     PhotoUrl: string option
-    /// Photo size
+    /// Photo size in bytes
     [<DataMember(Name = "photo_size")>]
     PhotoSize: int64 option
     /// Photo width
@@ -3676,10 +3696,10 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     /// Pass True, if you require the user's shipping address to complete the order
     [<DataMember(Name = "need_shipping_address")>]
     NeedShippingAddress: bool option
-    /// Pass True, if user's phone number should be sent to provider
+    /// Pass True, if the user's phone number should be sent to provider
     [<DataMember(Name = "send_phone_number_to_provider")>]
     SendPhoneNumberToProvider: bool option
-    /// Pass True, if user's email address should be sent to provider
+    /// Pass True, if the user's email address should be sent to provider
     [<DataMember(Name = "send_email_to_provider")>]
     SendEmailToProvider: bool option
     /// Pass True, if the final price depends on the shipping method
@@ -3711,7 +3731,7 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     }
 
 /// Represents a result of an inline query that was chosen by the user and sent to their chat partner.
-/// Note: It is necessary to enable inline feedback via @Botfather in order to receive these objects in updates.
+/// Note: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.
 and [<CLIMutable>] ChosenInlineResult =
   {
     /// The unique identifier for the result that was chosen
@@ -3739,7 +3759,7 @@ and [<CLIMutable>] ChosenInlineResult =
       InlineMessageId = inlineMessageId
     }
 
-/// Contains information about an inline message sent by a Web App on behalf of a user.
+/// Describes an inline message sent by a Web App on behalf of a user.
 /// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
 and [<CLIMutable>] SentWebAppMessage =
   {
@@ -3799,7 +3819,7 @@ and [<CLIMutable>] Invoice =
 /// This object represents a shipping address.
 and [<CLIMutable>] ShippingAddress =
   {
-    /// ISO 3166-1 alpha-2 country code
+    /// Two-letter ISO 3166-1 alpha-2 country code
     [<DataMember(Name = "country_code")>]
     CountryCode: string
     /// State, if applicable
@@ -3887,7 +3907,7 @@ and [<CLIMutable>] SuccessfulPayment =
     /// Identifier of the shipping option chosen by the user
     [<DataMember(Name = "shipping_option_id")>]
     ShippingOptionId: string option
-    /// Order info provided by the user
+    /// Order information provided by the user
     [<DataMember(Name = "order_info")>]
     OrderInfo: OrderInfo option
     /// Telegram payment identifier
@@ -3954,7 +3974,7 @@ and [<CLIMutable>] PreCheckoutQuery =
     /// Identifier of the shipping option chosen by the user
     [<DataMember(Name = "shipping_option_id")>]
     ShippingOptionId: string option
-    /// Order info provided by the user
+    /// Order information provided by the user
     [<DataMember(Name = "order_info")>]
     OrderInfo: OrderInfo option
   }
@@ -3969,7 +3989,7 @@ and [<CLIMutable>] PreCheckoutQuery =
       OrderInfo = orderInfo
     }
 
-/// Contains information about Telegram Passport data shared with the bot by the user.
+/// Describes Telegram Passport data shared with the bot by the user.
 and [<CLIMutable>] PassportData =
   {
     /// Array with information about documents and other Telegram Passport elements that was shared with the bot
@@ -4009,7 +4029,7 @@ and [<CLIMutable>] PassportFile =
       FileDate = fileDate
     }
 
-/// Contains information about documents or other Telegram Passport elements shared with the bot by the user.
+/// Describes documents or other Telegram Passport elements shared with the bot by the user.
 and [<CLIMutable>] EncryptedPassportElement =
   {
     /// Element type. One of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”, “phone_number”, “email”.
@@ -4057,7 +4077,7 @@ and [<CLIMutable>] EncryptedPassportElement =
       Translation = translation
     }
 
-/// Contains data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport Documentation for a complete description of the data decryption and authentication processes.
+/// Describes data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport Documentation for a complete description of the data decryption and authentication processes.
 and [<CLIMutable>] EncryptedCredentials =
   {
     /// Base64-encoded encrypted JSON-serialized data with unique user's payload, data hashes and secrets required for EncryptedPassportElement decryption and authentication
