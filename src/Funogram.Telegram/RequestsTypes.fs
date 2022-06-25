@@ -1768,7 +1768,7 @@ type CreateInvoiceLink =
       SendEmailToProvider = sendEmailToProvider
       IsFlexible = isFlexible
     }
-  interface IRequestBase<created> with
+  interface IRequestBase<string> with
     member _.MethodName = "createInvoiceLink"
     
 type AnswerShippingQuery =

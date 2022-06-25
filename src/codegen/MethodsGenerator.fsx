@@ -45,6 +45,7 @@ let returnTypeRegexes =
     Regex("Returns the new invite link as ([A|a]rray of \w+|\w+)\s")
     Regex("Returns the edited invite link as a ([A|a]rray of \w+|\w+)\s")
     Regex("Returns the revoked invite link as ([A|a]rray of \w+|\w+)\s")
+    Regex("Returns the created invoice link as ([A|a]rray of \w+|\w+)\s.")
 
     Regex("On success, a ([A|a]rray of \w+|\w+)\s")
     Regex("On success, an ([A|a]rray of \w+|\w+)\s")

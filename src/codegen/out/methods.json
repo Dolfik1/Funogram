@@ -3075,7 +3075,7 @@
         "Optional": true
       }
     ],
-    "ReturnType": "created"
+    "ReturnType": "String"
   },
   {
     "Name": "answerShippingQuery",
