@@ -195,24 +195,23 @@ Telegram [recommends](https://core.telegram.org/bots/api#setwebhook) using a sec
 Note: if you want to rollback to `getUpdates` method you need to clear webhook. This might be done via `deleteWebhook` function.
 
 ## Codegen
-Funogram types are generated automatically from Telegram Bot API [reference](https://core.telegram.org/bots/api). The code generation tool is located in `src/codegen` folder.
+Funogram types are generated automatically from Telegram Bot API [reference](https://core.telegram.org/bots/api). The code generation tool is located in `src/Funogram.Generator` folder.
 
-To start generator open terminal and type (dotnet cli is required):
-```shell
-cd src/codegen
-dotnet fsi MethodsGenerator.fsx
-dotnet fsi TypesGenerator.fsx
-```
+To start generator run Funogram.Generator project. You should specify project's directory as working directory to get correct result.
 
-Telegram Bot API reference will parsed and output will copied to `src/codegen/out` folder. The generated files are:
+Telegram Bot API reference will parsed and output will copied to `src/Funogram.Generator/out` folder. The generated files are:
 * types.json
-* Types.fs
 * methods.json
+
+The generated code will be copied to `src/Funogram.Telegram` folder:
+* Types.fs
 * RequestsTypes.fs
 
 If you want to generate types and methods for old Telegram server version you may specify link to [web archive](https://web.archive.org/web/*/https://core.telegram.org/bots/api).
 
 You also can patch code to load reference data from *.json files. This will allow you to make changes if needed.
+
+The generator supports remapping. This make it possible to replace some values in generated json to your own (see `RemapTypes.json` and `RemapMethods.json`)
 
 ## Advanced
 The library is built around types. Any API request or response is F# record type:
