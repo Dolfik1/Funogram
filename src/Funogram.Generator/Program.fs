@@ -20,27 +20,36 @@ type CliArguments =
 
 let processAsync (args: CliArguments list) =
   async {
-    let cached = true // args |> List.contains CliArguments.Cached
+    let cached = args |> List.contains CliArguments.Cached
     let! html =
       Loader.mkLoader ()
       |> Loader.withCache cached
       |> Loader.loadAsync
     
-    TypesParser.mkParser html
-    |> TypesParser.withResultPath (Path.Combine(Constants.OutputDir, "types.json"))
-    |> TypesParser.loadRemapData "./RemapTypes.json"
-    |> TypesParser.parse
+    let hasTypes = args |> List.contains CliArguments.Types
+    let hasMethods = args |> List.contains CliArguments.Methods
     
-    |> TypesGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.TypesFileName))
-    |> TypesGenerator.generate
+    let all = not hasTypes && not hasMethods
+    let genTypes = hasTypes || all
+    let genMethods = hasMethods || all
 
-    MethodsParser.mkParser html
-    |> MethodsParser.withResultPath (Path.Combine(Constants.OutputDir, "methods.json"))
-    |> MethodsParser.loadRemapData "./RemapMethods.json"
-    |> MethodsParser.parse
-    
-    |> MethodsGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.MethodsFileName))
-    |> MethodsGenerator.generate
+    if genTypes then    
+      TypesParser.mkParser html
+      |> TypesParser.withResultPath (Path.Combine(Constants.OutputDir, "types.json"))
+      |> TypesParser.loadRemapData "./RemapTypes.json"
+      |> TypesParser.parse
+      
+      |> TypesGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.TypesFileName))
+      |> TypesGenerator.generate
+
+    if genMethods then
+      MethodsParser.mkParser html
+      |> MethodsParser.withResultPath (Path.Combine(Constants.OutputDir, "methods.json"))
+      |> MethodsParser.loadRemapData "./RemapMethods.json"
+      |> MethodsParser.parse
+      
+      |> MethodsGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.MethodsFileName))
+      |> MethodsGenerator.generate
   }
 
 [<EntryPoint>]
