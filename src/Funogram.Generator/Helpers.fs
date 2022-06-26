@@ -41,7 +41,7 @@ let toCamelCase (str: string) =
   let mutable prev = '0'
   seq {
     for c in str do
-      let c = if prev = '_' then Char.ToUpper c else c
+      let c = if prev = '_' then Char.ToUpper c else if prev = '0' then Char.ToLower c else c
       if c <> '_' then c
       prev <- c
   } |> Array.ofSeq |> String

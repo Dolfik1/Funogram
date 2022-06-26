@@ -10,7 +10,7 @@ type Code =
     StringBuilder: StringBuilder
   }
 
-let code =
+let init () =
   {
     CurrentIndent = 0
     StringBuilder = StringBuilder()

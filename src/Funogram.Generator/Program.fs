@@ -3,6 +3,7 @@
 open System
 open System.IO
 open Argu
+open Funogram.Generator.Methods
 open Funogram.Generator.Types
 
 type CliArguments =
@@ -25,16 +26,21 @@ let processAsync (args: CliArguments list) =
       |> Loader.withCache cached
       |> Loader.loadAsync
     
-    let types =
-      TypesParser.mkParser html
-      |> TypesParser.withResultPath (Path.Combine(Constants.OutputDir, "types.json"))
-      |> TypesParser.loadRemapData "./RemapTypes.json"
-      |> TypesParser.parse
-      
-      |> TypesGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.TypesFileName))
-      |> TypesGenerator.generate
+    TypesParser.mkParser html
+    |> TypesParser.withResultPath (Path.Combine(Constants.OutputDir, "types.json"))
+    |> TypesParser.loadRemapData "./RemapTypes.json"
+    |> TypesParser.parse
+    
+    |> TypesGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.TypesFileName))
+    |> TypesGenerator.generate
 
-    ()
+    MethodsParser.mkParser html
+    |> MethodsParser.withResultPath (Path.Combine(Constants.OutputDir, "methods.json"))
+    |> MethodsParser.loadRemapData "./RemapMethods.json"
+    |> MethodsParser.parse
+    
+    |> MethodsGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.MethodsFileName))
+    |> MethodsGenerator.generate
   }
 
 [<EntryPoint>]

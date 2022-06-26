@@ -12,7 +12,7 @@ type GeneratorConfig =
   }
 
 let private createHeaderCode () =
-  Code.code
+  Code.init ()
   |> Code.print "module Funogram.Telegram.Types"
   |> Code.printNewLine 
      """
@@ -85,7 +85,7 @@ and EditMessageResult =
   /// Message sent via the bot or another...
   | Success of bool
 """
-  
+
 let mkGenerator path types =
   {
     Types = types

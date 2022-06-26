@@ -165,7 +165,7 @@ let parse (config: ParseConfig) =
     |> Array.ofSeq
 
   sw.Stop()
-  printfn "Got %i types to process in %i ms!" typesNodes.Length sw.ElapsedMilliseconds
+  printfn "Loaded %i types in %i ms!" typesNodes.Length sw.ElapsedMilliseconds
 
   printfn "Processing types..."
   

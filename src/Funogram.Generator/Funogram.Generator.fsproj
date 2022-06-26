@@ -10,6 +10,7 @@
         <Compile Include="Helpers.fs" />
         <Compile Include="Code.fs" />
         <Compile Include="Loader.fs" />
+        <Compile Include="Methods\Types.fs" />
         <Compile Include="Methods\MethodsParser.fs" />
         <Compile Include="Methods\MethodsGenerator.fs" />
         <Compile Include="Types\Types.fs" />
@@ -17,6 +18,7 @@
         <Compile Include="Types\TypesGenerator.fs" />
         <Compile Include="Program.fs" />
         <Content Include="RemapTypes.json" />
+        <Content Include="RemapMethods.json" />
     </ItemGroup>
 
     <ItemGroup>

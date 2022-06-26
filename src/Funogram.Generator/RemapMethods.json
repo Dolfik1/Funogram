@@ -1,0 +1,20 @@
+[
+  {
+    "OriginalName": "sendChatAction",
+    "Fields": [
+      {
+        "OriginalName": "action",
+        "ConvertedFieldType": "ChatAction"
+      }
+    ]
+  },
+  {
+    "OriginalName": "*",
+    "Fields": [
+      {
+        "OriginalName": "parse_mode",
+        "ConvertedFieldType": "ParseMode"
+      }
+    ]
+  }
+]
