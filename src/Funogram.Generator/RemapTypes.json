@@ -111,5 +111,42 @@
         ]
       ]
     }
+  },
+  {
+    "Name": "ChatAdministratorRights",
+    "Description": "Represents the rights of an administrator in a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "can_manage_voice_chats",
+            "ConvertedName": "CanManageVoiceChats",
+            "Description": "DEPRECATED: use can_manage_video_chats instead",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatMemberAdministrator",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "can_manage_voice_chats",
+            "ConvertedName": "CanManageVoiceChats",
+            "Description": "DEPRECATED: use can_manage_video_chats instead",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
   }
 ]

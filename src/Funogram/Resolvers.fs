@@ -93,13 +93,13 @@ module internal Resolvers =
             if dataMember.Length > 0
             then dataMember.[0].Name
             else c.CaseInfo.Name |> getSnakeCaseName
-          ([name], None)
+          (Set.ofList [name], None)
         else
           let tp = c.Fields.[0].Member.Type
-          if tp.IsPrimitive then ([], Some tp)
+          if tp.IsPrimitive then (Set.empty, Some tp)
           else (tp.GetProperties()
                 |> Seq.map(fun x -> x.Name |> getSnakeCaseName)
-                |> Seq.toList,
+                |> Set.ofSeq,
                 None))
       |> Seq.toArray
     
@@ -113,6 +113,7 @@ module internal Resolvers =
       |> Seq.map (fun case -> mkMemberDeserializer case case.CreateUninitialized)
       |> Seq.toArray
     
+    // this serializer/deserializer is used to match union case by set of fields
     interface IJsonFormatter<'a> with
       member x.Serialize(writer, value, resolver) =
         let serialize = serializers.[union.GetTag value] // all union cases
@@ -172,12 +173,17 @@ module internal Resolvers =
         
         let idx =
           cases
-          |> Array.findIndex (fun (caseNames, tp) ->
+          |> Array.tryFindIndex (fun (caseNames, tp) ->
             (jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value))
-            && jsonCaseNames |> Seq.forall (fun n -> caseNames |> Seq.contains n))
-        let (value, newOffset) = deserializers.[idx] buffer offset resolver
-        reader.AdvanceOffset(newOffset - offset)
-        value
+            && jsonCaseNames |> Seq.forall (fun n ->
+               caseNames |> Set.contains n))
+        match idx with
+        | Some idx ->
+          let value, newOffset = deserializers.[idx] buffer offset resolver
+          reader.AdvanceOffset(newOffset - offset)
+          value
+        | None ->
+          failwithf "Internal error: Cannot match type \"%s\" by fields. Please create issue on https://github.com/Dolfik1/Funogram/issues" typeof<'a>.FullName
 
   let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
   let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64

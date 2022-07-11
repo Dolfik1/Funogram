@@ -119,6 +119,22 @@ let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
                     field
                 ) field
               )
+            
+            // append manually added fields (for example: deprecated fields)
+            let fields =
+              if remapTp.Name = tp.Name then
+                let manuallyAddedFields = 
+                  remapFields
+                  |> Array.filter(fun x ->
+                    if String.IsNullOrEmpty x.OriginalName then
+                      false
+                    else
+                      fields |> Array.forall (fun f -> f.OriginalName <> x.OriginalName)
+                  )
+                manuallyAddedFields |> Array.append fields
+              else
+                fields
+
             { tp with Kind = ApiTypeKind.Fields fields }
             
           | ApiTypeKind.Cases cases, ApiTypeKind.Cases remapCases -> tp

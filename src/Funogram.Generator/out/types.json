@@ -2404,7 +2404,7 @@
           {
             "OriginalName": "url",
             "ConvertedName": "Url",
-            "Description": "An HTTP URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.\n\nNOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.",
+            "Description": "An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.\n\nNOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -2759,6 +2759,14 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_voice_chats",
+            "ConvertedName": "CanManageVoiceChats",
+            "Description": "DEPRECATED: use can_manage_video_chats instead",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -2967,6 +2975,14 @@
             "Description": "Custom title for this user",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_voice_chats",
+            "ConvertedName": "CanManageVoiceChats",
+            "Description": "DEPRECATED: use can_manage_video_chats instead",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]

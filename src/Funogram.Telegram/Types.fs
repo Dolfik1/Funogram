@@ -1380,7 +1380,7 @@ and [<CLIMutable>] InlineKeyboardButton =
 /// Telegram apps support these buttons as of version 5.7.
 and [<CLIMutable>] LoginUrl =
   {
-    /// An HTTP URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.
+    /// An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.
     /// 
     /// NOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.
     [<DataMember(Name = "url")>]
@@ -1563,8 +1563,11 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
+    /// DEPRECATED: use can_manage_video_chats instead
+    [<DataMember(Name = "can_manage_voice_chats")>]
+    CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool) = 
+  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageVoiceChats: bool) = 
     {
       IsAnonymous = isAnonymous
       CanManageChat = canManageChat
@@ -1577,6 +1580,7 @@ and [<CLIMutable>] ChatAdministratorRights =
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
+      CanManageVoiceChats = canManageVoiceChats
     }
 
 /// This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
@@ -1660,8 +1664,11 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// Custom title for this user
     [<DataMember(Name = "custom_title")>]
     CustomTitle: string option
+    /// DEPRECATED: use can_manage_video_chats instead
+    [<DataMember(Name = "can_manage_voice_chats")>]
+    CanManageVoiceChats: bool option
   }
-  static member Create(status: string, user: User, canBeEdited: bool, isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?customTitle: string) = 
+  static member Create(status: string, user: User, canBeEdited: bool, isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?customTitle: string, ?canManageVoiceChats: bool) = 
     {
       Status = status
       User = user
@@ -1678,6 +1685,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
       CustomTitle = customTitle
+      CanManageVoiceChats = canManageVoiceChats
     }
 
 /// Represents a chat member that has no additional privileges or restrictions.
