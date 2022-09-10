@@ -11,7 +11,7 @@ module Constants =
   let testDate = System.DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
   let testDateUnix = 4651649271L
     
-  let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None; Language = None }
+  let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None; Language = None; CustomEmojiId = None }
   let jsonTestObjString = """{"type":"italic","offset":0,"length":100,"url":"http://github.com"}"""
   let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null,"language":null} }"""
 

@@ -1517,6 +1517,17 @@ type GetStickerSet =
   interface IRequestBase<StickerSet> with
     member _.MethodName = "getStickerSet"
     
+type GetCustomEmojiStickers =
+  {
+    CustomEmojiIds: string[]
+  }
+  static member Make(customEmojiIds: string[]) = 
+    {
+      CustomEmojiIds = customEmojiIds
+    }
+  interface IRequestBase<Sticker[]> with
+    member _.MethodName = "getCustomEmojiStickers"
+    
 type UploadStickerFile =
   {
     UserId: int64
@@ -1538,11 +1549,11 @@ type CreateNewStickerSet =
     PngSticker: InputFile option
     TgsSticker: InputFile option
     WebmSticker: InputFile option
+    StickerType: string option
     Emojis: string
-    ContainsMasks: bool option
     MaskPosition: MaskPosition option
   }
-  static member Make(userId: int64, name: string, title: string, emojis: string, ?pngSticker: InputFile, ?tgsSticker: InputFile, ?webmSticker: InputFile, ?containsMasks: bool, ?maskPosition: MaskPosition) = 
+  static member Make(userId: int64, name: string, title: string, emojis: string, ?pngSticker: InputFile, ?tgsSticker: InputFile, ?webmSticker: InputFile, ?stickerType: string, ?maskPosition: MaskPosition) = 
     {
       UserId = userId
       Name = name
@@ -1550,8 +1561,8 @@ type CreateNewStickerSet =
       PngSticker = pngSticker
       TgsSticker = tgsSticker
       WebmSticker = webmSticker
+      StickerType = stickerType
       Emojis = emojis
-      ContainsMasks = containsMasks
       MaskPosition = maskPosition
     }
   interface IRequestBase<bool> with
