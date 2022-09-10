@@ -1142,7 +1142,7 @@ and [<CLIMutable>] VideoChatScheduled =
 
 /// This object represents a service message about a video chat started in the chat. Currently holds no information.
 and VideoChatStarted =
-  class end
+  new() = {}
 
 /// This object represents a service message about a video chat ended in the chat.
 and [<CLIMutable>] VideoChatEnded =
@@ -4370,7 +4370,7 @@ and [<CLIMutable>] Game =
 
 /// A placeholder, currently holds no information. Use BotFather to set up your game.
 and CallbackGame =
-  class end
+  new() = {}
 
 /// This object represents one row of the high scores table for a game.
 /// And that's about all we've got for now.

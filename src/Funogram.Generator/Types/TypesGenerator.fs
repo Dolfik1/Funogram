@@ -184,7 +184,7 @@ let generate config =
 
       |> (fun code ->
         match tp.Kind with
-        | Stub -> code |> Code.setIndent 1 |> Code.printNewLine "class end"
+        | Stub -> code |> Code.setIndent 1 |> Code.printNewLine "new() = {}"
         | Cases cases -> generateCasesBody cases code
         | Fields fields -> code |> generateFieldsBody tp fields |> generateFieldsCreateMember tp fields)
 
