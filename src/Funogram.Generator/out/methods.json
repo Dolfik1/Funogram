@@ -2,7 +2,7 @@
   {
     "OriginalName": "getUpdates",
     "ConvertedName": "GetUpdates",
-    "Description": "Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.",
+    "Description": "Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects.",
     "Fields": [
       {
         "OriginalName": "offset",
@@ -226,7 +226,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -295,7 +295,7 @@
   {
     "OriginalName": "copyMessage",
     "ConvertedName": "CopyMessage",
-    "Description": "Use this method to copy messages of any kind. Service messages and invoice messages can\u0027t be copied. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
+    "Description": "Use this method to copy messages of any kind. Service messages and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -372,7 +372,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -461,7 +461,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -582,7 +582,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -687,7 +687,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -784,7 +784,7 @@
       {
         "OriginalName": "supports_streaming",
         "ConvertedName": "SupportsStreaming",
-        "Description": "Pass True, if the uploaded video is suitable for streaming",
+        "Description": "Pass True if the uploaded video is suitable for streaming",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -816,7 +816,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -937,7 +937,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1034,7 +1034,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1123,7 +1123,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1188,7 +1188,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1285,7 +1285,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1528,7 +1528,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1617,7 +1617,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1738,7 +1738,7 @@
       {
         "OriginalName": "is_closed",
         "ConvertedName": "IsClosed",
-        "Description": "Pass True, if the poll needs to be immediately closed. This can be useful for poll preview.",
+        "Description": "Pass True if the poll needs to be immediately closed. This can be useful for poll preview.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1770,7 +1770,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1835,7 +1835,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2066,7 +2066,7 @@
       {
         "OriginalName": "is_anonymous",
         "ConvertedName": "IsAnonymous",
-        "Description": "Pass True, if the administrator\u0027s presence in the chat is hidden",
+        "Description": "Pass True if the administrator\u0027s presence in the chat is hidden",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2074,7 +2074,7 @@
       {
         "OriginalName": "can_manage_chat",
         "ConvertedName": "CanManageChat",
-        "Description": "Pass True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+        "Description": "Pass True if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2082,7 +2082,7 @@
       {
         "OriginalName": "can_post_messages",
         "ConvertedName": "CanPostMessages",
-        "Description": "Pass True, if the administrator can create channel posts, channels only",
+        "Description": "Pass True if the administrator can create channel posts, channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2090,7 +2090,7 @@
       {
         "OriginalName": "can_edit_messages",
         "ConvertedName": "CanEditMessages",
-        "Description": "Pass True, if the administrator can edit messages of other users and can pin messages, channels only",
+        "Description": "Pass True if the administrator can edit messages of other users and can pin messages, channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2098,7 +2098,7 @@
       {
         "OriginalName": "can_delete_messages",
         "ConvertedName": "CanDeleteMessages",
-        "Description": "Pass True, if the administrator can delete messages of other users",
+        "Description": "Pass True if the administrator can delete messages of other users",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2106,7 +2106,7 @@
       {
         "OriginalName": "can_manage_video_chats",
         "ConvertedName": "CanManageVideoChats",
-        "Description": "Pass True, if the administrator can manage video chats",
+        "Description": "Pass True if the administrator can manage video chats",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2114,7 +2114,7 @@
       {
         "OriginalName": "can_restrict_members",
         "ConvertedName": "CanRestrictMembers",
-        "Description": "Pass True, if the administrator can restrict, ban or unban chat members",
+        "Description": "Pass True if the administrator can restrict, ban or unban chat members",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2122,7 +2122,7 @@
       {
         "OriginalName": "can_promote_members",
         "ConvertedName": "CanPromoteMembers",
-        "Description": "Pass True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)",
+        "Description": "Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2130,7 +2130,7 @@
       {
         "OriginalName": "can_change_info",
         "ConvertedName": "CanChangeInfo",
-        "Description": "Pass True, if the administrator can change chat title, photo and other settings",
+        "Description": "Pass True if the administrator can change chat title, photo and other settings",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2138,7 +2138,7 @@
       {
         "OriginalName": "can_invite_users",
         "ConvertedName": "CanInviteUsers",
-        "Description": "Pass True, if the administrator can invite new users to the chat",
+        "Description": "Pass True if the administrator can invite new users to the chat",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2146,7 +2146,7 @@
       {
         "OriginalName": "can_pin_messages",
         "ConvertedName": "CanPinMessages",
-        "Description": "Pass True, if the administrator can pin messages, supergroups only",
+        "Description": "Pass True if the administrator can pin messages, supergroups only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2577,7 +2577,7 @@
       {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
-        "Description": "Pass True, if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.",
+        "Description": "Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2665,7 +2665,7 @@
   {
     "OriginalName": "getChatAdministrators",
     "ConvertedName": "GetChatAdministrators",
-    "Description": "Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.",
+    "Description": "Use this method to get a list of administrators in a chat, which aren\u0027t bots. Returns an Array of ChatMember objects.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2873,7 +2873,7 @@
   {
     "OriginalName": "getMyCommands",
     "ConvertedName": "GetMyCommands",
-    "Description": "Use this method to get the current list of the bot\u0027s commands for the given scope and user language. Returns Array of BotCommand on success. If commands aren\u0027t set, an empty list is returned.",
+    "Description": "Use this method to get the current list of the bot\u0027s commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren\u0027t set, an empty list is returned.",
     "Fields": [
       {
         "OriginalName": "scope",
@@ -3313,7 +3313,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3346,6 +3346,23 @@
     ],
     "OriginalReturnType": "StickerSet",
     "ConvertedReturnType": "StickerSet"
+  },
+  {
+    "OriginalName": "getCustomEmojiStickers",
+    "ConvertedName": "GetCustomEmojiStickers",
+    "Description": "Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.",
+    "Fields": [
+      {
+        "OriginalName": "custom_emoji_ids",
+        "ConvertedName": "CustomEmojiIds",
+        "Description": "List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.",
+        "OriginalFieldType": "Array of String",
+        "ConvertedFieldType": "string[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "Array of Sticker",
+    "ConvertedReturnType": "Sticker[]"
   },
   {
     "OriginalName": "uploadStickerFile",
@@ -3426,20 +3443,20 @@
         "Optional": true
       },
       {
+        "OriginalName": "sticker_type",
+        "ConvertedName": "StickerType",
+        "Description": "Type of stickers in the set, pass \u201Cregular\u201D or \u201Cmask\u201D. Custom emoji sticker sets can\u0027t be created via the Bot API at the moment. By default, a regular sticker set is created.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "emojis",
         "ConvertedName": "Emojis",
         "Description": "One or more emoji corresponding to the sticker",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
-      },
-      {
-        "OriginalName": "contains_masks",
-        "ConvertedName": "ContainsMasks",
-        "Description": "Pass True, if a set of mask stickers should be created",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
       },
       {
         "OriginalName": "mask_position",
@@ -3625,7 +3642,7 @@
       {
         "OriginalName": "is_personal",
         "ConvertedName": "IsPersonal",
-        "Description": "Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query",
+        "Description": "Pass True if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3811,7 +3828,7 @@
       {
         "OriginalName": "need_name",
         "ConvertedName": "NeedName",
-        "Description": "Pass True, if you require the user\u0027s full name to complete the order",
+        "Description": "Pass True if you require the user\u0027s full name to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3819,7 +3836,7 @@
       {
         "OriginalName": "need_phone_number",
         "ConvertedName": "NeedPhoneNumber",
-        "Description": "Pass True, if you require the user\u0027s phone number to complete the order",
+        "Description": "Pass True if you require the user\u0027s phone number to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3827,7 +3844,7 @@
       {
         "OriginalName": "need_email",
         "ConvertedName": "NeedEmail",
-        "Description": "Pass True, if you require the user\u0027s email address to complete the order",
+        "Description": "Pass True if you require the user\u0027s email address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3835,7 +3852,7 @@
       {
         "OriginalName": "need_shipping_address",
         "ConvertedName": "NeedShippingAddress",
-        "Description": "Pass True, if you require the user\u0027s shipping address to complete the order",
+        "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3843,7 +3860,7 @@
       {
         "OriginalName": "send_phone_number_to_provider",
         "ConvertedName": "SendPhoneNumberToProvider",
-        "Description": "Pass True, if the user\u0027s phone number should be sent to provider",
+        "Description": "Pass True if the user\u0027s phone number should be sent to provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3851,7 +3868,7 @@
       {
         "OriginalName": "send_email_to_provider",
         "ConvertedName": "SendEmailToProvider",
-        "Description": "Pass True, if the user\u0027s email address should be sent to provider",
+        "Description": "Pass True if the user\u0027s email address should be sent to provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3859,7 +3876,7 @@
       {
         "OriginalName": "is_flexible",
         "ConvertedName": "IsFlexible",
-        "Description": "Pass True, if the final price depends on the shipping method",
+        "Description": "Pass True if the final price depends on the shipping method",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3891,7 +3908,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4020,7 +4037,7 @@
       {
         "OriginalName": "need_name",
         "ConvertedName": "NeedName",
-        "Description": "Pass True, if you require the user\u0027s full name to complete the order",
+        "Description": "Pass True if you require the user\u0027s full name to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4028,7 +4045,7 @@
       {
         "OriginalName": "need_phone_number",
         "ConvertedName": "NeedPhoneNumber",
-        "Description": "Pass True, if you require the user\u0027s phone number to complete the order",
+        "Description": "Pass True if you require the user\u0027s phone number to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4036,7 +4053,7 @@
       {
         "OriginalName": "need_email",
         "ConvertedName": "NeedEmail",
-        "Description": "Pass True, if you require the user\u0027s email address to complete the order",
+        "Description": "Pass True if you require the user\u0027s email address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4044,7 +4061,7 @@
       {
         "OriginalName": "need_shipping_address",
         "ConvertedName": "NeedShippingAddress",
-        "Description": "Pass True, if you require the user\u0027s shipping address to complete the order",
+        "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4052,7 +4069,7 @@
       {
         "OriginalName": "send_phone_number_to_provider",
         "ConvertedName": "SendPhoneNumberToProvider",
-        "Description": "Pass True, if the user\u0027s phone number should be sent to the provider",
+        "Description": "Pass True if the user\u0027s phone number should be sent to the provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4060,7 +4077,7 @@
       {
         "OriginalName": "send_email_to_provider",
         "ConvertedName": "SendEmailToProvider",
-        "Description": "Pass True, if the user\u0027s email address should be sent to the provider",
+        "Description": "Pass True if the user\u0027s email address should be sent to the provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4068,7 +4085,7 @@
       {
         "OriginalName": "is_flexible",
         "ConvertedName": "IsFlexible",
-        "Description": "Pass True, if the final price depends on the shipping method",
+        "Description": "Pass True if the final price depends on the shipping method",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4093,7 +4110,7 @@
       {
         "OriginalName": "ok",
         "ConvertedName": "Ok",
-        "Description": "Specify True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)",
+        "Description": "Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": false
@@ -4224,7 +4241,7 @@
       {
         "OriginalName": "allow_sending_without_reply",
         "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
+        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4265,7 +4282,7 @@
       {
         "OriginalName": "force",
         "ConvertedName": "Force",
-        "Description": "Pass True, if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters",
+        "Description": "Pass True if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4273,7 +4290,7 @@
       {
         "OriginalName": "disable_edit_message",
         "ConvertedName": "DisableEditMessage",
-        "Description": "Pass True, if the game message should not be automatically edited to include the current scoreboard",
+        "Description": "Pass True if the game message should not be automatically edited to include the current scoreboard",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4309,7 +4326,7 @@
   {
     "OriginalName": "getGameHighScores",
     "ConvertedName": "GetGameHighScores",
-    "Description": "Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore objects.",
+    "Description": "Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of GameHighScore objects.",
     "Fields": [
       {
         "OriginalName": "user_id",

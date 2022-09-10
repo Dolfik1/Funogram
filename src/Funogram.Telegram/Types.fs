@@ -266,6 +266,9 @@ and [<CLIMutable>] Chat =
     /// True, if privacy settings of the other party in the private chat allows to use tg://user?id=<user_id> links only in chats with the user. Returned only in getChat.
     [<DataMember(Name = "has_private_forwards")>]
     HasPrivateForwards: bool option
+    /// True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.
+    [<DataMember(Name = "has_restricted_voice_and_video_messages")>]
+    HasRestrictedVoiceAndVideoMessages: bool option
     /// True, if users need to join the supergroup before they can send messages. Returned only in getChat.
     [<DataMember(Name = "join_to_send_messages")>]
     JoinToSendMessages: bool option
@@ -306,7 +309,7 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?photo: ChatPhoto, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?photo: ChatPhoto, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
@@ -321,6 +324,7 @@ and [<CLIMutable>] Chat =
       Description = description
       JoinByRequest = joinByRequest
       JoinToSendMessages = joinToSendMessages
+      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasPrivateForwards = hasPrivateForwards
       Bio = bio
       Photo = photo
@@ -591,7 +595,7 @@ and [<CLIMutable>] MessageId =
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 and [<CLIMutable>] MessageEntity =
   {
-    /// Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames)
+    /// Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
     [<DataMember(Name = "type")>]
     Type: string
     /// Offset in UTF-16 code units to the start of the entity
@@ -609,8 +613,11 @@ and [<CLIMutable>] MessageEntity =
     /// For “pre” only, the programming language of the entity text
     [<DataMember(Name = "language")>]
     Language: string option
+    /// For “custom_emoji” only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker
+    [<DataMember(Name = "custom_emoji_id")>]
+    CustomEmojiId: string option
   }
-  static member Create(``type``: string, offset: int64, length: int64, ?url: string, ?user: User, ?language: string) = 
+  static member Create(``type``: string, offset: int64, length: int64, ?url: string, ?user: User, ?language: string, ?customEmojiId: string) = 
     {
       Type = ``type``
       Offset = offset
@@ -618,6 +625,7 @@ and [<CLIMutable>] MessageEntity =
       Url = url
       User = user
       Language = language
+      CustomEmojiId = customEmojiId
     }
 
 /// This object represents one size of a photo or a file / sticker thumbnail.
@@ -2171,7 +2179,7 @@ and [<CLIMutable>] InputMediaVideo =
     /// Video duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64 option
-    /// Pass True, if the uploaded video is suitable for streaming
+    /// Pass True if the uploaded video is suitable for streaming
     [<DataMember(Name = "supports_streaming")>]
     SupportsStreaming: bool option
   }
@@ -2322,6 +2330,9 @@ and [<CLIMutable>] Sticker =
     /// Unique identifier for this file, which is supposed to be the same over time and for different bots. Can't be used to download or reuse the file.
     [<DataMember(Name = "file_unique_id")>]
     FileUniqueId: string
+    /// Type of the sticker, currently one of “regular”, “mask”, “custom_emoji”. The type of the sticker is independent from its format, which is determined by the fields is_animated and is_video.
+    [<DataMember(Name = "type")>]
+    Type: string
     /// Sticker width
     [<DataMember(Name = "width")>]
     Width: int64
@@ -2343,20 +2354,24 @@ and [<CLIMutable>] Sticker =
     /// Name of the sticker set to which the sticker belongs
     [<DataMember(Name = "set_name")>]
     SetName: string option
-    /// Premium animation for the sticker, if the sticker is premium
+    /// For premium regular stickers, premium animation for the sticker
     [<DataMember(Name = "premium_animation")>]
     PremiumAnimation: File option
     /// For mask stickers, the position where the mask should be placed
     [<DataMember(Name = "mask_position")>]
     MaskPosition: MaskPosition option
+    /// For custom emoji stickers, unique identifier of the custom emoji
+    [<DataMember(Name = "custom_emoji_id")>]
+    CustomEmojiId: string option
     /// File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumb: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, ``type``: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumb: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?customEmojiId: string, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
+      Type = ``type``
       Width = width
       Height = height
       IsAnimated = isAnimated
@@ -2366,6 +2381,7 @@ and [<CLIMutable>] Sticker =
       SetName = setName
       PremiumAnimation = premiumAnimation
       MaskPosition = maskPosition
+      CustomEmojiId = customEmojiId
       FileSize = fileSize
     }
 
@@ -2378,15 +2394,15 @@ and [<CLIMutable>] StickerSet =
     /// Sticker set title
     [<DataMember(Name = "title")>]
     Title: string
+    /// Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
+    [<DataMember(Name = "sticker_type")>]
+    StickerType: string
     /// True, if the sticker set contains animated stickers
     [<DataMember(Name = "is_animated")>]
     IsAnimated: bool
     /// True, if the sticker set contains video stickers
     [<DataMember(Name = "is_video")>]
     IsVideo: bool
-    /// True, if the sticker set contains masks
-    [<DataMember(Name = "contains_masks")>]
-    ContainsMasks: bool
     /// List of all set stickers
     [<DataMember(Name = "stickers")>]
     Stickers: Sticker[]
@@ -2394,13 +2410,13 @@ and [<CLIMutable>] StickerSet =
     [<DataMember(Name = "thumb")>]
     Thumb: PhotoSize option
   }
-  static member Create(name: string, title: string, isAnimated: bool, isVideo: bool, containsMasks: bool, stickers: Sticker[], ?thumb: PhotoSize) = 
+  static member Create(name: string, title: string, stickerType: string, isAnimated: bool, isVideo: bool, stickers: Sticker[], ?thumb: PhotoSize) = 
     {
       Name = name
       Title = title
+      StickerType = stickerType
       IsAnimated = isAnimated
       IsVideo = isVideo
-      ContainsMasks = containsMasks
       Stickers = stickers
       Thumb = thumb
     }
@@ -2506,7 +2522,7 @@ and [<CLIMutable>] InlineQueryResultArticle =
     /// URL of the result
     [<DataMember(Name = "url")>]
     Url: string option
-    /// Pass True, if you don't want the URL to be shown in the message
+    /// Pass True if you don't want the URL to be shown in the message
     [<DataMember(Name = "hide_url")>]
     HideUrl: bool option
     /// Short description of the result
@@ -3690,25 +3706,25 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     /// Photo height
     [<DataMember(Name = "photo_height")>]
     PhotoHeight: int64 option
-    /// Pass True, if you require the user's full name to complete the order
+    /// Pass True if you require the user's full name to complete the order
     [<DataMember(Name = "need_name")>]
     NeedName: bool option
-    /// Pass True, if you require the user's phone number to complete the order
+    /// Pass True if you require the user's phone number to complete the order
     [<DataMember(Name = "need_phone_number")>]
     NeedPhoneNumber: bool option
-    /// Pass True, if you require the user's email address to complete the order
+    /// Pass True if you require the user's email address to complete the order
     [<DataMember(Name = "need_email")>]
     NeedEmail: bool option
-    /// Pass True, if you require the user's shipping address to complete the order
+    /// Pass True if you require the user's shipping address to complete the order
     [<DataMember(Name = "need_shipping_address")>]
     NeedShippingAddress: bool option
-    /// Pass True, if the user's phone number should be sent to provider
+    /// Pass True if the user's phone number should be sent to provider
     [<DataMember(Name = "send_phone_number_to_provider")>]
     SendPhoneNumberToProvider: bool option
-    /// Pass True, if the user's email address should be sent to provider
+    /// Pass True if the user's email address should be sent to provider
     [<DataMember(Name = "send_email_to_provider")>]
     SendEmailToProvider: bool option
-    /// Pass True, if the final price depends on the shipping method
+    /// Pass True if the final price depends on the shipping method
     [<DataMember(Name = "is_flexible")>]
     IsFlexible: bool option
   }

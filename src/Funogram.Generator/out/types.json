@@ -392,6 +392,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "has_restricted_voice_and_video_messages",
+            "ConvertedName": "HasRestrictedVoiceAndVideoMessages",
+            "Description": "True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "join_to_send_messages",
             "ConvertedName": "JoinToSendMessages",
             "Description": "True, if users need to join the supergroup before they can send messages. Returned only in getChat.",
@@ -1011,7 +1019,7 @@
           {
             "OriginalName": "type",
             "ConvertedName": "Type",
-            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames)",
+            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames), \u201Ccustom_emoji\u201D (for inline custom emoji stickers)",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -1052,6 +1060,14 @@
             "OriginalName": "language",
             "ConvertedName": "Language",
             "Description": "For \u201Cpre\u201D only, the programming language of the entity text",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "custom_emoji_id",
+            "ConvertedName": "CustomEmojiId",
+            "Description": "For \u201Ccustom_emoji\u201D only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -3915,7 +3931,7 @@
           {
             "OriginalName": "supports_streaming",
             "ConvertedName": "SupportsStreaming",
-            "Description": "Pass True, if the uploaded video is suitable for streaming",
+            "Description": "Pass True if the uploaded video is suitable for streaming",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -4188,6 +4204,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the sticker, currently one of \u201Cregular\u201D, \u201Cmask\u201D, \u201Ccustom_emoji\u201D. The type of the sticker is independent from its format, which is determined by the fields is_animated and is_video.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
             "OriginalName": "width",
             "ConvertedName": "Width",
             "Description": "Sticker width",
@@ -4246,7 +4270,7 @@
           {
             "OriginalName": "premium_animation",
             "ConvertedName": "PremiumAnimation",
-            "Description": "Premium animation for the sticker, if the sticker is premium",
+            "Description": "For premium regular stickers, premium animation for the sticker",
             "OriginalFieldType": "File",
             "ConvertedFieldType": "File",
             "Optional": true
@@ -4257,6 +4281,14 @@
             "Description": "For mask stickers, the position where the mask should be placed",
             "OriginalFieldType": "MaskPosition",
             "ConvertedFieldType": "MaskPosition",
+            "Optional": true
+          },
+          {
+            "OriginalName": "custom_emoji_id",
+            "ConvertedName": "CustomEmojiId",
+            "Description": "For custom emoji stickers, unique identifier of the custom emoji",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           },
           {
@@ -4295,6 +4327,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "sticker_type",
+            "ConvertedName": "StickerType",
+            "Description": "Type of stickers in the set, currently one of \u201Cregular\u201D, \u201Cmask\u201D, \u201Ccustom_emoji\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
             "OriginalName": "is_animated",
             "ConvertedName": "IsAnimated",
             "Description": "True, if the sticker set contains animated stickers",
@@ -4306,14 +4346,6 @@
             "OriginalName": "is_video",
             "ConvertedName": "IsVideo",
             "Description": "True, if the sticker set contains video stickers",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "contains_masks",
-            "ConvertedName": "ContainsMasks",
-            "Description": "True, if the sticker set contains masks",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -4589,7 +4621,7 @@
           {
             "OriginalName": "hide_url",
             "ConvertedName": "HideUrl",
-            "Description": "Pass True, if you don\u0027t want the URL to be shown in the message",
+            "Description": "Pass True if you don\u0027t want the URL to be shown in the message",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6844,7 +6876,7 @@
           {
             "OriginalName": "need_name",
             "ConvertedName": "NeedName",
-            "Description": "Pass True, if you require the user\u0027s full name to complete the order",
+            "Description": "Pass True if you require the user\u0027s full name to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6852,7 +6884,7 @@
           {
             "OriginalName": "need_phone_number",
             "ConvertedName": "NeedPhoneNumber",
-            "Description": "Pass True, if you require the user\u0027s phone number to complete the order",
+            "Description": "Pass True if you require the user\u0027s phone number to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6860,7 +6892,7 @@
           {
             "OriginalName": "need_email",
             "ConvertedName": "NeedEmail",
-            "Description": "Pass True, if you require the user\u0027s email address to complete the order",
+            "Description": "Pass True if you require the user\u0027s email address to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6868,7 +6900,7 @@
           {
             "OriginalName": "need_shipping_address",
             "ConvertedName": "NeedShippingAddress",
-            "Description": "Pass True, if you require the user\u0027s shipping address to complete the order",
+            "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6876,7 +6908,7 @@
           {
             "OriginalName": "send_phone_number_to_provider",
             "ConvertedName": "SendPhoneNumberToProvider",
-            "Description": "Pass True, if the user\u0027s phone number should be sent to provider",
+            "Description": "Pass True if the user\u0027s phone number should be sent to provider",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6884,7 +6916,7 @@
           {
             "OriginalName": "send_email_to_provider",
             "ConvertedName": "SendEmailToProvider",
-            "Description": "Pass True, if the user\u0027s email address should be sent to provider",
+            "Description": "Pass True if the user\u0027s email address should be sent to provider",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6892,7 +6924,7 @@
           {
             "OriginalName": "is_flexible",
             "ConvertedName": "IsFlexible",
-            "Description": "Pass True, if the final price depends on the shipping method",
+            "Description": "Pass True if the final price depends on the shipping method",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
