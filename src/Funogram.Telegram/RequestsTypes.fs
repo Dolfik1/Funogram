@@ -1300,7 +1300,7 @@ type CreateForumTopic =
     CreateForumTopic.Make(ChatId.Int chatId, name, ?iconColor = iconColor, ?iconCustomEmojiId = iconCustomEmojiId)
   static member Make(chatId: string, name: string, ?iconColor: int64, ?iconCustomEmojiId: string) = 
     CreateForumTopic.Make(ChatId.String chatId, name, ?iconColor = iconColor, ?iconCustomEmojiId = iconCustomEmojiId)
-  interface IRequestBase<information> with
+  interface IRequestBase<ForumTopic> with
     member _.MethodName = "createForumTopic"
     
 type EditForumTopic =

@@ -54,6 +54,7 @@ let private returnTypeRegexes =
     Regex("On success, an ([A|a]rray of \w+|\w+)\s")
     Regex("An ([A|a]rray of \w+|\w+) objects is returned")
     Regex("[R|r]eturns basic information about the bot in form of a ([A|a]rray of \w+|\w+)")
+    Regex("[R|r]eturns information about the created topic as a ([A|a]rray of \w+|\w+)")
 
     Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
 

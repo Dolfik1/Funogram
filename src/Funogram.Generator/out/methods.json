@@ -2945,8 +2945,8 @@
         "Optional": true
       }
     ],
-    "OriginalReturnType": "information",
-    "ConvertedReturnType": "information"
+    "OriginalReturnType": "ForumTopic",
+    "ConvertedReturnType": "ForumTopic"
   },
   {
     "OriginalName": "editForumTopic",
