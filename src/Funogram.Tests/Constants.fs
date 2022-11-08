@@ -55,6 +55,7 @@ module Constants =
   let forwardMessageReq = 
     ({
       ChatId = ChatId.String "Dolfik"
+      MessageThreadId = None
       FromChatId = ChatId.Int 10L
       MessageId = 10L
       DisableNotification = None
