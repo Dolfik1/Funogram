@@ -50,7 +50,7 @@ let private splitCaseNameAndType (typeName: string) (nameAndType: string) =
   try nameAndType.Substring(typeName.Length) with | _ -> "ERROR!"
 
 let private isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
-  let name = typeNodeInfo.TypeName.InnerText()
+  let name = Helpers.innerText typeNodeInfo.TypeName
   Char.IsUpper name.[0] && (name.Replace(" ", "").Length = name.Length)
 
 let private setConvertedFieldType (field: ApiTypeField) =
@@ -62,14 +62,14 @@ let private parseApiTypeFields apiTypeName (node: HtmlNode) =
   |> Seq.map (fun n -> n.Elements()) 
   |> Seq.filter (fun e -> e.Length = 3)
   |> Seq.map (fun elements ->
-    let desc = elements.[2].InnerText()
+    let desc = Helpers.innerText elements.[2]
     let optionalIndex = desc.IndexOf("Optional. ") 
     let trimmedDesc = if optionalIndex >= 0 then desc.Substring(10) else desc
     {
-      OriginalName = elements.[0].InnerText()
-      ConvertedName = elements.[0].InnerText() |> Helpers.toPascalCase
+      OriginalName = Helpers.innerText elements.[0]
+      ConvertedName = elements.[0] |> Helpers.innerText |> Helpers.toPascalCase
       Description = trimmedDesc
-      OriginalFieldType = elements.[1].InnerText()
+      OriginalFieldType = Helpers.innerText elements.[1]
       ConvertedFieldType = ""
       Optional = Some (optionalIndex >= 0)
     } |> setConvertedFieldType
@@ -79,7 +79,7 @@ let private parseApiTypeFields apiTypeName (node: HtmlNode) =
 let private parseApiTypeCases (typeName: string) (node: HtmlNode) =
   node.CssSelect("li")
   |> Seq.map (fun n ->
-    let nameAndType = n.InnerText()
+    let nameAndType = Helpers.innerText n
     {
       Name = splitCaseNameAndType typeName nameAndType
       CaseType = nameAndType
@@ -191,13 +191,13 @@ let parse (config: ParseConfig) =
   let types =
     typesNodes
     |> Array.map (fun node ->
-      let typeName = node.TypeName.InnerText()
+      let typeName = Helpers.innerText node.TypeName
       printfn "Processing type %s" typeName
       {
         Name = typeName
         Description = 
           node.TypeDesc 
-          |> Seq.map (fun x -> x.InnerText())
+          |> Seq.map Helpers.innerText
           |> String.concat "\r\n"
 
         Kind = 
