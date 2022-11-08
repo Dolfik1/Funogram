@@ -368,11 +368,35 @@
             "Optional": true
           },
           {
+            "OriginalName": "is_forum",
+            "ConvertedName": "IsForum",
+            "Description": "True, if the supergroup chat is a forum (has topics enabled)",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "photo",
             "ConvertedName": "Photo",
             "Description": "Chat photo. Returned only in getChat.",
             "OriginalFieldType": "ChatPhoto",
             "ConvertedFieldType": "ChatPhoto",
+            "Optional": true
+          },
+          {
+            "OriginalName": "active_usernames",
+            "ConvertedName": "ActiveUsernames",
+            "Description": "If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "emoji_status_custom_emoji_id",
+            "ConvertedName": "EmojiStatusCustomEmojiId",
+            "Description": "Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           },
           {
@@ -523,6 +547,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of a message thread to which the message belongs; for supergroups only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "from",
             "ConvertedName": "From",
             "Description": "Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.",
@@ -600,6 +632,14 @@
             "Description": "For forwarded messages, date the original message was sent in Unix time",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_topic_message",
+            "ConvertedName": "IsTopicMessage",
+            "Description": "True, if the message is sent to a forum topic",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -936,6 +976,30 @@
             "Description": "Service message. A user in the chat triggered another user\u0027s proximity alert while sharing Live Location.",
             "OriginalFieldType": "ProximityAlertTriggered",
             "ConvertedFieldType": "ProximityAlertTriggered",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_created",
+            "ConvertedName": "ForumTopicCreated",
+            "Description": "Service message: forum topic created",
+            "OriginalFieldType": "ForumTopicCreated",
+            "ConvertedFieldType": "ForumTopicCreated",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_closed",
+            "ConvertedName": "ForumTopicClosed",
+            "Description": "Service message: forum topic closed",
+            "OriginalFieldType": "ForumTopicClosed",
+            "ConvertedFieldType": "ForumTopicClosed",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_reopened",
+            "ConvertedName": "ForumTopicReopened",
+            "Description": "Service message: forum topic reopened",
+            "OriginalFieldType": "ForumTopicReopened",
+            "ConvertedFieldType": "ForumTopicReopened",
             "Optional": true
           },
           {
@@ -2008,6 +2072,55 @@
     }
   },
   {
+    "Name": "ForumTopicCreated",
+    "Description": "This object represents a service message about a new forum topic created in the chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the topic",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_color",
+            "ConvertedName": "IconColor",
+            "Description": "Color of the topic icon in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "Unique identifier of the custom emoji shown as the topic icon",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopicClosed",
+    "Description": "This object represents a service message about a forum topic closed in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "ForumTopicReopened",
+    "Description": "This object represents a service message about a forum topic reopened in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
     "Name": "VideoChatScheduled",
     "Description": "This object represents a service message about a video chat scheduled in the chat.",
     "Kind": {
@@ -2777,6 +2890,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "can_manage_voice_chats",
             "ConvertedName": "CanManageVoiceChats",
             "Description": "DEPRECATED: use can_manage_video_chats instead",
@@ -2986,6 +3107,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "custom_title",
             "ConvertedName": "CustomTitle",
             "Description": "Custom title for this user",
@@ -3083,6 +3212,14 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create forum topics",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3381,6 +3518,14 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -3408,6 +3553,49 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopic",
+    "Description": "This object represents a forum topic.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of the forum topic",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the topic",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_color",
+            "ConvertedName": "IconColor",
+            "Description": "Color of the topic icon in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "Unique identifier of the custom emoji shown as the topic icon",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
           }
         ]
       ]

@@ -138,8 +138,8 @@ and [<CLIMutable>] Update =
       ChatJoinRequest = chatJoinRequest
     }
 
-/// Describes the current status of a webhook.
-/// All types used in the Bot API responses are represented as JSON-objects.
+/// Describes the current status of a webhook.
+/// All types used in the Bot API responses are represented as JSON-objects.
 /// It is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.
 and [<CLIMutable>] WebhookInfo =
   {
@@ -257,9 +257,18 @@ and [<CLIMutable>] Chat =
     /// Last name of the other party in a private chat
     [<DataMember(Name = "last_name")>]
     LastName: string option
+    /// True, if the supergroup chat is a forum (has topics enabled)
+    [<DataMember(Name = "is_forum")>]
+    IsForum: bool option
     /// Chat photo. Returned only in getChat.
     [<DataMember(Name = "photo")>]
     Photo: ChatPhoto option
+    /// If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.
+    [<DataMember(Name = "active_usernames")>]
+    ActiveUsernames: string[] option
+    /// Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
+    [<DataMember(Name = "emoji_status_custom_emoji_id")>]
+    EmojiStatusCustomEmojiId: string option
     /// Bio of the other party in a private chat. Returned only in getChat.
     [<DataMember(Name = "bio")>]
     Bio: string option
@@ -309,7 +318,7 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?photo: ChatPhoto, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
@@ -327,7 +336,10 @@ and [<CLIMutable>] Chat =
       HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasPrivateForwards = hasPrivateForwards
       Bio = bio
+      EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
+      ActiveUsernames = activeUsernames
       Photo = photo
+      IsForum = isForum
       LastName = lastName
       FirstName = firstName
       Username = username
@@ -342,6 +354,9 @@ and [<CLIMutable>] Message =
     /// Unique message identifier inside this chat
     [<DataMember(Name = "message_id")>]
     MessageId: int64
+    /// Unique identifier of a message thread to which the message belongs; for supergroups only
+    [<DataMember(Name = "message_thread_id")>]
+    MessageThreadId: int64 option
     /// Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     [<DataMember(Name = "from")>]
     From: User option
@@ -372,6 +387,9 @@ and [<CLIMutable>] Message =
     /// For forwarded messages, date the original message was sent in Unix time
     [<DataMember(Name = "forward_date")>]
     ForwardDate: DateTime option
+    /// True, if the message is sent to a forum topic
+    [<DataMember(Name = "is_topic_message")>]
+    IsTopicMessage: bool option
     /// True, if the message is a channel post that was automatically forwarded to the connected discussion group
     [<DataMember(Name = "is_automatic_forward")>]
     IsAutomaticForward: bool option
@@ -498,6 +516,15 @@ and [<CLIMutable>] Message =
     /// Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
     [<DataMember(Name = "proximity_alert_triggered")>]
     ProximityAlertTriggered: ProximityAlertTriggered option
+    /// Service message: forum topic created
+    [<DataMember(Name = "forum_topic_created")>]
+    ForumTopicCreated: ForumTopicCreated option
+    /// Service message: forum topic closed
+    [<DataMember(Name = "forum_topic_closed")>]
+    ForumTopicClosed: ForumTopicClosed option
+    /// Service message: forum topic reopened
+    [<DataMember(Name = "forum_topic_reopened")>]
+    ForumTopicReopened: ForumTopicReopened option
     /// Service message: video chat scheduled
     [<DataMember(Name = "video_chat_scheduled")>]
     VideoChatScheduled: VideoChatScheduled option
@@ -517,12 +544,11 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?game: Game, ?poll: Poll, ?venue: Venue, ?location: Location, ?newChatMembers: User[], ?leftChatMember: User, ?newChatTitle: string, ?newChatPhoto: PhotoSize[], ?deleteChatPhoto: bool, ?groupChatCreated: bool, ?supergroupChatCreated: bool, ?channelChatCreated: bool, ?migrateToChatId: int64, ?dice: Dice, ?migrateFromChatId: int64, ?pinnedMessage: Message, ?invoice: Invoice, ?successfulPayment: SuccessfulPayment, ?connectedWebsite: string, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?videoChatScheduled: VideoChatScheduled, ?videoChatStarted: VideoChatStarted, ?videoChatEnded: VideoChatEnded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?contact: Contact, ?captionEntities: MessageEntity[], ?caption: string, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?hasProtectedContent: bool, ?mediaGroupId: string, ?authorSignature: string, ?text: string, ?entities: MessageEntity[], ?animation: Animation, ?audio: Audio, ?document: Document, ?photo: PhotoSize[], ?sticker: Sticker, ?video: Video, ?videoNote: VideoNote, ?voice: Voice, ?webAppData: WebAppData, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?poll: Poll, ?venue: Venue, ?location: Location, ?newChatMembers: User[], ?leftChatMember: User, ?newChatTitle: string, ?newChatPhoto: PhotoSize[], ?deleteChatPhoto: bool, ?groupChatCreated: bool, ?supergroupChatCreated: bool, ?channelChatCreated: bool, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?migrateToChatId: int64, ?pinnedMessage: Message, ?game: Game, ?invoice: Invoice, ?successfulPayment: SuccessfulPayment, ?connectedWebsite: string, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?forumTopicCreated: ForumTopicCreated, ?forumTopicClosed: ForumTopicClosed, ?forumTopicReopened: ForumTopicReopened, ?videoChatScheduled: VideoChatScheduled, ?videoChatStarted: VideoChatStarted, ?videoChatEnded: VideoChatEnded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?migrateFromChatId: int64, ?dice: Dice, ?captionEntities: MessageEntity[], ?webAppData: WebAppData, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?contact: Contact, ?editDate: int64, ?mediaGroupId: string, ?authorSignature: string, ?text: string, ?entities: MessageEntity[], ?animation: Animation, ?audio: Audio, ?document: Document, ?photo: PhotoSize[], ?sticker: Sticker, ?video: Video, ?videoNote: VideoNote, ?voice: Voice, ?caption: string, ?hasProtectedContent: bool, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
-      Game = game
       Poll = poll
       Venue = venue
       Location = location
@@ -534,23 +560,27 @@ and [<CLIMutable>] Message =
       GroupChatCreated = groupChatCreated
       SupergroupChatCreated = supergroupChatCreated
       ChannelChatCreated = channelChatCreated
+      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       MigrateToChatId = migrateToChatId
-      Dice = dice
-      MigrateFromChatId = migrateFromChatId
       PinnedMessage = pinnedMessage
+      Game = game
       Invoice = invoice
       SuccessfulPayment = successfulPayment
       ConnectedWebsite = connectedWebsite
       PassportData = passportData
       ProximityAlertTriggered = proximityAlertTriggered
+      ForumTopicCreated = forumTopicCreated
+      ForumTopicClosed = forumTopicClosed
+      ForumTopicReopened = forumTopicReopened
       VideoChatScheduled = videoChatScheduled
       VideoChatStarted = videoChatStarted
       VideoChatEnded = videoChatEnded
       VideoChatParticipantsInvited = videoChatParticipantsInvited
-      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
-      Contact = contact
+      MigrateFromChatId = migrateFromChatId
+      Dice = dice
       CaptionEntities = captionEntities
-      Caption = caption
+      WebAppData = webAppData
+      MessageThreadId = messageThreadId
       From = from
       SenderChat = senderChat
       ForwardFrom = forwardFrom
@@ -559,11 +589,12 @@ and [<CLIMutable>] Message =
       ForwardSignature = forwardSignature
       ForwardSenderName = forwardSenderName
       ForwardDate = forwardDate
+      IsTopicMessage = isTopicMessage
       IsAutomaticForward = isAutomaticForward
       ReplyToMessage = replyToMessage
       ViaBot = viaBot
+      Contact = contact
       EditDate = editDate
-      HasProtectedContent = hasProtectedContent
       MediaGroupId = mediaGroupId
       AuthorSignature = authorSignature
       Text = text
@@ -576,7 +607,8 @@ and [<CLIMutable>] Message =
       Video = video
       VideoNote = videoNote
       Voice = voice
-      WebAppData = webAppData
+      Caption = caption
+      HasProtectedContent = hasProtectedContent
       ReplyMarkup = replyMarkup
     }
 
@@ -1136,6 +1168,34 @@ and [<CLIMutable>] MessageAutoDeleteTimerChanged =
       MessageAutoDeleteTime = messageAutoDeleteTime
     }
 
+/// This object represents a service message about a new forum topic created in the chat.
+and [<CLIMutable>] ForumTopicCreated =
+  {
+    /// Name of the topic
+    [<DataMember(Name = "name")>]
+    Name: string
+    /// Color of the topic icon in RGB format
+    [<DataMember(Name = "icon_color")>]
+    IconColor: int64
+    /// Unique identifier of the custom emoji shown as the topic icon
+    [<DataMember(Name = "icon_custom_emoji_id")>]
+    IconCustomEmojiId: string option
+  }
+  static member Create(name: string, iconColor: int64, ?iconCustomEmojiId: string) = 
+    {
+      Name = name
+      IconColor = iconColor
+      IconCustomEmojiId = iconCustomEmojiId
+    }
+
+/// This object represents a service message about a forum topic closed in the chat. Currently holds no information.
+and ForumTopicClosed =
+  new() = {}
+
+/// This object represents a service message about a forum topic reopened in the chat. Currently holds no information.
+and ForumTopicReopened =
+  new() = {}
+
 /// This object represents a service message about a video chat scheduled in the chat.
 and [<CLIMutable>] VideoChatScheduled =
   {
@@ -1258,7 +1318,7 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
       Selective = selective
     }
 
-/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
+/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
 /// Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 /// Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
 /// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
@@ -1319,7 +1379,7 @@ and [<CLIMutable>] ReplyKeyboardRemove =
       Selective = selective
     }
 
-/// This object represents an inline keyboard that appears right next to the message it belongs to.
+/// This object represents an inline keyboard that appears right next to the message it belongs to.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 and [<CLIMutable>] InlineKeyboardMarkup =
   {
@@ -1384,7 +1444,7 @@ and [<CLIMutable>] InlineKeyboardButton =
       Pay = pay
     }
 
-/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
+/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
 /// Telegram apps support these buttons as of version 5.7.
 and [<CLIMutable>] LoginUrl =
   {
@@ -1571,11 +1631,14 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
+    /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+    [<DataMember(Name = "can_manage_topics")>]
+    CanManageTopics: bool option
     /// DEPRECATED: use can_manage_video_chats instead
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageVoiceChats: bool) = 
+  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       IsAnonymous = isAnonymous
       CanManageChat = canManageChat
@@ -1588,6 +1651,7 @@ and [<CLIMutable>] ChatAdministratorRights =
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
+      CanManageTopics = canManageTopics
       CanManageVoiceChats = canManageVoiceChats
     }
 
@@ -1669,6 +1733,9 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
+    /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+    [<DataMember(Name = "can_manage_topics")>]
+    CanManageTopics: bool option
     /// Custom title for this user
     [<DataMember(Name = "custom_title")>]
     CustomTitle: string option
@@ -1676,23 +1743,24 @@ and [<CLIMutable>] ChatMemberAdministrator =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(status: string, user: User, canBeEdited: bool, isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?customTitle: string, ?canManageVoiceChats: bool) = 
+  static member Create(status: string, canInviteUsers: bool, canChangeInfo: bool, canRestrictMembers: bool, canManageVideoChats: bool, canPromoteMembers: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canDeleteMessages: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       Status = status
-      User = user
-      CanBeEdited = canBeEdited
-      IsAnonymous = isAnonymous
-      CanManageChat = canManageChat
-      CanDeleteMessages = canDeleteMessages
-      CanManageVideoChats = canManageVideoChats
-      CanRestrictMembers = canRestrictMembers
-      CanPromoteMembers = canPromoteMembers
-      CanChangeInfo = canChangeInfo
       CanInviteUsers = canInviteUsers
+      CanChangeInfo = canChangeInfo
+      CanRestrictMembers = canRestrictMembers
+      CanManageVideoChats = canManageVideoChats
+      CanPromoteMembers = canPromoteMembers
+      CanManageChat = canManageChat
+      IsAnonymous = isAnonymous
+      CanBeEdited = canBeEdited
+      User = user
+      CanDeleteMessages = canDeleteMessages
+      CustomTitle = customTitle
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
-      CustomTitle = customTitle
+      CanManageTopics = canManageTopics
       CanManageVoiceChats = canManageVoiceChats
     }
 
@@ -1733,6 +1801,9 @@ and [<CLIMutable>] ChatMemberRestricted =
     /// True, if the user is allowed to pin messages
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool
+    /// True, if the user is allowed to create forum topics
+    [<DataMember(Name = "can_manage_topics")>]
+    CanManageTopics: bool
     /// True, if the user is allowed to send text messages, contacts, locations and venues
     [<DataMember(Name = "can_send_messages")>]
     CanSendMessages: bool
@@ -1752,7 +1823,7 @@ and [<CLIMutable>] ChatMemberRestricted =
     [<DataMember(Name = "until_date")>]
     UntilDate: DateTime
   }
-  static member Create(status: string, user: User, isMember: bool, canChangeInfo: bool, canInviteUsers: bool, canPinMessages: bool, canSendMessages: bool, canSendMediaMessages: bool, canSendPolls: bool, canSendOtherMessages: bool, canAddWebPagePreviews: bool, untilDate: DateTime) = 
+  static member Create(status: string, user: User, isMember: bool, canChangeInfo: bool, canInviteUsers: bool, canPinMessages: bool, canManageTopics: bool, canSendMessages: bool, canSendMediaMessages: bool, canSendPolls: bool, canSendOtherMessages: bool, canAddWebPagePreviews: bool, untilDate: DateTime) = 
     {
       Status = status
       User = user
@@ -1760,6 +1831,7 @@ and [<CLIMutable>] ChatMemberRestricted =
       CanChangeInfo = canChangeInfo
       CanInviteUsers = canInviteUsers
       CanPinMessages = canPinMessages
+      CanManageTopics = canManageTopics
       CanSendMessages = canSendMessages
       CanSendMediaMessages = canSendMediaMessages
       CanSendPolls = canSendPolls
@@ -1891,8 +1963,11 @@ and [<CLIMutable>] ChatPermissions =
     /// True, if the user is allowed to pin messages. Ignored in public supergroups
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
+    /// True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages
+    [<DataMember(Name = "can_manage_topics")>]
+    CanManageTopics: bool option
   }
-  static member Create(?canSendMessages: bool, ?canSendMediaMessages: bool, ?canSendPolls: bool, ?canSendOtherMessages: bool, ?canAddWebPagePreviews: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool) = 
+  static member Create(?canSendMessages: bool, ?canSendMediaMessages: bool, ?canSendPolls: bool, ?canSendOtherMessages: bool, ?canAddWebPagePreviews: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
     {
       CanSendMessages = canSendMessages
       CanSendMediaMessages = canSendMediaMessages
@@ -1902,6 +1977,7 @@ and [<CLIMutable>] ChatPermissions =
       CanChangeInfo = canChangeInfo
       CanInviteUsers = canInviteUsers
       CanPinMessages = canPinMessages
+      CanManageTopics = canManageTopics
     }
 
 /// Represents a location to which a chat is connected.
@@ -1918,6 +1994,30 @@ and [<CLIMutable>] ChatLocation =
     {
       Location = location
       Address = address
+    }
+
+/// This object represents a forum topic.
+and [<CLIMutable>] ForumTopic =
+  {
+    /// Unique identifier of the forum topic
+    [<DataMember(Name = "message_thread_id")>]
+    MessageThreadId: int64
+    /// Name of the topic
+    [<DataMember(Name = "name")>]
+    Name: string
+    /// Color of the topic icon in RGB format
+    [<DataMember(Name = "icon_color")>]
+    IconColor: int64
+    /// Unique identifier of the custom emoji shown as the topic icon
+    [<DataMember(Name = "icon_custom_emoji_id")>]
+    IconCustomEmojiId: string option
+  }
+  static member Create(messageThreadId: int64, name: string, iconColor: int64, ?iconCustomEmojiId: string) = 
+    {
+      MessageThreadId = messageThreadId
+      Name = name
+      IconColor = iconColor
+      IconCustomEmojiId = iconCustomEmojiId
     }
 
 /// This object represents a bot command.
@@ -2046,7 +2146,7 @@ and [<CLIMutable>] BotCommandScopeChatMember =
       UserId = userId
     }
 
-/// This object describes the bot's menu button in a private chat. It should be one of
+/// This object describes the bot's menu button in a private chat. It should be one of
 /// If a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
 and MenuButton =
   | Commands of MenuButtonCommands
@@ -2477,7 +2577,7 @@ and [<CLIMutable>] InlineQuery =
       Location = location
     }
 
-/// This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
+/// This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
 /// Note: All URLs passed in inline query results will be available to end users and therefore must be assumed to be public.
 and InlineQueryResult =
   | CachedAudio of InlineQueryResultCachedAudio
@@ -2809,7 +2909,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+/// Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultAudio =
   {
@@ -2862,7 +2962,7 @@ and [<CLIMutable>] InlineQueryResultAudio =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
+/// Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultVoice =
   {
@@ -2911,7 +3011,7 @@ and [<CLIMutable>] InlineQueryResultVoice =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
+/// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultDocument =
   {
@@ -2976,7 +3076,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
+/// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultLocation =
   {
@@ -3041,7 +3141,7 @@ and [<CLIMutable>] InlineQueryResultLocation =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
+/// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultVenue =
   {
@@ -3110,7 +3210,7 @@ and [<CLIMutable>] InlineQueryResultVenue =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
+/// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultContact =
   {
@@ -3163,7 +3263,7 @@ and [<CLIMutable>] InlineQueryResultContact =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a Game.
+/// Represents a Game.
 /// Note: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.
 and [<CLIMutable>] InlineQueryResultGame =
   {
@@ -3324,7 +3424,7 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
+/// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
 /// Note: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedSticker =
   {
@@ -3353,7 +3453,7 @@ and [<CLIMutable>] InlineQueryResultCachedSticker =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
+/// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedDocument =
   {
@@ -3450,7 +3550,7 @@ and [<CLIMutable>] InlineQueryResultCachedVideo =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
+/// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedVoice =
   {
@@ -3495,7 +3595,7 @@ and [<CLIMutable>] InlineQueryResultCachedVoice =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+/// Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedAudio =
   {
@@ -3752,7 +3852,7 @@ and [<CLIMutable>] InputInvoiceMessageContent =
       IsFlexible = isFlexible
     }
 
-/// Represents a result of an inline query that was chosen by the user and sent to their chat partner.
+/// Represents a result of an inline query that was chosen by the user and sent to their chat partner.
 /// Note: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.
 and [<CLIMutable>] ChosenInlineResult =
   {
@@ -3781,7 +3881,7 @@ and [<CLIMutable>] ChosenInlineResult =
       InlineMessageId = inlineMessageId
     }
 
-/// Describes an inline message sent by a Web App on behalf of a user.
+/// Describes an inline message sent by a Web App on behalf of a user.
 /// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
 and [<CLIMutable>] SentWebAppMessage =
   {
@@ -3974,7 +4074,7 @@ and [<CLIMutable>] ShippingQuery =
       ShippingAddress = shippingAddress
     }
 
-/// This object contains information about an incoming pre-checkout query.
+/// This object contains information about an incoming pre-checkout query.
 /// Telegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.
 and [<CLIMutable>] PreCheckoutQuery =
   {
@@ -4327,7 +4427,7 @@ and [<CLIMutable>] PassportElementErrorTranslationFiles =
       Message = message
     }
 
-/// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
+/// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
 /// Your bot can offer users HTML5 games to play solo or to compete against each other in groups and one-on-one chats. Create games via @BotFather using the /newgame command. Please note that this kind of power requires responsibility: you will need to accept the terms for each game that your bots will be offering.
 and [<CLIMutable>] PassportElementErrorUnspecified =
   {
@@ -4388,7 +4488,7 @@ and [<CLIMutable>] Game =
 and CallbackGame =
   new() = {}
 
-/// This object represents one row of the high scores table for a game.
+/// This object represents one row of the high scores table for a game.
 /// And that's about all we've got for now.
 /// If you've got any questions, please check out our Bot FAQ »
 and [<CLIMutable>] GameHighScore =
