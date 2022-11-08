@@ -138,8 +138,8 @@ and [<CLIMutable>] Update =
       ChatJoinRequest = chatJoinRequest
     }
 
-/// Describes the current status of a webhook.
-/// All types used in the Bot API responses are represented as JSON-objects.
+/// Describes the current status of a webhook.
+/// All types used in the Bot API responses are represented as JSON-objects.
 /// It is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.
 and [<CLIMutable>] WebhookInfo =
   {
@@ -1318,7 +1318,7 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
       Selective = selective
     }
 
-/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
+/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
 /// Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 /// Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
 /// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
@@ -1379,7 +1379,7 @@ and [<CLIMutable>] ReplyKeyboardRemove =
       Selective = selective
     }
 
-/// This object represents an inline keyboard that appears right next to the message it belongs to.
+/// This object represents an inline keyboard that appears right next to the message it belongs to.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 and [<CLIMutable>] InlineKeyboardMarkup =
   {
@@ -1444,7 +1444,7 @@ and [<CLIMutable>] InlineKeyboardButton =
       Pay = pay
     }
 
-/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
+/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
 /// Telegram apps support these buttons as of version 5.7.
 and [<CLIMutable>] LoginUrl =
   {
@@ -2146,7 +2146,7 @@ and [<CLIMutable>] BotCommandScopeChatMember =
       UserId = userId
     }
 
-/// This object describes the bot's menu button in a private chat. It should be one of
+/// This object describes the bot's menu button in a private chat. It should be one of
 /// If a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
 and MenuButton =
   | Commands of MenuButtonCommands
@@ -2577,7 +2577,7 @@ and [<CLIMutable>] InlineQuery =
       Location = location
     }
 
-/// This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
+/// This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
 /// Note: All URLs passed in inline query results will be available to end users and therefore must be assumed to be public.
 and InlineQueryResult =
   | CachedAudio of InlineQueryResultCachedAudio
@@ -2909,7 +2909,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+/// Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultAudio =
   {
@@ -2962,7 +2962,7 @@ and [<CLIMutable>] InlineQueryResultAudio =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
+/// Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultVoice =
   {
@@ -3011,7 +3011,7 @@ and [<CLIMutable>] InlineQueryResultVoice =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
+/// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultDocument =
   {
@@ -3076,7 +3076,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
+/// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultLocation =
   {
@@ -3141,7 +3141,7 @@ and [<CLIMutable>] InlineQueryResultLocation =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
+/// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultVenue =
   {
@@ -3210,7 +3210,7 @@ and [<CLIMutable>] InlineQueryResultVenue =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
+/// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultContact =
   {
@@ -3263,7 +3263,7 @@ and [<CLIMutable>] InlineQueryResultContact =
       ThumbHeight = thumbHeight
     }
 
-/// Represents a Game.
+/// Represents a Game.
 /// Note: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.
 and [<CLIMutable>] InlineQueryResultGame =
   {
@@ -3424,7 +3424,7 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
+/// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
 /// Note: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedSticker =
   {
@@ -3453,7 +3453,7 @@ and [<CLIMutable>] InlineQueryResultCachedSticker =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
+/// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedDocument =
   {
@@ -3550,7 +3550,7 @@ and [<CLIMutable>] InlineQueryResultCachedVideo =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
+/// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedVoice =
   {
@@ -3595,7 +3595,7 @@ and [<CLIMutable>] InlineQueryResultCachedVoice =
       InputMessageContent = inputMessageContent
     }
 
-/// Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
+/// Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
 /// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedAudio =
   {
@@ -3852,7 +3852,7 @@ and [<CLIMutable>] InputInvoiceMessageContent =
       IsFlexible = isFlexible
     }
 
-/// Represents a result of an inline query that was chosen by the user and sent to their chat partner.
+/// Represents a result of an inline query that was chosen by the user and sent to their chat partner.
 /// Note: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.
 and [<CLIMutable>] ChosenInlineResult =
   {
@@ -3881,7 +3881,7 @@ and [<CLIMutable>] ChosenInlineResult =
       InlineMessageId = inlineMessageId
     }
 
-/// Describes an inline message sent by a Web App on behalf of a user.
+/// Describes an inline message sent by a Web App on behalf of a user.
 /// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
 and [<CLIMutable>] SentWebAppMessage =
   {
@@ -4074,7 +4074,7 @@ and [<CLIMutable>] ShippingQuery =
       ShippingAddress = shippingAddress
     }
 
-/// This object contains information about an incoming pre-checkout query.
+/// This object contains information about an incoming pre-checkout query.
 /// Telegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.
 and [<CLIMutable>] PreCheckoutQuery =
   {
@@ -4427,7 +4427,7 @@ and [<CLIMutable>] PassportElementErrorTranslationFiles =
       Message = message
     }
 
-/// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
+/// Represents an issue in an unspecified place. The error is considered resolved when new data is added.
 /// Your bot can offer users HTML5 games to play solo or to compete against each other in groups and one-on-one chats. Create games via @BotFather using the /newgame command. Please note that this kind of power requires responsibility: you will need to accept the terms for each game that your bots will be offering.
 and [<CLIMutable>] PassportElementErrorUnspecified =
   {
@@ -4488,7 +4488,7 @@ and [<CLIMutable>] Game =
 and CallbackGame =
   new() = {}
 
-/// This object represents one row of the high scores table for a game.
+/// This object represents one row of the high scores table for a game.
 /// And that's about all we've got for now.
 /// If you've got any questions, please check out our Bot FAQ »
 and [<CLIMutable>] GameHighScore =

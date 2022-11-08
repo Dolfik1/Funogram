@@ -198,7 +198,7 @@ let parse (config: ParseConfig) =
         Description = 
           node.TypeDesc 
           |> Seq.map Helpers.innerText
-          |> String.concat "\r\n"
+          |> String.concat "\n"
 
         Kind = 
           match node.TypeFields, node.TypeCases with
