@@ -132,7 +132,7 @@
   },
   {
     "Name": "WebhookInfo",
-    "Description": "Describes the current status of a webhook.\r\nAll types used in the Bot API responses are represented as JSON-objects.\r\nIt is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.",
+    "Description": "Describes the current status of a webhook.\nAll types used in the Bot API responses are represented as JSON-objects.\nIt is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -368,11 +368,35 @@
             "Optional": true
           },
           {
+            "OriginalName": "is_forum",
+            "ConvertedName": "IsForum",
+            "Description": "True, if the supergroup chat is a forum (has topics enabled)",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "photo",
             "ConvertedName": "Photo",
             "Description": "Chat photo. Returned only in getChat.",
             "OriginalFieldType": "ChatPhoto",
             "ConvertedFieldType": "ChatPhoto",
+            "Optional": true
+          },
+          {
+            "OriginalName": "active_usernames",
+            "ConvertedName": "ActiveUsernames",
+            "Description": "If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "emoji_status_custom_emoji_id",
+            "ConvertedName": "EmojiStatusCustomEmojiId",
+            "Description": "Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           },
           {
@@ -523,6 +547,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of a message thread to which the message belongs; for supergroups only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "from",
             "ConvertedName": "From",
             "Description": "Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.",
@@ -600,6 +632,14 @@
             "Description": "For forwarded messages, date the original message was sent in Unix time",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_topic_message",
+            "ConvertedName": "IsTopicMessage",
+            "Description": "True, if the message is sent to a forum topic",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -936,6 +976,30 @@
             "Description": "Service message. A user in the chat triggered another user\u0027s proximity alert while sharing Live Location.",
             "OriginalFieldType": "ProximityAlertTriggered",
             "ConvertedFieldType": "ProximityAlertTriggered",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_created",
+            "ConvertedName": "ForumTopicCreated",
+            "Description": "Service message: forum topic created",
+            "OriginalFieldType": "ForumTopicCreated",
+            "ConvertedFieldType": "ForumTopicCreated",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_closed",
+            "ConvertedName": "ForumTopicClosed",
+            "Description": "Service message: forum topic closed",
+            "OriginalFieldType": "ForumTopicClosed",
+            "ConvertedFieldType": "ForumTopicClosed",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_reopened",
+            "ConvertedName": "ForumTopicReopened",
+            "Description": "Service message: forum topic reopened",
+            "OriginalFieldType": "ForumTopicReopened",
+            "ConvertedFieldType": "ForumTopicReopened",
             "Optional": true
           },
           {
@@ -2008,6 +2072,55 @@
     }
   },
   {
+    "Name": "ForumTopicCreated",
+    "Description": "This object represents a service message about a new forum topic created in the chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the topic",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_color",
+            "ConvertedName": "IconColor",
+            "Description": "Color of the topic icon in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "Unique identifier of the custom emoji shown as the topic icon",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopicClosed",
+    "Description": "This object represents a service message about a forum topic closed in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "ForumTopicReopened",
+    "Description": "This object represents a service message about a forum topic reopened in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
     "Name": "VideoChatScheduled",
     "Description": "This object represents a service message about a video chat scheduled in the chat.",
     "Kind": {
@@ -2213,7 +2326,7 @@
   },
   {
     "Name": "KeyboardButton",
-    "Description": "This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.\r\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.",
+    "Description": "This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2310,7 +2423,7 @@
   },
   {
     "Name": "InlineKeyboardMarkup",
-    "Description": "This object represents an inline keyboard that appears right next to the message it belongs to.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.",
+    "Description": "This object represents an inline keyboard that appears right next to the message it belongs to.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2412,7 +2525,7 @@
   },
   {
     "Name": "LoginUrl",
-    "Description": "This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:\r\nTelegram apps support these buttons as of version 5.7.",
+    "Description": "This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:\nTelegram apps support these buttons as of version 5.7.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2777,6 +2890,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "can_manage_voice_chats",
             "ConvertedName": "CanManageVoiceChats",
             "Description": "DEPRECATED: use can_manage_video_chats instead",
@@ -2986,6 +3107,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "custom_title",
             "ConvertedName": "CustomTitle",
             "Description": "Custom title for this user",
@@ -3083,6 +3212,14 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create forum topics",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3381,6 +3518,14 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -3408,6 +3553,49 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopic",
+    "Description": "This object represents a forum topic.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of the forum topic",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the topic",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_color",
+            "ConvertedName": "IconColor",
+            "Description": "Color of the topic icon in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "Unique identifier of the custom emoji shown as the topic icon",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
           }
         ]
       ]
@@ -3646,7 +3834,7 @@
   },
   {
     "Name": "MenuButton",
-    "Description": "This object describes the bot\u0027s menu button in a private chat. It should be one of\r\nIf a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.",
+    "Description": "This object describes the bot\u0027s menu button in a private chat. It should be one of\nIf a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.",
     "Kind": {
       "Case": "Cases",
       "Fields": [
@@ -4474,7 +4662,7 @@
   },
   {
     "Name": "InlineQueryResult",
-    "Description": "This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:\r\nNote: All URLs passed in inline query results will be available to end users and therefore must be assumed to be public.",
+    "Description": "This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:\nNote: All URLs passed in inline query results will be available to end users and therefore must be assumed to be public.",
     "Kind": {
       "Case": "Cases",
       "Fields": [
@@ -5156,7 +5344,7 @@
   },
   {
     "Name": "InlineQueryResultAudio",
-    "Description": "Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5255,7 +5443,7 @@
   },
   {
     "Name": "InlineQueryResultVoice",
-    "Description": "Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5346,7 +5534,7 @@
   },
   {
     "Name": "InlineQueryResultDocument",
-    "Description": "Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5469,7 +5657,7 @@
   },
   {
     "Name": "InlineQueryResultLocation",
-    "Description": "Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5592,7 +5780,7 @@
   },
   {
     "Name": "InlineQueryResultVenue",
-    "Description": "Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5723,7 +5911,7 @@
   },
   {
     "Name": "InlineQueryResultContact",
-    "Description": "Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5822,7 +6010,7 @@
   },
   {
     "Name": "InlineQueryResultGame",
-    "Description": "Represents a Game.\r\nNote: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.",
+    "Description": "Represents a Game.\nNote: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6122,7 +6310,7 @@
   },
   {
     "Name": "InlineQueryResultCachedSticker",
-    "Description": "Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.\r\nNote: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.",
+    "Description": "Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.\nNote: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6173,7 +6361,7 @@
   },
   {
     "Name": "InlineQueryResultCachedDocument",
-    "Description": "Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6355,7 +6543,7 @@
   },
   {
     "Name": "InlineQueryResultCachedVoice",
-    "Description": "Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6438,7 +6626,7 @@
   },
   {
     "Name": "InlineQueryResultCachedAudio",
-    "Description": "Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6935,7 +7123,7 @@
   },
   {
     "Name": "ChosenInlineResult",
-    "Description": "Represents a result of an inline query that was chosen by the user and sent to their chat partner.\r\nNote: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.",
+    "Description": "Represents a result of an inline query that was chosen by the user and sent to their chat partner.\nNote: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6986,7 +7174,7 @@
   },
   {
     "Name": "SentWebAppMessage",
-    "Description": "Describes an inline message sent by a Web App on behalf of a user.\r\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).",
+    "Description": "Describes an inline message sent by a Web App on behalf of a user.\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7330,7 +7518,7 @@
   },
   {
     "Name": "PreCheckoutQuery",
-    "Description": "This object contains information about an incoming pre-checkout query.\r\nTelegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.",
+    "Description": "This object contains information about an incoming pre-checkout query.\nTelegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7992,7 +8180,7 @@
   },
   {
     "Name": "PassportElementErrorUnspecified",
-    "Description": "Represents an issue in an unspecified place. The error is considered resolved when new data is added.\r\nYour bot can offer users HTML5 games to play solo or to compete against each other in groups and one-on-one chats. Create games via @BotFather using the /newgame command. Please note that this kind of power requires responsibility: you will need to accept the terms for each game that your bots will be offering.",
+    "Description": "Represents an issue in an unspecified place. The error is considered resolved when new data is added.\nYour bot can offer users HTML5 games to play solo or to compete against each other in groups and one-on-one chats. Create games via @BotFather using the /newgame command. Please note that this kind of power requires responsibility: you will need to accept the terms for each game that your bots will be offering.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8101,7 +8289,7 @@
   },
   {
     "Name": "GameHighScore",
-    "Description": "This object represents one row of the high scores table for a game.\r\nAnd that\u0027s about all we\u0027ve got for now.\nIf you\u0027ve got any questions, please check out our Bot FAQ \u00BB",
+    "Description": "This object represents one row of the high scores table for a game.\nAnd that\u0027s about all we\u0027ve got for now.\nIf you\u0027ve got any questions, please check out our Bot FAQ \u00BB",
     "Kind": {
       "Case": "Fields",
       "Fields": [
