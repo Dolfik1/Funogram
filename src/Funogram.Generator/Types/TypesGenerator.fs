@@ -34,6 +34,7 @@ type ChatType =
   | Group
   | [<DataMember(Name = "supergroup")>] SuperGroup
   | Channel
+  | Sender
   | Unknown
 
 /// Message text parsing mode
