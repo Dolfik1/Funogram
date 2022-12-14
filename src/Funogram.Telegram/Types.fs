@@ -17,6 +17,7 @@ type ChatType =
   | Private
   | Group
   | [<DataMember(Name = "supergroup")>] SuperGroup
+  | Sender
   | Channel
   | Unknown
 
