@@ -488,6 +488,22 @@
             "Optional": true
           },
           {
+            "OriginalName": "has_aggressive_anti_spam_enabled",
+            "ConvertedName": "HasAggressiveAntiSpamEnabled",
+            "Description": "True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_hidden_members",
+            "ConvertedName": "HasHiddenMembers",
+            "Description": "True, if non-administrators can only get the list of bots and administrators in the chat. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "has_protected_content",
             "ConvertedName": "HasProtectedContent",
             "Description": "True, if messages from the chat can\u0027t be forwarded to other chats. Returned only in getChat.",
@@ -795,6 +811,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "has_media_spoiler",
+            "ConvertedName": "HasMediaSpoiler",
+            "Description": "True, if the message media is covered by a spoiler animation",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "contact",
             "ConvertedName": "Contact",
             "Description": "Message is a shared contact, information about the contact",
@@ -963,6 +987,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "write_access_allowed",
+            "ConvertedName": "WriteAccessAllowed",
+            "Description": "Service message: the user allowed the bot added to the attachment menu to write messages",
+            "OriginalFieldType": "WriteAccessAllowed",
+            "ConvertedFieldType": "WriteAccessAllowed",
+            "Optional": true
+          },
+          {
             "OriginalName": "passport_data",
             "ConvertedName": "PassportData",
             "Description": "Telegram Passport data",
@@ -987,6 +1019,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "forum_topic_edited",
+            "ConvertedName": "ForumTopicEdited",
+            "Description": "Service message: forum topic edited",
+            "OriginalFieldType": "ForumTopicEdited",
+            "ConvertedFieldType": "ForumTopicEdited",
+            "Optional": true
+          },
+          {
             "OriginalName": "forum_topic_closed",
             "ConvertedName": "ForumTopicClosed",
             "Description": "Service message: forum topic closed",
@@ -1000,6 +1040,22 @@
             "Description": "Service message: forum topic reopened",
             "OriginalFieldType": "ForumTopicReopened",
             "ConvertedFieldType": "ForumTopicReopened",
+            "Optional": true
+          },
+          {
+            "OriginalName": "general_forum_topic_hidden",
+            "ConvertedName": "GeneralForumTopicHidden",
+            "Description": "Service message: the \u0027General\u0027 forum topic hidden",
+            "OriginalFieldType": "GeneralForumTopicHidden",
+            "ConvertedFieldType": "GeneralForumTopicHidden",
+            "Optional": true
+          },
+          {
+            "OriginalName": "general_forum_topic_unhidden",
+            "ConvertedName": "GeneralForumTopicUnhidden",
+            "Description": "Service message: the \u0027General\u0027 forum topic unhidden",
+            "OriginalFieldType": "GeneralForumTopicUnhidden",
+            "ConvertedFieldType": "GeneralForumTopicUnhidden",
             "Optional": true
           },
           {
@@ -2114,8 +2170,56 @@
     }
   },
   {
+    "Name": "ForumTopicEdited",
+    "Description": "This object represents a service message about an edited forum topic.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "New name of the topic, if it was edited",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "New identifier of the custom emoji shown as the topic icon, if it was edited; an empty string if the icon was removed",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ForumTopicReopened",
     "Description": "This object represents a service message about a forum topic reopened in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "GeneralForumTopicHidden",
+    "Description": "This object represents a service message about General forum topic hidden in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "GeneralForumTopicUnhidden",
+    "Description": "This object represents a service message about General forum topic unhidden in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "WriteAccessAllowed",
+    "Description": "This object represents a service message about a user allowing a bot added to the attachment menu to write messages. Currently holds no information.",
     "Kind": {
       "Case": "Stub"
     }
@@ -2287,6 +2391,14 @@
             "OriginalFieldType": "Array of Array of KeyboardButton",
             "ConvertedFieldType": "KeyboardButton[][]",
             "Optional": false
+          },
+          {
+            "OriginalName": "is_persistent",
+            "ConvertedName": "IsPersistent",
+            "Description": "Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           },
           {
             "OriginalName": "resize_keyboard",
@@ -2844,7 +2956,7 @@
           {
             "OriginalName": "can_promote_members",
             "ConvertedName": "CanPromoteMembers",
-            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
+            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3061,7 +3173,7 @@
           {
             "OriginalName": "can_promote_members",
             "ConvertedName": "CanPromoteMembers",
-            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
+            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -4032,6 +4144,14 @@
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
             "Optional": true
+          },
+          {
+            "OriginalName": "has_spoiler",
+            "ConvertedName": "HasSpoiler",
+            "Description": "Pass True if the photo needs to be covered with a spoiler animation",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -4123,6 +4243,14 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "has_spoiler",
+            "ConvertedName": "HasSpoiler",
+            "Description": "Pass True if the video needs to be covered with a spoiler animation",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -4205,6 +4333,14 @@
             "Description": "Animation duration in seconds",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_spoiler",
+            "ConvertedName": "HasSpoiler",
+            "Description": "Pass True if the animation needs to be covered with a spoiler animation",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]

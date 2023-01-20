@@ -467,6 +467,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "has_spoiler",
+        "ConvertedName": "HasSpoiler",
+        "Description": "Pass True if the photo needs to be covered with a spoiler animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
         "Description": "Sends the message silently. Users will receive a notification with no sound.",
@@ -838,6 +846,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "has_spoiler",
+        "ConvertedName": "HasSpoiler",
+        "Description": "Pass True if the video needs to be covered with a spoiler animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "supports_streaming",
         "ConvertedName": "SupportsStreaming",
         "Description": "Pass True if the uploaded video is suitable for streaming",
@@ -972,6 +988,14 @@
         "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
         "OriginalFieldType": "Array of MessageEntity",
         "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "has_spoiler",
+        "ConvertedName": "HasSpoiler",
+        "Description": "Pass True if the animation needs to be covered with a spoiler animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
         "Optional": true
       },
       {
@@ -1994,6 +2018,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread; supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "action",
         "ConvertedName": "Action",
         "Description": "Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.",
@@ -2250,7 +2282,7 @@
       {
         "OriginalName": "can_promote_members",
         "ConvertedName": "CanPromoteMembers",
-        "Description": "Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)",
+        "Description": "Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by him)",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2835,7 +2867,7 @@
   {
     "OriginalName": "getChatMember",
     "ConvertedName": "GetChatMember",
-    "Description": "Use this method to get information about a member of a chat. Returns a ChatMember object on success.",
+    "Description": "Use this method to get information about a member of a chat. The method is guaranteed to work for other users, only if the bot is an administrator in the chat. Returns a ChatMember object on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2931,7 +2963,7 @@
       {
         "OriginalName": "icon_color",
         "ConvertedName": "IconColor",
-        "Description": "Color of the topic icon in RGB format. Currently, must be one of 0x6FB9F0, 0xFFD67E, 0xCB86DB, 0x8EEE98, 0xFF93B2, or 0xFB6F5F",
+        "Description": "Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2972,18 +3004,18 @@
       {
         "OriginalName": "name",
         "ConvertedName": "Name",
-        "Description": "New topic name, 1-128 characters",
+        "Description": "New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
-        "Optional": false
+        "Optional": true
       },
       {
         "OriginalName": "icon_custom_emoji_id",
         "ConvertedName": "IconCustomEmojiId",
-        "Description": "New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers.",
+        "Description": "New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
-        "Optional": false
+        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
@@ -3083,6 +3115,99 @@
         "Description": "Unique identifier for the target message thread of the forum topic",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "editGeneralForumTopic",
+    "ConvertedName": "EditGeneralForumTopic",
+    "Description": "Use this method to edit the name of the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "New topic name, 1-128 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "closeGeneralForumTopic",
+    "ConvertedName": "CloseGeneralForumTopic",
+    "Description": "Use this method to close an open \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "reopenGeneralForumTopic",
+    "ConvertedName": "ReopenGeneralForumTopic",
+    "Description": "Use this method to reopen a closed \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "hideGeneralForumTopic",
+    "ConvertedName": "HideGeneralForumTopic",
+    "Description": "Use this method to hide the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "unhideGeneralForumTopic",
+    "ConvertedName": "UnhideGeneralForumTopic",
+    "Description": "Use this method to unhide the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
         "Optional": false
       }
     ],

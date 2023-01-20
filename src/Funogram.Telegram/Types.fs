@@ -303,6 +303,12 @@ and [<CLIMutable>] Chat =
     /// The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in getChat.
     [<DataMember(Name = "message_auto_delete_time")>]
     MessageAutoDeleteTime: int64 option
+    /// True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in getChat.
+    [<DataMember(Name = "has_aggressive_anti_spam_enabled")>]
+    HasAggressiveAntiSpamEnabled: bool option
+    /// True, if non-administrators can only get the list of bots and administrators in the chat. Returned only in getChat.
+    [<DataMember(Name = "has_hidden_members")>]
+    HasHiddenMembers: bool option
     /// True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
     [<DataMember(Name = "has_protected_content")>]
     HasProtectedContent: bool option
@@ -319,13 +325,15 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?hasHiddenMembers: bool, ?hasAggressiveAntiSpamEnabled: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
       CanSetStickerSet = canSetStickerSet
       StickerSetName = stickerSetName
       HasProtectedContent = hasProtectedContent
+      HasHiddenMembers = hasHiddenMembers
+      HasAggressiveAntiSpamEnabled = hasAggressiveAntiSpamEnabled
       MessageAutoDeleteTime = messageAutoDeleteTime
       SlowModeDelay = slowModeDelay
       Permissions = permissions
@@ -448,6 +456,9 @@ and [<CLIMutable>] Message =
     /// For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
+    /// True, if the message media is covered by a spoiler animation
+    [<DataMember(Name = "has_media_spoiler")>]
+    HasMediaSpoiler: bool option
     /// Message is a shared contact, information about the contact
     [<DataMember(Name = "contact")>]
     Contact: Contact option
@@ -511,6 +522,9 @@ and [<CLIMutable>] Message =
     /// The domain name of the website on which the user has logged in. More about Telegram Login »
     [<DataMember(Name = "connected_website")>]
     ConnectedWebsite: string option
+    /// Service message: the user allowed the bot added to the attachment menu to write messages
+    [<DataMember(Name = "write_access_allowed")>]
+    WriteAccessAllowed: WriteAccessAllowed option
     /// Telegram Passport data
     [<DataMember(Name = "passport_data")>]
     PassportData: PassportData option
@@ -520,12 +534,21 @@ and [<CLIMutable>] Message =
     /// Service message: forum topic created
     [<DataMember(Name = "forum_topic_created")>]
     ForumTopicCreated: ForumTopicCreated option
+    /// Service message: forum topic edited
+    [<DataMember(Name = "forum_topic_edited")>]
+    ForumTopicEdited: ForumTopicEdited option
     /// Service message: forum topic closed
     [<DataMember(Name = "forum_topic_closed")>]
     ForumTopicClosed: ForumTopicClosed option
     /// Service message: forum topic reopened
     [<DataMember(Name = "forum_topic_reopened")>]
     ForumTopicReopened: ForumTopicReopened option
+    /// Service message: the 'General' forum topic hidden
+    [<DataMember(Name = "general_forum_topic_hidden")>]
+    GeneralForumTopicHidden: GeneralForumTopicHidden option
+    /// Service message: the 'General' forum topic unhidden
+    [<DataMember(Name = "general_forum_topic_unhidden")>]
+    GeneralForumTopicUnhidden: GeneralForumTopicUnhidden option
     /// Service message: video chat scheduled
     [<DataMember(Name = "video_chat_scheduled")>]
     VideoChatScheduled: VideoChatScheduled option
@@ -545,42 +568,45 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?poll: Poll, ?venue: Venue, ?location: Location, ?newChatMembers: User[], ?leftChatMember: User, ?newChatTitle: string, ?newChatPhoto: PhotoSize[], ?deleteChatPhoto: bool, ?groupChatCreated: bool, ?supergroupChatCreated: bool, ?channelChatCreated: bool, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?migrateToChatId: int64, ?pinnedMessage: Message, ?game: Game, ?invoice: Invoice, ?successfulPayment: SuccessfulPayment, ?connectedWebsite: string, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?forumTopicCreated: ForumTopicCreated, ?forumTopicClosed: ForumTopicClosed, ?forumTopicReopened: ForumTopicReopened, ?videoChatScheduled: VideoChatScheduled, ?videoChatStarted: VideoChatStarted, ?videoChatEnded: VideoChatEnded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?migrateFromChatId: int64, ?dice: Dice, ?captionEntities: MessageEntity[], ?webAppData: WebAppData, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?contact: Contact, ?editDate: int64, ?mediaGroupId: string, ?authorSignature: string, ?text: string, ?entities: MessageEntity[], ?animation: Animation, ?audio: Audio, ?document: Document, ?photo: PhotoSize[], ?sticker: Sticker, ?video: Video, ?videoNote: VideoNote, ?voice: Voice, ?caption: string, ?hasProtectedContent: bool, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?newChatPhoto: PhotoSize[], ?pinnedMessage: Message, ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?venue: Venue, ?deleteChatPhoto: bool, ?invoice: Invoice, ?successfulPayment: SuccessfulPayment, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?forumTopicCreated: ForumTopicCreated, ?forumTopicEdited: ForumTopicEdited, ?forumTopicClosed: ForumTopicClosed, ?forumTopicReopened: ForumTopicReopened, ?generalForumTopicHidden: GeneralForumTopicHidden, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?videoChatScheduled: VideoChatScheduled, ?videoChatStarted: VideoChatStarted, ?videoChatEnded: VideoChatEnded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?webAppData: WebAppData, ?hasProtectedContent: bool, ?authorSignature: string, ?text: string, ?entities: MessageEntity[], ?animation: Animation, ?audio: Audio, ?document: Document, ?photo: PhotoSize[], ?sticker: Sticker, ?video: Video, ?videoNote: VideoNote, ?voice: Voice, ?caption: string, ?captionEntities: MessageEntity[], ?hasMediaSpoiler: bool, ?mediaGroupId: string, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
-      Poll = poll
-      Venue = venue
-      Location = location
-      NewChatMembers = newChatMembers
-      LeftChatMember = leftChatMember
-      NewChatTitle = newChatTitle
-      NewChatPhoto = newChatPhoto
-      DeleteChatPhoto = deleteChatPhoto
-      GroupChatCreated = groupChatCreated
-      SupergroupChatCreated = supergroupChatCreated
-      ChannelChatCreated = channelChatCreated
-      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
+      MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
+      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
+      ChannelChatCreated = channelChatCreated
+      SupergroupChatCreated = supergroupChatCreated
+      GroupChatCreated = groupChatCreated
+      NewChatPhoto = newChatPhoto
       PinnedMessage = pinnedMessage
-      Game = game
+      NewChatTitle = newChatTitle
+      LeftChatMember = leftChatMember
+      NewChatMembers = newChatMembers
+      Location = location
+      Venue = venue
+      DeleteChatPhoto = deleteChatPhoto
       Invoice = invoice
       SuccessfulPayment = successfulPayment
       ConnectedWebsite = connectedWebsite
+      WriteAccessAllowed = writeAccessAllowed
       PassportData = passportData
       ProximityAlertTriggered = proximityAlertTriggered
       ForumTopicCreated = forumTopicCreated
+      ForumTopicEdited = forumTopicEdited
       ForumTopicClosed = forumTopicClosed
       ForumTopicReopened = forumTopicReopened
+      GeneralForumTopicHidden = generalForumTopicHidden
+      GeneralForumTopicUnhidden = generalForumTopicUnhidden
       VideoChatScheduled = videoChatScheduled
       VideoChatStarted = videoChatStarted
       VideoChatEnded = videoChatEnded
       VideoChatParticipantsInvited = videoChatParticipantsInvited
-      MigrateFromChatId = migrateFromChatId
+      Poll = poll
+      Game = game
       Dice = dice
-      CaptionEntities = captionEntities
-      WebAppData = webAppData
+      Contact = contact
       MessageThreadId = messageThreadId
       From = from
       SenderChat = senderChat
@@ -594,9 +620,9 @@ and [<CLIMutable>] Message =
       IsAutomaticForward = isAutomaticForward
       ReplyToMessage = replyToMessage
       ViaBot = viaBot
-      Contact = contact
       EditDate = editDate
-      MediaGroupId = mediaGroupId
+      WebAppData = webAppData
+      HasProtectedContent = hasProtectedContent
       AuthorSignature = authorSignature
       Text = text
       Entities = entities
@@ -609,7 +635,9 @@ and [<CLIMutable>] Message =
       VideoNote = videoNote
       Voice = voice
       Caption = caption
-      HasProtectedContent = hasProtectedContent
+      CaptionEntities = captionEntities
+      HasMediaSpoiler = hasMediaSpoiler
+      MediaGroupId = mediaGroupId
       ReplyMarkup = replyMarkup
     }
 
@@ -1193,8 +1221,36 @@ and [<CLIMutable>] ForumTopicCreated =
 and ForumTopicClosed =
   new() = {}
 
+/// This object represents a service message about an edited forum topic.
+and [<CLIMutable>] ForumTopicEdited =
+  {
+    /// New name of the topic, if it was edited
+    [<DataMember(Name = "name")>]
+    Name: string option
+    /// New identifier of the custom emoji shown as the topic icon, if it was edited; an empty string if the icon was removed
+    [<DataMember(Name = "icon_custom_emoji_id")>]
+    IconCustomEmojiId: string option
+  }
+  static member Create(?name: string, ?iconCustomEmojiId: string) = 
+    {
+      Name = name
+      IconCustomEmojiId = iconCustomEmojiId
+    }
+
 /// This object represents a service message about a forum topic reopened in the chat. Currently holds no information.
 and ForumTopicReopened =
+  new() = {}
+
+/// This object represents a service message about General forum topic hidden in the chat. Currently holds no information.
+and GeneralForumTopicHidden =
+  new() = {}
+
+/// This object represents a service message about General forum topic unhidden in the chat. Currently holds no information.
+and GeneralForumTopicUnhidden =
+  new() = {}
+
+/// This object represents a service message about a user allowing a bot added to the attachment menu to write messages. Currently holds no information.
+and WriteAccessAllowed =
   new() = {}
 
 /// This object represents a service message about a video chat scheduled in the chat.
@@ -1295,6 +1351,9 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     /// Array of button rows, each represented by an Array of KeyboardButton objects
     [<DataMember(Name = "keyboard")>]
     Keyboard: KeyboardButton[][]
+    /// Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.
+    [<DataMember(Name = "is_persistent")>]
+    IsPersistent: bool option
     /// Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app's standard keyboard.
     [<DataMember(Name = "resize_keyboard")>]
     ResizeKeyboard: bool option
@@ -1310,9 +1369,10 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     [<DataMember(Name = "selective")>]
     Selective: bool option
   }
-  static member Create(keyboard: KeyboardButton[][], ?resizeKeyboard: bool, ?oneTimeKeyboard: bool, ?inputFieldPlaceholder: string, ?selective: bool) = 
+  static member Create(keyboard: KeyboardButton[][], ?isPersistent: bool, ?resizeKeyboard: bool, ?oneTimeKeyboard: bool, ?inputFieldPlaceholder: string, ?selective: bool) = 
     {
       Keyboard = keyboard
+      IsPersistent = isPersistent
       ResizeKeyboard = resizeKeyboard
       OneTimeKeyboard = oneTimeKeyboard
       InputFieldPlaceholder = inputFieldPlaceholder
@@ -1614,7 +1674,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the administrator can restrict, ban or unban chat members
     [<DataMember(Name = "can_restrict_members")>]
     CanRestrictMembers: bool
-    /// True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
+    /// True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
     [<DataMember(Name = "can_promote_members")>]
     CanPromoteMembers: bool
     /// True, if the user is allowed to change the chat title, photo and other settings
@@ -1716,7 +1776,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the administrator can restrict, ban or unban chat members
     [<DataMember(Name = "can_restrict_members")>]
     CanRestrictMembers: bool
-    /// True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)
+    /// True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
     [<DataMember(Name = "can_promote_members")>]
     CanPromoteMembers: bool
     /// True, if the user is allowed to change the chat title, photo and other settings
@@ -2240,14 +2300,18 @@ and [<CLIMutable>] InputMediaPhoto =
     /// List of special entities that appear in the caption, which can be specified instead of parse_mode
     [<DataMember(Name = "caption_entities")>]
     CaptionEntities: MessageEntity[] option
+    /// Pass True if the photo needs to be covered with a spoiler animation
+    [<DataMember(Name = "has_spoiler")>]
+    HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[]) = 
+  static member Create(``type``: string, media: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
+      HasSpoiler = hasSpoiler
     }
 
 /// Represents a video to be sent.
@@ -2283,8 +2347,11 @@ and [<CLIMutable>] InputMediaVideo =
     /// Pass True if the uploaded video is suitable for streaming
     [<DataMember(Name = "supports_streaming")>]
     SupportsStreaming: bool option
+    /// Pass True if the video needs to be covered with a spoiler animation
+    [<DataMember(Name = "has_spoiler")>]
+    HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
@@ -2296,6 +2363,7 @@ and [<CLIMutable>] InputMediaVideo =
       Height = height
       Duration = duration
       SupportsStreaming = supportsStreaming
+      HasSpoiler = hasSpoiler
     }
 
 /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
@@ -2328,8 +2396,11 @@ and [<CLIMutable>] InputMediaAnimation =
     /// Animation duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64 option
+    /// Pass True if the animation needs to be covered with a spoiler animation
+    [<DataMember(Name = "has_spoiler")>]
+    HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64) = 
+  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
@@ -2340,6 +2411,7 @@ and [<CLIMutable>] InputMediaAnimation =
       Width = width
       Height = height
       Duration = duration
+      HasSpoiler = hasSpoiler
     }
 
 /// Represents an audio file to be treated as music to be sent.
