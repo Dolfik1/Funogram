@@ -519,6 +519,12 @@ and [<CLIMutable>] Message =
     /// Message is a service message about a successful payment, information about the payment. More about payments »
     [<DataMember(Name = "successful_payment")>]
     SuccessfulPayment: SuccessfulPayment option
+    /// Service message: a user was shared with the bot
+    [<DataMember(Name = "user_shared")>]
+    UserShared: UserShared option
+    /// Service message: a chat was shared with the bot
+    [<DataMember(Name = "chat_shared")>]
+    ChatShared: ChatShared option
     /// The domain name of the website on which the user has logged in. More about Telegram Login »
     [<DataMember(Name = "connected_website")>]
     ConnectedWebsite: string option
@@ -568,45 +574,46 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?newChatPhoto: PhotoSize[], ?pinnedMessage: Message, ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?venue: Venue, ?deleteChatPhoto: bool, ?invoice: Invoice, ?successfulPayment: SuccessfulPayment, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?forumTopicCreated: ForumTopicCreated, ?forumTopicEdited: ForumTopicEdited, ?forumTopicClosed: ForumTopicClosed, ?forumTopicReopened: ForumTopicReopened, ?generalForumTopicHidden: GeneralForumTopicHidden, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?videoChatScheduled: VideoChatScheduled, ?videoChatStarted: VideoChatStarted, ?videoChatEnded: VideoChatEnded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?webAppData: WebAppData, ?hasProtectedContent: bool, ?authorSignature: string, ?text: string, ?entities: MessageEntity[], ?animation: Animation, ?audio: Audio, ?document: Document, ?photo: PhotoSize[], ?sticker: Sticker, ?video: Video, ?videoNote: VideoNote, ?voice: Voice, ?caption: string, ?captionEntities: MessageEntity[], ?hasMediaSpoiler: bool, ?mediaGroupId: string, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?pinnedMessage: Message, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?deleteChatPhoto: bool, ?invoice: Invoice, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?groupChatCreated: bool, ?successfulPayment: SuccessfulPayment, ?chatShared: ChatShared, ?venue: Venue, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?userShared: UserShared, ?forumTopicReopened: ForumTopicReopened, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?forumTopicClosed: ForumTopicClosed, ?poll: Poll, ?game: Game, ?dice: Dice, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?hasProtectedContent: bool, ?mediaGroupId: string, ?authorSignature: string, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?webAppData: WebAppData, ?video: Video, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
+      PinnedMessage = pinnedMessage
       MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
       MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       ChannelChatCreated = channelChatCreated
       SupergroupChatCreated = supergroupChatCreated
-      GroupChatCreated = groupChatCreated
+      DeleteChatPhoto = deleteChatPhoto
+      Invoice = invoice
       NewChatPhoto = newChatPhoto
-      PinnedMessage = pinnedMessage
       NewChatTitle = newChatTitle
       LeftChatMember = leftChatMember
       NewChatMembers = newChatMembers
       Location = location
-      Venue = venue
-      DeleteChatPhoto = deleteChatPhoto
-      Invoice = invoice
+      GroupChatCreated = groupChatCreated
       SuccessfulPayment = successfulPayment
-      ConnectedWebsite = connectedWebsite
-      WriteAccessAllowed = writeAccessAllowed
-      PassportData = passportData
-      ProximityAlertTriggered = proximityAlertTriggered
-      ForumTopicCreated = forumTopicCreated
-      ForumTopicEdited = forumTopicEdited
-      ForumTopicClosed = forumTopicClosed
-      ForumTopicReopened = forumTopicReopened
-      GeneralForumTopicHidden = generalForumTopicHidden
-      GeneralForumTopicUnhidden = generalForumTopicUnhidden
-      VideoChatScheduled = videoChatScheduled
-      VideoChatStarted = videoChatStarted
-      VideoChatEnded = videoChatEnded
+      ChatShared = chatShared
+      Venue = venue
       VideoChatParticipantsInvited = videoChatParticipantsInvited
+      VideoChatEnded = videoChatEnded
+      VideoChatStarted = videoChatStarted
+      VideoChatScheduled = videoChatScheduled
+      GeneralForumTopicUnhidden = generalForumTopicUnhidden
+      GeneralForumTopicHidden = generalForumTopicHidden
+      UserShared = userShared
+      ForumTopicReopened = forumTopicReopened
+      ForumTopicEdited = forumTopicEdited
+      ForumTopicCreated = forumTopicCreated
+      ProximityAlertTriggered = proximityAlertTriggered
+      PassportData = passportData
+      WriteAccessAllowed = writeAccessAllowed
+      ConnectedWebsite = connectedWebsite
+      ForumTopicClosed = forumTopicClosed
       Poll = poll
       Game = game
       Dice = dice
-      Contact = contact
       MessageThreadId = messageThreadId
       From = from
       SenderChat = senderChat
@@ -621,23 +628,24 @@ and [<CLIMutable>] Message =
       ReplyToMessage = replyToMessage
       ViaBot = viaBot
       EditDate = editDate
-      WebAppData = webAppData
       HasProtectedContent = hasProtectedContent
-      AuthorSignature = authorSignature
-      Text = text
-      Entities = entities
-      Animation = animation
-      Audio = audio
-      Document = document
-      Photo = photo
-      Sticker = sticker
-      Video = video
-      VideoNote = videoNote
-      Voice = voice
-      Caption = caption
-      CaptionEntities = captionEntities
-      HasMediaSpoiler = hasMediaSpoiler
       MediaGroupId = mediaGroupId
+      AuthorSignature = authorSignature
+      Contact = contact
+      HasMediaSpoiler = hasMediaSpoiler
+      CaptionEntities = captionEntities
+      Caption = caption
+      Voice = voice
+      VideoNote = videoNote
+      WebAppData = webAppData
+      Video = video
+      Photo = photo
+      Document = document
+      Audio = audio
+      Animation = animation
+      Entities = entities
+      Text = text
+      Sticker = sticker
       ReplyMarkup = replyMarkup
     }
 
@@ -1249,6 +1257,38 @@ and GeneralForumTopicHidden =
 and GeneralForumTopicUnhidden =
   new() = {}
 
+/// This object contains information about the user whose identifier was shared with the bot using a KeyboardButtonRequestUser button.
+and [<CLIMutable>] UserShared =
+  {
+    /// Identifier of the request
+    [<DataMember(Name = "request_id")>]
+    RequestId: int64
+    /// Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.
+    [<DataMember(Name = "user_id")>]
+    UserId: int64
+  }
+  static member Create(requestId: int64, userId: int64) = 
+    {
+      RequestId = requestId
+      UserId = userId
+    }
+
+/// This object contains information about the chat whose identifier was shared with the bot using a KeyboardButtonRequestChat button.
+and [<CLIMutable>] ChatShared =
+  {
+    /// Identifier of the request
+    [<DataMember(Name = "request_id")>]
+    RequestId: int64
+    /// Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
+    [<DataMember(Name = "chat_id")>]
+    ChatId: int64
+  }
+  static member Create(requestId: int64, chatId: int64) = 
+    {
+      RequestId = requestId
+      ChatId = chatId
+    }
+
 /// This object represents a service message about a user allowing a bot added to the attachment menu to write messages. Currently holds no information.
 and WriteAccessAllowed =
   new() = {}
@@ -1379,15 +1419,22 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
       Selective = selective
     }
 
-/// This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.
+/// This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_user, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
 /// Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 /// Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
 /// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
+/// Note:request_user and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.
 and [<CLIMutable>] KeyboardButton =
   {
     /// Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
     [<DataMember(Name = "text")>]
     Text: string
+    /// If specified, pressing the button will open a list of suitable users. Tapping on any user will send their identifier to the bot in a “user_shared” service message. Available in private chats only.
+    [<DataMember(Name = "request_user")>]
+    RequestUser: KeyboardButtonRequestUser option
+    /// If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats only.
+    [<DataMember(Name = "request_chat")>]
+    RequestChat: KeyboardButtonRequestChat option
     /// If True, the user's phone number will be sent as a contact when the button is pressed. Available in private chats only.
     [<DataMember(Name = "request_contact")>]
     RequestContact: bool option
@@ -1401,13 +1448,75 @@ and [<CLIMutable>] KeyboardButton =
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
   }
-  static member Create(text: string, ?requestContact: bool, ?requestLocation: bool, ?requestPoll: KeyboardButtonPollType, ?webApp: WebAppInfo) = 
+  static member Create(text: string, ?requestUser: KeyboardButtonRequestUser, ?requestChat: KeyboardButtonRequestChat, ?requestContact: bool, ?requestLocation: bool, ?requestPoll: KeyboardButtonPollType, ?webApp: WebAppInfo) = 
     {
       Text = text
+      RequestUser = requestUser
+      RequestChat = requestChat
       RequestContact = requestContact
       RequestLocation = requestLocation
       RequestPoll = requestPoll
       WebApp = webApp
+    }
+
+/// This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed.
+and [<CLIMutable>] KeyboardButtonRequestUser =
+  {
+    /// Signed 32-bit identifier of the request, which will be received back in the UserShared object. Must be unique within the message
+    [<DataMember(Name = "request_id")>]
+    RequestId: int64
+    /// Pass True to request a bot, pass False to request a regular user. If not specified, no additional restrictions are applied.
+    [<DataMember(Name = "user_is_bot")>]
+    UserIsBot: bool option
+    /// Pass True to request a premium user, pass False to request a non-premium user. If not specified, no additional restrictions are applied.
+    [<DataMember(Name = "user_is_premium")>]
+    UserIsPremium: bool option
+  }
+  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool) = 
+    {
+      RequestId = requestId
+      UserIsBot = userIsBot
+      UserIsPremium = userIsPremium
+    }
+
+/// This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed.
+and [<CLIMutable>] KeyboardButtonRequestChat =
+  {
+    /// Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
+    [<DataMember(Name = "request_id")>]
+    RequestId: int64
+    /// Pass True to request a channel chat, pass False to request a group or a supergroup chat.
+    [<DataMember(Name = "chat_is_channel")>]
+    ChatIsChannel: bool
+    /// Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.
+    [<DataMember(Name = "chat_is_forum")>]
+    ChatIsForum: bool option
+    /// Pass True to request a supergroup or a channel with a username, pass False to request a chat without a username. If not specified, no additional restrictions are applied.
+    [<DataMember(Name = "chat_has_username")>]
+    ChatHasUsername: bool option
+    /// Pass True to request a chat owned by the user. Otherwise, no additional restrictions are applied.
+    [<DataMember(Name = "chat_is_created")>]
+    ChatIsCreated: bool option
+    /// A JSON-serialized object listing the required administrator rights of the user in the chat. The rights must be a superset of bot_administrator_rights. If not specified, no additional restrictions are applied.
+    [<DataMember(Name = "user_administrator_rights")>]
+    UserAdministratorRights: ChatAdministratorRights option
+    /// A JSON-serialized object listing the required administrator rights of the bot in the chat. The rights must be a subset of user_administrator_rights. If not specified, no additional restrictions are applied.
+    [<DataMember(Name = "bot_administrator_rights")>]
+    BotAdministratorRights: ChatAdministratorRights option
+    /// Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
+    [<DataMember(Name = "bot_is_member")>]
+    BotIsMember: bool option
+  }
+  static member Create(requestId: int64, chatIsChannel: bool, ?chatIsForum: bool, ?chatHasUsername: bool, ?chatIsCreated: bool, ?userAdministratorRights: ChatAdministratorRights, ?botAdministratorRights: ChatAdministratorRights, ?botIsMember: bool) = 
+    {
+      RequestId = requestId
+      ChatIsChannel = chatIsChannel
+      ChatIsForum = chatIsForum
+      ChatHasUsername = chatHasUsername
+      ChatIsCreated = chatIsCreated
+      UserAdministratorRights = userAdministratorRights
+      BotAdministratorRights = botAdministratorRights
+      BotIsMember = botIsMember
     }
 
 /// This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
@@ -1853,6 +1962,36 @@ and [<CLIMutable>] ChatMemberRestricted =
     /// True, if the user is a member of the chat at the moment of the request
     [<DataMember(Name = "is_member")>]
     IsMember: bool
+    /// True, if the user is allowed to send text messages, contacts, invoices, locations and venues
+    [<DataMember(Name = "can_send_messages")>]
+    CanSendMessages: bool
+    /// True, if the user is allowed to send audios
+    [<DataMember(Name = "can_send_audios")>]
+    CanSendAudios: bool
+    /// True, if the user is allowed to send documents
+    [<DataMember(Name = "can_send_documents")>]
+    CanSendDocuments: bool
+    /// True, if the user is allowed to send photos
+    [<DataMember(Name = "can_send_photos")>]
+    CanSendPhotos: bool
+    /// True, if the user is allowed to send videos
+    [<DataMember(Name = "can_send_videos")>]
+    CanSendVideos: bool
+    /// True, if the user is allowed to send video notes
+    [<DataMember(Name = "can_send_video_notes")>]
+    CanSendVideoNotes: bool
+    /// True, if the user is allowed to send voice notes
+    [<DataMember(Name = "can_send_voice_notes")>]
+    CanSendVoiceNotes: bool
+    /// True, if the user is allowed to send polls
+    [<DataMember(Name = "can_send_polls")>]
+    CanSendPolls: bool
+    /// True, if the user is allowed to send animations, games, stickers and use inline bots
+    [<DataMember(Name = "can_send_other_messages")>]
+    CanSendOtherMessages: bool
+    /// True, if the user is allowed to add web page previews to their messages
+    [<DataMember(Name = "can_add_web_page_previews")>]
+    CanAddWebPagePreviews: bool
     /// True, if the user is allowed to change the chat title, photo and other settings
     [<DataMember(Name = "can_change_info")>]
     CanChangeInfo: bool
@@ -1865,39 +2004,29 @@ and [<CLIMutable>] ChatMemberRestricted =
     /// True, if the user is allowed to create forum topics
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool
-    /// True, if the user is allowed to send text messages, contacts, locations and venues
-    [<DataMember(Name = "can_send_messages")>]
-    CanSendMessages: bool
-    /// True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes
-    [<DataMember(Name = "can_send_media_messages")>]
-    CanSendMediaMessages: bool
-    /// True, if the user is allowed to send polls
-    [<DataMember(Name = "can_send_polls")>]
-    CanSendPolls: bool
-    /// True, if the user is allowed to send animations, games, stickers and use inline bots
-    [<DataMember(Name = "can_send_other_messages")>]
-    CanSendOtherMessages: bool
-    /// True, if the user is allowed to add web page previews to their messages
-    [<DataMember(Name = "can_add_web_page_previews")>]
-    CanAddWebPagePreviews: bool
     /// Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
     [<DataMember(Name = "until_date")>]
     UntilDate: DateTime
   }
-  static member Create(status: string, user: User, isMember: bool, canChangeInfo: bool, canInviteUsers: bool, canPinMessages: bool, canManageTopics: bool, canSendMessages: bool, canSendMediaMessages: bool, canSendPolls: bool, canSendOtherMessages: bool, canAddWebPagePreviews: bool, untilDate: DateTime) = 
+  static member Create(status: string, canPinMessages: bool, canInviteUsers: bool, canChangeInfo: bool, canAddWebPagePreviews: bool, canSendOtherMessages: bool, canSendPolls: bool, canSendVoiceNotes: bool, canSendVideoNotes: bool, canSendVideos: bool, canSendPhotos: bool, canSendDocuments: bool, canSendAudios: bool, canSendMessages: bool, isMember: bool, user: User, canManageTopics: bool, untilDate: DateTime) = 
     {
       Status = status
-      User = user
-      IsMember = isMember
-      CanChangeInfo = canChangeInfo
-      CanInviteUsers = canInviteUsers
       CanPinMessages = canPinMessages
-      CanManageTopics = canManageTopics
-      CanSendMessages = canSendMessages
-      CanSendMediaMessages = canSendMediaMessages
-      CanSendPolls = canSendPolls
-      CanSendOtherMessages = canSendOtherMessages
+      CanInviteUsers = canInviteUsers
+      CanChangeInfo = canChangeInfo
       CanAddWebPagePreviews = canAddWebPagePreviews
+      CanSendOtherMessages = canSendOtherMessages
+      CanSendPolls = canSendPolls
+      CanSendVoiceNotes = canSendVoiceNotes
+      CanSendVideoNotes = canSendVideoNotes
+      CanSendVideos = canSendVideos
+      CanSendPhotos = canSendPhotos
+      CanSendDocuments = canSendDocuments
+      CanSendAudios = canSendAudios
+      CanSendMessages = canSendMessages
+      IsMember = isMember
+      User = user
+      CanManageTopics = canManageTopics
       UntilDate = untilDate
     }
 
@@ -1978,6 +2107,9 @@ and [<CLIMutable>] ChatJoinRequest =
     /// User that sent the join request
     [<DataMember(Name = "from")>]
     From: User
+    /// Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 24 hours to send messages until the join request is processed, assuming no other administrator contacted the user.
+    [<DataMember(Name = "user_chat_id")>]
+    UserChatId: int64
     /// Date the request was sent in Unix time
     [<DataMember(Name = "date")>]
     Date: DateTime
@@ -1988,10 +2120,11 @@ and [<CLIMutable>] ChatJoinRequest =
     [<DataMember(Name = "invite_link")>]
     InviteLink: ChatInviteLink option
   }
-  static member Create(chat: Chat, from: User, date: DateTime, ?bio: string, ?inviteLink: ChatInviteLink) = 
+  static member Create(chat: Chat, from: User, userChatId: int64, date: DateTime, ?bio: string, ?inviteLink: ChatInviteLink) = 
     {
       Chat = chat
       From = from
+      UserChatId = userChatId
       Date = date
       Bio = bio
       InviteLink = inviteLink
@@ -2000,19 +2133,34 @@ and [<CLIMutable>] ChatJoinRequest =
 /// Describes actions that a non-administrator user is allowed to take in a chat.
 and [<CLIMutable>] ChatPermissions =
   {
-    /// True, if the user is allowed to send text messages, contacts, locations and venues
+    /// True, if the user is allowed to send text messages, contacts, invoices, locations and venues
     [<DataMember(Name = "can_send_messages")>]
     CanSendMessages: bool option
-    /// True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages
-    [<DataMember(Name = "can_send_media_messages")>]
-    CanSendMediaMessages: bool option
-    /// True, if the user is allowed to send polls, implies can_send_messages
+    /// True, if the user is allowed to send audios
+    [<DataMember(Name = "can_send_audios")>]
+    CanSendAudios: bool option
+    /// True, if the user is allowed to send documents
+    [<DataMember(Name = "can_send_documents")>]
+    CanSendDocuments: bool option
+    /// True, if the user is allowed to send photos
+    [<DataMember(Name = "can_send_photos")>]
+    CanSendPhotos: bool option
+    /// True, if the user is allowed to send videos
+    [<DataMember(Name = "can_send_videos")>]
+    CanSendVideos: bool option
+    /// True, if the user is allowed to send video notes
+    [<DataMember(Name = "can_send_video_notes")>]
+    CanSendVideoNotes: bool option
+    /// True, if the user is allowed to send voice notes
+    [<DataMember(Name = "can_send_voice_notes")>]
+    CanSendVoiceNotes: bool option
+    /// True, if the user is allowed to send polls
     [<DataMember(Name = "can_send_polls")>]
     CanSendPolls: bool option
-    /// True, if the user is allowed to send animations, games, stickers and use inline bots, implies can_send_media_messages
+    /// True, if the user is allowed to send animations, games, stickers and use inline bots
     [<DataMember(Name = "can_send_other_messages")>]
     CanSendOtherMessages: bool option
-    /// True, if the user is allowed to add web page previews to their messages, implies can_send_media_messages
+    /// True, if the user is allowed to add web page previews to their messages
     [<DataMember(Name = "can_add_web_page_previews")>]
     CanAddWebPagePreviews: bool option
     /// True, if the user is allowed to change the chat title, photo and other settings. Ignored in public supergroups
@@ -2028,10 +2176,15 @@ and [<CLIMutable>] ChatPermissions =
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
   }
-  static member Create(?canSendMessages: bool, ?canSendMediaMessages: bool, ?canSendPolls: bool, ?canSendOtherMessages: bool, ?canAddWebPagePreviews: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
+  static member Create(?canSendMessages: bool, ?canSendAudios: bool, ?canSendDocuments: bool, ?canSendPhotos: bool, ?canSendVideos: bool, ?canSendVideoNotes: bool, ?canSendVoiceNotes: bool, ?canSendPolls: bool, ?canSendOtherMessages: bool, ?canAddWebPagePreviews: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
     {
       CanSendMessages = canSendMessages
-      CanSendMediaMessages = canSendMediaMessages
+      CanSendAudios = canSendAudios
+      CanSendDocuments = canSendDocuments
+      CanSendPhotos = canSendPhotos
+      CanSendVideos = canSendVideos
+      CanSendVideoNotes = canSendVideoNotes
+      CanSendVoiceNotes = canSendVoiceNotes
       CanSendPolls = canSendPolls
       CanSendOtherMessages = canSendOtherMessages
       CanAddWebPagePreviews = canAddWebPagePreviews

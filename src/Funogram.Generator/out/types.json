@@ -979,6 +979,22 @@
             "Optional": true
           },
           {
+            "OriginalName": "user_shared",
+            "ConvertedName": "UserShared",
+            "Description": "Service message: a user was shared with the bot",
+            "OriginalFieldType": "UserShared",
+            "ConvertedFieldType": "UserShared",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_shared",
+            "ConvertedName": "ChatShared",
+            "Description": "Service message: a chat was shared with the bot",
+            "OriginalFieldType": "ChatShared",
+            "ConvertedFieldType": "ChatShared",
+            "Optional": true
+          },
+          {
             "OriginalName": "connected_website",
             "ConvertedName": "ConnectedWebsite",
             "Description": "The domain name of the website on which the user has logged in. More about Telegram Login \u00BB",
@@ -2218,6 +2234,60 @@
     }
   },
   {
+    "Name": "UserShared",
+    "Description": "This object contains information about the user whose identifier was shared with the bot using a KeyboardButtonRequestUser button.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Identifier of the request",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user_id",
+            "ConvertedName": "UserId",
+            "Description": "Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatShared",
+    "Description": "This object contains information about the chat whose identifier was shared with the bot using a KeyboardButtonRequestChat button.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Identifier of the request",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_id",
+            "ConvertedName": "ChatId",
+            "Description": "Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "WriteAccessAllowed",
     "Description": "This object represents a service message about a user allowing a bot added to the attachment menu to write messages. Currently holds no information.",
     "Kind": {
@@ -2438,7 +2508,7 @@
   },
   {
     "Name": "KeyboardButton",
-    "Description": "This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.",
+    "Description": "This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_user, request_chat, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.\nNote:request_user and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2450,6 +2520,22 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "request_user",
+            "ConvertedName": "RequestUser",
+            "Description": "If specified, pressing the button will open a list of suitable users. Tapping on any user will send their identifier to the bot in a \u201Cuser_shared\u201D service message. Available in private chats only.",
+            "OriginalFieldType": "KeyboardButtonRequestUser",
+            "ConvertedFieldType": "KeyboardButtonRequestUser",
+            "Optional": true
+          },
+          {
+            "OriginalName": "request_chat",
+            "ConvertedName": "RequestChat",
+            "Description": "If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a \u201Cchat_shared\u201D service message. Available in private chats only.",
+            "OriginalFieldType": "KeyboardButtonRequestChat",
+            "ConvertedFieldType": "KeyboardButtonRequestChat",
+            "Optional": true
           },
           {
             "OriginalName": "request_contact",
@@ -2481,6 +2567,116 @@
             "Description": "If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a \u201Cweb_app_data\u201D service message. Available in private chats only.",
             "OriginalFieldType": "WebAppInfo",
             "ConvertedFieldType": "WebAppInfo",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "KeyboardButtonRequestUser",
+    "Description": "This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Signed 32-bit identifier of the request, which will be received back in the UserShared object. Must be unique within the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user_is_bot",
+            "ConvertedName": "UserIsBot",
+            "Description": "Pass True to request a bot, pass False to request a regular user. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "user_is_premium",
+            "ConvertedName": "UserIsPremium",
+            "Description": "Pass True to request a premium user, pass False to request a non-premium user. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "KeyboardButtonRequestChat",
+    "Description": "This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_is_channel",
+            "ConvertedName": "ChatIsChannel",
+            "Description": "Pass True to request a channel chat, pass False to request a group or a supergroup chat.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_is_forum",
+            "ConvertedName": "ChatIsForum",
+            "Description": "Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_has_username",
+            "ConvertedName": "ChatHasUsername",
+            "Description": "Pass True to request a supergroup or a channel with a username, pass False to request a chat without a username. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_is_created",
+            "ConvertedName": "ChatIsCreated",
+            "Description": "Pass True to request a chat owned by the user. Otherwise, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "user_administrator_rights",
+            "ConvertedName": "UserAdministratorRights",
+            "Description": "A JSON-serialized object listing the required administrator rights of the user in the chat. The rights must be a superset of bot_administrator_rights. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "ChatAdministratorRights",
+            "ConvertedFieldType": "ChatAdministratorRights",
+            "Optional": true
+          },
+          {
+            "OriginalName": "bot_administrator_rights",
+            "ConvertedName": "BotAdministratorRights",
+            "Description": "A JSON-serialized object listing the required administrator rights of the bot in the chat. The rights must be a subset of user_administrator_rights. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "ChatAdministratorRights",
+            "ConvertedFieldType": "ChatAdministratorRights",
+            "Optional": true
+          },
+          {
+            "OriginalName": "bot_is_member",
+            "ConvertedName": "BotIsMember",
+            "Description": "Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]
@@ -3305,6 +3501,86 @@
             "Optional": false
           },
           {
+            "OriginalName": "can_send_messages",
+            "ConvertedName": "CanSendMessages",
+            "Description": "True, if the user is allowed to send text messages, contacts, invoices, locations and venues",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_audios",
+            "ConvertedName": "CanSendAudios",
+            "Description": "True, if the user is allowed to send audios",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_documents",
+            "ConvertedName": "CanSendDocuments",
+            "Description": "True, if the user is allowed to send documents",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_photos",
+            "ConvertedName": "CanSendPhotos",
+            "Description": "True, if the user is allowed to send photos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_videos",
+            "ConvertedName": "CanSendVideos",
+            "Description": "True, if the user is allowed to send videos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_video_notes",
+            "ConvertedName": "CanSendVideoNotes",
+            "Description": "True, if the user is allowed to send video notes",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_voice_notes",
+            "ConvertedName": "CanSendVoiceNotes",
+            "Description": "True, if the user is allowed to send voice notes",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_polls",
+            "ConvertedName": "CanSendPolls",
+            "Description": "True, if the user is allowed to send polls",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_other_messages",
+            "ConvertedName": "CanSendOtherMessages",
+            "Description": "True, if the user is allowed to send animations, games, stickers and use inline bots",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_add_web_page_previews",
+            "ConvertedName": "CanAddWebPagePreviews",
+            "Description": "True, if the user is allowed to add web page previews to their messages",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
             "OriginalName": "can_change_info",
             "ConvertedName": "CanChangeInfo",
             "Description": "True, if the user is allowed to change the chat title, photo and other settings",
@@ -3332,46 +3608,6 @@
             "OriginalName": "can_manage_topics",
             "ConvertedName": "CanManageTopics",
             "Description": "True, if the user is allowed to create forum topics",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_send_messages",
-            "ConvertedName": "CanSendMessages",
-            "Description": "True, if the user is allowed to send text messages, contacts, locations and venues",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_send_media_messages",
-            "ConvertedName": "CanSendMediaMessages",
-            "Description": "True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_send_polls",
-            "ConvertedName": "CanSendPolls",
-            "Description": "True, if the user is allowed to send polls",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_send_other_messages",
-            "ConvertedName": "CanSendOtherMessages",
-            "Description": "True, if the user is allowed to send animations, games, stickers and use inline bots",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_add_web_page_previews",
-            "ConvertedName": "CanAddWebPagePreviews",
-            "Description": "True, if the user is allowed to add web page previews to their messages",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3533,6 +3769,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "user_chat_id",
+            "ConvertedName": "UserChatId",
+            "Description": "Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 24 hours to send messages until the join request is processed, assuming no other administrator contacted the user.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
             "OriginalName": "date",
             "ConvertedName": "Date",
             "Description": "Date the request was sent in Unix time",
@@ -3570,15 +3814,55 @@
           {
             "OriginalName": "can_send_messages",
             "ConvertedName": "CanSendMessages",
-            "Description": "True, if the user is allowed to send text messages, contacts, locations and venues",
+            "Description": "True, if the user is allowed to send text messages, contacts, invoices, locations and venues",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
-            "OriginalName": "can_send_media_messages",
-            "ConvertedName": "CanSendMediaMessages",
-            "Description": "True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages",
+            "OriginalName": "can_send_audios",
+            "ConvertedName": "CanSendAudios",
+            "Description": "True, if the user is allowed to send audios",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_documents",
+            "ConvertedName": "CanSendDocuments",
+            "Description": "True, if the user is allowed to send documents",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_photos",
+            "ConvertedName": "CanSendPhotos",
+            "Description": "True, if the user is allowed to send photos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_videos",
+            "ConvertedName": "CanSendVideos",
+            "Description": "True, if the user is allowed to send videos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_video_notes",
+            "ConvertedName": "CanSendVideoNotes",
+            "Description": "True, if the user is allowed to send video notes",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_voice_notes",
+            "ConvertedName": "CanSendVoiceNotes",
+            "Description": "True, if the user is allowed to send voice notes",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3586,7 +3870,7 @@
           {
             "OriginalName": "can_send_polls",
             "ConvertedName": "CanSendPolls",
-            "Description": "True, if the user is allowed to send polls, implies can_send_messages",
+            "Description": "True, if the user is allowed to send polls",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3594,7 +3878,7 @@
           {
             "OriginalName": "can_send_other_messages",
             "ConvertedName": "CanSendOtherMessages",
-            "Description": "True, if the user is allowed to send animations, games, stickers and use inline bots, implies can_send_media_messages",
+            "Description": "True, if the user is allowed to send animations, games, stickers and use inline bots",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3602,7 +3886,7 @@
           {
             "OriginalName": "can_add_web_page_previews",
             "ConvertedName": "CanAddWebPagePreviews",
-            "Description": "True, if the user is allowed to add web page previews to their messages, implies can_send_media_messages",
+            "Description": "True, if the user is allowed to add web page previews to their messages",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true

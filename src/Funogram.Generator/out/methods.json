@@ -2191,6 +2191,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "use_independent_chat_permissions",
+        "ConvertedName": "UseIndependentChatPermissions",
+        "Description": "Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "until_date",
         "ConvertedName": "UntilDate",
         "Description": "Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever",
@@ -2426,6 +2434,14 @@
         "OriginalFieldType": "ChatPermissions",
         "ConvertedFieldType": "ChatPermissions",
         "Optional": false
+      },
+      {
+        "OriginalName": "use_independent_chat_permissions",
+        "ConvertedName": "UseIndependentChatPermissions",
+        "Description": "Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
@@ -2867,7 +2883,7 @@
   {
     "OriginalName": "getChatMember",
     "ConvertedName": "GetChatMember",
-    "Description": "Use this method to get information about a member of a chat. The method is guaranteed to work for other users, only if the bot is an administrator in the chat. Returns a ChatMember object on success.",
+    "Description": "Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
