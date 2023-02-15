@@ -10,26 +10,24 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
-    name: Upload NuGet package
+    runs-on: ubuntu-latest
 
     env:
       NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
       PROJECT_PATH: src/Funogram.Telegram
 
     steps:
-      - name: Checkout repository
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
         
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
 
-      - name: Build solution and generate NuGet package
-        run: |
-          cd $PROJECT_PATH
-          dotnet pack -c Release -o out
+    - name: Build solution and generate NuGet package
+      run: |
+        cd $PROJECT_PATH
+        dotnet pack -c Release -o out
 
-      - name: Push generated package to GitHub registry
-        run: dotnet nuget push ./$PROJECT_PATH/out/*.nupkg -k ${NUGET_AUTH_TOKEN} --skip-duplicate --no-symbols true
+    - name: Push generated package to GitHub registry
+      run: dotnet nuget push ./$PROJECT_PATH/out/*.nupkg -k ${NUGET_AUTH_TOKEN} --skip-duplicate --no-symbols true
