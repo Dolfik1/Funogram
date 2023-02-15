@@ -818,19 +818,21 @@ type RestrictChatMember =
     ChatId: ChatId
     UserId: int64
     Permissions: ChatPermissions
+    UseIndependentChatPermissions: bool option
     UntilDate: int64 option
   }
-  static member Make(chatId: ChatId, userId: int64, permissions: ChatPermissions, ?untilDate: int64) = 
+  static member Make(chatId: ChatId, userId: int64, permissions: ChatPermissions, ?useIndependentChatPermissions: bool, ?untilDate: int64) = 
     {
       ChatId = chatId
       UserId = userId
       Permissions = permissions
+      UseIndependentChatPermissions = useIndependentChatPermissions
       UntilDate = untilDate
     }
-  static member Make(chatId: int64, userId: int64, permissions: ChatPermissions, ?untilDate: int64) = 
-    RestrictChatMember.Make(ChatId.Int chatId, userId, permissions, ?untilDate = untilDate)
-  static member Make(chatId: string, userId: int64, permissions: ChatPermissions, ?untilDate: int64) = 
-    RestrictChatMember.Make(ChatId.String chatId, userId, permissions, ?untilDate = untilDate)
+  static member Make(chatId: int64, userId: int64, permissions: ChatPermissions, ?useIndependentChatPermissions: bool, ?untilDate: int64) = 
+    RestrictChatMember.Make(ChatId.Int chatId, userId, permissions, ?useIndependentChatPermissions = useIndependentChatPermissions, ?untilDate = untilDate)
+  static member Make(chatId: string, userId: int64, permissions: ChatPermissions, ?useIndependentChatPermissions: bool, ?untilDate: int64) = 
+    RestrictChatMember.Make(ChatId.String chatId, userId, permissions, ?useIndependentChatPermissions = useIndependentChatPermissions, ?untilDate = untilDate)
   interface IRequestBase<bool> with
     member _.MethodName = "restrictChatMember"
     
@@ -932,16 +934,18 @@ type SetChatPermissions =
   {
     ChatId: ChatId
     Permissions: ChatPermissions
+    UseIndependentChatPermissions: bool option
   }
-  static member Make(chatId: ChatId, permissions: ChatPermissions) = 
+  static member Make(chatId: ChatId, permissions: ChatPermissions, ?useIndependentChatPermissions: bool) = 
     {
       ChatId = chatId
       Permissions = permissions
+      UseIndependentChatPermissions = useIndependentChatPermissions
     }
-  static member Make(chatId: int64, permissions: ChatPermissions) = 
-    SetChatPermissions.Make(ChatId.Int chatId, permissions)
-  static member Make(chatId: string, permissions: ChatPermissions) = 
-    SetChatPermissions.Make(ChatId.String chatId, permissions)
+  static member Make(chatId: int64, permissions: ChatPermissions, ?useIndependentChatPermissions: bool) = 
+    SetChatPermissions.Make(ChatId.Int chatId, permissions, ?useIndependentChatPermissions = useIndependentChatPermissions)
+  static member Make(chatId: string, permissions: ChatPermissions, ?useIndependentChatPermissions: bool) = 
+    SetChatPermissions.Make(ChatId.String chatId, permissions, ?useIndependentChatPermissions = useIndependentChatPermissions)
   interface IRequestBase<bool> with
     member _.MethodName = "setChatPermissions"
     
