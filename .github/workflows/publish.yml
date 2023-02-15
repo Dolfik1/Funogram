@@ -1,4 +1,4 @@
-name: CI
+name: Publish
 
 on:
   create:
@@ -11,7 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-18.04
-    name: Update NuGet package
+    name: Upload NuGet package
+
+    env:
+      NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
+      PROJECT_PATH: src/Funogram.Telegram
+
     steps:
       - name: Checkout repository
       - uses: actions/checkout@v2
@@ -20,10 +25,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
-
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
-          PROJECT_PATH: src/Funogram.Telegram
 
       - name: Build solution and generate NuGet package
         run: |
