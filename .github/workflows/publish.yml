@@ -24,6 +24,12 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
+    - name: Install dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
     - name: Build solution and generate NuGet package
       run: |
         cd $PROJECT_PATH
