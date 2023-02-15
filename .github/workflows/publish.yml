@@ -24,7 +24,7 @@ jobs:
           PROJECT_FILE_PATH: src/Funogram.Telegram/Funogram.Telegram.fsproj
 
           # Configuration to build and package
-          BUILD_CONFIGURATION: Release
+          # BUILD_CONFIGURATION: Release
 
           # Platform target to compile (default is empty/AnyCPU)
           # BUILD_PLATFORM: x64
