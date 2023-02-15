@@ -8,13 +8,17 @@ on:
     branches:
       - develop
 
+defaults:
+  run:
+    working-directory: ./src
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     env:
       NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
-      PROJECT_PATH: src/Funogram.Telegram
+      PROJECT_PATH: Funogram.Telegram
 
     steps:
     - uses: actions/checkout@v2
