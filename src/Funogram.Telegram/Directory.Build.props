@@ -1,0 +1,14 @@
+<Project>
+    <PropertyGroup>
+        <Version>6.5.0.0</Version>
+        <Authors>Nikolay Matyushin</Authors>
+        <Product>Funogram.Telegram</Product>
+        <Title>Funogram.Telegram</Title>
+        <PackageId>Funogram.Telegram</PackageId>
+        <PackageTags>telegram;funogram;F#;bot</PackageTags>
+        <PackageIcon>logo.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    </PropertyGroup>
+</Project>
