@@ -110,8 +110,8 @@ let private runBot config me updateArrived updatesArrived =
       async {
         try
           let! updatesResult =
-              Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
-              |> bot
+            Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
+            |> bot
           match updatesResult with
           | Ok updates when updates |> Seq.isEmpty |> not ->
             let offset = updates |> Seq.map (fun f -> f.UpdateId) |> Seq.max |> fun x -> x + 1L
