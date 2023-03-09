@@ -1,6 +1,7 @@
 module Funogram.Tools
 
 open System
+open System.Net
 open System.Net.Http
 open System.Runtime.CompilerServices
 open Utf8Json
@@ -388,8 +389,11 @@ module Api =
         if hasData then client.PostAsync(url, content) |> Async.AwaitTask
         else client.GetAsync(url) |> Async.AwaitTask
   
-      use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
-      return parseJsonStreamApiResponse<'a> stream
+      if result.StatusCode = HttpStatusCode.OK then
+        use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
+        return parseJsonStreamApiResponse<'a> stream
+      else
+        return Error { Description = "HTTP_ERROR"; ErrorCode = int result.StatusCode }
     }
     
 

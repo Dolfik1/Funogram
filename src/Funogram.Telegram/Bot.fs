@@ -115,10 +115,25 @@ let private runBot config me updateArrived updatesArrived =
             return! loopAsync offset // send new offset
           | Error e ->
             config.OnError (e.AsException() :> Exception)
+            
+            // add delay in case of HTTP error
+            // for example: the server may be "busy"
+            if e.Description = "HTTP_ERROR" then
+              do! Async.Sleep 1000
+            
             return! loopAsync offset
-          | _ -> return! loopAsync offset
-        with ex ->
+          | _ ->
+            return! loopAsync offset
+        with
+        | :? HttpRequestException as e ->
+          // in case of HTTP error we should not increment offset
+          config.OnError e
+          do! Async.Sleep 1000
+          return! loopAsync offset
+          
+        | ex ->
           config.OnError ex
+          // in case of "general" error we should increment offset to skip problematic update
           return! loopAsync (offset + 1L)
         return! loopAsync offset
       }
