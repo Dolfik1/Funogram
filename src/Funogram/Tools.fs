@@ -36,7 +36,12 @@ let internal resolver =
   )
 
 let private getUrl (config: BotConfig) methodName = 
-  sprintf "%s%s/%s" (config.ApiEndpointUrl |> string) config.Token methodName
+  let botToken = sprintf "%s%s" (config.ApiEndpointUrl |> string) config.Token
+  
+  if config.IsTest then
+    sprintf "%s/test/%s" botToken methodName
+  else
+    sprintf "%s/%s" botToken methodName
 
 let internal getUnix (date: DateTime) = 
   Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
