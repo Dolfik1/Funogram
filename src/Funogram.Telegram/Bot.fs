@@ -15,7 +15,8 @@ let TokenFileName = "token"
 [<RequireQualifiedAccess>]
 module Config =
   let defaultConfig =
-    { Token = ""
+    { IsTest = false
+      Token = ""
       Offset = Some 0L
       Limit = Some 100
       Timeout = Some 60000
