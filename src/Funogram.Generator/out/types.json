@@ -1311,8 +1311,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Animation thumbnail as defined by sender",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1418,8 +1418,8 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the album cover to which the music file belongs",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1453,8 +1453,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Document thumbnail as defined by sender",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1536,8 +1536,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Video thumbnail",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1611,8 +1611,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Video thumbnail",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -2289,9 +2289,21 @@
   },
   {
     "Name": "WriteAccessAllowed",
-    "Description": "This object represents a service message about a user allowing a bot added to the attachment menu to write messages. Currently holds no information.",
+    "Description": "This object represents a service message about a user allowing a bot to write messages after adding the bot to the attachment menu or launching a Web App from a link.",
     "Kind": {
-      "Case": "Stub"
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "web_app_name",
+            "ConvertedName": "WebAppName",
+            "Description": "Name of the Web App which was launched from a link",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
     }
   },
   {
@@ -2575,7 +2587,7 @@
   },
   {
     "Name": "KeyboardButtonRequestUser",
-    "Description": "This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed.",
+    "Description": "This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed. More about requesting users \u00BB",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2610,7 +2622,7 @@
   },
   {
     "Name": "KeyboardButtonRequestChat",
-    "Description": "This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed.",
+    "Description": "This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More about requesting chats \u00BB",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2812,6 +2824,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "switch_inline_query_chosen_chat",
+            "ConvertedName": "SwitchInlineQueryChosenChat",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field",
+            "OriginalFieldType": "SwitchInlineQueryChosenChat",
+            "ConvertedFieldType": "SwitchInlineQueryChosenChat",
+            "Optional": true
+          },
+          {
             "OriginalName": "callback_game",
             "ConvertedName": "CallbackGame",
             "Description": "Description of the game that will be launched when the user presses the button.\n\nNOTE: This type of button must always be the first button in the first row.",
@@ -2866,6 +2886,57 @@
             "OriginalName": "request_write_access",
             "ConvertedName": "RequestWriteAccess",
             "Description": "Pass True to request the permission for your bot to send messages to the user.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SwitchInlineQueryChosenChat",
+    "Description": "This object represents an inline button that switches the current user to inline mode in a chosen chat, with an optional default inline query.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "query",
+            "ConvertedName": "Query",
+            "Description": "The default inline query to be inserted in the input field. If left empty, only the bot\u0027s username will be inserted",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_user_chats",
+            "ConvertedName": "AllowUserChats",
+            "Description": "True, if private chats with users can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_bot_chats",
+            "ConvertedName": "AllowBotChats",
+            "Description": "True, if private chats with bots can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_group_chats",
+            "ConvertedName": "AllowGroupChats",
+            "Description": "True, if group and supergroup chats can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_channel_chats",
+            "ConvertedName": "AllowChannelChats",
+            "Description": "True, if channel chats can be chosen",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3740,6 +3811,14 @@
             "OriginalFieldType": "ChatInviteLink",
             "ConvertedFieldType": "ChatInviteLink",
             "Optional": true
+          },
+          {
+            "OriginalName": "via_chat_folder_invite_link",
+            "ConvertedName": "ViaChatFolderInviteLink",
+            "Description": "True, if the user joined the chat via a chat folder invite link",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -4229,6 +4308,63 @@
     }
   },
   {
+    "Name": "BotName",
+    "Description": "This object represents the bot\u0027s name.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "The bot\u0027s name",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BotDescription",
+    "Description": "This object represents the bot\u0027s description.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "description",
+            "ConvertedName": "Description",
+            "Description": "The bot\u0027s description",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BotShortDescription",
+    "Description": "This object represents the bot\u0027s short description.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "short_description",
+            "ConvertedName": "ShortDescription",
+            "Description": "The bot\u0027s short description",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "MenuButton",
     "Description": "This object describes the bot\u0027s menu button in a private chat. It should be one of\nIf a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.",
     "Kind": {
@@ -4465,8 +4601,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4564,8 +4700,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4655,8 +4791,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4738,8 +4874,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4852,8 +4988,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Sticker thumbnail in the .WEBP or .JPG format",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -4897,6 +5033,14 @@
             "Description": "For custom emoji stickers, unique identifier of the custom emoji",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "needs_repainting",
+            "ConvertedName": "NeedsRepainting",
+            "Description": "True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -4967,8 +5111,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -5016,6 +5160,49 @@
             "OriginalFieldType": "Float number",
             "ConvertedFieldType": "float",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputSticker",
+    "Description": "This object describes a sticker to be added to a sticker set.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. Animated and video stickers can\u0027t be uploaded via HTTP URL. More information on Sending Files \u00BB",
+            "OriginalFieldType": "InputFile or String",
+            "ConvertedFieldType": "InputFile",
+            "Optional": false
+          },
+          {
+            "OriginalName": "emoji_list",
+            "ConvertedName": "EmojiList",
+            "Description": "List of 1-20 emoji associated with the sticker",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "mask_position",
+            "ConvertedName": "MaskPosition",
+            "Description": "Position where the mask should be placed on faces. For \u201Cmask\u201D stickers only.",
+            "OriginalFieldType": "MaskPosition",
+            "ConvertedFieldType": "MaskPosition",
+            "Optional": true
+          },
+          {
+            "OriginalName": "keywords",
+            "ConvertedName": "Keywords",
+            "Description": "List of 0-20 search keywords for the sticker with total length of up to 64 characters. For \u201Cregular\u201D and \u201Ccustom_emoji\u201D stickers only.",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": true
           }
         ]
       ]
@@ -5074,6 +5261,41 @@
             "Description": "Sender location, only for bots that request user location",
             "OriginalFieldType": "Location",
             "ConvertedFieldType": "Location",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InlineQueryResultsButton",
+    "Description": "This object represents a button to be shown above inline query results. You must use exactly one of the optional fields.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Label text on the button",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "web_app",
+            "ConvertedName": "WebApp",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method web_app_switch_inline_query inside the Web App.",
+            "OriginalFieldType": "WebAppInfo",
+            "ConvertedFieldType": "WebAppInfo",
+            "Optional": true
+          },
+          {
+            "OriginalName": "start_parameter",
+            "ConvertedName": "StartParameter",
+            "Description": "Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.\n\nExample: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a \u0027Connect your YouTube account\u0027 button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot\u0027s inline capabilities.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           }
         ]
@@ -5243,24 +5465,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -5302,8 +5524,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the thumbnail for the photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -5441,16 +5663,16 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
           },
           {
-            "OriginalName": "thumb_mime_type",
-            "ConvertedName": "ThumbMimeType",
+            "OriginalName": "thumbnail_mime_type",
+            "ConvertedName": "ThumbnailMimeType",
             "Description": "MIME type of the thumbnail, must be one of \u201Cimage/jpeg\u201D, \u201Cimage/gif\u201D, or \u201Cvideo/mp4\u201D. Defaults to \u201Cimage/jpeg\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -5564,16 +5786,16 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
           },
           {
-            "OriginalName": "thumb_mime_type",
-            "ConvertedName": "ThumbMimeType",
+            "OriginalName": "thumbnail_mime_type",
+            "ConvertedName": "ThumbnailMimeType",
             "Description": "MIME type of the thumbnail, must be one of \u201Cimage/jpeg\u201D, \u201Cimage/gif\u201D, or \u201Cvideo/mp4\u201D. Defaults to \u201Cimage/jpeg\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -5671,8 +5893,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the thumbnail (JPEG only) for the video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -6048,24 +6270,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the thumbnail (JPEG only) for the file",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -6171,24 +6393,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -6302,24 +6524,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -6401,24 +6623,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
