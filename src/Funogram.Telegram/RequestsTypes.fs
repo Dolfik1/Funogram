@@ -221,14 +221,14 @@ type SendAudio =
     Duration: int64 option
     Performer: string option
     Title: string option
-    Thumb: InputFile option
+    Thumbnail: InputFile option
     DisableNotification: bool option
     ProtectContent: bool option
     ReplyToMessageId: int64 option
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, audio: InputFile, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, audio: InputFile, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
@@ -239,17 +239,17 @@ type SendAudio =
       Duration = duration
       Performer = performer
       Title = title
-      Thumb = thumb
+      Thumbnail = thumbnail
       DisableNotification = disableNotification
       ProtectContent = protectContent
       ReplyToMessageId = replyToMessageId
       AllowSendingWithoutReply = allowSendingWithoutReply
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, audio: InputFile, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendAudio.Make(ChatId.Int chatId, audio, ?messageThreadId = messageThreadId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?duration = duration, ?performer = performer, ?title = title, ?thumb = thumb, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, audio: InputFile, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendAudio.Make(ChatId.String chatId, audio, ?messageThreadId = messageThreadId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?duration = duration, ?performer = performer, ?title = title, ?thumb = thumb, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, audio: InputFile, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendAudio.Make(ChatId.Int chatId, audio, ?messageThreadId = messageThreadId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?duration = duration, ?performer = performer, ?title = title, ?thumbnail = thumbnail, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, audio: InputFile, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendAudio.Make(ChatId.String chatId, audio, ?messageThreadId = messageThreadId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?duration = duration, ?performer = performer, ?title = title, ?thumbnail = thumbnail, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendAudio"
     
@@ -258,7 +258,7 @@ type SendDocument =
     ChatId: ChatId
     MessageThreadId: int64 option
     Document: InputFile
-    Thumb: InputFile option
+    Thumbnail: InputFile option
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
@@ -269,12 +269,12 @@ type SendDocument =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, document: InputFile, ?messageThreadId: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, document: InputFile, ?messageThreadId: int64, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
       Document = document
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -285,10 +285,10 @@ type SendDocument =
       AllowSendingWithoutReply = allowSendingWithoutReply
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, document: InputFile, ?messageThreadId: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendDocument.Make(ChatId.Int chatId, document, ?messageThreadId = messageThreadId, ?thumb = thumb, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?disableContentTypeDetection = disableContentTypeDetection, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, document: InputFile, ?messageThreadId: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendDocument.Make(ChatId.String chatId, document, ?messageThreadId = messageThreadId, ?thumb = thumb, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?disableContentTypeDetection = disableContentTypeDetection, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, document: InputFile, ?messageThreadId: int64, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendDocument.Make(ChatId.Int chatId, document, ?messageThreadId = messageThreadId, ?thumbnail = thumbnail, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?disableContentTypeDetection = disableContentTypeDetection, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, document: InputFile, ?messageThreadId: int64, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendDocument.Make(ChatId.String chatId, document, ?messageThreadId = messageThreadId, ?thumbnail = thumbnail, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?disableContentTypeDetection = disableContentTypeDetection, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendDocument"
     
@@ -300,7 +300,7 @@ type SendVideo =
     Duration: int64 option
     Width: int64 option
     Height: int64 option
-    Thumb: InputFile option
+    Thumbnail: InputFile option
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
@@ -312,7 +312,7 @@ type SendVideo =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, video: InputFile, ?replyToMessageId: int64, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumb: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, video: InputFile, ?replyToMessageId: int64, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
@@ -320,7 +320,7 @@ type SendVideo =
       Duration = duration
       Width = width
       Height = height
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -332,10 +332,10 @@ type SendVideo =
       AllowSendingWithoutReply = allowSendingWithoutReply
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, video: InputFile, ?replyToMessageId: int64, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumb: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendVideo.Make(ChatId.Int chatId, video, ?replyToMessageId = replyToMessageId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumb = thumb, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, video: InputFile, ?replyToMessageId: int64, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumb: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendVideo.Make(ChatId.String chatId, video, ?replyToMessageId = replyToMessageId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumb = thumb, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, video: InputFile, ?replyToMessageId: int64, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendVideo.Make(ChatId.Int chatId, video, ?replyToMessageId = replyToMessageId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, video: InputFile, ?replyToMessageId: int64, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendVideo.Make(ChatId.String chatId, video, ?replyToMessageId = replyToMessageId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVideo"
     
@@ -347,7 +347,7 @@ type SendAnimation =
     Duration: int64 option
     Width: int64 option
     Height: int64 option
-    Thumb: InputFile option
+    Thumbnail: InputFile option
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
@@ -358,7 +358,7 @@ type SendAnimation =
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, animation: InputFile, ?messageThreadId: int64, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, animation: InputFile, ?messageThreadId: int64, ?duration: int64, ?width: int64, ?height: int64, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
@@ -366,7 +366,7 @@ type SendAnimation =
       Duration = duration
       Width = width
       Height = height
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -377,10 +377,10 @@ type SendAnimation =
       AllowSendingWithoutReply = allowSendingWithoutReply
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, animation: InputFile, ?messageThreadId: int64, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendAnimation.Make(ChatId.Int chatId, animation, ?messageThreadId = messageThreadId, ?duration = duration, ?width = width, ?height = height, ?thumb = thumb, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?hasSpoiler = hasSpoiler, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, animation: InputFile, ?messageThreadId: int64, ?duration: int64, ?width: int64, ?height: int64, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendAnimation.Make(ChatId.String chatId, animation, ?messageThreadId = messageThreadId, ?duration = duration, ?width = width, ?height = height, ?thumb = thumb, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?hasSpoiler = hasSpoiler, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, animation: InputFile, ?messageThreadId: int64, ?duration: int64, ?width: int64, ?height: int64, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendAnimation.Make(ChatId.Int chatId, animation, ?messageThreadId = messageThreadId, ?duration = duration, ?width = width, ?height = height, ?thumbnail = thumbnail, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?hasSpoiler = hasSpoiler, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, animation: InputFile, ?messageThreadId: int64, ?duration: int64, ?width: int64, ?height: int64, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendAnimation.Make(ChatId.String chatId, animation, ?messageThreadId = messageThreadId, ?duration = duration, ?width = width, ?height = height, ?thumbnail = thumbnail, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?hasSpoiler = hasSpoiler, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendAnimation"
     
@@ -428,31 +428,31 @@ type SendVideoNote =
     VideoNote: InputFile
     Duration: int64 option
     Length: int64 option
-    Thumb: InputFile option
+    Thumbnail: InputFile option
     DisableNotification: bool option
     ProtectContent: bool option
     ReplyToMessageId: int64 option
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, videoNote: InputFile, ?messageThreadId: int64, ?duration: int64, ?length: int64, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, videoNote: InputFile, ?messageThreadId: int64, ?duration: int64, ?length: int64, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
       VideoNote = videoNote
       Duration = duration
       Length = length
-      Thumb = thumb
+      Thumbnail = thumbnail
       DisableNotification = disableNotification
       ProtectContent = protectContent
       ReplyToMessageId = replyToMessageId
       AllowSendingWithoutReply = allowSendingWithoutReply
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, videoNote: InputFile, ?messageThreadId: int64, ?duration: int64, ?length: int64, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendVideoNote.Make(ChatId.Int chatId, videoNote, ?messageThreadId = messageThreadId, ?duration = duration, ?length = length, ?thumb = thumb, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, videoNote: InputFile, ?messageThreadId: int64, ?duration: int64, ?length: int64, ?thumb: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendVideoNote.Make(ChatId.String chatId, videoNote, ?messageThreadId = messageThreadId, ?duration = duration, ?length = length, ?thumb = thumb, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, videoNote: InputFile, ?messageThreadId: int64, ?duration: int64, ?length: int64, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendVideoNote.Make(ChatId.Int chatId, videoNote, ?messageThreadId = messageThreadId, ?duration = duration, ?length = length, ?thumbnail = thumbnail, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, videoNote: InputFile, ?messageThreadId: int64, ?duration: int64, ?length: int64, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendVideoNote.Make(ChatId.String chatId, videoNote, ?messageThreadId = messageThreadId, ?duration = duration, ?length = length, ?thumbnail = thumbnail, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVideoNote"
     
@@ -521,54 +521,6 @@ type SendLocation =
     SendLocation.Make(ChatId.String chatId, latitude, longitude, ?messageThreadId = messageThreadId, ?horizontalAccuracy = horizontalAccuracy, ?livePeriod = livePeriod, ?heading = heading, ?proximityAlertRadius = proximityAlertRadius, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendLocation"
-    
-type EditMessageLiveLocation =
-  {
-    ChatId: ChatId option
-    MessageId: int64 option
-    InlineMessageId: string option
-    Latitude: float
-    Longitude: float
-    HorizontalAccuracy: float option
-    Heading: int64 option
-    ProximityAlertRadius: int64 option
-    ReplyMarkup: InlineKeyboardMarkup option
-  }
-  static member Make(latitude: float, longitude: float, ?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?horizontalAccuracy: float, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup) = 
-    {
-      ChatId = chatId
-      MessageId = messageId
-      InlineMessageId = inlineMessageId
-      Latitude = latitude
-      Longitude = longitude
-      HorizontalAccuracy = horizontalAccuracy
-      Heading = heading
-      ProximityAlertRadius = proximityAlertRadius
-      ReplyMarkup = replyMarkup
-    }
-  interface IRequestBase<EditMessageResult> with
-    member _.MethodName = "editMessageLiveLocation"
-    
-type StopMessageLiveLocation =
-  {
-    ChatId: ChatId option
-    MessageId: int64 option
-    InlineMessageId: string option
-    ReplyMarkup: InlineKeyboardMarkup option
-  }
-  static member Make(?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?replyMarkup: InlineKeyboardMarkup) = 
-    {
-      ChatId = chatId
-      MessageId = messageId
-      InlineMessageId = inlineMessageId
-      ReplyMarkup = replyMarkup
-    }
-  static member Make(?chatId: int64, ?messageId: int64, ?inlineMessageId: string, ?replyMarkup: InlineKeyboardMarkup) = 
-    StopMessageLiveLocation.Make(?chatId = (chatId |> Option.map ChatId.Int), ?messageId = messageId, ?inlineMessageId = inlineMessageId, ?replyMarkup = replyMarkup)
-  static member Make(?chatId: string, ?messageId: int64, ?inlineMessageId: string, ?replyMarkup: InlineKeyboardMarkup) = 
-    StopMessageLiveLocation.Make(?chatId = (chatId |> Option.map ChatId.String), ?messageId = messageId, ?inlineMessageId = inlineMessageId, ?replyMarkup = replyMarkup)
-  interface IRequestBase<EditMessageResult> with
-    member _.MethodName = "stopMessageLiveLocation"
     
 type SendVenue =
   {
@@ -1541,6 +1493,78 @@ type GetMyCommands =
   interface IRequestBase<BotCommand[]> with
     member _.MethodName = "getMyCommands"
     
+type SetMyName =
+  {
+    Name: string option
+    LanguageCode: string option
+  }
+  static member Make(?name: string, ?languageCode: string) = 
+    {
+      Name = name
+      LanguageCode = languageCode
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setMyName"
+    
+type GetMyName =
+  {
+    LanguageCode: string option
+  }
+  static member Make(?languageCode: string) = 
+    {
+      LanguageCode = languageCode
+    }
+  interface IRequestBase<BotName> with
+    member _.MethodName = "getMyName"
+    
+type SetMyDescription =
+  {
+    Description: string option
+    LanguageCode: string option
+  }
+  static member Make(?description: string, ?languageCode: string) = 
+    {
+      Description = description
+      LanguageCode = languageCode
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setMyDescription"
+    
+type GetMyDescription =
+  {
+    LanguageCode: string option
+  }
+  static member Make(?languageCode: string) = 
+    {
+      LanguageCode = languageCode
+    }
+  interface IRequestBase<BotDescription> with
+    member _.MethodName = "getMyDescription"
+    
+type SetMyShortDescription =
+  {
+    ShortDescription: string option
+    LanguageCode: string option
+  }
+  static member Make(?shortDescription: string, ?languageCode: string) = 
+    {
+      ShortDescription = shortDescription
+      LanguageCode = languageCode
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setMyShortDescription"
+    
+type GetMyShortDescription =
+  {
+    LanguageCode: string option
+  }
+  static member Make(?languageCode: string) = 
+    {
+      LanguageCode = languageCode
+    }
+  interface IRequestBase<BotShortDescription> with
+    member _.MethodName = "getMyShortDescription"
+    
 type SetChatMenuButton =
   {
     ChatId: int64 option
@@ -1660,6 +1684,54 @@ type EditMessageMedia =
   interface IRequestBase<EditMessageResult> with
     member _.MethodName = "editMessageMedia"
     
+type EditMessageLiveLocation =
+  {
+    ChatId: ChatId option
+    MessageId: int64 option
+    InlineMessageId: string option
+    Latitude: float
+    Longitude: float
+    HorizontalAccuracy: float option
+    Heading: int64 option
+    ProximityAlertRadius: int64 option
+    ReplyMarkup: InlineKeyboardMarkup option
+  }
+  static member Make(latitude: float, longitude: float, ?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?horizontalAccuracy: float, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup) = 
+    {
+      ChatId = chatId
+      MessageId = messageId
+      InlineMessageId = inlineMessageId
+      Latitude = latitude
+      Longitude = longitude
+      HorizontalAccuracy = horizontalAccuracy
+      Heading = heading
+      ProximityAlertRadius = proximityAlertRadius
+      ReplyMarkup = replyMarkup
+    }
+  interface IRequestBase<EditMessageResult> with
+    member _.MethodName = "editMessageLiveLocation"
+    
+type StopMessageLiveLocation =
+  {
+    ChatId: ChatId option
+    MessageId: int64 option
+    InlineMessageId: string option
+    ReplyMarkup: InlineKeyboardMarkup option
+  }
+  static member Make(?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?replyMarkup: InlineKeyboardMarkup) = 
+    {
+      ChatId = chatId
+      MessageId = messageId
+      InlineMessageId = inlineMessageId
+      ReplyMarkup = replyMarkup
+    }
+  static member Make(?chatId: int64, ?messageId: int64, ?inlineMessageId: string, ?replyMarkup: InlineKeyboardMarkup) = 
+    StopMessageLiveLocation.Make(?chatId = (chatId |> Option.map ChatId.Int), ?messageId = messageId, ?inlineMessageId = inlineMessageId, ?replyMarkup = replyMarkup)
+  static member Make(?chatId: string, ?messageId: int64, ?inlineMessageId: string, ?replyMarkup: InlineKeyboardMarkup) = 
+    StopMessageLiveLocation.Make(?chatId = (chatId |> Option.map ChatId.String), ?messageId = messageId, ?inlineMessageId = inlineMessageId, ?replyMarkup = replyMarkup)
+  interface IRequestBase<EditMessageResult> with
+    member _.MethodName = "stopMessageLiveLocation"
+    
 type EditMessageReplyMarkup =
   {
     ChatId: ChatId option
@@ -1722,27 +1794,29 @@ type SendSticker =
     ChatId: ChatId
     MessageThreadId: int64 option
     Sticker: InputFile
+    Emoji: string option
     DisableNotification: bool option
     ProtectContent: bool option
     ReplyToMessageId: int64 option
     AllowSendingWithoutReply: bool option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, sticker: InputFile, ?messageThreadId: int64, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, sticker: InputFile, ?messageThreadId: int64, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
       Sticker = sticker
+      Emoji = emoji
       DisableNotification = disableNotification
       ProtectContent = protectContent
       ReplyToMessageId = replyToMessageId
       AllowSendingWithoutReply = allowSendingWithoutReply
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, sticker: InputFile, ?messageThreadId: int64, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendSticker.Make(ChatId.Int chatId, sticker, ?messageThreadId = messageThreadId, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, sticker: InputFile, ?messageThreadId: int64, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
-    SendSticker.Make(ChatId.String chatId, sticker, ?messageThreadId = messageThreadId, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, sticker: InputFile, ?messageThreadId: int64, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendSticker.Make(ChatId.Int chatId, sticker, ?messageThreadId = messageThreadId, ?emoji = emoji, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, sticker: InputFile, ?messageThreadId: int64, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?replyToMessageId: int64, ?allowSendingWithoutReply: bool, ?replyMarkup: Markup) = 
+    SendSticker.Make(ChatId.String chatId, sticker, ?messageThreadId = messageThreadId, ?emoji = emoji, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyToMessageId = replyToMessageId, ?allowSendingWithoutReply = allowSendingWithoutReply, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendSticker"
     
@@ -1771,12 +1845,14 @@ type GetCustomEmojiStickers =
 type UploadStickerFile =
   {
     UserId: int64
-    PngSticker: InputFile
+    Sticker: InputFile
+    StickerFormat: string
   }
-  static member Make(userId: int64, pngSticker: InputFile) = 
+  static member Make(userId: int64, sticker: InputFile, stickerFormat: string) = 
     {
       UserId = userId
-      PngSticker = pngSticker
+      Sticker = sticker
+      StickerFormat = stickerFormat
     }
   interface IRequestBase<File> with
     member _.MethodName = "uploadStickerFile"
@@ -1786,24 +1862,20 @@ type CreateNewStickerSet =
     UserId: int64
     Name: string
     Title: string
-    PngSticker: InputFile option
-    TgsSticker: InputFile option
-    WebmSticker: InputFile option
+    Stickers: InputSticker[]
+    StickerFormat: string
     StickerType: string option
-    Emojis: string
-    MaskPosition: MaskPosition option
+    NeedsRepainting: bool option
   }
-  static member Make(userId: int64, name: string, title: string, emojis: string, ?pngSticker: InputFile, ?tgsSticker: InputFile, ?webmSticker: InputFile, ?stickerType: string, ?maskPosition: MaskPosition) = 
+  static member Make(userId: int64, name: string, title: string, stickers: InputSticker[], stickerFormat: string, ?stickerType: string, ?needsRepainting: bool) = 
     {
       UserId = userId
       Name = name
       Title = title
-      PngSticker = pngSticker
-      TgsSticker = tgsSticker
-      WebmSticker = webmSticker
+      Stickers = stickers
+      StickerFormat = stickerFormat
       StickerType = stickerType
-      Emojis = emojis
-      MaskPosition = maskPosition
+      NeedsRepainting = needsRepainting
     }
   interface IRequestBase<bool> with
     member _.MethodName = "createNewStickerSet"
@@ -1812,21 +1884,13 @@ type AddStickerToSet =
   {
     UserId: int64
     Name: string
-    PngSticker: InputFile option
-    TgsSticker: InputFile option
-    WebmSticker: InputFile option
-    Emojis: string
-    MaskPosition: MaskPosition option
+    Sticker: InputSticker
   }
-  static member Make(userId: int64, name: string, emojis: string, ?pngSticker: InputFile, ?tgsSticker: InputFile, ?webmSticker: InputFile, ?maskPosition: MaskPosition) = 
+  static member Make(userId: int64, name: string, sticker: InputSticker) = 
     {
       UserId = userId
       Name = name
-      PngSticker = pngSticker
-      TgsSticker = tgsSticker
-      WebmSticker = webmSticker
-      Emojis = emojis
-      MaskPosition = maskPosition
+      Sticker = sticker
     }
   interface IRequestBase<bool> with
     member _.MethodName = "addStickerToSet"
@@ -1855,20 +1919,96 @@ type DeleteStickerFromSet =
   interface IRequestBase<bool> with
     member _.MethodName = "deleteStickerFromSet"
     
-type SetStickerSetThumb =
+type SetStickerEmojiList =
+  {
+    Sticker: string
+    EmojiList: string[]
+  }
+  static member Make(sticker: string, emojiList: string[]) = 
+    {
+      Sticker = sticker
+      EmojiList = emojiList
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setStickerEmojiList"
+    
+type SetStickerKeywords =
+  {
+    Sticker: string
+    Keywords: string[] option
+  }
+  static member Make(sticker: string, ?keywords: string[]) = 
+    {
+      Sticker = sticker
+      Keywords = keywords
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setStickerKeywords"
+    
+type SetStickerMaskPosition =
+  {
+    Sticker: string
+    MaskPosition: MaskPosition option
+  }
+  static member Make(sticker: string, ?maskPosition: MaskPosition) = 
+    {
+      Sticker = sticker
+      MaskPosition = maskPosition
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setStickerMaskPosition"
+    
+type SetStickerSetTitle =
+  {
+    Name: string
+    Title: string
+  }
+  static member Make(name: string, title: string) = 
+    {
+      Name = name
+      Title = title
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setStickerSetTitle"
+    
+type SetStickerSetThumbnail =
   {
     Name: string
     UserId: int64
-    Thumb: InputFile option
+    Thumbnail: InputFile option
   }
-  static member Make(name: string, userId: int64, ?thumb: InputFile) = 
+  static member Make(name: string, userId: int64, ?thumbnail: InputFile) = 
     {
       Name = name
       UserId = userId
-      Thumb = thumb
+      Thumbnail = thumbnail
     }
   interface IRequestBase<bool> with
-    member _.MethodName = "setStickerSetThumb"
+    member _.MethodName = "setStickerSetThumbnail"
+    
+type SetCustomEmojiStickerSetThumbnail =
+  {
+    Name: string
+    CustomEmojiId: string option
+  }
+  static member Make(name: string, ?customEmojiId: string) = 
+    {
+      Name = name
+      CustomEmojiId = customEmojiId
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setCustomEmojiStickerSetThumbnail"
+    
+type DeleteStickerSet =
+  {
+    Name: string
+  }
+  static member Make(name: string) = 
+    {
+      Name = name
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "deleteStickerSet"
     
 type AnswerInlineQuery =
   {
@@ -1877,18 +2017,16 @@ type AnswerInlineQuery =
     CacheTime: int64 option
     IsPersonal: bool option
     NextOffset: string option
-    SwitchPmText: string option
-    SwitchPmParameter: string option
+    Button: InlineQueryResultsButton option
   }
-  static member Make(inlineQueryId: string, results: InlineQueryResult[], ?cacheTime: int64, ?isPersonal: bool, ?nextOffset: string, ?switchPmText: string, ?switchPmParameter: string) = 
+  static member Make(inlineQueryId: string, results: InlineQueryResult[], ?cacheTime: int64, ?isPersonal: bool, ?nextOffset: string, ?button: InlineQueryResultsButton) = 
     {
       InlineQueryId = inlineQueryId
       Results = results
       CacheTime = cacheTime
       IsPersonal = isPersonal
       NextOffset = nextOffset
-      SwitchPmText = switchPmText
-      SwitchPmParameter = switchPmParameter
+      Button = button
     }
   interface IRequestBase<bool> with
     member _.MethodName = "answerInlineQuery"

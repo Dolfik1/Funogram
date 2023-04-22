@@ -744,8 +744,8 @@ and [<CLIMutable>] Animation =
     [<DataMember(Name = "duration")>]
     Duration: int64
     /// Animation thumbnail as defined by sender
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
     /// Original animation filename as defined by sender
     [<DataMember(Name = "file_name")>]
     FileName: string option
@@ -756,14 +756,14 @@ and [<CLIMutable>] Animation =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumb: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
       Width = width
       Height = height
       Duration = duration
-      Thumb = thumb
+      Thumbnail = thumbnail
       FileName = fileName
       MimeType = mimeType
       FileSize = fileSize
@@ -797,10 +797,10 @@ and [<CLIMutable>] Audio =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
     /// Thumbnail of the album cover to which the music file belongs
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
   }
-  static member Create(fileId: string, fileUniqueId: string, duration: int64, ?performer: string, ?title: string, ?fileName: string, ?mimeType: string, ?fileSize: int64, ?thumb: PhotoSize) = 
+  static member Create(fileId: string, fileUniqueId: string, duration: int64, ?performer: string, ?title: string, ?fileName: string, ?mimeType: string, ?fileSize: int64, ?thumbnail: PhotoSize) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -810,7 +810,7 @@ and [<CLIMutable>] Audio =
       FileName = fileName
       MimeType = mimeType
       FileSize = fileSize
-      Thumb = thumb
+      Thumbnail = thumbnail
     }
 
 /// This object represents a general file (as opposed to photos, voice messages and audio files).
@@ -823,8 +823,8 @@ and [<CLIMutable>] Document =
     [<DataMember(Name = "file_unique_id")>]
     FileUniqueId: string
     /// Document thumbnail as defined by sender
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
     /// Original filename as defined by sender
     [<DataMember(Name = "file_name")>]
     FileName: string option
@@ -835,11 +835,11 @@ and [<CLIMutable>] Document =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, ?thumb: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
-      Thumb = thumb
+      Thumbnail = thumbnail
       FileName = fileName
       MimeType = mimeType
       FileSize = fileSize
@@ -864,8 +864,8 @@ and [<CLIMutable>] Video =
     [<DataMember(Name = "duration")>]
     Duration: int64
     /// Video thumbnail
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
     /// Original filename as defined by sender
     [<DataMember(Name = "file_name")>]
     FileName: string option
@@ -876,14 +876,14 @@ and [<CLIMutable>] Video =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumb: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
       Width = width
       Height = height
       Duration = duration
-      Thumb = thumb
+      Thumbnail = thumbnail
       FileName = fileName
       MimeType = mimeType
       FileSize = fileSize
@@ -905,19 +905,19 @@ and [<CLIMutable>] VideoNote =
     [<DataMember(Name = "duration")>]
     Duration: int64
     /// Video thumbnail
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
     /// File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, length: int64, duration: int64, ?thumb: PhotoSize, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, length: int64, duration: int64, ?thumbnail: PhotoSize, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
       Length = length
       Duration = duration
-      Thumb = thumb
+      Thumbnail = thumbnail
       FileSize = fileSize
     }
 
@@ -1289,9 +1289,17 @@ and [<CLIMutable>] ChatShared =
       ChatId = chatId
     }
 
-/// This object represents a service message about a user allowing a bot added to the attachment menu to write messages. Currently holds no information.
-and WriteAccessAllowed =
-  new() = {}
+/// This object represents a service message about a user allowing a bot to write messages after adding the bot to the attachment menu or launching a Web App from a link.
+and [<CLIMutable>] WriteAccessAllowed =
+  {
+    /// Name of the Web App which was launched from a link
+    [<DataMember(Name = "web_app_name")>]
+    WebAppName: string option
+  }
+  static member Create(?webAppName: string) = 
+    {
+      WebAppName = webAppName
+    }
 
 /// This object represents a service message about a video chat scheduled in the chat.
 and [<CLIMutable>] VideoChatScheduled =
@@ -1459,7 +1467,7 @@ and [<CLIMutable>] KeyboardButton =
       WebApp = webApp
     }
 
-/// This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed.
+/// This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed. More about requesting users »
 and [<CLIMutable>] KeyboardButtonRequestUser =
   {
     /// Signed 32-bit identifier of the request, which will be received back in the UserShared object. Must be unique within the message
@@ -1479,7 +1487,7 @@ and [<CLIMutable>] KeyboardButtonRequestUser =
       UserIsPremium = userIsPremium
     }
 
-/// This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed.
+/// This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More about requesting chats »
 and [<CLIMutable>] KeyboardButtonRequestChat =
   {
     /// Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
@@ -1590,6 +1598,9 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.
     [<DataMember(Name = "switch_inline_query_current_chat")>]
     SwitchInlineQueryCurrentChat: string option
+    /// If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field
+    [<DataMember(Name = "switch_inline_query_chosen_chat")>]
+    SwitchInlineQueryChosenChat: SwitchInlineQueryChosenChat option
     /// Description of the game that will be launched when the user presses the button.
     /// 
     /// NOTE: This type of button must always be the first button in the first row.
@@ -1601,7 +1612,7 @@ and [<CLIMutable>] InlineKeyboardButton =
     [<DataMember(Name = "pay")>]
     Pay: bool option
   }
-  static member Create(text: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?callbackGame: CallbackGame, ?pay: bool) = 
+  static member Create(text: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?callbackGame: CallbackGame, ?pay: bool) = 
     {
       Text = text
       Url = url
@@ -1610,6 +1621,7 @@ and [<CLIMutable>] InlineKeyboardButton =
       LoginUrl = loginUrl
       SwitchInlineQuery = switchInlineQuery
       SwitchInlineQueryCurrentChat = switchInlineQueryCurrentChat
+      SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
       CallbackGame = callbackGame
       Pay = pay
     }
@@ -1639,6 +1651,34 @@ and [<CLIMutable>] LoginUrl =
       ForwardText = forwardText
       BotUsername = botUsername
       RequestWriteAccess = requestWriteAccess
+    }
+
+/// This object represents an inline button that switches the current user to inline mode in a chosen chat, with an optional default inline query.
+and [<CLIMutable>] SwitchInlineQueryChosenChat =
+  {
+    /// The default inline query to be inserted in the input field. If left empty, only the bot's username will be inserted
+    [<DataMember(Name = "query")>]
+    Query: string option
+    /// True, if private chats with users can be chosen
+    [<DataMember(Name = "allow_user_chats")>]
+    AllowUserChats: bool option
+    /// True, if private chats with bots can be chosen
+    [<DataMember(Name = "allow_bot_chats")>]
+    AllowBotChats: bool option
+    /// True, if group and supergroup chats can be chosen
+    [<DataMember(Name = "allow_group_chats")>]
+    AllowGroupChats: bool option
+    /// True, if channel chats can be chosen
+    [<DataMember(Name = "allow_channel_chats")>]
+    AllowChannelChats: bool option
+  }
+  static member Create(?query: string, ?allowUserChats: bool, ?allowBotChats: bool, ?allowGroupChats: bool, ?allowChannelChats: bool) = 
+    {
+      Query = query
+      AllowUserChats = allowUserChats
+      AllowBotChats = allowBotChats
+      AllowGroupChats = allowGroupChats
+      AllowChannelChats = allowChannelChats
     }
 
 /// This object represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
@@ -2087,8 +2127,11 @@ and [<CLIMutable>] ChatMemberUpdated =
     /// Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
     [<DataMember(Name = "invite_link")>]
     InviteLink: ChatInviteLink option
+    /// True, if the user joined the chat via a chat folder invite link
+    [<DataMember(Name = "via_chat_folder_invite_link")>]
+    ViaChatFolderInviteLink: bool option
   }
-  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink) = 
+  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaChatFolderInviteLink: bool) = 
     {
       Chat = chat
       From = from
@@ -2096,6 +2139,7 @@ and [<CLIMutable>] ChatMemberUpdated =
       OldChatMember = oldChatMember
       NewChatMember = newChatMember
       InviteLink = inviteLink
+      ViaChatFolderInviteLink = viaChatFolderInviteLink
     }
 
 /// Represents a join request sent to a chat.
@@ -2360,6 +2404,42 @@ and [<CLIMutable>] BotCommandScopeChatMember =
       UserId = userId
     }
 
+/// This object represents the bot's name.
+and [<CLIMutable>] BotName =
+  {
+    /// The bot's name
+    [<DataMember(Name = "name")>]
+    Name: string
+  }
+  static member Create(name: string) = 
+    {
+      Name = name
+    }
+
+/// This object represents the bot's description.
+and [<CLIMutable>] BotDescription =
+  {
+    /// The bot's description
+    [<DataMember(Name = "description")>]
+    Description: string
+  }
+  static member Create(description: string) = 
+    {
+      Description = description
+    }
+
+/// This object represents the bot's short description.
+and [<CLIMutable>] BotShortDescription =
+  {
+    /// The bot's short description
+    [<DataMember(Name = "short_description")>]
+    ShortDescription: string
+  }
+  static member Create(shortDescription: string) = 
+    {
+      ShortDescription = shortDescription
+    }
+
 /// This object describes the bot's menu button in a private chat. It should be one of
 /// If a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.
 and MenuButton =
@@ -2477,8 +2557,8 @@ and [<CLIMutable>] InputMediaVideo =
     [<DataMember(Name = "media")>]
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
-    [<DataMember(Name = "thumb")>]
-    Thumb: InputFile option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: InputFile option
     /// Caption of the video to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -2504,11 +2584,11 @@ and [<CLIMutable>] InputMediaVideo =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -2529,8 +2609,8 @@ and [<CLIMutable>] InputMediaAnimation =
     [<DataMember(Name = "media")>]
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
-    [<DataMember(Name = "thumb")>]
-    Thumb: InputFile option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: InputFile option
     /// Caption of the animation to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -2553,11 +2633,11 @@ and [<CLIMutable>] InputMediaAnimation =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -2577,8 +2657,8 @@ and [<CLIMutable>] InputMediaAudio =
     [<DataMember(Name = "media")>]
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
-    [<DataMember(Name = "thumb")>]
-    Thumb: InputFile option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: InputFile option
     /// Caption of the audio to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -2598,11 +2678,11 @@ and [<CLIMutable>] InputMediaAudio =
     [<DataMember(Name = "title")>]
     Title: string option
   }
-  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string) = 
     {
       Type = ``type``
       Media = media
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -2621,8 +2701,8 @@ and [<CLIMutable>] InputMediaDocument =
     [<DataMember(Name = "media")>]
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
-    [<DataMember(Name = "thumb")>]
-    Thumb: InputFile option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: InputFile option
     /// Caption of the document to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -2636,11 +2716,11 @@ and [<CLIMutable>] InputMediaDocument =
     [<DataMember(Name = "disable_content_type_detection")>]
     DisableContentTypeDetection: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumb: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool) = 
     {
       Type = ``type``
       Media = media
-      Thumb = thumb
+      Thumbnail = thumbnail
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -2672,8 +2752,8 @@ and [<CLIMutable>] Sticker =
     [<DataMember(Name = "is_video")>]
     IsVideo: bool
     /// Sticker thumbnail in the .WEBP or .JPG format
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
     /// Emoji associated with the sticker
     [<DataMember(Name = "emoji")>]
     Emoji: string option
@@ -2689,11 +2769,14 @@ and [<CLIMutable>] Sticker =
     /// For custom emoji stickers, unique identifier of the custom emoji
     [<DataMember(Name = "custom_emoji_id")>]
     CustomEmojiId: string option
+    /// True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places
+    [<DataMember(Name = "needs_repainting")>]
+    NeedsRepainting: bool option
     /// File size in bytes
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, ``type``: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumb: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?customEmojiId: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, ``type``: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumbnail: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?customEmojiId: string, ?needsRepainting: bool, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -2702,12 +2785,13 @@ and [<CLIMutable>] Sticker =
       Height = height
       IsAnimated = isAnimated
       IsVideo = isVideo
-      Thumb = thumb
+      Thumbnail = thumbnail
       Emoji = emoji
       SetName = setName
       PremiumAnimation = premiumAnimation
       MaskPosition = maskPosition
       CustomEmojiId = customEmojiId
+      NeedsRepainting = needsRepainting
       FileSize = fileSize
     }
 
@@ -2733,10 +2817,10 @@ and [<CLIMutable>] StickerSet =
     [<DataMember(Name = "stickers")>]
     Stickers: Sticker[]
     /// Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format
-    [<DataMember(Name = "thumb")>]
-    Thumb: PhotoSize option
+    [<DataMember(Name = "thumbnail")>]
+    Thumbnail: PhotoSize option
   }
-  static member Create(name: string, title: string, stickerType: string, isAnimated: bool, isVideo: bool, stickers: Sticker[], ?thumb: PhotoSize) = 
+  static member Create(name: string, title: string, stickerType: string, isAnimated: bool, isVideo: bool, stickers: Sticker[], ?thumbnail: PhotoSize) = 
     {
       Name = name
       Title = title
@@ -2744,7 +2828,7 @@ and [<CLIMutable>] StickerSet =
       IsAnimated = isAnimated
       IsVideo = isVideo
       Stickers = stickers
-      Thumb = thumb
+      Thumbnail = thumbnail
     }
 
 /// This object describes the position on faces where a mask should be placed by default.
@@ -2769,6 +2853,30 @@ and [<CLIMutable>] MaskPosition =
       XShift = xShift
       YShift = yShift
       Scale = scale
+    }
+
+/// This object describes a sticker to be added to a sticker set.
+and [<CLIMutable>] InputSticker =
+  {
+    /// The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
+    [<DataMember(Name = "sticker")>]
+    Sticker: InputFile
+    /// List of 1-20 emoji associated with the sticker
+    [<DataMember(Name = "emoji_list")>]
+    EmojiList: string[]
+    /// Position where the mask should be placed on faces. For “mask” stickers only.
+    [<DataMember(Name = "mask_position")>]
+    MaskPosition: MaskPosition option
+    /// List of 0-20 search keywords for the sticker with total length of up to 64 characters. For “regular” and “custom_emoji” stickers only.
+    [<DataMember(Name = "keywords")>]
+    Keywords: string[] option
+  }
+  static member Create(sticker: InputFile, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) = 
+    {
+      Sticker = sticker
+      EmojiList = emojiList
+      MaskPosition = maskPosition
+      Keywords = keywords
     }
 
 /// This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
@@ -2801,6 +2909,28 @@ and [<CLIMutable>] InlineQuery =
       Offset = offset
       ChatType = chatType
       Location = location
+    }
+
+/// This object represents a button to be shown above inline query results. You must use exactly one of the optional fields.
+and [<CLIMutable>] InlineQueryResultsButton =
+  {
+    /// Label text on the button
+    [<DataMember(Name = "text")>]
+    Text: string
+    /// Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method web_app_switch_inline_query inside the Web App.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo option
+    /// Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
+    /// 
+    /// Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot's inline capabilities.
+    [<DataMember(Name = "start_parameter")>]
+    StartParameter: string option
+  }
+  static member Create(text: string, ?webApp: WebAppInfo, ?startParameter: string) = 
+    {
+      Text = text
+      WebApp = webApp
+      StartParameter = startParameter
     }
 
 /// This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:
@@ -2855,16 +2985,16 @@ and [<CLIMutable>] InlineQueryResultArticle =
     [<DataMember(Name = "description")>]
     Description: string option
     /// Url of the thumbnail for the result
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string option
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string option
     /// Thumbnail width
-    [<DataMember(Name = "thumb_width")>]
-    ThumbWidth: int64 option
+    [<DataMember(Name = "thumbnail_width")>]
+    ThumbnailWidth: int64 option
     /// Thumbnail height
-    [<DataMember(Name = "thumb_height")>]
-    ThumbHeight: int64 option
+    [<DataMember(Name = "thumbnail_height")>]
+    ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, title: string, inputMessageContent: InputMessageContent, ?replyMarkup: InlineKeyboardMarkup, ?url: string, ?hideUrl: bool, ?description: string, ?thumbUrl: string, ?thumbWidth: int64, ?thumbHeight: int64) = 
+  static member Create(``type``: string, id: string, title: string, inputMessageContent: InputMessageContent, ?replyMarkup: InlineKeyboardMarkup, ?url: string, ?hideUrl: bool, ?description: string, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
     {
       Type = ``type``
       Id = id
@@ -2874,9 +3004,9 @@ and [<CLIMutable>] InlineQueryResultArticle =
       Url = url
       HideUrl = hideUrl
       Description = description
-      ThumbUrl = thumbUrl
-      ThumbWidth = thumbWidth
-      ThumbHeight = thumbHeight
+      ThumbnailUrl = thumbnailUrl
+      ThumbnailWidth = thumbnailWidth
+      ThumbnailHeight = thumbnailHeight
     }
 
 /// Represents a link to a photo. By default, this photo will be sent by the user with optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the photo.
@@ -2892,8 +3022,8 @@ and [<CLIMutable>] InlineQueryResultPhoto =
     [<DataMember(Name = "photo_url")>]
     PhotoUrl: string
     /// URL of the thumbnail for the photo
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string
     /// Width of the photo
     [<DataMember(Name = "photo_width")>]
     PhotoWidth: int64 option
@@ -2922,12 +3052,12 @@ and [<CLIMutable>] InlineQueryResultPhoto =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, photoUrl: string, thumbUrl: string, ?photoWidth: int64, ?photoHeight: int64, ?title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, photoUrl: string, thumbnailUrl: string, ?photoWidth: int64, ?photoHeight: int64, ?title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
     {
       Type = ``type``
       Id = id
       PhotoUrl = photoUrl
-      ThumbUrl = thumbUrl
+      ThumbnailUrl = thumbnailUrl
       PhotoWidth = photoWidth
       PhotoHeight = photoHeight
       Title = title
@@ -2961,11 +3091,11 @@ and [<CLIMutable>] InlineQueryResultGif =
     [<DataMember(Name = "gif_duration")>]
     GifDuration: int64 option
     /// URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string
     /// MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
-    [<DataMember(Name = "thumb_mime_type")>]
-    ThumbMimeType: string option
+    [<DataMember(Name = "thumbnail_mime_type")>]
+    ThumbnailMimeType: string option
     /// Title for the result
     [<DataMember(Name = "title")>]
     Title: string option
@@ -2985,16 +3115,16 @@ and [<CLIMutable>] InlineQueryResultGif =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, gifUrl: string, thumbUrl: string, ?gifWidth: int64, ?gifHeight: int64, ?gifDuration: int64, ?thumbMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, gifUrl: string, thumbnailUrl: string, ?gifWidth: int64, ?gifHeight: int64, ?gifDuration: int64, ?thumbnailMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
     {
       Type = ``type``
       Id = id
       GifUrl = gifUrl
-      ThumbUrl = thumbUrl
+      ThumbnailUrl = thumbnailUrl
       GifWidth = gifWidth
       GifHeight = gifHeight
       GifDuration = gifDuration
-      ThumbMimeType = thumbMimeType
+      ThumbnailMimeType = thumbnailMimeType
       Title = title
       Caption = caption
       ParseMode = parseMode
@@ -3025,11 +3155,11 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     [<DataMember(Name = "mpeg4_duration")>]
     Mpeg4Duration: int64 option
     /// URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string
     /// MIME type of the thumbnail, must be one of “image/jpeg”, “image/gif”, or “video/mp4”. Defaults to “image/jpeg”
-    [<DataMember(Name = "thumb_mime_type")>]
-    ThumbMimeType: string option
+    [<DataMember(Name = "thumbnail_mime_type")>]
+    ThumbnailMimeType: string option
     /// Title for the result
     [<DataMember(Name = "title")>]
     Title: string option
@@ -3049,16 +3179,16 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, mpeg4Url: string, thumbUrl: string, ?mpeg4Width: int64, ?mpeg4Height: int64, ?mpeg4Duration: int64, ?thumbMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, mpeg4Url: string, thumbnailUrl: string, ?mpeg4Width: int64, ?mpeg4Height: int64, ?mpeg4Duration: int64, ?thumbnailMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
     {
       Type = ``type``
       Id = id
       Mpeg4Url = mpeg4Url
-      ThumbUrl = thumbUrl
+      ThumbnailUrl = thumbnailUrl
       Mpeg4Width = mpeg4Width
       Mpeg4Height = mpeg4Height
       Mpeg4Duration = mpeg4Duration
-      ThumbMimeType = thumbMimeType
+      ThumbnailMimeType = thumbnailMimeType
       Title = title
       Caption = caption
       ParseMode = parseMode
@@ -3083,8 +3213,8 @@ and [<CLIMutable>] InlineQueryResultVideo =
     [<DataMember(Name = "mime_type")>]
     MimeType: string
     /// URL of the thumbnail (JPEG only) for the video
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string
     /// Title for the result
     [<DataMember(Name = "title")>]
     Title: string
@@ -3116,13 +3246,13 @@ and [<CLIMutable>] InlineQueryResultVideo =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, videoUrl: string, mimeType: string, thumbUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?videoWidth: int64, ?videoHeight: int64, ?videoDuration: int64, ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, videoUrl: string, mimeType: string, thumbnailUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?videoWidth: int64, ?videoHeight: int64, ?videoDuration: int64, ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
     {
       Type = ``type``
       Id = id
       VideoUrl = videoUrl
       MimeType = mimeType
-      ThumbUrl = thumbUrl
+      ThumbnailUrl = thumbnailUrl
       Title = title
       Caption = caption
       ParseMode = parseMode
@@ -3275,16 +3405,16 @@ and [<CLIMutable>] InlineQueryResultDocument =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
     /// URL of the thumbnail (JPEG only) for the file
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string option
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string option
     /// Thumbnail width
-    [<DataMember(Name = "thumb_width")>]
-    ThumbWidth: int64 option
+    [<DataMember(Name = "thumbnail_width")>]
+    ThumbnailWidth: int64 option
     /// Thumbnail height
-    [<DataMember(Name = "thumb_height")>]
-    ThumbHeight: int64 option
+    [<DataMember(Name = "thumbnail_height")>]
+    ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, title: string, documentUrl: string, mimeType: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbUrl: string, ?thumbWidth: int64, ?thumbHeight: int64) = 
+  static member Create(``type``: string, id: string, title: string, documentUrl: string, mimeType: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
     {
       Type = ``type``
       Id = id
@@ -3297,9 +3427,9 @@ and [<CLIMutable>] InlineQueryResultDocument =
       Description = description
       ReplyMarkup = replyMarkup
       InputMessageContent = inputMessageContent
-      ThumbUrl = thumbUrl
-      ThumbWidth = thumbWidth
-      ThumbHeight = thumbHeight
+      ThumbnailUrl = thumbnailUrl
+      ThumbnailWidth = thumbnailWidth
+      ThumbnailHeight = thumbnailHeight
     }
 
 /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
@@ -3340,16 +3470,16 @@ and [<CLIMutable>] InlineQueryResultLocation =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
     /// Url of the thumbnail for the result
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string option
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string option
     /// Thumbnail width
-    [<DataMember(Name = "thumb_width")>]
-    ThumbWidth: int64 option
+    [<DataMember(Name = "thumbnail_width")>]
+    ThumbnailWidth: int64 option
     /// Thumbnail height
-    [<DataMember(Name = "thumb_height")>]
-    ThumbHeight: int64 option
+    [<DataMember(Name = "thumbnail_height")>]
+    ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbUrl: string, ?thumbWidth: int64, ?thumbHeight: int64) = 
+  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
     {
       Type = ``type``
       Id = id
@@ -3362,9 +3492,9 @@ and [<CLIMutable>] InlineQueryResultLocation =
       ProximityAlertRadius = proximityAlertRadius
       ReplyMarkup = replyMarkup
       InputMessageContent = inputMessageContent
-      ThumbUrl = thumbUrl
-      ThumbWidth = thumbWidth
-      ThumbHeight = thumbHeight
+      ThumbnailUrl = thumbnailUrl
+      ThumbnailWidth = thumbnailWidth
+      ThumbnailHeight = thumbnailHeight
     }
 
 /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
@@ -3408,16 +3538,16 @@ and [<CLIMutable>] InlineQueryResultVenue =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
     /// Url of the thumbnail for the result
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string option
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string option
     /// Thumbnail width
-    [<DataMember(Name = "thumb_width")>]
-    ThumbWidth: int64 option
+    [<DataMember(Name = "thumbnail_width")>]
+    ThumbnailWidth: int64 option
     /// Thumbnail height
-    [<DataMember(Name = "thumb_height")>]
-    ThumbHeight: int64 option
+    [<DataMember(Name = "thumbnail_height")>]
+    ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbUrl: string, ?thumbWidth: int64, ?thumbHeight: int64) = 
+  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
     {
       Type = ``type``
       Id = id
@@ -3431,9 +3561,9 @@ and [<CLIMutable>] InlineQueryResultVenue =
       GooglePlaceType = googlePlaceType
       ReplyMarkup = replyMarkup
       InputMessageContent = inputMessageContent
-      ThumbUrl = thumbUrl
-      ThumbWidth = thumbWidth
-      ThumbHeight = thumbHeight
+      ThumbnailUrl = thumbnailUrl
+      ThumbnailWidth = thumbnailWidth
+      ThumbnailHeight = thumbnailHeight
     }
 
 /// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
@@ -3465,16 +3595,16 @@ and [<CLIMutable>] InlineQueryResultContact =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
     /// Url of the thumbnail for the result
-    [<DataMember(Name = "thumb_url")>]
-    ThumbUrl: string option
+    [<DataMember(Name = "thumbnail_url")>]
+    ThumbnailUrl: string option
     /// Thumbnail width
-    [<DataMember(Name = "thumb_width")>]
-    ThumbWidth: int64 option
+    [<DataMember(Name = "thumbnail_width")>]
+    ThumbnailWidth: int64 option
     /// Thumbnail height
-    [<DataMember(Name = "thumb_height")>]
-    ThumbHeight: int64 option
+    [<DataMember(Name = "thumbnail_height")>]
+    ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, phoneNumber: string, firstName: string, ?lastName: string, ?vcard: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbUrl: string, ?thumbWidth: int64, ?thumbHeight: int64) = 
+  static member Create(``type``: string, id: string, phoneNumber: string, firstName: string, ?lastName: string, ?vcard: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
     {
       Type = ``type``
       Id = id
@@ -3484,9 +3614,9 @@ and [<CLIMutable>] InlineQueryResultContact =
       Vcard = vcard
       ReplyMarkup = replyMarkup
       InputMessageContent = inputMessageContent
-      ThumbUrl = thumbUrl
-      ThumbWidth = thumbWidth
-      ThumbHeight = thumbHeight
+      ThumbnailUrl = thumbnailUrl
+      ThumbnailWidth = thumbnailWidth
+      ThumbnailHeight = thumbnailHeight
     }
 
 /// Represents a Game.

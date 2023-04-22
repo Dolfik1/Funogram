@@ -1,3 +1,6 @@
+.DS_Store
+src/Funogram/out
+src/Funogram.Telegram/out
 obj
 bin
 .vscode
