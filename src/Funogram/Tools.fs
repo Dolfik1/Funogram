@@ -35,25 +35,25 @@ let internal resolver =
     resolvers
   )
 
-let private getUrl (config: BotConfig) methodName = 
+let private getUrl (config: BotConfig) methodName =
   let botToken = sprintf "%s%s" (config.ApiEndpointUrl |> string) config.Token
-  
+
   if config.IsTest then
     sprintf "%s/test/%s" botToken methodName
   else
     sprintf "%s/%s" botToken methodName
 
-let internal getUnix (date: DateTime) = 
+let internal getUnix (date: DateTime) =
   Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
 
 let internal parseJson<'a> (data: byte[]) =
   try
     match JsonSerializer.Deserialize<ApiResponse<'a>>(data, resolver) with
     | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
-    | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
+    | x when x.Description.IsSome && x.ErrorCode.IsSome ->
       Error { Description = x.Description.Value
               ErrorCode = x.ErrorCode.Value }
-    | _ -> 
+    | _ ->
       Error { Description = "Unknown error"
               ErrorCode = -1 }
   with ex ->
@@ -61,11 +61,11 @@ let internal parseJson<'a> (data: byte[]) =
     let message = sprintf "%s in %s" ex.Message json
     ArgumentException(message, ex) |> raise
 
-let internal parseJsonStream<'a> (data: Stream) =
+let parseJsonStream<'a> (data: Stream) =
   try
     JsonSerializer.Deserialize<'a>(data, resolver) |> Ok
   with ex ->
-    if data.CanSeek then 
+    if data.CanSeek then
       data.Seek(0L, SeekOrigin.Begin) |> ignore
       use sr = new StreamReader(data)
       let message = sprintf "%s in %s" ex.Message (sr.ReadToEnd())
@@ -77,13 +77,13 @@ let internal parseJsonStreamApiResponse<'a> (data: Stream) =
   match parseJsonStream<Types.ApiResponse<'a>> data with
   | Ok x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
 
-  | Ok x when x.Description.IsSome && x.ErrorCode.IsSome -> 
+  | Ok x when x.Description.IsSome && x.ErrorCode.IsSome ->
     Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
 
-  | Error e -> 
+  | Error e ->
     Error { Description = e.Message; ErrorCode = -1 }
 
-  | _ -> 
+  | _ ->
     Error { Description = "Unknown error"; ErrorCode = -1 }
 
 [<ReflectedDefinition>]
@@ -101,13 +101,13 @@ let private generateSerializer tp =
   let method = toJsonMethodInfo.MakeGenericMethod(tp)
   let call = Expression.Call(method, convert)
   Expression.Lambda<Func<IBotRequest, byte[]>>(call, [sourceParam]).Compile()
-  
+
 let toJsonBotRequest (request: IBotRequest) =
   let toJson =
     jsonSerializers.GetOrAdd(
       request.GetType(),
       Func<Type, Func<IBotRequest, byte[]>>(generateSerializer))
-  toJson.Invoke(request)  
+  toJson.Invoke(request)
 
 module Api =
   type File = string * Stream
@@ -115,10 +115,10 @@ module Api =
   let isFile (case: ShapeFSharpUnionCase<'T>) =
     case.Fields
     |> Array.map (fun x -> x.Member.Type) = [|typeof<string>;typeof<Stream>|]
-        
+
   let readFile =
     fun (x: 'T) (case: ShapeFSharpUnionCase<'T>) ->
-      let a = 
+      let a =
         case.Fields.[0].Accept {
           new IMemberVisitor<'T, 'T -> string> with
             member __.Visit (shape : ShapeMember<'T, 'a>) =
@@ -126,7 +126,7 @@ module Api =
               shape.Get >> cast
           }
 
-      let b = 
+      let b =
         case.Fields.[1].Accept {
            new IMemberVisitor<'T, 'T -> Stream> with
              member __.Visit (shape : ShapeMember<'T, 'b>) =
@@ -134,16 +134,16 @@ module Api =
                shape.Get >> cast
         }
       (a x, b x)
-  
+
   let fileFinders = ConcurrentDictionary<Type, obj>()
   let rec mkFilesFinder<'T> () : 'T -> File[] =
     let mkMemberFinder (shape : IShapeMember<'T>) =
        shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
          member __.Visit (shape : ShapeMember<'T, 'a>) =
           let fieldFinder = mkFilesFinder<'a>()
-          fieldFinder << shape.Get }    
+          fieldFinder << shape.Get }
     let wrap(p : 'a -> File[]) = unbox<'T -> File[]> p
-    
+
     match shapeof<'T> with
     | Shape.FSharpOption s ->
       s.Element.Accept {
@@ -169,7 +169,7 @@ module Api =
               let r = t |> box :?> seq<'a>
               r |> Seq.map tp |> Array.concat
       }
-        
+
     | Shape.Tuple (:? ShapeTuple<'T> as shape) ->
       let mkElemFinder (shape : IShapeMember<'T>) =
         shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
@@ -192,7 +192,7 @@ module Api =
             wrap(fun (s:Set<'a>) -> s |> Seq.map tp |> Array.concat)
       }
     | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
-      let fieldPrinters : ('T -> File[]) [] = 
+      let fieldPrinters : ('T -> File[]) [] =
         shape.Fields |> Array.map (fun f -> mkMemberFinder f)
 
       fun (r:'T) ->
@@ -204,15 +204,15 @@ module Api =
           if isFile case then
             readFile |> Some
           else None
-        
+
         let fieldPrinters = case.Fields |> Array.map mkMemberFinder
         fun (x: 'T) ->
           match readFile with
           | Some fn ->
             [|fn x case|]
           | None ->
-            fieldPrinters 
-            |> Seq.map (fun fp -> fp x) 
+            fieldPrinters
+            |> Seq.map (fun fp -> fp x)
             |> Array.concat
 
       let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
@@ -222,7 +222,7 @@ module Api =
     | _ -> fun _ -> [||]
 
   let multipartSerializers = ConcurrentDictionary<Type, IBotRequest -> MultipartFormDataContent -> bool>()
-  
+
   let mkBaseGeneratorMethod =
     System.Reflection.Assembly.GetExecutingAssembly()
       .GetType("Funogram.Tools")
@@ -235,9 +235,9 @@ module Api =
       .Compile().Invoke()
 
   let rec mkRequestGenerator<'T> () : 'T -> string -> MultipartFormDataContent -> bool =
-    
+
     let inline ($) _ x = x
-  
+
     let mkGenerateInMember (shape : IShapeMember<'DeclaringType>) =
      shape.Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> string -> MultipartFormDataContent -> bool> with
        member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
@@ -253,9 +253,9 @@ module Api =
         |> unbox<'v -> File[]>
       let files = finder a
       files |> Seq.iter (fun (name, stream) -> data.Add(new StreamContent(stream), name, name))
-    
+
     let strf a b = new StringContent(sprintf a b)
-    
+
     match shapeof<'T> with
     | Shape.Bool ->
       wrap(fun x prop data -> data.Add(strf "%b" x, prop) $ true)
@@ -286,7 +286,7 @@ module Api =
     | Shape.DateTime ->
       wrap(fun x prop data -> data.Add(strf "%i" (toUnix x), prop) $ true)
     | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
-      let fieldPrinters : (string * ('T -> string -> MultipartFormDataContent -> bool)) [] = 
+      let fieldPrinters : (string * ('T -> string -> MultipartFormDataContent -> bool)) [] =
         shape.Fields |> Array.map (fun f -> f.Label, mkGenerateInMember f)
 
       fun (x: 'T) prop data ->
@@ -348,7 +348,7 @@ module Api =
           if isFile case then
             readFile |> Some
           else None
-        
+
         if isEnum then
           let name = getSnakeCaseName case.CaseInfo.Name
           fun _ (prop: string) (data: MultipartFormDataContent) ->
@@ -362,7 +362,7 @@ module Api =
             | None ->
               let fieldPrinters = case.Fields |> Array.map mkGenerateInMember
               fieldPrinters
-              |> Array.map (fun fp -> fp x prop data) 
+              |> Array.map (fun fp -> fp x prop data)
               |> Array.contains true
 
       let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
@@ -371,16 +371,16 @@ module Api =
         casePrinters.[tag] u
     | _ ->
       fun _ _ _ -> false
-  
+
   let mkBaseGenerator<'a when 'a :> IBotRequest> () =
     let fn = mkRequestGenerator<'a> ()
     fun (request: IBotRequest) -> fn (request :?> 'a) ""
-  
+
   let makeRequestAsync config (request: IRequestBase<'a>) =
     async {
       let client = config.Client
       let url = getUrl config request.MethodName
-      
+
       let serialize =
         multipartSerializers.GetOrAdd(
           request.GetType(),
@@ -389,30 +389,30 @@ module Api =
 
       use content = new MultipartFormDataContent()
       let hasData = serialize request content
-      
+
       let! result =
         if hasData then client.PostAsync(url, content) |> Async.AwaitTask
         else client.GetAsync(url) |> Async.AwaitTask
-  
+
       if result.StatusCode = HttpStatusCode.OK then
         use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
         return parseJsonStreamApiResponse<'a> stream
       else
         return Error { Description = "HTTP_ERROR"; ErrorCode = int result.StatusCode }
     }
-    
+
 
   let makeJsonBodyRequestAsync config (request: IRequestBase<'a>) =
     async {
       let client = config.Client
       let url = getUrl config request.MethodName
-      
+
       use ms = new MemoryStream()
       JsonSerializer.Serialize(ms, request, resolver)
-      
+
       use content = new StreamContent(ms)
       let! result = client.PostAsync(url, content) |> Async.AwaitTask
-  
+
       use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
       return parseJsonStreamApiResponse<'a> stream
     }
