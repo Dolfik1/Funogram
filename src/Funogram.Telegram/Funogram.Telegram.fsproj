@@ -16,4 +16,7 @@
     <ItemGroup>
         <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
+    <ItemGroup>
+      <PackageReference Update="FSharp.Core" Version="7.0.400" />
+    </ItemGroup>
 </Project>
