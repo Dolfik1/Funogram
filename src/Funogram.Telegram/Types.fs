@@ -16,7 +16,7 @@ type InputFile =
 type ChatType =
   | Private
   | Group
-  | [<DataMember(Name = "super_group")>] SuperGroup
+  | [<DataMember(Name = "supergroup")>] SuperGroup
   | Channel
   | Sender
   | Unknown

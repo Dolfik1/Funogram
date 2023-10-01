@@ -180,7 +180,7 @@ let processUpdate config inputStream updateArrived updatesArrived =
   let me = asyncMe |> Async.RunSynchronously
 
 
-  let bot data = api config data
+  //let bot data = api config data
   let processUpdates updates =
     if updates |> Seq.isEmpty |> not then
       updates |> Seq.iter (fun f -> updateArrived { Update = f; Config = config; Me = me })
