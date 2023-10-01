@@ -10,7 +10,7 @@ open Utf8Json
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 do ()
 module internal Resolvers =
-  
+
   open TypeShape.Core
 
   let getSnakeCaseName (name: string) =
@@ -33,14 +33,24 @@ module internal Resolvers =
 
   let mkMemberSerializer (case: ShapeFSharpUnionCase<'DeclaringType>) =
     let isFile = case.Fields |> Array.map (fun x -> x.Member.Type) = [|typeof<string>; typeof<Stream>|]
+
+
     if case.Fields.Length = 0 then
-      fun _ _ -> Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
+      let dataMember =
+          case.CaseInfo.GetCustomAttributes(typeof<DataMemberAttribute>)
+          |> Seq.cast<DataMemberAttribute>
+          |> Seq.filter (fun x -> String.IsNullOrEmpty(x.Name) |> not)
+          |> Seq.toArray
+      if dataMember.Length > 0 then fun _ _ ->
+        Encoding.UTF8.GetBytes(dataMember.[0].Name |> sprintf "\"%s\"")
+      else fun _ _ ->
+        Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
     else
       case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> IJsonFormatterResolver -> byte[]> with
         member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
           fun value resolver ->
             let mutable myWriter = JsonWriter()
-            
+
             if isFile then
               let str = box (shape.Get value) |> unbox<string>
               myWriter.WriteString(sprintf "attach://%s" str)
@@ -49,7 +59,7 @@ module internal Resolvers =
                 .Serialize(&myWriter, shape.Get value, resolver)
             myWriter.ToUtf8ByteArray()
       }
-  
+
   let mkMemberDeserializer (case: ShapeFSharpUnionCase<'DeclaringType>) (init: unit -> 'DeclaringType) =
     if case.Fields.Length = 0 then
       fun value offset _ ->
@@ -70,15 +80,15 @@ module internal Resolvers =
     }
 
   type FunogramDiscriminatedUnionFormatter<'a>() =
-    
+
     let shape = Core.shapeof<'a>
     let union =
       match shape with
       | Shape.FSharpUnion (:? ShapeFSharpUnion<'a> as union) -> union
       | _ -> failwith "Unsupported type"
-    
+
     let enumUnion = union.UnionCases |> Seq.forall (fun x -> x.Fields.Length = 0)
-    
+
     let cases =
       union.UnionCases
       |> Seq.map (fun c ->
@@ -88,7 +98,7 @@ module internal Resolvers =
             |> Seq.cast<DataMemberAttribute>
             |> Seq.filter (fun x -> String.IsNullOrEmpty(x.Name) |> not)
             |> Seq.toArray
-          
+
           let name =
             if dataMember.Length > 0
             then dataMember.[0].Name
@@ -102,40 +112,40 @@ module internal Resolvers =
                 |> Set.ofSeq,
                 None))
       |> Seq.toArray
-    
+
     let serializers =
       union.UnionCases
       |> Seq.map (fun case -> mkMemberSerializer case)
       |> Seq.toArray
-      
+
     let deserializers =
       union.UnionCases
       |> Seq.map (fun case -> mkMemberDeserializer case case.CreateUninitialized)
       |> Seq.toArray
-    
+
     // this serializer/deserializer is used to match union case by set of fields
     interface IJsonFormatter<'a> with
       member x.Serialize(writer, value, resolver) =
         let serialize = serializers.[union.GetTag value] // all union cases
         writer.WriteRaw(serialize value resolver)
-      
+
       member x.Deserialize(reader, resolver) =
         // read list of properties
         let mutable loop = true
-        
+
         let buffer = reader.GetBufferUnsafe()
         let offset = reader.GetCurrentOffsetUnsafe()
-        
+
         let propReader = JsonReader(buffer, offset)
         let mutable readProperty = false
         let mutable level = 0
         let mutable types: Type list = []
-        
+
         let (jsonCaseNames, jsonCaseTypes) =
           (seq {
             while loop do
               let token = propReader.GetCurrentJsonToken()
-              
+
               if level = 0 && token <> JsonToken.BeginObject && enumUnion |> not then
                 types <-
                   match token with
@@ -159,7 +169,7 @@ module internal Resolvers =
                   readProperty <- true
                 | JsonToken.None -> loop <- false
                 | _ -> ()
-                
+
                 if readProperty && level = 1 then
                   propReader.ReadNext()
                   yield propReader.ReadPropertyName()
@@ -170,7 +180,7 @@ module internal Resolvers =
                   readProperty <- false
                   propReader.ReadNext()
           } |> Seq.toList, types)
-        
+
         let idx =
           cases
           |> Array.tryFindIndex (fun (caseNames, tp) ->
@@ -187,13 +197,13 @@ module internal Resolvers =
 
   let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
   let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
-  
+
   type FunogramUnixTimestampDateTimeFormatter() =
     let unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
     interface IJsonFormatter<DateTime> with
       member x.Serialize(writer, value, _) =
         writer.WriteInt64(toUnix value)
-              
+
       member x.Deserialize(reader, _) =
         let v = reader.ReadInt64() |> float
         unixEpoch.AddSeconds(v)
@@ -203,8 +213,8 @@ module internal Resolvers =
       member x.GetFormatter<'a>(): IJsonFormatter<'a> =
         match shapeof<'a> with
         | Shape.FSharpOption _ -> null
-        | Shape.FSharpUnion _ ->    
+        | Shape.FSharpUnion _ ->
           FunogramDiscriminatedUnionFormatter<'a>() :> IJsonFormatter<'a>
         | _ -> null
-    
+
     static member Instance = FunogramResolver()
