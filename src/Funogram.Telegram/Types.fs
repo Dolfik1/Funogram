@@ -4,25 +4,25 @@ open System
 open System.IO
 open System.Runtime.Serialization
 
-type ChatId = 
+type ChatId =
   | Int of int64
   | String of string
-    
-type InputFile = 
-  | Url of Uri 
+
+type InputFile =
+  | Url of Uri
   | File of string * Stream
   | FileId of string
 
 type ChatType =
   | Private
   | Group
-  | [<DataMember(Name = "supergroup")>] SuperGroup
+  | [<DataMember(Name = "super_group")>] SuperGroup
   | Channel
   | Sender
   | Unknown
 
 /// Message text parsing mode
-type ParseMode = 
+type ParseMode =
   /// Markdown parse syntax
   | Markdown
   /// Html parse syntax
@@ -57,14 +57,14 @@ type MaskPoint =
   | Mouth
   | Chin
 
-type Markup = 
-  | InlineKeyboardMarkup of InlineKeyboardMarkup 
+type Markup =
+  | InlineKeyboardMarkup of InlineKeyboardMarkup
   | ReplyKeyboardMarkup of ReplyKeyboardMarkup
   | ReplyKeyboardRemove of ReplyKeyboardRemove
   | ForceReply of ForceReply
 
 /// If edited message is sent by the bot, used Message, otherwise Success.
-and EditMessageResult = 
+and EditMessageResult =
   /// Message sent by the bot
   | Message of Message
   /// Message sent via the bot or another...
@@ -120,7 +120,7 @@ and [<CLIMutable>] Update =
     [<DataMember(Name = "chat_join_request")>]
     ChatJoinRequest: ChatJoinRequest option
   }
-  static member Create(updateId: int64, ?message: Message, ?editedMessage: Message, ?channelPost: Message, ?editedChannelPost: Message, ?inlineQuery: InlineQuery, ?chosenInlineResult: ChosenInlineResult, ?callbackQuery: CallbackQuery, ?shippingQuery: ShippingQuery, ?preCheckoutQuery: PreCheckoutQuery, ?poll: Poll, ?pollAnswer: PollAnswer, ?myChatMember: ChatMemberUpdated, ?chatMember: ChatMemberUpdated, ?chatJoinRequest: ChatJoinRequest) = 
+  static member Create(updateId: int64, ?message: Message, ?editedMessage: Message, ?channelPost: Message, ?editedChannelPost: Message, ?inlineQuery: InlineQuery, ?chosenInlineResult: ChosenInlineResult, ?callbackQuery: CallbackQuery, ?shippingQuery: ShippingQuery, ?preCheckoutQuery: PreCheckoutQuery, ?poll: Poll, ?pollAnswer: PollAnswer, ?myChatMember: ChatMemberUpdated, ?chatMember: ChatMemberUpdated, ?chatJoinRequest: ChatJoinRequest) =
     {
       UpdateId = updateId
       Message = message
@@ -172,7 +172,7 @@ and [<CLIMutable>] WebhookInfo =
     [<DataMember(Name = "allowed_updates")>]
     AllowedUpdates: string[] option
   }
-  static member Create(url: string, hasCustomCertificate: bool, pendingUpdateCount: int64, ?ipAddress: string, ?lastErrorDate: int64, ?lastErrorMessage: string, ?lastSynchronizationErrorDate: int64, ?maxConnections: int64, ?allowedUpdates: string[]) = 
+  static member Create(url: string, hasCustomCertificate: bool, pendingUpdateCount: int64, ?ipAddress: string, ?lastErrorDate: int64, ?lastErrorMessage: string, ?lastSynchronizationErrorDate: int64, ?maxConnections: int64, ?allowedUpdates: string[]) =
     {
       Url = url
       HasCustomCertificate = hasCustomCertificate
@@ -222,7 +222,7 @@ and [<CLIMutable>] User =
     [<DataMember(Name = "supports_inline_queries")>]
     SupportsInlineQueries: bool option
   }
-  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool) = 
+  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool) =
     {
       Id = id
       IsBot = isBot
@@ -325,7 +325,7 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?hasHiddenMembers: bool, ?hasAggressiveAntiSpamEnabled: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?hasHiddenMembers: bool, ?hasAggressiveAntiSpamEnabled: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) =
     {
       Id = id
       Type = ``type``
@@ -574,7 +574,7 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?pinnedMessage: Message, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?deleteChatPhoto: bool, ?invoice: Invoice, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?groupChatCreated: bool, ?successfulPayment: SuccessfulPayment, ?chatShared: ChatShared, ?venue: Venue, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?userShared: UserShared, ?forumTopicReopened: ForumTopicReopened, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?forumTopicClosed: ForumTopicClosed, ?poll: Poll, ?game: Game, ?dice: Dice, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?hasProtectedContent: bool, ?mediaGroupId: string, ?authorSignature: string, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?webAppData: WebAppData, ?video: Video, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?pinnedMessage: Message, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?deleteChatPhoto: bool, ?invoice: Invoice, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?groupChatCreated: bool, ?successfulPayment: SuccessfulPayment, ?chatShared: ChatShared, ?venue: Venue, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?userShared: UserShared, ?forumTopicReopened: ForumTopicReopened, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?forumTopicClosed: ForumTopicClosed, ?poll: Poll, ?game: Game, ?dice: Dice, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?hasProtectedContent: bool, ?mediaGroupId: string, ?authorSignature: string, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?webAppData: WebAppData, ?video: Video, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) =
     {
       MessageId = messageId
       Date = date
@@ -656,7 +656,7 @@ and [<CLIMutable>] MessageId =
     [<DataMember(Name = "message_id")>]
     MessageId: int64
   }
-  static member Create(messageId: int64) = 
+  static member Create(messageId: int64) =
     {
       MessageId = messageId
     }
@@ -686,7 +686,7 @@ and [<CLIMutable>] MessageEntity =
     [<DataMember(Name = "custom_emoji_id")>]
     CustomEmojiId: string option
   }
-  static member Create(``type``: string, offset: int64, length: int64, ?url: string, ?user: User, ?language: string, ?customEmojiId: string) = 
+  static member Create(``type``: string, offset: int64, length: int64, ?url: string, ?user: User, ?language: string, ?customEmojiId: string) =
     {
       Type = ``type``
       Offset = offset
@@ -716,7 +716,7 @@ and [<CLIMutable>] PhotoSize =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -756,7 +756,7 @@ and [<CLIMutable>] Animation =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -800,7 +800,7 @@ and [<CLIMutable>] Audio =
     [<DataMember(Name = "thumbnail")>]
     Thumbnail: PhotoSize option
   }
-  static member Create(fileId: string, fileUniqueId: string, duration: int64, ?performer: string, ?title: string, ?fileName: string, ?mimeType: string, ?fileSize: int64, ?thumbnail: PhotoSize) = 
+  static member Create(fileId: string, fileUniqueId: string, duration: int64, ?performer: string, ?title: string, ?fileName: string, ?mimeType: string, ?fileSize: int64, ?thumbnail: PhotoSize) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -835,7 +835,7 @@ and [<CLIMutable>] Document =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -876,7 +876,7 @@ and [<CLIMutable>] Video =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -911,7 +911,7 @@ and [<CLIMutable>] VideoNote =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, length: int64, duration: int64, ?thumbnail: PhotoSize, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, length: int64, duration: int64, ?thumbnail: PhotoSize, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -940,7 +940,7 @@ and [<CLIMutable>] Voice =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, duration: int64, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, duration: int64, ?mimeType: string, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -968,7 +968,7 @@ and [<CLIMutable>] Contact =
     [<DataMember(Name = "vcard")>]
     Vcard: string option
   }
-  static member Create(phoneNumber: string, firstName: string, ?lastName: string, ?userId: int64, ?vcard: string) = 
+  static member Create(phoneNumber: string, firstName: string, ?lastName: string, ?userId: int64, ?vcard: string) =
     {
       PhoneNumber = phoneNumber
       FirstName = firstName
@@ -987,7 +987,7 @@ and [<CLIMutable>] Dice =
     [<DataMember(Name = "value")>]
     Value: int64
   }
-  static member Create(emoji: string, value: int64) = 
+  static member Create(emoji: string, value: int64) =
     {
       Emoji = emoji
       Value = value
@@ -1003,7 +1003,7 @@ and [<CLIMutable>] PollOption =
     [<DataMember(Name = "voter_count")>]
     VoterCount: int64
   }
-  static member Create(text: string, voterCount: int64) = 
+  static member Create(text: string, voterCount: int64) =
     {
       Text = text
       VoterCount = voterCount
@@ -1022,7 +1022,7 @@ and [<CLIMutable>] PollAnswer =
     [<DataMember(Name = "option_ids")>]
     OptionIds: int64[]
   }
-  static member Create(pollId: string, user: User, optionIds: int64[]) = 
+  static member Create(pollId: string, user: User, optionIds: int64[]) =
     {
       PollId = pollId
       User = user
@@ -1072,7 +1072,7 @@ and [<CLIMutable>] Poll =
     [<DataMember(Name = "close_date")>]
     CloseDate: int64 option
   }
-  static member Create(id: string, question: string, options: PollOption[], totalVoterCount: int64, isClosed: bool, isAnonymous: bool, ``type``: string, allowsMultipleAnswers: bool, ?correctOptionId: int64, ?explanation: string, ?explanationEntities: MessageEntity[], ?openPeriod: int64, ?closeDate: int64) = 
+  static member Create(id: string, question: string, options: PollOption[], totalVoterCount: int64, isClosed: bool, isAnonymous: bool, ``type``: string, allowsMultipleAnswers: bool, ?correctOptionId: int64, ?explanation: string, ?explanationEntities: MessageEntity[], ?openPeriod: int64, ?closeDate: int64) =
     {
       Id = id
       Question = question
@@ -1111,7 +1111,7 @@ and [<CLIMutable>] Location =
     [<DataMember(Name = "proximity_alert_radius")>]
     ProximityAlertRadius: int64 option
   }
-  static member Create(longitude: float, latitude: float, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64) = 
+  static member Create(longitude: float, latitude: float, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64) =
     {
       Longitude = longitude
       Latitude = latitude
@@ -1146,7 +1146,7 @@ and [<CLIMutable>] Venue =
     [<DataMember(Name = "google_place_type")>]
     GooglePlaceType: string option
   }
-  static member Create(location: Location, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string) = 
+  static member Create(location: Location, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string) =
     {
       Location = location
       Title = title
@@ -1167,7 +1167,7 @@ and [<CLIMutable>] WebAppData =
     [<DataMember(Name = "button_text")>]
     ButtonText: string
   }
-  static member Create(data: string, buttonText: string) = 
+  static member Create(data: string, buttonText: string) =
     {
       Data = data
       ButtonText = buttonText
@@ -1186,7 +1186,7 @@ and [<CLIMutable>] ProximityAlertTriggered =
     [<DataMember(Name = "distance")>]
     Distance: int64
   }
-  static member Create(traveler: User, watcher: User, distance: int64) = 
+  static member Create(traveler: User, watcher: User, distance: int64) =
     {
       Traveler = traveler
       Watcher = watcher
@@ -1200,7 +1200,7 @@ and [<CLIMutable>] MessageAutoDeleteTimerChanged =
     [<DataMember(Name = "message_auto_delete_time")>]
     MessageAutoDeleteTime: int64
   }
-  static member Create(messageAutoDeleteTime: int64) = 
+  static member Create(messageAutoDeleteTime: int64) =
     {
       MessageAutoDeleteTime = messageAutoDeleteTime
     }
@@ -1218,7 +1218,7 @@ and [<CLIMutable>] ForumTopicCreated =
     [<DataMember(Name = "icon_custom_emoji_id")>]
     IconCustomEmojiId: string option
   }
-  static member Create(name: string, iconColor: int64, ?iconCustomEmojiId: string) = 
+  static member Create(name: string, iconColor: int64, ?iconCustomEmojiId: string) =
     {
       Name = name
       IconColor = iconColor
@@ -1239,7 +1239,7 @@ and [<CLIMutable>] ForumTopicEdited =
     [<DataMember(Name = "icon_custom_emoji_id")>]
     IconCustomEmojiId: string option
   }
-  static member Create(?name: string, ?iconCustomEmojiId: string) = 
+  static member Create(?name: string, ?iconCustomEmojiId: string) =
     {
       Name = name
       IconCustomEmojiId = iconCustomEmojiId
@@ -1267,7 +1267,7 @@ and [<CLIMutable>] UserShared =
     [<DataMember(Name = "user_id")>]
     UserId: int64
   }
-  static member Create(requestId: int64, userId: int64) = 
+  static member Create(requestId: int64, userId: int64) =
     {
       RequestId = requestId
       UserId = userId
@@ -1283,7 +1283,7 @@ and [<CLIMutable>] ChatShared =
     [<DataMember(Name = "chat_id")>]
     ChatId: int64
   }
-  static member Create(requestId: int64, chatId: int64) = 
+  static member Create(requestId: int64, chatId: int64) =
     {
       RequestId = requestId
       ChatId = chatId
@@ -1296,7 +1296,7 @@ and [<CLIMutable>] WriteAccessAllowed =
     [<DataMember(Name = "web_app_name")>]
     WebAppName: string option
   }
-  static member Create(?webAppName: string) = 
+  static member Create(?webAppName: string) =
     {
       WebAppName = webAppName
     }
@@ -1308,7 +1308,7 @@ and [<CLIMutable>] VideoChatScheduled =
     [<DataMember(Name = "start_date")>]
     StartDate: int64
   }
-  static member Create(startDate: int64) = 
+  static member Create(startDate: int64) =
     {
       StartDate = startDate
     }
@@ -1324,7 +1324,7 @@ and [<CLIMutable>] VideoChatEnded =
     [<DataMember(Name = "duration")>]
     Duration: int64
   }
-  static member Create(duration: int64) = 
+  static member Create(duration: int64) =
     {
       Duration = duration
     }
@@ -1336,7 +1336,7 @@ and [<CLIMutable>] VideoChatParticipantsInvited =
     [<DataMember(Name = "users")>]
     Users: User[]
   }
-  static member Create(users: User[]) = 
+  static member Create(users: User[]) =
     {
       Users = users
     }
@@ -1351,7 +1351,7 @@ and [<CLIMutable>] UserProfilePhotos =
     [<DataMember(Name = "photos")>]
     Photos: PhotoSize[][]
   }
-  static member Create(totalCount: int64, photos: PhotoSize[][]) = 
+  static member Create(totalCount: int64, photos: PhotoSize[][]) =
     {
       TotalCount = totalCount
       Photos = photos
@@ -1373,7 +1373,7 @@ and [<CLIMutable>] File =
     [<DataMember(Name = "file_path")>]
     FilePath: string option
   }
-  static member Create(fileId: string, fileUniqueId: string, ?fileSize: int64, ?filePath: string) = 
+  static member Create(fileId: string, fileUniqueId: string, ?fileSize: int64, ?filePath: string) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -1388,7 +1388,7 @@ and [<CLIMutable>] WebAppInfo =
     [<DataMember(Name = "url")>]
     Url: string
   }
-  static member Create(url: string) = 
+  static member Create(url: string) =
     {
       Url = url
     }
@@ -1412,12 +1412,12 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     [<DataMember(Name = "input_field_placeholder")>]
     InputFieldPlaceholder: string option
     /// Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
-    /// 
+    ///
     /// Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
     [<DataMember(Name = "selective")>]
     Selective: bool option
   }
-  static member Create(keyboard: KeyboardButton[][], ?isPersistent: bool, ?resizeKeyboard: bool, ?oneTimeKeyboard: bool, ?inputFieldPlaceholder: string, ?selective: bool) = 
+  static member Create(keyboard: KeyboardButton[][], ?isPersistent: bool, ?resizeKeyboard: bool, ?oneTimeKeyboard: bool, ?inputFieldPlaceholder: string, ?selective: bool) =
     {
       Keyboard = keyboard
       IsPersistent = isPersistent
@@ -1456,7 +1456,7 @@ and [<CLIMutable>] KeyboardButton =
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
   }
-  static member Create(text: string, ?requestUser: KeyboardButtonRequestUser, ?requestChat: KeyboardButtonRequestChat, ?requestContact: bool, ?requestLocation: bool, ?requestPoll: KeyboardButtonPollType, ?webApp: WebAppInfo) = 
+  static member Create(text: string, ?requestUser: KeyboardButtonRequestUser, ?requestChat: KeyboardButtonRequestChat, ?requestContact: bool, ?requestLocation: bool, ?requestPoll: KeyboardButtonPollType, ?webApp: WebAppInfo) =
     {
       Text = text
       RequestUser = requestUser
@@ -1480,7 +1480,7 @@ and [<CLIMutable>] KeyboardButtonRequestUser =
     [<DataMember(Name = "user_is_premium")>]
     UserIsPremium: bool option
   }
-  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool) = 
+  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool) =
     {
       RequestId = requestId
       UserIsBot = userIsBot
@@ -1515,7 +1515,7 @@ and [<CLIMutable>] KeyboardButtonRequestChat =
     [<DataMember(Name = "bot_is_member")>]
     BotIsMember: bool option
   }
-  static member Create(requestId: int64, chatIsChannel: bool, ?chatIsForum: bool, ?chatHasUsername: bool, ?chatIsCreated: bool, ?userAdministratorRights: ChatAdministratorRights, ?botAdministratorRights: ChatAdministratorRights, ?botIsMember: bool) = 
+  static member Create(requestId: int64, chatIsChannel: bool, ?chatIsForum: bool, ?chatHasUsername: bool, ?chatIsCreated: bool, ?userAdministratorRights: ChatAdministratorRights, ?botAdministratorRights: ChatAdministratorRights, ?botIsMember: bool) =
     {
       RequestId = requestId
       ChatIsChannel = chatIsChannel
@@ -1534,7 +1534,7 @@ and [<CLIMutable>] KeyboardButtonPollType =
     [<DataMember(Name = "type")>]
     Type: string option
   }
-  static member Create(?``type``: string) = 
+  static member Create(?``type``: string) =
     {
       Type = ``type``
     }
@@ -1546,12 +1546,12 @@ and [<CLIMutable>] ReplyKeyboardRemove =
     [<DataMember(Name = "remove_keyboard")>]
     RemoveKeyboard: bool
     /// Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
-    /// 
+    ///
     /// Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
     [<DataMember(Name = "selective")>]
     Selective: bool option
   }
-  static member Create(removeKeyboard: bool, ?selective: bool) = 
+  static member Create(removeKeyboard: bool, ?selective: bool) =
     {
       RemoveKeyboard = removeKeyboard
       Selective = selective
@@ -1565,7 +1565,7 @@ and [<CLIMutable>] InlineKeyboardMarkup =
     [<DataMember(Name = "inline_keyboard")>]
     InlineKeyboard: InlineKeyboardButton[][]
   }
-  static member Create(inlineKeyboard: InlineKeyboardButton[][]) = 
+  static member Create(inlineKeyboard: InlineKeyboardButton[][]) =
     {
       InlineKeyboard = inlineKeyboard
     }
@@ -1589,12 +1589,12 @@ and [<CLIMutable>] InlineKeyboardButton =
     [<DataMember(Name = "login_url")>]
     LoginUrl: LoginUrl option
     /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.
-    /// 
+    ///
     /// Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
     [<DataMember(Name = "switch_inline_query")>]
     SwitchInlineQuery: string option
     /// If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
-    /// 
+    ///
     /// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.
     [<DataMember(Name = "switch_inline_query_current_chat")>]
     SwitchInlineQueryCurrentChat: string option
@@ -1602,17 +1602,17 @@ and [<CLIMutable>] InlineKeyboardButton =
     [<DataMember(Name = "switch_inline_query_chosen_chat")>]
     SwitchInlineQueryChosenChat: SwitchInlineQueryChosenChat option
     /// Description of the game that will be launched when the user presses the button.
-    /// 
+    ///
     /// NOTE: This type of button must always be the first button in the first row.
     [<DataMember(Name = "callback_game")>]
     CallbackGame: CallbackGame option
     /// Specify True, to send a Pay button.
-    /// 
+    ///
     /// NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
     [<DataMember(Name = "pay")>]
     Pay: bool option
   }
-  static member Create(text: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?callbackGame: CallbackGame, ?pay: bool) = 
+  static member Create(text: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?callbackGame: CallbackGame, ?pay: bool) =
     {
       Text = text
       Url = url
@@ -1631,7 +1631,7 @@ and [<CLIMutable>] InlineKeyboardButton =
 and [<CLIMutable>] LoginUrl =
   {
     /// An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.
-    /// 
+    ///
     /// NOTE: You must always check the hash of the received data to verify the authentication and the integrity of the data as described in Checking authorization.
     [<DataMember(Name = "url")>]
     Url: string
@@ -1645,7 +1645,7 @@ and [<CLIMutable>] LoginUrl =
     [<DataMember(Name = "request_write_access")>]
     RequestWriteAccess: bool option
   }
-  static member Create(url: string, ?forwardText: string, ?botUsername: string, ?requestWriteAccess: bool) = 
+  static member Create(url: string, ?forwardText: string, ?botUsername: string, ?requestWriteAccess: bool) =
     {
       Url = url
       ForwardText = forwardText
@@ -1672,7 +1672,7 @@ and [<CLIMutable>] SwitchInlineQueryChosenChat =
     [<DataMember(Name = "allow_channel_chats")>]
     AllowChannelChats: bool option
   }
-  static member Create(?query: string, ?allowUserChats: bool, ?allowBotChats: bool, ?allowGroupChats: bool, ?allowChannelChats: bool) = 
+  static member Create(?query: string, ?allowUserChats: bool, ?allowBotChats: bool, ?allowGroupChats: bool, ?allowChannelChats: bool) =
     {
       Query = query
       AllowUserChats = allowUserChats
@@ -1706,7 +1706,7 @@ and [<CLIMutable>] CallbackQuery =
     [<DataMember(Name = "game_short_name")>]
     GameShortName: string option
   }
-  static member Create(id: string, from: User, chatInstance: string, ?message: Message, ?inlineMessageId: string, ?data: string, ?gameShortName: string) = 
+  static member Create(id: string, from: User, chatInstance: string, ?message: Message, ?inlineMessageId: string, ?data: string, ?gameShortName: string) =
     {
       Id = id
       From = from
@@ -1730,7 +1730,7 @@ and [<CLIMutable>] ForceReply =
     [<DataMember(Name = "selective")>]
     Selective: bool option
   }
-  static member Create(forceReply: bool, ?inputFieldPlaceholder: string, ?selective: bool) = 
+  static member Create(forceReply: bool, ?inputFieldPlaceholder: string, ?selective: bool) =
     {
       ForceReply = forceReply
       InputFieldPlaceholder = inputFieldPlaceholder
@@ -1753,7 +1753,7 @@ and [<CLIMutable>] ChatPhoto =
     [<DataMember(Name = "big_file_unique_id")>]
     BigFileUniqueId: string
   }
-  static member Create(smallFileId: string, smallFileUniqueId: string, bigFileId: string, bigFileUniqueId: string) = 
+  static member Create(smallFileId: string, smallFileUniqueId: string, bigFileId: string, bigFileUniqueId: string) =
     {
       SmallFileId = smallFileId
       SmallFileUniqueId = smallFileUniqueId
@@ -1792,7 +1792,7 @@ and [<CLIMutable>] ChatInviteLink =
     [<DataMember(Name = "pending_join_request_count")>]
     PendingJoinRequestCount: int64 option
   }
-  static member Create(inviteLink: string, creator: User, createsJoinRequest: bool, isPrimary: bool, isRevoked: bool, ?name: string, ?expireDate: int64, ?memberLimit: int64, ?pendingJoinRequestCount: int64) = 
+  static member Create(inviteLink: string, creator: User, createsJoinRequest: bool, isPrimary: bool, isRevoked: bool, ?name: string, ?expireDate: int64, ?memberLimit: int64, ?pendingJoinRequestCount: int64) =
     {
       InviteLink = inviteLink
       Creator = creator
@@ -1848,7 +1848,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) =
     {
       IsAnonymous = isAnonymous
       CanManageChat = canManageChat
@@ -1890,7 +1890,7 @@ and [<CLIMutable>] ChatMemberOwner =
     [<DataMember(Name = "custom_title")>]
     CustomTitle: string option
   }
-  static member Create(status: string, user: User, isAnonymous: bool, ?customTitle: string) = 
+  static member Create(status: string, user: User, isAnonymous: bool, ?customTitle: string) =
     {
       Status = status
       User = user
@@ -1953,7 +1953,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(status: string, canInviteUsers: bool, canChangeInfo: bool, canRestrictMembers: bool, canManageVideoChats: bool, canPromoteMembers: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canDeleteMessages: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(status: string, canInviteUsers: bool, canChangeInfo: bool, canRestrictMembers: bool, canManageVideoChats: bool, canPromoteMembers: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canDeleteMessages: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) =
     {
       Status = status
       CanInviteUsers = canInviteUsers
@@ -1984,7 +1984,7 @@ and [<CLIMutable>] ChatMemberMember =
     [<DataMember(Name = "user")>]
     User: User
   }
-  static member Create(status: string, user: User) = 
+  static member Create(status: string, user: User) =
     {
       Status = status
       User = user
@@ -2048,7 +2048,7 @@ and [<CLIMutable>] ChatMemberRestricted =
     [<DataMember(Name = "until_date")>]
     UntilDate: DateTime
   }
-  static member Create(status: string, canPinMessages: bool, canInviteUsers: bool, canChangeInfo: bool, canAddWebPagePreviews: bool, canSendOtherMessages: bool, canSendPolls: bool, canSendVoiceNotes: bool, canSendVideoNotes: bool, canSendVideos: bool, canSendPhotos: bool, canSendDocuments: bool, canSendAudios: bool, canSendMessages: bool, isMember: bool, user: User, canManageTopics: bool, untilDate: DateTime) = 
+  static member Create(status: string, canPinMessages: bool, canInviteUsers: bool, canChangeInfo: bool, canAddWebPagePreviews: bool, canSendOtherMessages: bool, canSendPolls: bool, canSendVoiceNotes: bool, canSendVideoNotes: bool, canSendVideos: bool, canSendPhotos: bool, canSendDocuments: bool, canSendAudios: bool, canSendMessages: bool, isMember: bool, user: User, canManageTopics: bool, untilDate: DateTime) =
     {
       Status = status
       CanPinMessages = canPinMessages
@@ -2080,7 +2080,7 @@ and [<CLIMutable>] ChatMemberLeft =
     [<DataMember(Name = "user")>]
     User: User
   }
-  static member Create(status: string, user: User) = 
+  static member Create(status: string, user: User) =
     {
       Status = status
       User = user
@@ -2099,7 +2099,7 @@ and [<CLIMutable>] ChatMemberBanned =
     [<DataMember(Name = "until_date")>]
     UntilDate: DateTime
   }
-  static member Create(status: string, user: User, untilDate: DateTime) = 
+  static member Create(status: string, user: User, untilDate: DateTime) =
     {
       Status = status
       User = user
@@ -2131,7 +2131,7 @@ and [<CLIMutable>] ChatMemberUpdated =
     [<DataMember(Name = "via_chat_folder_invite_link")>]
     ViaChatFolderInviteLink: bool option
   }
-  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaChatFolderInviteLink: bool) = 
+  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaChatFolderInviteLink: bool) =
     {
       Chat = chat
       From = from
@@ -2164,7 +2164,7 @@ and [<CLIMutable>] ChatJoinRequest =
     [<DataMember(Name = "invite_link")>]
     InviteLink: ChatInviteLink option
   }
-  static member Create(chat: Chat, from: User, userChatId: int64, date: DateTime, ?bio: string, ?inviteLink: ChatInviteLink) = 
+  static member Create(chat: Chat, from: User, userChatId: int64, date: DateTime, ?bio: string, ?inviteLink: ChatInviteLink) =
     {
       Chat = chat
       From = from
@@ -2220,7 +2220,7 @@ and [<CLIMutable>] ChatPermissions =
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
   }
-  static member Create(?canSendMessages: bool, ?canSendAudios: bool, ?canSendDocuments: bool, ?canSendPhotos: bool, ?canSendVideos: bool, ?canSendVideoNotes: bool, ?canSendVoiceNotes: bool, ?canSendPolls: bool, ?canSendOtherMessages: bool, ?canAddWebPagePreviews: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
+  static member Create(?canSendMessages: bool, ?canSendAudios: bool, ?canSendDocuments: bool, ?canSendPhotos: bool, ?canSendVideos: bool, ?canSendVideoNotes: bool, ?canSendVoiceNotes: bool, ?canSendPolls: bool, ?canSendOtherMessages: bool, ?canAddWebPagePreviews: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) =
     {
       CanSendMessages = canSendMessages
       CanSendAudios = canSendAudios
@@ -2248,7 +2248,7 @@ and [<CLIMutable>] ChatLocation =
     [<DataMember(Name = "address")>]
     Address: string
   }
-  static member Create(location: Location, address: string) = 
+  static member Create(location: Location, address: string) =
     {
       Location = location
       Address = address
@@ -2270,7 +2270,7 @@ and [<CLIMutable>] ForumTopic =
     [<DataMember(Name = "icon_custom_emoji_id")>]
     IconCustomEmojiId: string option
   }
-  static member Create(messageThreadId: int64, name: string, iconColor: int64, ?iconCustomEmojiId: string) = 
+  static member Create(messageThreadId: int64, name: string, iconColor: int64, ?iconCustomEmojiId: string) =
     {
       MessageThreadId = messageThreadId
       Name = name
@@ -2288,7 +2288,7 @@ and [<CLIMutable>] BotCommand =
     [<DataMember(Name = "description")>]
     Description: string
   }
-  static member Create(command: string, description: string) = 
+  static member Create(command: string, description: string) =
     {
       Command = command
       Description = description
@@ -2311,7 +2311,7 @@ and [<CLIMutable>] BotCommandScopeDefault =
     [<DataMember(Name = "type")>]
     Type: string
   }
-  static member Create(``type``: string) = 
+  static member Create(``type``: string) =
     {
       Type = ``type``
     }
@@ -2323,7 +2323,7 @@ and [<CLIMutable>] BotCommandScopeAllPrivateChats =
     [<DataMember(Name = "type")>]
     Type: string
   }
-  static member Create(``type``: string) = 
+  static member Create(``type``: string) =
     {
       Type = ``type``
     }
@@ -2335,7 +2335,7 @@ and [<CLIMutable>] BotCommandScopeAllGroupChats =
     [<DataMember(Name = "type")>]
     Type: string
   }
-  static member Create(``type``: string) = 
+  static member Create(``type``: string) =
     {
       Type = ``type``
     }
@@ -2347,7 +2347,7 @@ and [<CLIMutable>] BotCommandScopeAllChatAdministrators =
     [<DataMember(Name = "type")>]
     Type: string
   }
-  static member Create(``type``: string) = 
+  static member Create(``type``: string) =
     {
       Type = ``type``
     }
@@ -2362,7 +2362,7 @@ and [<CLIMutable>] BotCommandScopeChat =
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId
   }
-  static member Create(``type``: string, chatId: ChatId) = 
+  static member Create(``type``: string, chatId: ChatId) =
     {
       Type = ``type``
       ChatId = chatId
@@ -2378,7 +2378,7 @@ and [<CLIMutable>] BotCommandScopeChatAdministrators =
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId
   }
-  static member Create(``type``: string, chatId: ChatId) = 
+  static member Create(``type``: string, chatId: ChatId) =
     {
       Type = ``type``
       ChatId = chatId
@@ -2397,7 +2397,7 @@ and [<CLIMutable>] BotCommandScopeChatMember =
     [<DataMember(Name = "user_id")>]
     UserId: int64
   }
-  static member Create(``type``: string, chatId: ChatId, userId: int64) = 
+  static member Create(``type``: string, chatId: ChatId, userId: int64) =
     {
       Type = ``type``
       ChatId = chatId
@@ -2411,7 +2411,7 @@ and [<CLIMutable>] BotName =
     [<DataMember(Name = "name")>]
     Name: string
   }
-  static member Create(name: string) = 
+  static member Create(name: string) =
     {
       Name = name
     }
@@ -2423,7 +2423,7 @@ and [<CLIMutable>] BotDescription =
     [<DataMember(Name = "description")>]
     Description: string
   }
-  static member Create(description: string) = 
+  static member Create(description: string) =
     {
       Description = description
     }
@@ -2435,7 +2435,7 @@ and [<CLIMutable>] BotShortDescription =
     [<DataMember(Name = "short_description")>]
     ShortDescription: string
   }
-  static member Create(shortDescription: string) = 
+  static member Create(shortDescription: string) =
     {
       ShortDescription = shortDescription
     }
@@ -2454,7 +2454,7 @@ and [<CLIMutable>] MenuButtonCommands =
     [<DataMember(Name = "type")>]
     Type: string
   }
-  static member Create(``type``: string) = 
+  static member Create(``type``: string) =
     {
       Type = ``type``
     }
@@ -2472,7 +2472,7 @@ and [<CLIMutable>] MenuButtonWebApp =
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo
   }
-  static member Create(``type``: string, text: string, webApp: WebAppInfo) = 
+  static member Create(``type``: string, text: string, webApp: WebAppInfo) =
     {
       Type = ``type``
       Text = text
@@ -2486,7 +2486,7 @@ and [<CLIMutable>] MenuButtonDefault =
     [<DataMember(Name = "type")>]
     Type: string
   }
-  static member Create(``type``: string) = 
+  static member Create(``type``: string) =
     {
       Type = ``type``
     }
@@ -2501,7 +2501,7 @@ and [<CLIMutable>] ResponseParameters =
     [<DataMember(Name = "retry_after")>]
     RetryAfter: int64 option
   }
-  static member Create(?migrateToChatId: int64, ?retryAfter: int64) = 
+  static member Create(?migrateToChatId: int64, ?retryAfter: int64) =
     {
       MigrateToChatId = migrateToChatId
       RetryAfter = retryAfter
@@ -2537,7 +2537,7 @@ and [<CLIMutable>] InputMediaPhoto =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?hasSpoiler: bool) =
     {
       Type = ``type``
       Media = media
@@ -2584,7 +2584,7 @@ and [<CLIMutable>] InputMediaVideo =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) =
     {
       Type = ``type``
       Media = media
@@ -2633,7 +2633,7 @@ and [<CLIMutable>] InputMediaAnimation =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) =
     {
       Type = ``type``
       Media = media
@@ -2678,7 +2678,7 @@ and [<CLIMutable>] InputMediaAudio =
     [<DataMember(Name = "title")>]
     Title: string option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string) =
     {
       Type = ``type``
       Media = media
@@ -2716,7 +2716,7 @@ and [<CLIMutable>] InputMediaDocument =
     [<DataMember(Name = "disable_content_type_detection")>]
     DisableContentTypeDetection: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool) =
     {
       Type = ``type``
       Media = media
@@ -2776,7 +2776,7 @@ and [<CLIMutable>] Sticker =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, ``type``: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumbnail: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?customEmojiId: string, ?needsRepainting: bool, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, ``type``: string, width: int64, height: int64, isAnimated: bool, isVideo: bool, ?thumbnail: PhotoSize, ?emoji: string, ?setName: string, ?premiumAnimation: File, ?maskPosition: MaskPosition, ?customEmojiId: string, ?needsRepainting: bool, ?fileSize: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -2820,7 +2820,7 @@ and [<CLIMutable>] StickerSet =
     [<DataMember(Name = "thumbnail")>]
     Thumbnail: PhotoSize option
   }
-  static member Create(name: string, title: string, stickerType: string, isAnimated: bool, isVideo: bool, stickers: Sticker[], ?thumbnail: PhotoSize) = 
+  static member Create(name: string, title: string, stickerType: string, isAnimated: bool, isVideo: bool, stickers: Sticker[], ?thumbnail: PhotoSize) =
     {
       Name = name
       Title = title
@@ -2847,7 +2847,7 @@ and [<CLIMutable>] MaskPosition =
     [<DataMember(Name = "scale")>]
     Scale: float
   }
-  static member Create(point: MaskPoint, xShift: float, yShift: float, scale: float) = 
+  static member Create(point: MaskPoint, xShift: float, yShift: float, scale: float) =
     {
       Point = point
       XShift = xShift
@@ -2871,7 +2871,7 @@ and [<CLIMutable>] InputSticker =
     [<DataMember(Name = "keywords")>]
     Keywords: string[] option
   }
-  static member Create(sticker: InputFile, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) = 
+  static member Create(sticker: InputFile, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) =
     {
       Sticker = sticker
       EmojiList = emojiList
@@ -2901,7 +2901,7 @@ and [<CLIMutable>] InlineQuery =
     [<DataMember(Name = "location")>]
     Location: Location option
   }
-  static member Create(id: string, from: User, query: string, offset: string, ?chatType: ChatType, ?location: Location) = 
+  static member Create(id: string, from: User, query: string, offset: string, ?chatType: ChatType, ?location: Location) =
     {
       Id = id
       From = from
@@ -2921,12 +2921,12 @@ and [<CLIMutable>] InlineQueryResultsButton =
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
     /// Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
-    /// 
+    ///
     /// Example: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a 'Connect your YouTube account' button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot's inline capabilities.
     [<DataMember(Name = "start_parameter")>]
     StartParameter: string option
   }
-  static member Create(text: string, ?webApp: WebAppInfo, ?startParameter: string) = 
+  static member Create(text: string, ?webApp: WebAppInfo, ?startParameter: string) =
     {
       Text = text
       WebApp = webApp
@@ -2994,7 +2994,7 @@ and [<CLIMutable>] InlineQueryResultArticle =
     [<DataMember(Name = "thumbnail_height")>]
     ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, title: string, inputMessageContent: InputMessageContent, ?replyMarkup: InlineKeyboardMarkup, ?url: string, ?hideUrl: bool, ?description: string, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
+  static member Create(``type``: string, id: string, title: string, inputMessageContent: InputMessageContent, ?replyMarkup: InlineKeyboardMarkup, ?url: string, ?hideUrl: bool, ?description: string, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) =
     {
       Type = ``type``
       Id = id
@@ -3052,7 +3052,7 @@ and [<CLIMutable>] InlineQueryResultPhoto =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, photoUrl: string, thumbnailUrl: string, ?photoWidth: int64, ?photoHeight: int64, ?title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, photoUrl: string, thumbnailUrl: string, ?photoWidth: int64, ?photoHeight: int64, ?title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3115,7 +3115,7 @@ and [<CLIMutable>] InlineQueryResultGif =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, gifUrl: string, thumbnailUrl: string, ?gifWidth: int64, ?gifHeight: int64, ?gifDuration: int64, ?thumbnailMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, gifUrl: string, thumbnailUrl: string, ?gifWidth: int64, ?gifHeight: int64, ?gifDuration: int64, ?thumbnailMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3179,7 +3179,7 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, mpeg4Url: string, thumbnailUrl: string, ?mpeg4Width: int64, ?mpeg4Height: int64, ?mpeg4Duration: int64, ?thumbnailMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, mpeg4Url: string, thumbnailUrl: string, ?mpeg4Width: int64, ?mpeg4Height: int64, ?mpeg4Duration: int64, ?thumbnailMimeType: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3246,7 +3246,7 @@ and [<CLIMutable>] InlineQueryResultVideo =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, videoUrl: string, mimeType: string, thumbnailUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?videoWidth: int64, ?videoHeight: int64, ?videoDuration: int64, ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, videoUrl: string, mimeType: string, thumbnailUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?videoWidth: int64, ?videoHeight: int64, ?videoDuration: int64, ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3303,7 +3303,7 @@ and [<CLIMutable>] InlineQueryResultAudio =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, audioUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?performer: string, ?audioDuration: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, audioUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?performer: string, ?audioDuration: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3353,7 +3353,7 @@ and [<CLIMutable>] InlineQueryResultVoice =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, voiceUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?voiceDuration: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, voiceUrl: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?voiceDuration: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3414,7 +3414,7 @@ and [<CLIMutable>] InlineQueryResultDocument =
     [<DataMember(Name = "thumbnail_height")>]
     ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, title: string, documentUrl: string, mimeType: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
+  static member Create(``type``: string, id: string, title: string, documentUrl: string, mimeType: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?description: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) =
     {
       Type = ``type``
       Id = id
@@ -3479,7 +3479,7 @@ and [<CLIMutable>] InlineQueryResultLocation =
     [<DataMember(Name = "thumbnail_height")>]
     ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
+  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) =
     {
       Type = ``type``
       Id = id
@@ -3547,7 +3547,7 @@ and [<CLIMutable>] InlineQueryResultVenue =
     [<DataMember(Name = "thumbnail_height")>]
     ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
+  static member Create(``type``: string, id: string, latitude: float, longitude: float, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) =
     {
       Type = ``type``
       Id = id
@@ -3604,7 +3604,7 @@ and [<CLIMutable>] InlineQueryResultContact =
     [<DataMember(Name = "thumbnail_height")>]
     ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, phoneNumber: string, firstName: string, ?lastName: string, ?vcard: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
+  static member Create(``type``: string, id: string, phoneNumber: string, firstName: string, ?lastName: string, ?vcard: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) =
     {
       Type = ``type``
       Id = id
@@ -3636,7 +3636,7 @@ and [<CLIMutable>] InlineQueryResultGame =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(``type``: string, id: string, gameShortName: string, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(``type``: string, id: string, gameShortName: string, ?replyMarkup: InlineKeyboardMarkup) =
     {
       Type = ``type``
       Id = id
@@ -3678,7 +3678,7 @@ and [<CLIMutable>] InlineQueryResultCachedPhoto =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, photoFileId: string, ?title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, photoFileId: string, ?title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3723,7 +3723,7 @@ and [<CLIMutable>] InlineQueryResultCachedGif =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, gifFileId: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, gifFileId: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3767,7 +3767,7 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, mpeg4FileId: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, mpeg4FileId: string, ?title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3800,7 +3800,7 @@ and [<CLIMutable>] InlineQueryResultCachedSticker =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, stickerFileId: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, stickerFileId: string, ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3844,7 +3844,7 @@ and [<CLIMutable>] InlineQueryResultCachedDocument =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, title: string, documentFileId: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, title: string, documentFileId: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3892,7 +3892,7 @@ and [<CLIMutable>] InlineQueryResultCachedVideo =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, videoFileId: string, title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, videoFileId: string, title: string, ?description: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3938,7 +3938,7 @@ and [<CLIMutable>] InlineQueryResultCachedVoice =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, voiceFileId: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, voiceFileId: string, title: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -3980,7 +3980,7 @@ and [<CLIMutable>] InlineQueryResultCachedAudio =
     [<DataMember(Name = "input_message_content")>]
     InputMessageContent: InputMessageContent option
   }
-  static member Create(``type``: string, id: string, audioFileId: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) = 
+  static member Create(``type``: string, id: string, audioFileId: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup, ?inputMessageContent: InputMessageContent) =
     {
       Type = ``type``
       Id = id
@@ -4016,7 +4016,7 @@ and [<CLIMutable>] InputTextMessageContent =
     [<DataMember(Name = "disable_web_page_preview")>]
     DisableWebPagePreview: bool option
   }
-  static member Create(messageText: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?disableWebPagePreview: bool) = 
+  static member Create(messageText: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?disableWebPagePreview: bool) =
     {
       MessageText = messageText
       ParseMode = parseMode
@@ -4046,7 +4046,7 @@ and [<CLIMutable>] InputLocationMessageContent =
     [<DataMember(Name = "proximity_alert_radius")>]
     ProximityAlertRadius: int64 option
   }
-  static member Create(latitude: float, longitude: float, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64) = 
+  static member Create(latitude: float, longitude: float, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64) =
     {
       Latitude = latitude
       Longitude = longitude
@@ -4084,7 +4084,7 @@ and [<CLIMutable>] InputVenueMessageContent =
     [<DataMember(Name = "google_place_type")>]
     GooglePlaceType: string option
   }
-  static member Create(latitude: float, longitude: float, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string) = 
+  static member Create(latitude: float, longitude: float, title: string, address: string, ?foursquareId: string, ?foursquareType: string, ?googlePlaceId: string, ?googlePlaceType: string) =
     {
       Latitude = latitude
       Longitude = longitude
@@ -4112,7 +4112,7 @@ and [<CLIMutable>] InputContactMessageContent =
     [<DataMember(Name = "vcard")>]
     Vcard: string option
   }
-  static member Create(phoneNumber: string, firstName: string, ?lastName: string, ?vcard: string) = 
+  static member Create(phoneNumber: string, firstName: string, ?lastName: string, ?vcard: string) =
     {
       PhoneNumber = phoneNumber
       FirstName = firstName
@@ -4184,7 +4184,7 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     [<DataMember(Name = "is_flexible")>]
     IsFlexible: bool option
   }
-  static member Create(title: string, description: string, payload: string, providerToken: string, currency: string, prices: LabeledPrice[], ?sendPhoneNumberToProvider: bool, ?needShippingAddress: bool, ?needEmail: bool, ?needPhoneNumber: bool, ?needName: bool, ?photoHeight: int64, ?photoUrl: string, ?photoSize: int64, ?sendEmailToProvider: bool, ?providerData: string, ?suggestedTipAmounts: int64[], ?maxTipAmount: int64, ?photoWidth: int64, ?isFlexible: bool) = 
+  static member Create(title: string, description: string, payload: string, providerToken: string, currency: string, prices: LabeledPrice[], ?sendPhoneNumberToProvider: bool, ?needShippingAddress: bool, ?needEmail: bool, ?needPhoneNumber: bool, ?needName: bool, ?photoHeight: int64, ?photoUrl: string, ?photoSize: int64, ?sendEmailToProvider: bool, ?providerData: string, ?suggestedTipAmounts: int64[], ?maxTipAmount: int64, ?photoWidth: int64, ?isFlexible: bool) =
     {
       Title = title
       Description = description
@@ -4228,7 +4228,7 @@ and [<CLIMutable>] ChosenInlineResult =
     [<DataMember(Name = "query")>]
     Query: string
   }
-  static member Create(resultId: string, from: User, query: string, ?location: Location, ?inlineMessageId: string) = 
+  static member Create(resultId: string, from: User, query: string, ?location: Location, ?inlineMessageId: string) =
     {
       ResultId = resultId
       From = from
@@ -4245,7 +4245,7 @@ and [<CLIMutable>] SentWebAppMessage =
     [<DataMember(Name = "inline_message_id")>]
     InlineMessageId: string option
   }
-  static member Create(?inlineMessageId: string) = 
+  static member Create(?inlineMessageId: string) =
     {
       InlineMessageId = inlineMessageId
     }
@@ -4260,7 +4260,7 @@ and [<CLIMutable>] LabeledPrice =
     [<DataMember(Name = "amount")>]
     Amount: int64
   }
-  static member Create(label: string, amount: int64) = 
+  static member Create(label: string, amount: int64) =
     {
       Label = label
       Amount = amount
@@ -4285,7 +4285,7 @@ and [<CLIMutable>] Invoice =
     [<DataMember(Name = "total_amount")>]
     TotalAmount: int64
   }
-  static member Create(title: string, description: string, startParameter: string, currency: string, totalAmount: int64) = 
+  static member Create(title: string, description: string, startParameter: string, currency: string, totalAmount: int64) =
     {
       Title = title
       Description = description
@@ -4316,7 +4316,7 @@ and [<CLIMutable>] ShippingAddress =
     [<DataMember(Name = "post_code")>]
     PostCode: string
   }
-  static member Create(countryCode: string, state: string, city: string, streetLine1: string, streetLine2: string, postCode: string) = 
+  static member Create(countryCode: string, state: string, city: string, streetLine1: string, streetLine2: string, postCode: string) =
     {
       CountryCode = countryCode
       State = state
@@ -4342,7 +4342,7 @@ and [<CLIMutable>] OrderInfo =
     [<DataMember(Name = "shipping_address")>]
     ShippingAddress: ShippingAddress option
   }
-  static member Create(?name: string, ?phoneNumber: string, ?email: string, ?shippingAddress: ShippingAddress) = 
+  static member Create(?name: string, ?phoneNumber: string, ?email: string, ?shippingAddress: ShippingAddress) =
     {
       Name = name
       PhoneNumber = phoneNumber
@@ -4363,7 +4363,7 @@ and [<CLIMutable>] ShippingOption =
     [<DataMember(Name = "prices")>]
     Prices: LabeledPrice[]
   }
-  static member Create(id: string, title: string, prices: LabeledPrice[]) = 
+  static member Create(id: string, title: string, prices: LabeledPrice[]) =
     {
       Id = id
       Title = title
@@ -4395,7 +4395,7 @@ and [<CLIMutable>] SuccessfulPayment =
     [<DataMember(Name = "provider_payment_charge_id")>]
     ProviderPaymentChargeId: string
   }
-  static member Create(currency: string, totalAmount: int64, invoicePayload: string, telegramPaymentChargeId: string, providerPaymentChargeId: string, ?shippingOptionId: string, ?orderInfo: OrderInfo) = 
+  static member Create(currency: string, totalAmount: int64, invoicePayload: string, telegramPaymentChargeId: string, providerPaymentChargeId: string, ?shippingOptionId: string, ?orderInfo: OrderInfo) =
     {
       Currency = currency
       TotalAmount = totalAmount
@@ -4422,7 +4422,7 @@ and [<CLIMutable>] ShippingQuery =
     [<DataMember(Name = "shipping_address")>]
     ShippingAddress: ShippingAddress
   }
-  static member Create(id: string, from: User, invoicePayload: string, shippingAddress: ShippingAddress) = 
+  static member Create(id: string, from: User, invoicePayload: string, shippingAddress: ShippingAddress) =
     {
       Id = id
       From = from
@@ -4456,7 +4456,7 @@ and [<CLIMutable>] PreCheckoutQuery =
     [<DataMember(Name = "order_info")>]
     OrderInfo: OrderInfo option
   }
-  static member Create(id: string, from: User, currency: string, totalAmount: int64, invoicePayload: string, ?shippingOptionId: string, ?orderInfo: OrderInfo) = 
+  static member Create(id: string, from: User, currency: string, totalAmount: int64, invoicePayload: string, ?shippingOptionId: string, ?orderInfo: OrderInfo) =
     {
       Id = id
       From = from
@@ -4477,7 +4477,7 @@ and [<CLIMutable>] PassportData =
     [<DataMember(Name = "credentials")>]
     Credentials: EncryptedCredentials
   }
-  static member Create(data: EncryptedPassportElement[], credentials: EncryptedCredentials) = 
+  static member Create(data: EncryptedPassportElement[], credentials: EncryptedCredentials) =
     {
       Data = data
       Credentials = credentials
@@ -4499,7 +4499,7 @@ and [<CLIMutable>] PassportFile =
     [<DataMember(Name = "file_date")>]
     FileDate: int64
   }
-  static member Create(fileId: string, fileUniqueId: string, fileSize: int64, fileDate: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, fileSize: int64, fileDate: int64) =
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -4541,7 +4541,7 @@ and [<CLIMutable>] EncryptedPassportElement =
     [<DataMember(Name = "hash")>]
     Hash: string
   }
-  static member Create(``type``: string, hash: string, ?data: string, ?phoneNumber: string, ?email: string, ?files: PassportFile[], ?frontSide: PassportFile, ?reverseSide: PassportFile, ?selfie: PassportFile, ?translation: PassportFile[]) = 
+  static member Create(``type``: string, hash: string, ?data: string, ?phoneNumber: string, ?email: string, ?files: PassportFile[], ?frontSide: PassportFile, ?reverseSide: PassportFile, ?selfie: PassportFile, ?translation: PassportFile[]) =
     {
       Type = ``type``
       Hash = hash
@@ -4568,7 +4568,7 @@ and [<CLIMutable>] EncryptedCredentials =
     [<DataMember(Name = "secret")>]
     Secret: string
   }
-  static member Create(data: string, hash: string, secret: string) = 
+  static member Create(data: string, hash: string, secret: string) =
     {
       Data = data
       Hash = hash
@@ -4606,7 +4606,7 @@ and [<CLIMutable>] PassportElementErrorDataField =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fieldName: string, dataHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, fieldName: string, dataHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4631,7 +4631,7 @@ and [<CLIMutable>] PassportElementErrorFrontSide =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, fileHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4655,7 +4655,7 @@ and [<CLIMutable>] PassportElementErrorReverseSide =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, fileHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4679,7 +4679,7 @@ and [<CLIMutable>] PassportElementErrorSelfie =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, fileHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4703,7 +4703,7 @@ and [<CLIMutable>] PassportElementErrorFile =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, fileHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4727,7 +4727,7 @@ and [<CLIMutable>] PassportElementErrorFiles =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHashes: string[], message: string) = 
+  static member Create(source: string, ``type``: string, fileHashes: string[], message: string) =
     {
       Source = source
       Type = ``type``
@@ -4751,7 +4751,7 @@ and [<CLIMutable>] PassportElementErrorTranslationFile =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, fileHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4775,7 +4775,7 @@ and [<CLIMutable>] PassportElementErrorTranslationFiles =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, fileHashes: string[], message: string) = 
+  static member Create(source: string, ``type``: string, fileHashes: string[], message: string) =
     {
       Source = source
       Type = ``type``
@@ -4800,7 +4800,7 @@ and [<CLIMutable>] PassportElementErrorUnspecified =
     [<DataMember(Name = "message")>]
     Message: string
   }
-  static member Create(source: string, ``type``: string, elementHash: string, message: string) = 
+  static member Create(source: string, ``type``: string, elementHash: string, message: string) =
     {
       Source = source
       Type = ``type``
@@ -4830,7 +4830,7 @@ and [<CLIMutable>] Game =
     [<DataMember(Name = "animation")>]
     Animation: Animation option
   }
-  static member Create(title: string, description: string, photo: PhotoSize[], ?text: string, ?textEntities: MessageEntity[], ?animation: Animation) = 
+  static member Create(title: string, description: string, photo: PhotoSize[], ?text: string, ?textEntities: MessageEntity[], ?animation: Animation) =
     {
       Title = title
       Description = description
@@ -4859,7 +4859,7 @@ and [<CLIMutable>] GameHighScore =
     [<DataMember(Name = "score")>]
     Score: int64
   }
-  static member Create(position: int64, user: User, score: int64) = 
+  static member Create(position: int64, user: User, score: int64) =
     {
       Position = position
       User = user
