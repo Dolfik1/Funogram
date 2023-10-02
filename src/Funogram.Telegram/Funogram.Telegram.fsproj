@@ -9,6 +9,7 @@
         <Compile Include="Api.fs" />
         <Compile Include="Sscanf.fs" />
         <Compile Include="Bot.fs" />
+        <Compile Include="BotExtension.fs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Funogram\Funogram.fsproj" />
