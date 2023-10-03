@@ -1,42 +1,46 @@
 ﻿module Funogram.Telegram.BotExtension
 
 open Funogram.Telegram.Bot
-open System
-open System.IO
-open System.Net.Http
 open Funogram.Telegram
-open Funogram.Telegram.Sscanf
 open Funogram.Telegram.Types
 open Funogram.Types
 open Funogram.Api
 
-let processUpdateAsync config inputStream updateArrivedAsync updatesArrivedAsync=
+let processUpdateAsync config inputStream (updateArrivedAsync:UpdateContext -> Async<unit>) =
     async {
 
-        let! meAsync =
-            Api.getMe |> api config
+        let! meAsync = Api.getMe |> api config
                 // me
-        let test = meAsync
-        |> function
+        let me =
+            meAsync
+            |> function
             | Ok e -> e
             | Error error -> failwith error.Description
 
-        // let me = asyncMe |> Async.RunSynchronously
+        let processUpdatesAsync (updates: seq<Update>): Async<unit array>=
+          async{
+                let updatesAsync = updates
+                match updates |> Seq.isEmpty with
+                | false ->  return! (updates |> Seq.map (fun f -> updateArrivedAsync { Update = f; Config = config; Me = me }   ) |> Async.Sequential)
+                // | true -> failwithf "no updates"
+                // if 0 then
 
-      //let bot data = api config data
-        let processUpdates updates =
-          if updates |> Seq.isEmpty |> not then
-            updates |> Seq.iter (fun f -> updateArrived { Update = f; Config = config; Me = me })
-            updatesArrived |> Option.iter (fun x -> x updates)
+
+            }
+            // updatesArrivedAsync |> Option.iter (fun x ->  x updates )
+
+
         let input =Funogram.Tools.parseJsonStream<Update> inputStream
         match input with
-                | Ok updates -> processUpdates [| updates |]
+                | Ok updates ->
+                    let! executionParallel = processUpdatesAsync [| updates |]
+                    executionParallel |> Array.map (fun f -> do f)
                 | Error e -> config.OnError e
-        match input with
-                | Ok updates -> Some updates
-                | Error e -> None
+        // match input with
+        //         | Ok updates -> Some updates
+        //         | Error e -> None
 
-
+        return input
   }
 
-let processUpdate config inputStream updateArrived updatesArrived =
+// let processUpdate config inputStream updateArrived updatesArrived =

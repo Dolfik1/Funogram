@@ -2,6 +2,16 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <Version>6.7.1.0-marctdt</Version>
+        <Configurations>Debug;Release;LunaChat Release</Configurations>
+        <Platforms>AnyCPU</Platforms>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>../lib</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'LunaChat Release' ">
+      <OutputPath>../../../MarcTDT.LunaChat/Lib</OutputPath>
+      <Optimize>true</Optimize>
+      <TailCalls>true</TailCalls>
     </PropertyGroup>
     <ItemGroup>
         <Compile Include="Types.fs" />
@@ -12,7 +22,7 @@
         <Compile Include="BotExtension.fs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Funogram\Funogram.fsproj" />
+        <ProjectReference Include="..\Funogram\Funogram.fsproj"/>
     </ItemGroup>
     <ItemGroup>
         <None Include="..\..\docs\files\img\logo.png" Pack="true" PackagePath="\"/>
