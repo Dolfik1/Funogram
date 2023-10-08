@@ -19,7 +19,6 @@ let processUpdateAsync config inputStream (updateArrivedAsync:UpdateContext -> A
 
         let processUpdatesAsync (updates: seq<Update>): Async<unit array>=
           async{
-                let updatesAsync = updates
                 match updates |> Seq.isEmpty with
                 | false ->  return! (updates |> Seq.map (fun f -> updateArrivedAsync { Update = f; Config = config; Me = me }   ) |> Async.Sequential)
                 // | true -> failwithf "no updates"

@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Configurations>Debug;Release;LunaChat Release;Dependencies</Configurations>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
   <PropertyGroup>
     <VersionPrefix>2.0.7</VersionPrefix>
@@ -15,6 +17,13 @@
     <PackageProjectUrl>https://github.com/Dolfik1/Funogram</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'LunaChat Release' ">
+    <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
+    <DebugSymbols Condition="'$(DebugSymbols)' == '' ">false</DebugSymbols>
+    <Optimize Condition="'$(Optimize)' == '' ">true</Optimize>
+    <Tailcalls Condition="'$(Tailcalls)' == '' ">true</Tailcalls>
+    <OutputPath>../../../MarcTDT.LunaChat/Lib/Funogram\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Types.fs" />
