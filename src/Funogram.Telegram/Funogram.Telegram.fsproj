@@ -13,6 +13,11 @@
       <Optimize>true</Optimize>
       <TailCalls>true</TailCalls>
     </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Dependencies' ">
+      <OutputPath>../../../MarcTDT.LunaChat/Lib/Funogram.Telegram\</OutputPath>
+      <Optimize>true</Optimize>
+      <TailCalls>true</TailCalls>
+    </PropertyGroup>
     <ItemGroup>
         <Compile Include="Types.fs" />
         <Compile Include="RequestsTypes.fs" />

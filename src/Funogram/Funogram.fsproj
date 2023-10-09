@@ -25,6 +25,11 @@
     <Tailcalls Condition="'$(Tailcalls)' == '' ">true</Tailcalls>
     <OutputPath>../../../MarcTDT.LunaChat/Lib/Funogram\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Dependencies' ">
+    <OutputPath>../../../MarcTDT.LunaChat/Lib/Funogram\</OutputPath>
+    <Optimize>true</Optimize>
+    <TailCalls>true</TailCalls>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Resolvers.fs" />
