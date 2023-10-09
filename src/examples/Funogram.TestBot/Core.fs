@@ -14,5 +14,5 @@ let processResultWithValue (result: Result<'a, ApiResponseError>) =
 let processResult (result: Result<'a, ApiResponseError>) =
   processResultWithValue result |> ignore
 
-let botResult config data = api config data |> Async.RunSynchronously
+let botResult config data = apiAsync config data |> Async.RunSynchronously
 let bot config data = botResult config data |> processResult

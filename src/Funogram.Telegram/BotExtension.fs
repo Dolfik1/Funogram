@@ -9,7 +9,7 @@ open Funogram.Api
 let processUpdateAsync config inputStream (updateArrivedAsync:UpdateContext -> Async<unit>) =
     async {
 
-        let! meAsync = Api.getMe |> api config
+        let! meAsync = Api.getMe |> apiAsync config
                 // me
         let me =
             meAsync

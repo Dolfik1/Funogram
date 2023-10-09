@@ -15,12 +15,12 @@ let processResultWithValue (result: Async<Result<'a, ApiResponseError>>) =
     match result with
     | Ok _ -> ()
     | Error e -> printfn "Server error: %s" e.Description
-    
+
     return result
   }
 
 let processResult result = processResultWithValue result
-let botResult config data = api config data
+let botResult config data = apiAsync config data
 let bot config data = botResult config data |> processResult
 let botIgnored config data = bot config data |> Async.Ignore |> Async.Start
 
@@ -63,11 +63,11 @@ let usersState =
               elif state.SearchUsers.Length > 0 then
                 let idx = rnd.Next(0, state.SearchUsers.Length - 1)
                 let newTalkerId = state.SearchUsers.[idx]
-                
-                
+
+
                 sendMessage from.Id anonFoundText ctx
                 sendMessage newTalkerId anonFoundText ctx
-                
+
                 { state with
                     SearchUsers = state.SearchUsers |> Array.removeAt idx
                     SearchUsersSet = state.SearchUsersSet |> Set.remove newTalkerId
@@ -82,14 +82,14 @@ let usersState =
                     SearchUsers = state.SearchUsers |> Array.append [| from.Id |]
                     SearchUsersSet = state.SearchUsersSet |> Set.add from.Id
                 }
-                
-              
+
+
             | Command.Stop next ->
               let chattingWithId = state.UsersDialogs |> Map.tryFind from.Id
               match chattingWithId with
               | Some chattingWithId ->
                 sendMessage chattingWithId "Anonymous has stopped the chat! Send /search to start new chat" ctx
-                
+
                 if not next then
                   sendMessage from.Id "You have stopped the chat! Send /search to start new chat" ctx
                 else
@@ -97,7 +97,7 @@ let usersState =
                   inbox.Post(Search, ctx)
 
                 state
-              
+
               | None when state.SearchUsersSet |> Set.contains from.Id ->
                 sendMessage from.Id "You have stopped the search! Send /search to start it again" ctx
                 let idx = Array.IndexOf(state.SearchUsers, from.Id)
@@ -105,8 +105,8 @@ let usersState =
                     SearchUsersSet = state.SearchUsersSet |> Set.remove from.Id
                     SearchUsers = state.SearchUsers |> Array.removeAt idx
                 }
-                
-                
+
+
               | None ->
                 sendMessage from.Id "You have no active chat! Send /search to start new chat" ctx
                 state
@@ -117,17 +117,17 @@ let usersState =
               | Some chattingWithId ->
                 Req.CopyMessage.Make(chattingWithId, from.Id, messageId) |> botIgnored ctx.Config
                 state
-                
+
               | None ->
                 sendMessage from.Id "You have no active chat! Send /search to start new chat" ctx
                 state
-              
+
           | _ ->
             state
-        
+
         return! loop newState
       }
-    
+
     loop { UsersDialogs = Map.empty; SearchUsersSet = Set.empty; SearchUsers = Array.empty }
   )
 
@@ -145,7 +145,7 @@ let updateArrived (ctx: UpdateContext) =
 let main _ =
   async {
     let config = Config.defaultConfig |> Config.withReadTokenFromFile
-    let! _ = Api.deleteWebhookBase () |> api config
+    let! _ = Api.deleteWebhookBase () |> apiAsync config
     return! startBot config updateArrived None
   } |> Async.RunSynchronously
   0

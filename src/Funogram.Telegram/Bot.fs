@@ -93,7 +93,7 @@ let cmdScan (format: PrintfFormat<_, _, _, _, 't>) (handler: 't -> UpdateContext
   |> not
 
 let private runBot config me updateArrived updatesArrived =
-  let bot data = api config data
+  let bot data = apiAsync config data
 
   let processUpdates updates =
     if updates |> Seq.isEmpty |> not then
@@ -162,7 +162,7 @@ let private runBot config me updateArrived updatesArrived =
 
 let startBot config updateArrived updatesArrived =
   async {
-    let! me = Api.getMe |> api config
+    let! me = Api.getMe |> apiAsync config
     return! me
     |> function
     | Error error -> failwith error.Description
