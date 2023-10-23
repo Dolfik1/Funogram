@@ -113,7 +113,7 @@ and [<CLIMutable>] Update =
     /// The bot's chat member status was updated in a chat. For private chats, this update is received only when the bot is blocked or unblocked by the user.
     [<DataMember(Name = "my_chat_member")>]
     MyChatMember: ChatMemberUpdated option
-    /// A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify “chat_member” in the list of allowed_updates to receive these updates.
+    /// A chat member's status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify "chat_member" in the list of allowed_updates to receive these updates.
     [<DataMember(Name = "chat_member")>]
     ChatMember: ChatMemberUpdated option
     /// A request to join the chat has been sent. The bot must have the can_invite_users administrator right in the chat to receive these updates.
@@ -270,6 +270,9 @@ and [<CLIMutable>] Chat =
     /// Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
     [<DataMember(Name = "emoji_status_custom_emoji_id")>]
     EmojiStatusCustomEmojiId: string option
+    /// Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in getChat.
+    [<DataMember(Name = "emoji_status_expiration_date")>]
+    EmojiStatusExpirationDate: int64 option
     /// Bio of the other party in a private chat. Returned only in getChat.
     [<DataMember(Name = "bio")>]
     Bio: string option
@@ -325,7 +328,7 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?hasHiddenMembers: bool, ?hasAggressiveAntiSpamEnabled: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?hasHiddenMembers: bool, ?hasAggressiveAntiSpamEnabled: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusExpirationDate: int64, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
@@ -345,6 +348,7 @@ and [<CLIMutable>] Chat =
       HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasPrivateForwards = hasPrivateForwards
       Bio = bio
+      EmojiStatusExpirationDate = emojiStatusExpirationDate
       EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
       ActiveUsernames = activeUsernames
       Photo = photo
@@ -441,6 +445,9 @@ and [<CLIMutable>] Message =
     /// Message is a sticker, information about the sticker
     [<DataMember(Name = "sticker")>]
     Sticker: Sticker option
+    /// Message is a forwarded story
+    [<DataMember(Name = "story")>]
+    Story: Story option
     /// Message is a video, information about the video
     [<DataMember(Name = "video")>]
     Video: Video option
@@ -528,7 +535,7 @@ and [<CLIMutable>] Message =
     /// The domain name of the website on which the user has logged in. More about Telegram Login »
     [<DataMember(Name = "connected_website")>]
     ConnectedWebsite: string option
-    /// Service message: the user allowed the bot added to the attachment menu to write messages
+    /// Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess
     [<DataMember(Name = "write_access_allowed")>]
     WriteAccessAllowed: WriteAccessAllowed option
     /// Telegram Passport data
@@ -574,7 +581,7 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?pinnedMessage: Message, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?deleteChatPhoto: bool, ?invoice: Invoice, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?groupChatCreated: bool, ?successfulPayment: SuccessfulPayment, ?chatShared: ChatShared, ?venue: Venue, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?userShared: UserShared, ?forumTopicReopened: ForumTopicReopened, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?forumTopicClosed: ForumTopicClosed, ?poll: Poll, ?game: Game, ?dice: Dice, ?messageThreadId: int64, ?from: User, ?senderChat: Chat, ?forwardFrom: User, ?forwardFromChat: Chat, ?forwardFromMessageId: int64, ?forwardSignature: string, ?forwardSenderName: string, ?forwardDate: DateTime, ?isTopicMessage: bool, ?isAutomaticForward: bool, ?replyToMessage: Message, ?viaBot: User, ?editDate: int64, ?hasProtectedContent: bool, ?mediaGroupId: string, ?authorSignature: string, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?webAppData: WebAppData, ?video: Video, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?pinnedMessage: Message, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?deleteChatPhoto: bool, ?invoice: Invoice, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?groupChatCreated: bool, ?successfulPayment: SuccessfulPayment, ?chatShared: ChatShared, ?venue: Venue, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?userShared: UserShared, ?forumTopicReopened: ForumTopicReopened, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?forumTopicClosed: ForumTopicClosed, ?poll: Poll, ?dice: Dice, ?webAppData: WebAppData, ?editDate: int64, ?viaBot: User, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardDate: DateTime, ?hasProtectedContent: bool, ?forwardSenderName: string, ?forwardFromMessageId: int64, ?forwardFromChat: Chat, ?forwardFrom: User, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?forwardSignature: string, ?game: Game, ?mediaGroupId: string, ?text: string, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?authorSignature: string, ?video: Video, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?story: Story, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
@@ -612,40 +619,41 @@ and [<CLIMutable>] Message =
       ConnectedWebsite = connectedWebsite
       ForumTopicClosed = forumTopicClosed
       Poll = poll
-      Game = game
       Dice = dice
-      MessageThreadId = messageThreadId
-      From = from
-      SenderChat = senderChat
-      ForwardFrom = forwardFrom
-      ForwardFromChat = forwardFromChat
-      ForwardFromMessageId = forwardFromMessageId
-      ForwardSignature = forwardSignature
-      ForwardSenderName = forwardSenderName
-      ForwardDate = forwardDate
-      IsTopicMessage = isTopicMessage
-      IsAutomaticForward = isAutomaticForward
-      ReplyToMessage = replyToMessage
-      ViaBot = viaBot
+      WebAppData = webAppData
       EditDate = editDate
+      ViaBot = viaBot
+      ReplyToMessage = replyToMessage
+      IsAutomaticForward = isAutomaticForward
+      IsTopicMessage = isTopicMessage
+      ForwardDate = forwardDate
       HasProtectedContent = hasProtectedContent
+      ForwardSenderName = forwardSenderName
+      ForwardFromMessageId = forwardFromMessageId
+      ForwardFromChat = forwardFromChat
+      ForwardFrom = forwardFrom
+      SenderChat = senderChat
+      From = from
+      MessageThreadId = messageThreadId
+      ForwardSignature = forwardSignature
+      Game = game
       MediaGroupId = mediaGroupId
-      AuthorSignature = authorSignature
+      Text = text
       Contact = contact
       HasMediaSpoiler = hasMediaSpoiler
       CaptionEntities = captionEntities
       Caption = caption
       Voice = voice
       VideoNote = videoNote
-      WebAppData = webAppData
+      AuthorSignature = authorSignature
       Video = video
+      Sticker = sticker
       Photo = photo
       Document = document
       Audio = audio
       Animation = animation
       Entities = entities
-      Text = text
-      Sticker = sticker
+      Story = story
       ReplyMarkup = replyMarkup
     }
 
@@ -845,6 +853,10 @@ and [<CLIMutable>] Document =
       FileSize = fileSize
     }
 
+/// This object represents a message about a forwarded story in the chat. Currently holds no information.
+and Story =
+  new() = {}
+
 /// This object represents a video file.
 and [<CLIMutable>] Video =
   {
@@ -1015,18 +1027,22 @@ and [<CLIMutable>] PollAnswer =
     /// Unique poll identifier
     [<DataMember(Name = "poll_id")>]
     PollId: string
-    /// The user, who changed the answer to the poll
+    /// The chat that changed the answer to the poll, if the voter is anonymous
+    [<DataMember(Name = "voter_chat")>]
+    VoterChat: Chat option
+    /// The user that changed the answer to the poll, if the voter isn't anonymous
     [<DataMember(Name = "user")>]
-    User: User
-    /// 0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.
+    User: User option
+    /// 0-based identifiers of chosen answer options. May be empty if the vote was retracted.
     [<DataMember(Name = "option_ids")>]
     OptionIds: int64[]
   }
-  static member Create(pollId: string, user: User, optionIds: int64[]) = 
+  static member Create(pollId: string, optionIds: int64[], ?voterChat: Chat, ?user: User) = 
     {
       PollId = pollId
-      User = user
       OptionIds = optionIds
+      VoterChat = voterChat
+      User = user
     }
 
 /// This object contains information about a poll.
@@ -1289,16 +1305,24 @@ and [<CLIMutable>] ChatShared =
       ChatId = chatId
     }
 
-/// This object represents a service message about a user allowing a bot to write messages after adding the bot to the attachment menu or launching a Web App from a link.
+/// This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.
 and [<CLIMutable>] WriteAccessAllowed =
   {
-    /// Name of the Web App which was launched from a link
+    /// True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess
+    [<DataMember(Name = "from_request")>]
+    FromRequest: bool option
+    /// Name of the Web App, if the access was granted when the Web App was launched from a link
     [<DataMember(Name = "web_app_name")>]
     WebAppName: string option
+    /// True, if the access was granted when the bot was added to the attachment or side menu
+    [<DataMember(Name = "from_attachment_menu")>]
+    FromAttachmentMenu: bool option
   }
-  static member Create(?webAppName: string) = 
+  static member Create(?fromRequest: bool, ?webAppName: string, ?fromAttachmentMenu: bool) = 
     {
+      FromRequest = fromRequest
       WebAppName = webAppName
+      FromAttachmentMenu = fromAttachmentMenu
     }
 
 /// This object represents a service message about a video chat scheduled in the chat.
@@ -1589,8 +1613,6 @@ and [<CLIMutable>] InlineKeyboardButton =
     [<DataMember(Name = "login_url")>]
     LoginUrl: LoginUrl option
     /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted.
-    /// 
-    /// Note: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm… actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.
     [<DataMember(Name = "switch_inline_query")>]
     SwitchInlineQuery: string option
     /// If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
@@ -1811,7 +1833,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user's presence in the chat is hidden
     [<DataMember(Name = "is_anonymous")>]
     IsAnonymous: bool
-    /// True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    /// True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
     [<DataMember(Name = "can_manage_chat")>]
     CanManageChat: bool
     /// True, if the administrator can delete messages of other users
@@ -1820,7 +1842,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the administrator can manage video chats
     [<DataMember(Name = "can_manage_video_chats")>]
     CanManageVideoChats: bool
-    /// True, if the administrator can restrict, ban or unban chat members
+    /// True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
     [<DataMember(Name = "can_restrict_members")>]
     CanRestrictMembers: bool
     /// True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
@@ -1832,7 +1854,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to invite new users to the chat
     [<DataMember(Name = "can_invite_users")>]
     CanInviteUsers: bool
-    /// True, if the administrator can post in the channel; channels only
+    /// True, if the administrator can post messages in the channel, or access channel statistics; channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
     /// True, if the administrator can edit messages of other users and can pin messages; channels only
@@ -1841,6 +1863,15 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
+    /// True, if the administrator can post stories in the channel; channels only
+    [<DataMember(Name = "can_post_stories")>]
+    CanPostStories: bool option
+    /// True, if the administrator can edit stories posted by other users; channels only
+    [<DataMember(Name = "can_edit_stories")>]
+    CanEditStories: bool option
+    /// True, if the administrator can delete stories posted by other users; channels only
+    [<DataMember(Name = "can_delete_stories")>]
+    CanDeleteStories: bool option
     /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
@@ -1848,7 +1879,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canPostStories: bool, ?canEditStories: bool, ?canDeleteStories: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       IsAnonymous = isAnonymous
       CanManageChat = canManageChat
@@ -1861,6 +1892,9 @@ and [<CLIMutable>] ChatAdministratorRights =
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
+      CanPostStories = canPostStories
+      CanEditStories = canEditStories
+      CanDeleteStories = canDeleteStories
       CanManageTopics = canManageTopics
       CanManageVoiceChats = canManageVoiceChats
     }
@@ -1913,7 +1947,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user's presence in the chat is hidden
     [<DataMember(Name = "is_anonymous")>]
     IsAnonymous: bool
-    /// True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    /// True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
     [<DataMember(Name = "can_manage_chat")>]
     CanManageChat: bool
     /// True, if the administrator can delete messages of other users
@@ -1922,7 +1956,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the administrator can manage video chats
     [<DataMember(Name = "can_manage_video_chats")>]
     CanManageVideoChats: bool
-    /// True, if the administrator can restrict, ban or unban chat members
+    /// True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics
     [<DataMember(Name = "can_restrict_members")>]
     CanRestrictMembers: bool
     /// True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)
@@ -1934,7 +1968,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user is allowed to invite new users to the chat
     [<DataMember(Name = "can_invite_users")>]
     CanInviteUsers: bool
-    /// True, if the administrator can post in the channel; channels only
+    /// True, if the administrator can post messages in the channel, or access channel statistics; channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
     /// True, if the administrator can edit messages of other users and can pin messages; channels only
@@ -1943,6 +1977,15 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
+    /// True, if the administrator can post stories in the channel; channels only
+    [<DataMember(Name = "can_post_stories")>]
+    CanPostStories: bool option
+    /// True, if the administrator can edit stories posted by other users; channels only
+    [<DataMember(Name = "can_edit_stories")>]
+    CanEditStories: bool option
+    /// True, if the administrator can delete stories posted by other users; channels only
+    [<DataMember(Name = "can_delete_stories")>]
+    CanDeleteStories: bool option
     /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
@@ -1953,14 +1996,14 @@ and [<CLIMutable>] ChatMemberAdministrator =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(status: string, canInviteUsers: bool, canChangeInfo: bool, canRestrictMembers: bool, canManageVideoChats: bool, canPromoteMembers: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canDeleteMessages: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(status: string, canInviteUsers: bool, canPromoteMembers: bool, canRestrictMembers: bool, canManageVideoChats: bool, canChangeInfo: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canDeleteMessages: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canPostStories: bool, ?canEditStories: bool, ?canDeleteStories: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       Status = status
       CanInviteUsers = canInviteUsers
-      CanChangeInfo = canChangeInfo
+      CanPromoteMembers = canPromoteMembers
       CanRestrictMembers = canRestrictMembers
       CanManageVideoChats = canManageVideoChats
-      CanPromoteMembers = canPromoteMembers
+      CanChangeInfo = canChangeInfo
       CanManageChat = canManageChat
       IsAnonymous = isAnonymous
       CanBeEdited = canBeEdited
@@ -1970,6 +2013,9 @@ and [<CLIMutable>] ChatMemberAdministrator =
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
+      CanPostStories = canPostStories
+      CanEditStories = canEditStories
+      CanDeleteStories = canDeleteStories
       CanManageTopics = canManageTopics
       CanManageVoiceChats = canManageVoiceChats
     }
@@ -2044,7 +2090,7 @@ and [<CLIMutable>] ChatMemberRestricted =
     /// True, if the user is allowed to create forum topics
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool
-    /// Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever
+    /// Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever
     [<DataMember(Name = "until_date")>]
     UntilDate: DateTime
   }
@@ -2095,7 +2141,7 @@ and [<CLIMutable>] ChatMemberBanned =
     /// Information about the user
     [<DataMember(Name = "user")>]
     User: User
-    /// Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned forever
+    /// Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever
     [<DataMember(Name = "until_date")>]
     UntilDate: DateTime
   }
@@ -2151,7 +2197,7 @@ and [<CLIMutable>] ChatJoinRequest =
     /// User that sent the join request
     [<DataMember(Name = "from")>]
     From: User
-    /// Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 24 hours to send messages until the join request is processed, assuming no other administrator contacted the user.
+    /// Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.
     [<DataMember(Name = "user_chat_id")>]
     UserChatId: int64
     /// Date the request was sent in Unix time
@@ -2917,7 +2963,7 @@ and [<CLIMutable>] InlineQueryResultsButton =
     /// Label text on the button
     [<DataMember(Name = "text")>]
     Text: string
-    /// Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method web_app_switch_inline_query inside the Web App.
+    /// Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method switchInlineQuery inside the Web App.
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
     /// Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
