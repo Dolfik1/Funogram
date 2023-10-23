@@ -794,38 +794,44 @@ type PromoteChatMember =
     UserId: int64
     IsAnonymous: bool option
     CanManageChat: bool option
-    CanPostMessages: bool option
-    CanEditMessages: bool option
     CanDeleteMessages: bool option
     CanManageVideoChats: bool option
     CanRestrictMembers: bool option
     CanPromoteMembers: bool option
     CanChangeInfo: bool option
     CanInviteUsers: bool option
+    CanPostMessages: bool option
+    CanEditMessages: bool option
     CanPinMessages: bool option
+    CanPostStories: bool option
+    CanEditStories: bool option
+    CanDeleteStories: bool option
     CanManageTopics: bool option
   }
-  static member Make(chatId: ChatId, userId: int64, ?isAnonymous: bool, ?canManageChat: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canDeleteMessages: bool, ?canManageVideoChats: bool, ?canRestrictMembers: bool, ?canPromoteMembers: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
+  static member Make(chatId: ChatId, userId: int64, ?canEditStories: bool, ?canPostStories: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canDeleteStories: bool, ?canManageTopics: bool) = 
     {
       ChatId = chatId
       UserId = userId
       IsAnonymous = isAnonymous
       CanManageChat = canManageChat
-      CanPostMessages = canPostMessages
-      CanEditMessages = canEditMessages
       CanDeleteMessages = canDeleteMessages
       CanManageVideoChats = canManageVideoChats
       CanRestrictMembers = canRestrictMembers
       CanPromoteMembers = canPromoteMembers
       CanChangeInfo = canChangeInfo
       CanInviteUsers = canInviteUsers
+      CanPostMessages = canPostMessages
+      CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
+      CanPostStories = canPostStories
+      CanEditStories = canEditStories
+      CanDeleteStories = canDeleteStories
       CanManageTopics = canManageTopics
     }
-  static member Make(chatId: int64, userId: int64, ?isAnonymous: bool, ?canManageChat: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canDeleteMessages: bool, ?canManageVideoChats: bool, ?canRestrictMembers: bool, ?canPromoteMembers: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
-    PromoteChatMember.Make(ChatId.Int chatId, userId, ?isAnonymous = isAnonymous, ?canManageChat = canManageChat, ?canPostMessages = canPostMessages, ?canEditMessages = canEditMessages, ?canDeleteMessages = canDeleteMessages, ?canManageVideoChats = canManageVideoChats, ?canRestrictMembers = canRestrictMembers, ?canPromoteMembers = canPromoteMembers, ?canChangeInfo = canChangeInfo, ?canInviteUsers = canInviteUsers, ?canPinMessages = canPinMessages, ?canManageTopics = canManageTopics)
-  static member Make(chatId: string, userId: int64, ?isAnonymous: bool, ?canManageChat: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canDeleteMessages: bool, ?canManageVideoChats: bool, ?canRestrictMembers: bool, ?canPromoteMembers: bool, ?canChangeInfo: bool, ?canInviteUsers: bool, ?canPinMessages: bool, ?canManageTopics: bool) = 
-    PromoteChatMember.Make(ChatId.String chatId, userId, ?isAnonymous = isAnonymous, ?canManageChat = canManageChat, ?canPostMessages = canPostMessages, ?canEditMessages = canEditMessages, ?canDeleteMessages = canDeleteMessages, ?canManageVideoChats = canManageVideoChats, ?canRestrictMembers = canRestrictMembers, ?canPromoteMembers = canPromoteMembers, ?canChangeInfo = canChangeInfo, ?canInviteUsers = canInviteUsers, ?canPinMessages = canPinMessages, ?canManageTopics = canManageTopics)
+  static member Make(chatId: int64, userId: int64, ?canEditStories: bool, ?canPostStories: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canDeleteStories: bool, ?canManageTopics: bool) = 
+    PromoteChatMember.Make(ChatId.Int chatId, userId, ?canEditStories = canEditStories, ?canPostStories = canPostStories, ?canPinMessages = canPinMessages, ?canEditMessages = canEditMessages, ?canPostMessages = canPostMessages, ?canInviteUsers = canInviteUsers, ?canChangeInfo = canChangeInfo, ?canPromoteMembers = canPromoteMembers, ?canRestrictMembers = canRestrictMembers, ?canManageVideoChats = canManageVideoChats, ?canDeleteMessages = canDeleteMessages, ?canManageChat = canManageChat, ?isAnonymous = isAnonymous, ?canDeleteStories = canDeleteStories, ?canManageTopics = canManageTopics)
+  static member Make(chatId: string, userId: int64, ?canEditStories: bool, ?canPostStories: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canDeleteStories: bool, ?canManageTopics: bool) = 
+    PromoteChatMember.Make(ChatId.String chatId, userId, ?canEditStories = canEditStories, ?canPostStories = canPostStories, ?canPinMessages = canPinMessages, ?canEditMessages = canEditMessages, ?canPostMessages = canPostMessages, ?canInviteUsers = canInviteUsers, ?canChangeInfo = canChangeInfo, ?canPromoteMembers = canPromoteMembers, ?canRestrictMembers = canRestrictMembers, ?canManageVideoChats = canManageVideoChats, ?canDeleteMessages = canDeleteMessages, ?canManageChat = canManageChat, ?isAnonymous = isAnonymous, ?canDeleteStories = canDeleteStories, ?canManageTopics = canManageTopics)
   interface IRequestBase<bool> with
     member _.MethodName = "promoteChatMember"
     
@@ -1432,6 +1438,21 @@ type UnhideGeneralForumTopic =
     UnhideGeneralForumTopic.Make(ChatId.String chatId)
   interface IRequestBase<bool> with
     member _.MethodName = "unhideGeneralForumTopic"
+    
+type UnpinAllGeneralForumTopicMessages =
+  {
+    ChatId: ChatId
+  }
+  static member Make(chatId: ChatId) = 
+    {
+      ChatId = chatId
+    }
+  static member Make(chatId: int64) = 
+    UnpinAllGeneralForumTopicMessages.Make(ChatId.Int chatId)
+  static member Make(chatId: string) = 
+    UnpinAllGeneralForumTopicMessages.Make(ChatId.String chatId)
+  interface IRequestBase<bool> with
+    member _.MethodName = "unpinAllGeneralForumTopicMessages"
     
 type AnswerCallbackQuery =
   {
