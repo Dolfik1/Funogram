@@ -31,7 +31,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u201Cmessage\u201D, \u201Cedited_channel_post\u201D, \u201Ccallback_query\u201D] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -80,7 +80,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u201Cmessage\u201D, \u201Cedited_channel_post\u201D, \u201Ccallback_query\u201D] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\nPlease note that this parameter doesn\u0027t affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\nPlease note that this parameter doesn\u0027t affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -1989,7 +1989,7 @@
       {
         "OriginalName": "until_date",
         "ConvertedName": "UntilDate",
-        "Description": "Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.",
+        "Description": "Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2079,7 +2079,7 @@
       {
         "OriginalName": "until_date",
         "ConvertedName": "UntilDate",
-        "Description": "Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever",
+        "Description": "Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2120,23 +2120,7 @@
       {
         "OriginalName": "can_manage_chat",
         "ConvertedName": "CanManageChat",
-        "Description": "Pass True if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_post_messages",
-        "ConvertedName": "CanPostMessages",
-        "Description": "Pass True if the administrator can create channel posts, channels only",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_edit_messages",
-        "ConvertedName": "CanEditMessages",
-        "Description": "Pass True if the administrator can edit messages of other users and can pin messages, channels only",
+        "Description": "Pass True if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2160,7 +2144,7 @@
       {
         "OriginalName": "can_restrict_members",
         "ConvertedName": "CanRestrictMembers",
-        "Description": "Pass True if the administrator can restrict, ban or unban chat members",
+        "Description": "Pass True if the administrator can restrict, ban or unban chat members, or access supergroup statistics",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2190,9 +2174,49 @@
         "Optional": true
       },
       {
+        "OriginalName": "can_post_messages",
+        "ConvertedName": "CanPostMessages",
+        "Description": "Pass True if the administrator can post messages in the channel, or access channel statistics; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_edit_messages",
+        "ConvertedName": "CanEditMessages",
+        "Description": "Pass True if the administrator can edit messages of other users and can pin messages; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "can_pin_messages",
         "ConvertedName": "CanPinMessages",
         "Description": "Pass True if the administrator can pin messages, supergroups only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_post_stories",
+        "ConvertedName": "CanPostStories",
+        "Description": "Pass True if the administrator can post stories in the channel; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_edit_stories",
+        "ConvertedName": "CanEditStories",
+        "Description": "Pass True if the administrator can edit stories posted by other users; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_delete_stories",
+        "ConvertedName": "CanDeleteStories",
+        "Description": "Pass True if the administrator can delete stories posted by other users; channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3095,6 +3119,23 @@
     "OriginalName": "unhideGeneralForumTopic",
     "ConvertedName": "UnhideGeneralForumTopic",
     "Description": "Use this method to unhide the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "unpinAllGeneralForumTopicMessages",
+    "ConvertedName": "UnpinAllGeneralForumTopicMessages",
+    "Description": "Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",

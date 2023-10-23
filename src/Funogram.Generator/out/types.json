@@ -113,7 +113,7 @@
           {
             "OriginalName": "chat_member",
             "ConvertedName": "ChatMember",
-            "Description": "A chat member\u0027s status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify \u201Cchat_member\u201D in the list of allowed_updates to receive these updates.",
+            "Description": "A chat member\u0027s status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify \u0022chat_member\u0022 in the list of allowed_updates to receive these updates.",
             "OriginalFieldType": "ChatMemberUpdated",
             "ConvertedFieldType": "ChatMemberUpdated",
             "Optional": true
@@ -397,6 +397,14 @@
             "Description": "Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "emoji_status_expiration_date",
+            "ConvertedName": "EmojiStatusExpirationDate",
+            "Description": "Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in getChat.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -771,6 +779,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "story",
+            "ConvertedName": "Story",
+            "Description": "Message is a forwarded story",
+            "OriginalFieldType": "Story",
+            "ConvertedFieldType": "Story",
+            "Optional": true
+          },
+          {
             "OriginalName": "video",
             "ConvertedName": "Video",
             "Description": "Message is a video, information about the video",
@@ -1005,7 +1021,7 @@
           {
             "OriginalName": "write_access_allowed",
             "ConvertedName": "WriteAccessAllowed",
-            "Description": "Service message: the user allowed the bot added to the attachment menu to write messages",
+            "Description": "Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess",
             "OriginalFieldType": "WriteAccessAllowed",
             "ConvertedFieldType": "WriteAccessAllowed",
             "Optional": true
@@ -1489,6 +1505,13 @@
     }
   },
   {
+    "Name": "Story",
+    "Description": "This object represents a message about a forwarded story in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
     "Name": "Video",
     "Description": "This object represents a video file.",
     "Kind": {
@@ -1802,17 +1825,25 @@
             "Optional": false
           },
           {
+            "OriginalName": "voter_chat",
+            "ConvertedName": "VoterChat",
+            "Description": "The chat that changed the answer to the poll, if the voter is anonymous",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
             "OriginalName": "user",
             "ConvertedName": "User",
-            "Description": "The user, who changed the answer to the poll",
+            "Description": "The user that changed the answer to the poll, if the voter isn\u0027t anonymous",
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "option_ids",
             "ConvertedName": "OptionIds",
-            "Description": "0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.",
+            "Description": "0-based identifiers of chosen answer options. May be empty if the vote was retracted.",
             "OriginalFieldType": "Array of Integer",
             "ConvertedFieldType": "int64[]",
             "Optional": false
@@ -2289,17 +2320,33 @@
   },
   {
     "Name": "WriteAccessAllowed",
-    "Description": "This object represents a service message about a user allowing a bot to write messages after adding the bot to the attachment menu or launching a Web App from a link.",
+    "Description": "This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
         [
           {
+            "OriginalName": "from_request",
+            "ConvertedName": "FromRequest",
+            "Description": "True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "web_app_name",
             "ConvertedName": "WebAppName",
-            "Description": "Name of the Web App which was launched from a link",
+            "Description": "Name of the Web App, if the access was granted when the Web App was launched from a link",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "from_attachment_menu",
+            "ConvertedName": "FromAttachmentMenu",
+            "Description": "True, if the access was granted when the bot was added to the attachment or side menu",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]
@@ -2810,7 +2857,7 @@
           {
             "OriginalName": "switch_inline_query",
             "ConvertedName": "SwitchInlineQuery",
-            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted.\n\nNote: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm\u2026 actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -3191,7 +3238,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "Description": "True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3215,7 +3262,7 @@
           {
             "OriginalName": "can_restrict_members",
             "ConvertedName": "CanRestrictMembers",
-            "Description": "True, if the administrator can restrict, ban or unban chat members",
+            "Description": "True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3247,7 +3294,7 @@
           {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
-            "Description": "True, if the administrator can post in the channel; channels only",
+            "Description": "True, if the administrator can post messages in the channel, or access channel statistics; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3264,6 +3311,30 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages; groups and supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_post_stories",
+            "ConvertedName": "CanPostStories",
+            "Description": "True, if the administrator can post stories in the channel; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_stories",
+            "ConvertedName": "CanEditStories",
+            "Description": "True, if the administrator can edit stories posted by other users; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_delete_stories",
+            "ConvertedName": "CanDeleteStories",
+            "Description": "True, if the administrator can delete stories posted by other users; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3408,7 +3479,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "Description": "True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3432,7 +3503,7 @@
           {
             "OriginalName": "can_restrict_members",
             "ConvertedName": "CanRestrictMembers",
-            "Description": "True, if the administrator can restrict, ban or unban chat members",
+            "Description": "True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3464,7 +3535,7 @@
           {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
-            "Description": "True, if the administrator can post in the channel; channels only",
+            "Description": "True, if the administrator can post messages in the channel, or access channel statistics; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3481,6 +3552,30 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages; groups and supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_post_stories",
+            "ConvertedName": "CanPostStories",
+            "Description": "True, if the administrator can post stories in the channel; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_stories",
+            "ConvertedName": "CanEditStories",
+            "Description": "True, if the administrator can edit stories posted by other users; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_delete_stories",
+            "ConvertedName": "CanDeleteStories",
+            "Description": "True, if the administrator can delete stories posted by other users; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3686,7 +3781,7 @@
           {
             "OriginalName": "until_date",
             "ConvertedName": "UntilDate",
-            "Description": "Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever",
+            "Description": "Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
             "Optional": false
@@ -3748,7 +3843,7 @@
           {
             "OriginalName": "until_date",
             "ConvertedName": "UntilDate",
-            "Description": "Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned forever",
+            "Description": "Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
             "Optional": false
@@ -3850,7 +3945,7 @@
           {
             "OriginalName": "user_chat_id",
             "ConvertedName": "UserChatId",
-            "Description": "Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 24 hours to send messages until the join request is processed, assuming no other administrator contacted the user.",
+            "Description": "Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -5285,7 +5380,7 @@
           {
             "OriginalName": "web_app",
             "ConvertedName": "WebApp",
-            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method web_app_switch_inline_query inside the Web App.",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method switchInlineQuery inside the Web App.",
             "OriginalFieldType": "WebAppInfo",
             "ConvertedFieldType": "WebAppInfo",
             "Optional": true

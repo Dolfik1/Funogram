@@ -3,6 +3,7 @@
 open System
 open System.IO
 open System.Net.Http
+open System.Net.Sockets
 open Funogram.Telegram
 open Funogram.Telegram.Sscanf
 open Funogram.Telegram.Types
@@ -116,12 +117,12 @@ let private runBot config me updateArrived updatesArrived =
             return! loopAsync offset // send new offset
           | Error e ->
             config.OnError (e.AsException() :> Exception)
-            
+
             // add delay in case of HTTP error
             // for example: the server may be "busy"
             if e.Description = "HTTP_ERROR" then
               do! Async.Sleep 1000
-            
+
             return! loopAsync offset
           | _ ->
             return! loopAsync offset
@@ -131,7 +132,12 @@ let private runBot config me updateArrived updatesArrived =
           config.OnError e
           do! Async.Sleep 1000
           return! loopAsync offset
-          
+
+        | :? AggregateException as e when e.InnerExceptions <> null && e.InnerExceptions |> Seq.exists (fun x -> (x :? HttpRequestException) || (x :? SocketException)) ->
+          config.OnError e
+          do! Async.Sleep 1000
+          return! loopAsync offset
+
         | ex ->
           config.OnError ex
           // in case of "general" error we should increment offset to skip problematic update
