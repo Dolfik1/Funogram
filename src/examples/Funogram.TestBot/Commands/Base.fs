@@ -52,6 +52,5 @@ let updateArrived (ctx: UpdateContext) =
       cmd "/send_photo" (fun _ -> Files.testUploadAndSendSinglePhoto |> wrap)
     |]
 
-  if result then ()
-  else
+  if result then
     Api.sendMessage (fromId()) defaultText |> bot ctx.Config
