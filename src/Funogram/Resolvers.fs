@@ -183,7 +183,20 @@ module internal Resolvers =
           reader.AdvanceOffset(newOffset - offset)
           value
         | None ->
-          failwithf "Internal error: Cannot match type \"%s\" by fields. Please create issue on https://github.com/Dolfik1/Funogram/issues" typeof<'a>.FullName
+          // try to find most similar type
+          let item =
+            cases |> Array.maxBy (fun (caseNames, tp) ->
+              if jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value) then
+                jsonCaseNames |> Seq.sumBy (fun n -> if caseNames |> Set.contains n then 1 else 0)
+              else
+                -1
+            )
+
+          let idx = cases |> Array.findIndex (fun x -> x = item)
+          let value, newOffset = deserializers.[idx] buffer offset resolver
+          reader.AdvanceOffset(newOffset - offset)
+          value
+          // failwithf "Internal error: Cannot match type \"%s\" by fields. Please create issue on https://github.com/Dolfik1/Funogram/issues" typeof<'a>.FullName
 
   let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
   let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
