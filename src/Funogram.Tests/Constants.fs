@@ -48,7 +48,7 @@ module Constants =
     
   let jsonMessageForward = Message.Create(1L, testDate, jsonTestChat, forwardOrigin = testForwardOrigin, text = "abc")
     
-  let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":1,"type":"group","title":"Test group"},"forward_date":%i,"text":"abc"}""" testDateUnix testDateUnix    
+  let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":1,"type":"group","title":"Test group"},"forward_origin":{"type":"hidden_user","date":%i,"sender_user_name":"test user"},"text":"abc"}""" testDateUnix testDateUnix
   let jsonMessageForwardDateApiString = ok jsonMessageForwardDateString
     
   let paramsDictionary =
