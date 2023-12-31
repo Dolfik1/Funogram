@@ -15,14 +15,14 @@ let testNoWebpageAndNotification config chatId =
     ChatId.Int chatId,
     "@Dolfik! See http://fsharplang.ru - Russian F# Community",
     disableNotification = true,
-    disableWebPagePreview = true
+    linkPreviewOptions = LinkPreviewOptions.Create(isDisabled = true)
   ) |> bot config
 
 let testReply (ctx: UpdateContext) config (chatId: int64) =
   Req.SendMessage.Make(
     chatId,
     "That's message with reply!",
-    replyToMessageId = ctx.Update.Message.Value.MessageId
+    replyParameters = ReplyParameters.Create(messageId = ctx.Update.Message.Value.MessageId)
   ) |> bot config
  
 let testForwardMessage (ctx: UpdateContext) config (chatId: int64) =

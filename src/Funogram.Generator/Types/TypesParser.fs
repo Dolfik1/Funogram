@@ -47,7 +47,11 @@ let private splitCaseNameAndType (typeName: string) (nameAndType: string) =
     | "InputMessageContent" -> "Input"
     | _ -> typeName
 
-  try nameAndType.Substring(typeName.Length) with | _ -> "ERROR!"
+  match typeName, nameAndType with
+  | "MaybeInaccessibleMessage", "Message" -> "Message"
+  | "MaybeInaccessibleMessage", "InaccessibleMessage" -> "InaccessibleMessage"
+  | _ ->
+    try nameAndType.Substring(typeName.Length) with | _ -> "ERROR!"
 
 let private isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
   let name = Helpers.innerText typeNodeInfo.TypeName

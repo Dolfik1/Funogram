@@ -10,7 +10,14 @@ module Constants =
     
   let testDate = System.DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
   let testDateUnix = 4651649271L
-    
+  let testForwardOrigin = MessageOrigin.HiddenUser(
+                            MessageOriginHiddenUser.Create(
+                              ``type`` = "hidden_user",
+                              date = testDate,
+                              senderUserName = "test user"
+                            )
+                          )
+
   let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None; Language = None; CustomEmojiId = None }
   let jsonTestObjString = """{"type":"italic","offset":0,"length":100,"url":"http://github.com"}"""
   let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null,"language":null} }"""
@@ -35,10 +42,11 @@ module Constants =
   let testMaskPosition = { MaskPosition.Point = MaskPoint.Eyes; XShift = 0.0; YShift = 0.0; Scale = 0.0 }
   let jsonTestMaskPosition = """{"point":"eyes","x_shift":0,"y_shift":0,"scale":0}"""
   let jsonTestMaskPositionResult = ok jsonTestMaskPosition
+
+
+  let jsonMessageForwardDate = Message.Create(1L, testDate, jsonTestChat, text = "abc", forwardOrigin = testForwardOrigin)
     
-  let jsonMessageForwardDate = Message.Create(1L, testDate, jsonTestChat, text = "abc", forwardDate = testDate)
-    
-  let jsonMessageForward = Message.Create(1L, testDate, jsonTestChat, forwardDate = testDate, text = "abc")
+  let jsonMessageForward = Message.Create(1L, testDate, jsonTestChat, forwardOrigin = testForwardOrigin, text = "abc")
     
   let jsonMessageForwardDateString = sprintf """{"message_id":1,"date":%i,"chat":{"id":1,"type":"group","title":"Test group"},"forward_date":%i,"text":"abc"}""" testDateUnix testDateUnix    
   let jsonMessageForwardDateApiString = ok jsonMessageForwardDateString
