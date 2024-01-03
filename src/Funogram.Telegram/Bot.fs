@@ -107,7 +107,7 @@ let private runBot config me updateArrived updatesArrived =
       async {
         try
           let! updatesResult =
-            Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
+            Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout, ?allowedUpdates = (config.AllowedUpdates |> Option.map Seq.toArray))
             |> bot
 
           match updatesResult with

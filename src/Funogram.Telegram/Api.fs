@@ -2,6 +2,7 @@
 module Funogram.Telegram.Api
 
 open Funogram.Telegram
+open Funogram.Telegram.Types
 open Types
 
 let deleteWebhookBase () =
@@ -15,7 +16,7 @@ let sendMessageByChatName chatName text = Req.SendMessage.Make(ChatId.String cha
 
 let sendMessageMarkup chatId text replyMarkup = Req.SendMessage.Make(ChatId.Int chatId, text, replyMarkup = replyMarkup)
 
-let sendMessageReply chatId text replyToMessageId = Req.SendMessage.Make(ChatId.Int chatId, text, replyToMessageId = replyToMessageId)
+let sendMessageReply chatId text replyToMessageId = Req.SendMessage.Make(ChatId.Int chatId, text, replyParameters = ReplyParameters.Create replyToMessageId)
 
 let forwardMessage chatId fromChatId messageId = Req.ForwardMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId)
 

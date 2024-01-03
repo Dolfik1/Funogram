@@ -31,7 +31,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -80,7 +80,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\nPlease note that this parameter doesn\u0027t affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.\nPlease note that this parameter doesn\u0027t affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -200,11 +200,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "disable_web_page_preview",
-        "ConvertedName": "DisableWebPagePreview",
-        "Description": "Disables link previews for links in this message",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "link_preview_options",
+        "ConvertedName": "LinkPreviewOptions",
+        "Description": "Link preview generation options for the message",
+        "OriginalFieldType": "LinkPreviewOptions",
+        "ConvertedFieldType": "LinkPreviewOptions",
         "Optional": true
       },
       {
@@ -224,19 +224,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -254,7 +246,7 @@
   {
     "OriginalName": "forwardMessage",
     "ConvertedName": "ForwardMessage",
-    "Description": "Use this method to forward messages of any kind. Service messages can\u0027t be forwarded. On success, the sent Message is returned.",
+    "Description": "Use this method to forward messages of any kind. Service messages and messages with protected content can\u0027t be forwarded. On success, the sent Message is returned.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -309,9 +301,66 @@
     "ConvertedReturnType": "Message"
   },
   {
+    "OriginalName": "forwardMessages",
+    "ConvertedName": "ForwardMessages",
+    "Description": "Use this method to forward multiple messages of any kind. If some of the specified messages can\u0027t be found or forwarded, they are skipped. Service messages and messages with protected content can\u0027t be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "from_chat_id",
+        "ConvertedName": "FromChatId",
+        "Description": "Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "Identifiers of 1-100 messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order.",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      },
+      {
+        "OriginalName": "disable_notification",
+        "ConvertedName": "DisableNotification",
+        "Description": "Sends the messages silently. Users will receive a notification with no sound.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Protects the contents of the forwarded messages from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "array of MessageId",
+    "ConvertedReturnType": "MessageId[]"
+  },
+  {
     "OriginalName": "copyMessage",
     "ConvertedName": "CopyMessage",
-    "Description": "Use this method to copy messages of any kind. Service messages and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
+    "Description": "Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -386,19 +435,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -412,6 +453,71 @@
     ],
     "OriginalReturnType": "MessageId",
     "ConvertedReturnType": "MessageId"
+  },
+  {
+    "OriginalName": "copyMessages",
+    "ConvertedName": "CopyMessages",
+    "Description": "Use this method to copy messages of any kind. If some of the specified messages can\u0027t be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don\u0027t have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "from_chat_id",
+        "ConvertedName": "FromChatId",
+        "Description": "Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "Identifiers of 1-100 messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order.",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      },
+      {
+        "OriginalName": "disable_notification",
+        "ConvertedName": "DisableNotification",
+        "Description": "Sends the messages silently. Users will receive a notification with no sound.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Protects the contents of the sent messages from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "remove_caption",
+        "ConvertedName": "RemoveCaption",
+        "Description": "Pass True to copy the messages without their captions",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "array of MessageId",
+    "ConvertedReturnType": "MessageId[]"
   },
   {
     "OriginalName": "sendPhoto",
@@ -491,19 +597,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -620,19 +718,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -733,19 +823,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -878,19 +960,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1015,19 +1089,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1120,19 +1186,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1217,19 +1275,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1290,19 +1340,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the messages are a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       }
     ],
@@ -1395,19 +1437,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1524,19 +1558,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1621,19 +1647,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1782,19 +1800,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1855,19 +1865,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1910,6 +1912,47 @@
         "OriginalFieldType": "String",
         "ConvertedFieldType": "ChatAction",
         "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setMessageReaction",
+    "ConvertedName": "SetMessageReaction",
+    "Description": "Use this method to change the chosen reactions on a message. Service messages can\u0027t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "reaction",
+        "ConvertedName": "Reaction",
+        "Description": "New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.",
+        "OriginalFieldType": "Array of ReactionType",
+        "ConvertedFieldType": "ReactionType[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "is_big",
+        "ConvertedName": "IsBig",
+        "Description": "Pass True to set the reaction with a big animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
@@ -2734,7 +2777,7 @@
   {
     "OriginalName": "getChat",
     "ConvertedName": "GetChat",
-    "Description": "Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.",
+    "Description": "Use this method to get up to date information about the chat. Returns a Chat object on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -3199,6 +3242,31 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "getUserChatBoosts",
+    "ConvertedName": "GetUserChatBoosts",
+    "Description": "Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the chat or username of the channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "UserChatBoosts",
+    "ConvertedReturnType": "UserChatBoosts"
+  },
+  {
     "OriginalName": "setMyCommands",
     "ConvertedName": "SetMyCommands",
     "Description": "Use this method to change the list of the bot\u0027s commands. See this manual for more details about bot commands. Returns True on success.",
@@ -3545,11 +3613,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "disable_web_page_preview",
-        "ConvertedName": "DisableWebPagePreview",
-        "Description": "Disables link previews for links in this message",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "link_preview_options",
+        "ConvertedName": "LinkPreviewOptions",
+        "Description": "Link preview generation options for the message",
+        "OriginalFieldType": "LinkPreviewOptions",
+        "ConvertedFieldType": "LinkPreviewOptions",
         "Optional": true
       },
       {
@@ -3900,6 +3968,31 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "deleteMessages",
+    "ConvertedName": "DeleteMessages",
+    "Description": "Use this method to delete multiple messages simultaneously. If some of the specified messages can\u0027t be found, they are skipped. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "Identifiers of 1-100 messages to delete. See deleteMessage for limitations on which messages can be deleted",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "sendSticker",
     "ConvertedName": "SendSticker",
     "Description": "Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.",
@@ -3953,19 +4046,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -4650,19 +4735,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -4991,19 +5068,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {

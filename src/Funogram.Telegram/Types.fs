@@ -89,6 +89,12 @@ and [<CLIMutable>] Update =
     /// New version of a channel post that is known to the bot and was edited
     [<DataMember(Name = "edited_channel_post")>]
     EditedChannelPost: Message option
+    /// A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to receive these updates. The update isn't received for reactions set by bots.
+    [<DataMember(Name = "message_reaction")>]
+    MessageReaction: MessageReactionUpdated option
+    /// Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of allowed_updates to receive these updates.
+    [<DataMember(Name = "message_reaction_count")>]
+    MessageReactionCount: MessageReactionCountUpdated option
     /// New incoming inline query
     [<DataMember(Name = "inline_query")>]
     InlineQuery: InlineQuery option
@@ -119,24 +125,34 @@ and [<CLIMutable>] Update =
     /// A request to join the chat has been sent. The bot must have the can_invite_users administrator right in the chat to receive these updates.
     [<DataMember(Name = "chat_join_request")>]
     ChatJoinRequest: ChatJoinRequest option
+    /// A chat boost was added or changed. The bot must be an administrator in the chat to receive these updates.
+    [<DataMember(Name = "chat_boost")>]
+    ChatBoost: ChatBoostUpdated option
+    /// A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.
+    [<DataMember(Name = "removed_chat_boost")>]
+    RemovedChatBoost: ChatBoostRemoved option
   }
-  static member Create(updateId: int64, ?message: Message, ?editedMessage: Message, ?channelPost: Message, ?editedChannelPost: Message, ?inlineQuery: InlineQuery, ?chosenInlineResult: ChosenInlineResult, ?callbackQuery: CallbackQuery, ?shippingQuery: ShippingQuery, ?preCheckoutQuery: PreCheckoutQuery, ?poll: Poll, ?pollAnswer: PollAnswer, ?myChatMember: ChatMemberUpdated, ?chatMember: ChatMemberUpdated, ?chatJoinRequest: ChatJoinRequest) = 
+  static member Create(updateId: int64, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?chatBoost: ChatBoostUpdated, ?callbackQuery: CallbackQuery, ?inlineQuery: InlineQuery, ?messageReactionCount: MessageReactionCountUpdated, ?messageReaction: MessageReactionUpdated, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?chosenInlineResult: ChosenInlineResult, ?removedChatBoost: ChatBoostRemoved) = 
     {
       UpdateId = updateId
-      Message = message
-      EditedMessage = editedMessage
-      ChannelPost = channelPost
-      EditedChannelPost = editedChannelPost
-      InlineQuery = inlineQuery
-      ChosenInlineResult = chosenInlineResult
-      CallbackQuery = callbackQuery
-      ShippingQuery = shippingQuery
-      PreCheckoutQuery = preCheckoutQuery
-      Poll = poll
-      PollAnswer = pollAnswer
-      MyChatMember = myChatMember
-      ChatMember = chatMember
       ChatJoinRequest = chatJoinRequest
+      ChatMember = chatMember
+      MyChatMember = myChatMember
+      PollAnswer = pollAnswer
+      Poll = poll
+      PreCheckoutQuery = preCheckoutQuery
+      ShippingQuery = shippingQuery
+      ChatBoost = chatBoost
+      CallbackQuery = callbackQuery
+      InlineQuery = inlineQuery
+      MessageReactionCount = messageReactionCount
+      MessageReaction = messageReaction
+      EditedChannelPost = editedChannelPost
+      ChannelPost = channelPost
+      EditedMessage = editedMessage
+      Message = message
+      ChosenInlineResult = chosenInlineResult
+      RemovedChatBoost = removedChatBoost
     }
 
 /// Describes the current status of a webhook.
@@ -267,10 +283,25 @@ and [<CLIMutable>] Chat =
     /// If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.
     [<DataMember(Name = "active_usernames")>]
     ActiveUsernames: string[] option
-    /// Custom emoji identifier of emoji status of the other party in a private chat. Returned only in getChat.
+    /// List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. Returned only in getChat.
+    [<DataMember(Name = "available_reactions")>]
+    AvailableReactions: ReactionType[] option
+    /// Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. Returned only in getChat. Always returned in getChat.
+    [<DataMember(Name = "accent_color_id")>]
+    AccentColorId: int64 option
+    /// Custom emoji identifier of emoji chosen by the chat for the reply header and link preview background. Returned only in getChat.
+    [<DataMember(Name = "background_custom_emoji_id")>]
+    BackgroundCustomEmojiId: string option
+    /// Identifier of the accent color for the chat's profile background. See profile accent colors for more details. Returned only in getChat.
+    [<DataMember(Name = "profile_accent_color_id")>]
+    ProfileAccentColorId: int64 option
+    /// Custom emoji identifier of the emoji chosen by the chat for its profile background. Returned only in getChat.
+    [<DataMember(Name = "profile_background_custom_emoji_id")>]
+    ProfileBackgroundCustomEmojiId: string option
+    /// Custom emoji identifier of the emoji status of the chat or the other party in a private chat. Returned only in getChat.
     [<DataMember(Name = "emoji_status_custom_emoji_id")>]
     EmojiStatusCustomEmojiId: string option
-    /// Expiration date of the emoji status of the other party in a private chat in Unix time, if any. Returned only in getChat.
+    /// Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any. Returned only in getChat.
     [<DataMember(Name = "emoji_status_expiration_date")>]
     EmojiStatusExpirationDate: int64 option
     /// Bio of the other party in a private chat. Returned only in getChat.
@@ -315,6 +346,9 @@ and [<CLIMutable>] Chat =
     /// True, if messages from the chat can't be forwarded to other chats. Returned only in getChat.
     [<DataMember(Name = "has_protected_content")>]
     HasProtectedContent: bool option
+    /// True, if new chat members will have access to old messages; available only to chat administrators. Returned only in getChat.
+    [<DataMember(Name = "has_visible_history")>]
+    HasVisibleHistory: bool option
     /// For supergroups, name of group sticker set. Returned only in getChat.
     [<DataMember(Name = "sticker_set_name")>]
     StickerSetName: string option
@@ -328,36 +362,42 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?canSetStickerSet: bool, ?stickerSetName: string, ?hasProtectedContent: bool, ?hasHiddenMembers: bool, ?hasAggressiveAntiSpamEnabled: bool, ?messageAutoDeleteTime: int64, ?slowModeDelay: int64, ?permissions: ChatPermissions, ?pinnedMessage: Message, ?inviteLink: string, ?description: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusExpirationDate: int64, ?emojiStatusCustomEmojiId: string, ?activeUsernames: string[], ?photo: ChatPhoto, ?isForum: bool, ?lastName: string, ?firstName: string, ?username: string, ?title: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?linkedChatId: int64, ?activeUsernames: string[], ?accentColorId: int64, ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?availableReactions: ReactionType[], ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
-      CanSetStickerSet = canSetStickerSet
-      StickerSetName = stickerSetName
-      HasProtectedContent = hasProtectedContent
-      HasHiddenMembers = hasHiddenMembers
-      HasAggressiveAntiSpamEnabled = hasAggressiveAntiSpamEnabled
-      MessageAutoDeleteTime = messageAutoDeleteTime
-      SlowModeDelay = slowModeDelay
-      Permissions = permissions
-      PinnedMessage = pinnedMessage
-      InviteLink = inviteLink
-      Description = description
       JoinByRequest = joinByRequest
+      Description = description
+      InviteLink = inviteLink
+      PinnedMessage = pinnedMessage
+      Permissions = permissions
+      SlowModeDelay = slowModeDelay
+      MessageAutoDeleteTime = messageAutoDeleteTime
+      HasAggressiveAntiSpamEnabled = hasAggressiveAntiSpamEnabled
+      HasHiddenMembers = hasHiddenMembers
+      HasProtectedContent = hasProtectedContent
+      HasVisibleHistory = hasVisibleHistory
+      StickerSetName = stickerSetName
+      CanSetStickerSet = canSetStickerSet
       JoinToSendMessages = joinToSendMessages
       HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasPrivateForwards = hasPrivateForwards
       Bio = bio
-      EmojiStatusExpirationDate = emojiStatusExpirationDate
-      EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
-      ActiveUsernames = activeUsernames
-      Photo = photo
-      IsForum = isForum
-      LastName = lastName
-      FirstName = firstName
-      Username = username
       Title = title
+      Username = username
+      FirstName = firstName
+      LastName = lastName
+      IsForum = isForum
+      Photo = photo
       LinkedChatId = linkedChatId
+      ActiveUsernames = activeUsernames
+      AccentColorId = accentColorId
+      BackgroundCustomEmojiId = backgroundCustomEmojiId
+      ProfileAccentColorId = profileAccentColorId
+      ProfileBackgroundCustomEmojiId = profileBackgroundCustomEmojiId
+      EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
+      EmojiStatusExpirationDate = emojiStatusExpirationDate
+      AvailableReactions = availableReactions
       Location = location
     }
 
@@ -376,39 +416,30 @@ and [<CLIMutable>] Message =
     /// Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     [<DataMember(Name = "sender_chat")>]
     SenderChat: Chat option
-    /// Date the message was sent in Unix time
+    /// Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     [<DataMember(Name = "date")>]
     Date: DateTime
-    /// Conversation the message belongs to
+    /// Chat the message belongs to
     [<DataMember(Name = "chat")>]
     Chat: Chat
-    /// For forwarded messages, sender of the original message
-    [<DataMember(Name = "forward_from")>]
-    ForwardFrom: User option
-    /// For messages forwarded from channels or from anonymous administrators, information about the original sender chat
-    [<DataMember(Name = "forward_from_chat")>]
-    ForwardFromChat: Chat option
-    /// For messages forwarded from channels, identifier of the original message in the channel
-    [<DataMember(Name = "forward_from_message_id")>]
-    ForwardFromMessageId: int64 option
-    /// For forwarded messages that were originally sent in channels or by an anonymous chat administrator, signature of the message sender if present
-    [<DataMember(Name = "forward_signature")>]
-    ForwardSignature: string option
-    /// Sender's name for messages forwarded from users who disallow adding a link to their account in forwarded messages
-    [<DataMember(Name = "forward_sender_name")>]
-    ForwardSenderName: string option
-    /// For forwarded messages, date the original message was sent in Unix time
-    [<DataMember(Name = "forward_date")>]
-    ForwardDate: DateTime option
+    /// Information about the original message for forwarded messages
+    [<DataMember(Name = "forward_origin")>]
+    ForwardOrigin: MessageOrigin option
     /// True, if the message is sent to a forum topic
     [<DataMember(Name = "is_topic_message")>]
     IsTopicMessage: bool option
     /// True, if the message is a channel post that was automatically forwarded to the connected discussion group
     [<DataMember(Name = "is_automatic_forward")>]
     IsAutomaticForward: bool option
-    /// For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
+    /// For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
     [<DataMember(Name = "reply_to_message")>]
     ReplyToMessage: Message option
+    /// Information about the message that is being replied to, which may come from another chat or forum topic
+    [<DataMember(Name = "external_reply")>]
+    ExternalReply: ExternalReplyInfo option
+    /// For replies that quote part of the original message, the quoted part of the message
+    [<DataMember(Name = "quote")>]
+    Quote: TextQuote option
     /// Bot through which the message was sent
     [<DataMember(Name = "via_bot")>]
     ViaBot: User option
@@ -430,6 +461,9 @@ and [<CLIMutable>] Message =
     /// For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text
     [<DataMember(Name = "entities")>]
     Entities: MessageEntity[] option
+    /// Options used for link preview generation for the message, if it is a text message and link preview options were changed
+    [<DataMember(Name = "link_preview_options")>]
+    LinkPreviewOptions: LinkPreviewOptions option
     /// Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set
     [<DataMember(Name = "animation")>]
     Animation: Animation option
@@ -517,18 +551,18 @@ and [<CLIMutable>] Message =
     /// The supergroup has been migrated from a group with the specified identifier. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.
     [<DataMember(Name = "migrate_from_chat_id")>]
     MigrateFromChatId: int64 option
-    /// Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.
+    /// Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.
     [<DataMember(Name = "pinned_message")>]
-    PinnedMessage: Message option
+    PinnedMessage: MaybeInaccessibleMessage option
     /// Message is an invoice for a payment, information about the invoice. More about payments »
     [<DataMember(Name = "invoice")>]
     Invoice: Invoice option
     /// Message is a service message about a successful payment, information about the payment. More about payments »
     [<DataMember(Name = "successful_payment")>]
     SuccessfulPayment: SuccessfulPayment option
-    /// Service message: a user was shared with the bot
-    [<DataMember(Name = "user_shared")>]
-    UserShared: UserShared option
+    /// Service message: users were shared with the bot
+    [<DataMember(Name = "users_shared")>]
+    UsersShared: UsersShared option
     /// Service message: a chat was shared with the bot
     [<DataMember(Name = "chat_shared")>]
     ChatShared: ChatShared option
@@ -562,6 +596,18 @@ and [<CLIMutable>] Message =
     /// Service message: the 'General' forum topic unhidden
     [<DataMember(Name = "general_forum_topic_unhidden")>]
     GeneralForumTopicUnhidden: GeneralForumTopicUnhidden option
+    /// Service message: a scheduled giveaway was created
+    [<DataMember(Name = "giveaway_created")>]
+    GiveawayCreated: GiveawayCreated option
+    /// The message is a scheduled giveaway message
+    [<DataMember(Name = "giveaway")>]
+    Giveaway: Giveaway option
+    /// A giveaway with public winners was completed
+    [<DataMember(Name = "giveaway_winners")>]
+    GiveawayWinners: GiveawayWinners option
+    /// Service message: a giveaway without public winners was completed
+    [<DataMember(Name = "giveaway_completed")>]
+    GiveawayCompleted: GiveawayCompleted option
     /// Service message: video chat scheduled
     [<DataMember(Name = "video_chat_scheduled")>]
     VideoChatScheduled: VideoChatScheduled option
@@ -581,79 +627,81 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?pinnedMessage: Message, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?deleteChatPhoto: bool, ?invoice: Invoice, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?groupChatCreated: bool, ?successfulPayment: SuccessfulPayment, ?chatShared: ChatShared, ?venue: Venue, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?userShared: UserShared, ?forumTopicReopened: ForumTopicReopened, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?forumTopicClosed: ForumTopicClosed, ?poll: Poll, ?dice: Dice, ?webAppData: WebAppData, ?editDate: int64, ?viaBot: User, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardDate: DateTime, ?hasProtectedContent: bool, ?forwardSenderName: string, ?forwardFromMessageId: int64, ?forwardFromChat: Chat, ?forwardFrom: User, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?forwardSignature: string, ?game: Game, ?mediaGroupId: string, ?text: string, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?authorSignature: string, ?video: Video, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?story: Story, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?chatShared: ChatShared, ?usersShared: UsersShared, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?leftChatMember: User, ?giveaway: Giveaway, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?giveawayCreated: GiveawayCreated, ?newChatMembers: User[], ?venue: Venue, ?webAppData: WebAppData, ?authorSignature: string, ?mediaGroupId: string, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?quote: TextQuote, ?text: string, ?externalReply: ExternalReplyInfo, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?replyToMessage: Message, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?animation: Animation, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?location: Location, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
+      ChatShared = chatShared
+      UsersShared = usersShared
+      SuccessfulPayment = successfulPayment
+      Invoice = invoice
       PinnedMessage = pinnedMessage
       MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
       MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       ChannelChatCreated = channelChatCreated
       SupergroupChatCreated = supergroupChatCreated
+      GroupChatCreated = groupChatCreated
       DeleteChatPhoto = deleteChatPhoto
-      Invoice = invoice
       NewChatPhoto = newChatPhoto
       NewChatTitle = newChatTitle
-      LeftChatMember = leftChatMember
-      NewChatMembers = newChatMembers
-      Location = location
-      GroupChatCreated = groupChatCreated
-      SuccessfulPayment = successfulPayment
-      ChatShared = chatShared
-      Venue = venue
+      ConnectedWebsite = connectedWebsite
+      WriteAccessAllowed = writeAccessAllowed
+      PassportData = passportData
+      ProximityAlertTriggered = proximityAlertTriggered
       VideoChatParticipantsInvited = videoChatParticipantsInvited
       VideoChatEnded = videoChatEnded
       VideoChatStarted = videoChatStarted
       VideoChatScheduled = videoChatScheduled
+      GiveawayCompleted = giveawayCompleted
+      GiveawayWinners = giveawayWinners
+      LeftChatMember = leftChatMember
+      Giveaway = giveaway
       GeneralForumTopicUnhidden = generalForumTopicUnhidden
       GeneralForumTopicHidden = generalForumTopicHidden
-      UserShared = userShared
       ForumTopicReopened = forumTopicReopened
+      ForumTopicClosed = forumTopicClosed
       ForumTopicEdited = forumTopicEdited
       ForumTopicCreated = forumTopicCreated
-      ProximityAlertTriggered = proximityAlertTriggered
-      PassportData = passportData
-      WriteAccessAllowed = writeAccessAllowed
-      ConnectedWebsite = connectedWebsite
-      ForumTopicClosed = forumTopicClosed
-      Poll = poll
-      Dice = dice
+      GiveawayCreated = giveawayCreated
+      NewChatMembers = newChatMembers
+      Venue = venue
       WebAppData = webAppData
+      AuthorSignature = authorSignature
+      MediaGroupId = mediaGroupId
+      HasProtectedContent = hasProtectedContent
       EditDate = editDate
       ViaBot = viaBot
-      ReplyToMessage = replyToMessage
+      Quote = quote
+      Text = text
+      ExternalReply = externalReply
       IsAutomaticForward = isAutomaticForward
       IsTopicMessage = isTopicMessage
-      ForwardDate = forwardDate
-      HasProtectedContent = hasProtectedContent
-      ForwardSenderName = forwardSenderName
-      ForwardFromMessageId = forwardFromMessageId
-      ForwardFromChat = forwardFromChat
-      ForwardFrom = forwardFrom
+      ForwardOrigin = forwardOrigin
       SenderChat = senderChat
       From = from
       MessageThreadId = messageThreadId
-      ForwardSignature = forwardSignature
+      ReplyToMessage = replyToMessage
+      Entities = entities
+      LinkPreviewOptions = linkPreviewOptions
+      Animation = animation
+      Poll = poll
       Game = game
-      MediaGroupId = mediaGroupId
-      Text = text
+      Dice = dice
       Contact = contact
       HasMediaSpoiler = hasMediaSpoiler
       CaptionEntities = captionEntities
       Caption = caption
       Voice = voice
       VideoNote = videoNote
-      AuthorSignature = authorSignature
       Video = video
+      Story = story
       Sticker = sticker
       Photo = photo
       Document = document
       Audio = audio
-      Animation = animation
-      Entities = entities
-      Story = story
+      Location = location
       ReplyMarkup = replyMarkup
     }
 
@@ -669,10 +717,35 @@ and [<CLIMutable>] MessageId =
       MessageId = messageId
     }
 
+/// This object describes a message that was deleted or is otherwise inaccessible to the bot.
+and [<CLIMutable>] InaccessibleMessage =
+  {
+    /// Chat the message belonged to
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique message identifier inside the chat
+    [<DataMember(Name = "message_id")>]
+    MessageId: int64
+    /// Always 0. The field can be used to differentiate regular and inaccessible messages.
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+  }
+  static member Create(chat: Chat, messageId: int64, date: DateTime) = 
+    {
+      Chat = chat
+      MessageId = messageId
+      Date = date
+    }
+
+/// This object describes a message that can be inaccessible to the bot. It can be one of
+and MaybeInaccessibleMessage =
+  | Message of Message
+  | InaccessibleMessage of InaccessibleMessage
+
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 and [<CLIMutable>] MessageEntity =
   {
-    /// Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
+    /// Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
     [<DataMember(Name = "type")>]
     Type: string
     /// Offset in UTF-16 code units to the start of the entity
@@ -703,6 +776,265 @@ and [<CLIMutable>] MessageEntity =
       User = user
       Language = language
       CustomEmojiId = customEmojiId
+    }
+
+/// This object contains information about the quoted part of a message that is replied to by the given message.
+and [<CLIMutable>] TextQuote =
+  {
+    /// Text of the quoted part of a message that is replied to by the given message
+    [<DataMember(Name = "text")>]
+    Text: string
+    /// Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes.
+    [<DataMember(Name = "entities")>]
+    Entities: MessageEntity[] option
+    /// Approximate quote position in the original message in UTF-16 code units as specified by the sender
+    [<DataMember(Name = "position")>]
+    Position: int64
+    /// True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.
+    [<DataMember(Name = "is_manual")>]
+    IsManual: bool option
+  }
+  static member Create(text: string, position: int64, ?entities: MessageEntity[], ?isManual: bool) = 
+    {
+      Text = text
+      Position = position
+      Entities = entities
+      IsManual = isManual
+    }
+
+/// This object contains information about a message that is being replied to, which may come from another chat or forum topic.
+and [<CLIMutable>] ExternalReplyInfo =
+  {
+    /// Origin of the message replied to by the given message
+    [<DataMember(Name = "origin")>]
+    Origin: MessageOrigin
+    /// Chat the original message belongs to. Available only if the chat is a supergroup or a channel.
+    [<DataMember(Name = "chat")>]
+    Chat: Chat option
+    /// Unique message identifier inside the original chat. Available only if the original chat is a supergroup or a channel.
+    [<DataMember(Name = "message_id")>]
+    MessageId: int64 option
+    /// Options used for link preview generation for the original message, if it is a text message
+    [<DataMember(Name = "link_preview_options")>]
+    LinkPreviewOptions: LinkPreviewOptions option
+    /// Message is an animation, information about the animation
+    [<DataMember(Name = "animation")>]
+    Animation: Animation option
+    /// Message is an audio file, information about the file
+    [<DataMember(Name = "audio")>]
+    Audio: Audio option
+    /// Message is a general file, information about the file
+    [<DataMember(Name = "document")>]
+    Document: Document option
+    /// Message is a photo, available sizes of the photo
+    [<DataMember(Name = "photo")>]
+    Photo: PhotoSize[] option
+    /// Message is a sticker, information about the sticker
+    [<DataMember(Name = "sticker")>]
+    Sticker: Sticker option
+    /// Message is a forwarded story
+    [<DataMember(Name = "story")>]
+    Story: Story option
+    /// Message is a video, information about the video
+    [<DataMember(Name = "video")>]
+    Video: Video option
+    /// Message is a video note, information about the video message
+    [<DataMember(Name = "video_note")>]
+    VideoNote: VideoNote option
+    /// Message is a voice message, information about the file
+    [<DataMember(Name = "voice")>]
+    Voice: Voice option
+    /// True, if the message media is covered by a spoiler animation
+    [<DataMember(Name = "has_media_spoiler")>]
+    HasMediaSpoiler: bool option
+    /// Message is a shared contact, information about the contact
+    [<DataMember(Name = "contact")>]
+    Contact: Contact option
+    /// Message is a dice with random value
+    [<DataMember(Name = "dice")>]
+    Dice: Dice option
+    /// Message is a game, information about the game. More about games »
+    [<DataMember(Name = "game")>]
+    Game: Game option
+    /// Message is a scheduled giveaway, information about the giveaway
+    [<DataMember(Name = "giveaway")>]
+    Giveaway: Giveaway option
+    /// A giveaway with public winners was completed
+    [<DataMember(Name = "giveaway_winners")>]
+    GiveawayWinners: GiveawayWinners option
+    /// Message is an invoice for a payment, information about the invoice. More about payments »
+    [<DataMember(Name = "invoice")>]
+    Invoice: Invoice option
+    /// Message is a shared location, information about the location
+    [<DataMember(Name = "location")>]
+    Location: Location option
+    /// Message is a native poll, information about the poll
+    [<DataMember(Name = "poll")>]
+    Poll: Poll option
+    /// Message is a venue, information about the venue
+    [<DataMember(Name = "venue")>]
+    Venue: Venue option
+  }
+  static member Create(origin: MessageOrigin, ?location: Location, ?invoice: Invoice, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?game: Game, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?voice: Voice, ?poll: Poll, ?videoNote: VideoNote, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?linkPreviewOptions: LinkPreviewOptions, ?messageId: int64, ?chat: Chat, ?video: Video, ?venue: Venue) = 
+    {
+      Origin = origin
+      Location = location
+      Invoice = invoice
+      GiveawayWinners = giveawayWinners
+      Giveaway = giveaway
+      Game = game
+      Dice = dice
+      Contact = contact
+      HasMediaSpoiler = hasMediaSpoiler
+      Voice = voice
+      Poll = poll
+      VideoNote = videoNote
+      Story = story
+      Sticker = sticker
+      Photo = photo
+      Document = document
+      Audio = audio
+      Animation = animation
+      LinkPreviewOptions = linkPreviewOptions
+      MessageId = messageId
+      Chat = chat
+      Video = video
+      Venue = venue
+    }
+
+/// Describes reply parameters for the message that is being sent.
+and [<CLIMutable>] ReplyParameters =
+  {
+    /// Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
+    [<DataMember(Name = "message_id")>]
+    MessageId: int64
+    /// If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername)
+    [<DataMember(Name = "chat_id")>]
+    ChatId: ChatId option
+    /// Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic.
+    [<DataMember(Name = "allow_sending_without_reply")>]
+    AllowSendingWithoutReply: bool option
+    /// Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
+    [<DataMember(Name = "quote")>]
+    Quote: string option
+    /// Mode for parsing entities in the quote. See formatting options for more details.
+    [<DataMember(Name = "quote_parse_mode")>]
+    QuoteParseMode: string option
+    /// A JSON-serialized list of special entities that appear in the quote. It can be specified instead of quote_parse_mode.
+    [<DataMember(Name = "quote_entities")>]
+    QuoteEntities: MessageEntity[] option
+    /// Position of the quote in the original message in UTF-16 code units
+    [<DataMember(Name = "quote_position")>]
+    QuotePosition: int64 option
+  }
+  static member Create(messageId: int64, ?chatId: ChatId, ?allowSendingWithoutReply: bool, ?quote: string, ?quoteParseMode: string, ?quoteEntities: MessageEntity[], ?quotePosition: int64) = 
+    {
+      MessageId = messageId
+      ChatId = chatId
+      AllowSendingWithoutReply = allowSendingWithoutReply
+      Quote = quote
+      QuoteParseMode = quoteParseMode
+      QuoteEntities = quoteEntities
+      QuotePosition = quotePosition
+    }
+
+/// This object describes the origin of a message. It can be one of
+and MessageOrigin =
+  | User of MessageOriginUser
+  | HiddenUser of MessageOriginHiddenUser
+  | Chat of MessageOriginChat
+  | Channel of MessageOriginChannel
+
+/// The message was originally sent by a known user.
+and [<CLIMutable>] MessageOriginUser =
+  {
+    /// Type of the message origin, always “user”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Date the message was sent originally in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// User that sent the message originally
+    [<DataMember(Name = "sender_user")>]
+    SenderUser: User
+  }
+  static member Create(``type``: string, date: DateTime, senderUser: User) = 
+    {
+      Type = ``type``
+      Date = date
+      SenderUser = senderUser
+    }
+
+/// The message was originally sent by an unknown user.
+and [<CLIMutable>] MessageOriginHiddenUser =
+  {
+    /// Type of the message origin, always “hidden_user”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Date the message was sent originally in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// Name of the user that sent the message originally
+    [<DataMember(Name = "sender_user_name")>]
+    SenderUserName: string
+  }
+  static member Create(``type``: string, date: DateTime, senderUserName: string) = 
+    {
+      Type = ``type``
+      Date = date
+      SenderUserName = senderUserName
+    }
+
+/// The message was originally sent on behalf of a chat to a group chat.
+and [<CLIMutable>] MessageOriginChat =
+  {
+    /// Type of the message origin, always “chat”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Date the message was sent originally in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// Chat that sent the message originally
+    [<DataMember(Name = "sender_chat")>]
+    SenderChat: Chat
+    /// For messages originally sent by an anonymous chat administrator, original message author signature
+    [<DataMember(Name = "author_signature")>]
+    AuthorSignature: string option
+  }
+  static member Create(``type``: string, date: DateTime, senderChat: Chat, ?authorSignature: string) = 
+    {
+      Type = ``type``
+      Date = date
+      SenderChat = senderChat
+      AuthorSignature = authorSignature
+    }
+
+/// The message was originally sent to a channel chat.
+and [<CLIMutable>] MessageOriginChannel =
+  {
+    /// Type of the message origin, always “channel”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Date the message was sent originally in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// Channel chat to which the message was originally sent
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique message identifier inside the chat
+    [<DataMember(Name = "message_id")>]
+    MessageId: int64
+    /// Signature of the original post author
+    [<DataMember(Name = "author_signature")>]
+    AuthorSignature: string option
+  }
+  static member Create(``type``: string, date: DateTime, chat: Chat, messageId: int64, ?authorSignature: string) = 
+    {
+      Type = ``type``
+      Date = date
+      Chat = chat
+      MessageId = messageId
+      AuthorSignature = authorSignature
     }
 
 /// This object represents one size of a photo or a file / sticker thumbnail.
@@ -1273,20 +1605,20 @@ and GeneralForumTopicHidden =
 and GeneralForumTopicUnhidden =
   new() = {}
 
-/// This object contains information about the user whose identifier was shared with the bot using a KeyboardButtonRequestUser button.
-and [<CLIMutable>] UserShared =
+/// This object contains information about the users whose identifiers were shared with the bot using a KeyboardButtonRequestUsers button.
+and [<CLIMutable>] UsersShared =
   {
     /// Identifier of the request
     [<DataMember(Name = "request_id")>]
     RequestId: int64
-    /// Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.
-    [<DataMember(Name = "user_id")>]
-    UserId: int64
+    /// Identifiers of the shared users. These numbers may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting them. But they have at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the users and could be unable to use these identifiers, unless the users are already known to the bot by some other means.
+    [<DataMember(Name = "user_ids")>]
+    UserIds: int64[]
   }
-  static member Create(requestId: int64, userId: int64) = 
+  static member Create(requestId: int64, userIds: int64[]) = 
     {
       RequestId = requestId
-      UserId = userId
+      UserIds = userIds
     }
 
 /// This object contains information about the chat whose identifier was shared with the bot using a KeyboardButtonRequestChat button.
@@ -1363,6 +1695,150 @@ and [<CLIMutable>] VideoChatParticipantsInvited =
   static member Create(users: User[]) = 
     {
       Users = users
+    }
+
+/// This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.
+and GiveawayCreated =
+  new() = {}
+
+/// This object represents a message about a scheduled giveaway.
+and [<CLIMutable>] Giveaway =
+  {
+    /// The list of chats which the user must join to participate in the giveaway
+    [<DataMember(Name = "chats")>]
+    Chats: Chat[]
+    /// Point in time (Unix timestamp) when winners of the giveaway will be selected
+    [<DataMember(Name = "winners_selection_date")>]
+    WinnersSelectionDate: int64
+    /// The number of users which are supposed to be selected as winners of the giveaway
+    [<DataMember(Name = "winner_count")>]
+    WinnerCount: int64
+    /// True, if only users who join the chats after the giveaway started should be eligible to win
+    [<DataMember(Name = "only_new_members")>]
+    OnlyNewMembers: bool option
+    /// True, if the list of giveaway winners will be visible to everyone
+    [<DataMember(Name = "has_public_winners")>]
+    HasPublicWinners: bool option
+    /// Description of additional giveaway prize
+    [<DataMember(Name = "prize_description")>]
+    PrizeDescription: string option
+    /// A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways.
+    [<DataMember(Name = "country_codes")>]
+    CountryCodes: string[] option
+    /// The number of months the Telegram Premium subscription won from the giveaway will be active for
+    [<DataMember(Name = "premium_subscription_month_count")>]
+    PremiumSubscriptionMonthCount: int64 option
+  }
+  static member Create(chats: Chat[], winnersSelectionDate: int64, winnerCount: int64, ?onlyNewMembers: bool, ?hasPublicWinners: bool, ?prizeDescription: string, ?countryCodes: string[], ?premiumSubscriptionMonthCount: int64) = 
+    {
+      Chats = chats
+      WinnersSelectionDate = winnersSelectionDate
+      WinnerCount = winnerCount
+      OnlyNewMembers = onlyNewMembers
+      HasPublicWinners = hasPublicWinners
+      PrizeDescription = prizeDescription
+      CountryCodes = countryCodes
+      PremiumSubscriptionMonthCount = premiumSubscriptionMonthCount
+    }
+
+/// This object represents a message about the completion of a giveaway with public winners.
+and [<CLIMutable>] GiveawayWinners =
+  {
+    /// The chat that created the giveaway
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Identifier of the messsage with the giveaway in the chat
+    [<DataMember(Name = "giveaway_message_id")>]
+    GiveawayMessageId: int64
+    /// Point in time (Unix timestamp) when winners of the giveaway were selected
+    [<DataMember(Name = "winners_selection_date")>]
+    WinnersSelectionDate: int64
+    /// Total number of winners in the giveaway
+    [<DataMember(Name = "winner_count")>]
+    WinnerCount: int64
+    /// List of up to 100 winners of the giveaway
+    [<DataMember(Name = "winners")>]
+    Winners: User[]
+    /// The number of other chats the user had to join in order to be eligible for the giveaway
+    [<DataMember(Name = "additional_chat_count")>]
+    AdditionalChatCount: int64 option
+    /// The number of months the Telegram Premium subscription won from the giveaway will be active for
+    [<DataMember(Name = "premium_subscription_month_count")>]
+    PremiumSubscriptionMonthCount: int64 option
+    /// Number of undistributed prizes
+    [<DataMember(Name = "unclaimed_prize_count")>]
+    UnclaimedPrizeCount: int64 option
+    /// True, if only users who had joined the chats after the giveaway started were eligible to win
+    [<DataMember(Name = "only_new_members")>]
+    OnlyNewMembers: bool option
+    /// True, if the giveaway was canceled because the payment for it was refunded
+    [<DataMember(Name = "was_refunded")>]
+    WasRefunded: bool option
+    /// Description of additional giveaway prize
+    [<DataMember(Name = "prize_description")>]
+    PrizeDescription: string option
+  }
+  static member Create(chat: Chat, giveawayMessageId: int64, winnersSelectionDate: int64, winnerCount: int64, winners: User[], ?additionalChatCount: int64, ?premiumSubscriptionMonthCount: int64, ?unclaimedPrizeCount: int64, ?onlyNewMembers: bool, ?wasRefunded: bool, ?prizeDescription: string) = 
+    {
+      Chat = chat
+      GiveawayMessageId = giveawayMessageId
+      WinnersSelectionDate = winnersSelectionDate
+      WinnerCount = winnerCount
+      Winners = winners
+      AdditionalChatCount = additionalChatCount
+      PremiumSubscriptionMonthCount = premiumSubscriptionMonthCount
+      UnclaimedPrizeCount = unclaimedPrizeCount
+      OnlyNewMembers = onlyNewMembers
+      WasRefunded = wasRefunded
+      PrizeDescription = prizeDescription
+    }
+
+/// This object represents a service message about the completion of a giveaway without public winners.
+and [<CLIMutable>] GiveawayCompleted =
+  {
+    /// Number of winners in the giveaway
+    [<DataMember(Name = "winner_count")>]
+    WinnerCount: int64
+    /// Number of undistributed prizes
+    [<DataMember(Name = "unclaimed_prize_count")>]
+    UnclaimedPrizeCount: int64 option
+    /// Message with the giveaway that was completed, if it wasn't deleted
+    [<DataMember(Name = "giveaway_message")>]
+    GiveawayMessage: Message option
+  }
+  static member Create(winnerCount: int64, ?unclaimedPrizeCount: int64, ?giveawayMessage: Message) = 
+    {
+      WinnerCount = winnerCount
+      UnclaimedPrizeCount = unclaimedPrizeCount
+      GiveawayMessage = giveawayMessage
+    }
+
+/// Describes the options used for link preview generation.
+and [<CLIMutable>] LinkPreviewOptions =
+  {
+    /// True, if the link preview is disabled
+    [<DataMember(Name = "is_disabled")>]
+    IsDisabled: bool option
+    /// URL to use for the link preview. If empty, then the first URL found in the message text will be used
+    [<DataMember(Name = "url")>]
+    Url: string option
+    /// True, if the media in the link preview is suppposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
+    [<DataMember(Name = "prefer_small_media")>]
+    PreferSmallMedia: bool option
+    /// True, if the media in the link preview is suppposed to be enlarged; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
+    [<DataMember(Name = "prefer_large_media")>]
+    PreferLargeMedia: bool option
+    /// True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text
+    [<DataMember(Name = "show_above_text")>]
+    ShowAboveText: bool option
+  }
+  static member Create(?isDisabled: bool, ?url: string, ?preferSmallMedia: bool, ?preferLargeMedia: bool, ?showAboveText: bool) = 
+    {
+      IsDisabled = isDisabled
+      Url = url
+      PreferSmallMedia = preferSmallMedia
+      PreferLargeMedia = preferLargeMedia
+      ShowAboveText = showAboveText
     }
 
 /// This object represent a user's profile pictures.
@@ -1451,19 +1927,19 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
       Selective = selective
     }
 
-/// This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_user, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
+/// This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
 /// Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 /// Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
 /// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
-/// Note:request_user and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.
+/// Note:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.
 and [<CLIMutable>] KeyboardButton =
   {
     /// Text of the button. If none of the optional fields are used, it will be sent as a message when the button is pressed
     [<DataMember(Name = "text")>]
     Text: string
-    /// If specified, pressing the button will open a list of suitable users. Tapping on any user will send their identifier to the bot in a “user_shared” service message. Available in private chats only.
-    [<DataMember(Name = "request_user")>]
-    RequestUser: KeyboardButtonRequestUser option
+    /// If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a “users_shared” service message. Available in private chats only.
+    [<DataMember(Name = "request_users")>]
+    RequestUsers: KeyboardButtonRequestUsers option
     /// If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a “chat_shared” service message. Available in private chats only.
     [<DataMember(Name = "request_chat")>]
     RequestChat: KeyboardButtonRequestChat option
@@ -1480,10 +1956,10 @@ and [<CLIMutable>] KeyboardButton =
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
   }
-  static member Create(text: string, ?requestUser: KeyboardButtonRequestUser, ?requestChat: KeyboardButtonRequestChat, ?requestContact: bool, ?requestLocation: bool, ?requestPoll: KeyboardButtonPollType, ?webApp: WebAppInfo) = 
+  static member Create(text: string, ?requestUsers: KeyboardButtonRequestUsers, ?requestChat: KeyboardButtonRequestChat, ?requestContact: bool, ?requestLocation: bool, ?requestPoll: KeyboardButtonPollType, ?webApp: WebAppInfo) = 
     {
       Text = text
-      RequestUser = requestUser
+      RequestUsers = requestUsers
       RequestChat = requestChat
       RequestContact = requestContact
       RequestLocation = requestLocation
@@ -1491,24 +1967,28 @@ and [<CLIMutable>] KeyboardButton =
       WebApp = webApp
     }
 
-/// This object defines the criteria used to request a suitable user. The identifier of the selected user will be shared with the bot when the corresponding button is pressed. More about requesting users »
-and [<CLIMutable>] KeyboardButtonRequestUser =
+/// This object defines the criteria used to request suitable users. The identifiers of the selected users will be shared with the bot when the corresponding button is pressed. More about requesting users »
+and [<CLIMutable>] KeyboardButtonRequestUsers =
   {
-    /// Signed 32-bit identifier of the request, which will be received back in the UserShared object. Must be unique within the message
+    /// Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message
     [<DataMember(Name = "request_id")>]
     RequestId: int64
-    /// Pass True to request a bot, pass False to request a regular user. If not specified, no additional restrictions are applied.
+    /// Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied.
     [<DataMember(Name = "user_is_bot")>]
     UserIsBot: bool option
-    /// Pass True to request a premium user, pass False to request a non-premium user. If not specified, no additional restrictions are applied.
+    /// Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied.
     [<DataMember(Name = "user_is_premium")>]
     UserIsPremium: bool option
+    /// The maximum number of users to be selected; 1-10. Defaults to 1.
+    [<DataMember(Name = "max_quantity")>]
+    MaxQuantity: int64 option
   }
-  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool) = 
+  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool, ?maxQuantity: int64) = 
     {
       RequestId = requestId
       UserIsBot = userIsBot
       UserIsPremium = userIsPremium
+      MaxQuantity = maxQuantity
     }
 
 /// This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More about requesting chats »
@@ -1712,9 +2192,9 @@ and [<CLIMutable>] CallbackQuery =
     /// Sender
     [<DataMember(Name = "from")>]
     From: User
-    /// Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old
+    /// Message sent by the bot with the callback button that originated the query
     [<DataMember(Name = "message")>]
-    Message: Message option
+    Message: MaybeInaccessibleMessage option
     /// Identifier of the message sent via the bot in inline mode, that originated the query.
     [<DataMember(Name = "inline_message_id")>]
     InlineMessageId: string option
@@ -1728,7 +2208,7 @@ and [<CLIMutable>] CallbackQuery =
     [<DataMember(Name = "game_short_name")>]
     GameShortName: string option
   }
-  static member Create(id: string, from: User, chatInstance: string, ?message: Message, ?inlineMessageId: string, ?data: string, ?gameShortName: string) = 
+  static member Create(id: string, from: User, chatInstance: string, ?message: MaybeInaccessibleMessage, ?inlineMessageId: string, ?data: string, ?gameShortName: string) = 
     {
       Id = id
       From = from
@@ -1899,6 +2379,42 @@ and [<CLIMutable>] ChatAdministratorRights =
       CanManageVoiceChats = canManageVoiceChats
     }
 
+/// This object represents changes in the status of a chat member.
+and [<CLIMutable>] ChatMemberUpdated =
+  {
+    /// Chat the user belongs to
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Performer of the action, which resulted in the change
+    [<DataMember(Name = "from")>]
+    From: User
+    /// Date the change was done in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// Previous information about the chat member
+    [<DataMember(Name = "old_chat_member")>]
+    OldChatMember: ChatMember
+    /// New information about the chat member
+    [<DataMember(Name = "new_chat_member")>]
+    NewChatMember: ChatMember
+    /// Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
+    [<DataMember(Name = "invite_link")>]
+    InviteLink: ChatInviteLink option
+    /// True, if the user joined the chat via a chat folder invite link
+    [<DataMember(Name = "via_chat_folder_invite_link")>]
+    ViaChatFolderInviteLink: bool option
+  }
+  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaChatFolderInviteLink: bool) = 
+    {
+      Chat = chat
+      From = from
+      Date = date
+      OldChatMember = oldChatMember
+      NewChatMember = newChatMember
+      InviteLink = inviteLink
+      ViaChatFolderInviteLink = viaChatFolderInviteLink
+    }
+
 /// This object contains information about one member of a chat. Currently, the following 6 types of chat members are supported:
 and ChatMember =
   | Owner of ChatMemberOwner
@@ -2048,7 +2564,7 @@ and [<CLIMutable>] ChatMemberRestricted =
     /// True, if the user is a member of the chat at the moment of the request
     [<DataMember(Name = "is_member")>]
     IsMember: bool
-    /// True, if the user is allowed to send text messages, contacts, invoices, locations and venues
+    /// True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     [<DataMember(Name = "can_send_messages")>]
     CanSendMessages: bool
     /// True, if the user is allowed to send audios
@@ -2152,42 +2668,6 @@ and [<CLIMutable>] ChatMemberBanned =
       UntilDate = untilDate
     }
 
-/// This object represents changes in the status of a chat member.
-and [<CLIMutable>] ChatMemberUpdated =
-  {
-    /// Chat the user belongs to
-    [<DataMember(Name = "chat")>]
-    Chat: Chat
-    /// Performer of the action, which resulted in the change
-    [<DataMember(Name = "from")>]
-    From: User
-    /// Date the change was done in Unix time
-    [<DataMember(Name = "date")>]
-    Date: DateTime
-    /// Previous information about the chat member
-    [<DataMember(Name = "old_chat_member")>]
-    OldChatMember: ChatMember
-    /// New information about the chat member
-    [<DataMember(Name = "new_chat_member")>]
-    NewChatMember: ChatMember
-    /// Chat invite link, which was used by the user to join the chat; for joining by invite link events only.
-    [<DataMember(Name = "invite_link")>]
-    InviteLink: ChatInviteLink option
-    /// True, if the user joined the chat via a chat folder invite link
-    [<DataMember(Name = "via_chat_folder_invite_link")>]
-    ViaChatFolderInviteLink: bool option
-  }
-  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaChatFolderInviteLink: bool) = 
-    {
-      Chat = chat
-      From = from
-      Date = date
-      OldChatMember = oldChatMember
-      NewChatMember = newChatMember
-      InviteLink = inviteLink
-      ViaChatFolderInviteLink = viaChatFolderInviteLink
-    }
-
 /// Represents a join request sent to a chat.
 and [<CLIMutable>] ChatJoinRequest =
   {
@@ -2223,7 +2703,7 @@ and [<CLIMutable>] ChatJoinRequest =
 /// Describes actions that a non-administrator user is allowed to take in a chat.
 and [<CLIMutable>] ChatPermissions =
   {
-    /// True, if the user is allowed to send text messages, contacts, invoices, locations and venues
+    /// True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues
     [<DataMember(Name = "can_send_messages")>]
     CanSendMessages: bool option
     /// True, if the user is allowed to send audios
@@ -2298,6 +2778,119 @@ and [<CLIMutable>] ChatLocation =
     {
       Location = location
       Address = address
+    }
+
+/// This object describes the type of a reaction. Currently, it can be one of
+and ReactionType =
+  | Emoji of ReactionTypeEmoji
+  | CustomEmoji of ReactionTypeCustomEmoji
+
+/// The reaction is based on an emoji.
+and [<CLIMutable>] ReactionTypeEmoji =
+  {
+    /// Type of the reaction, always “emoji”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Reaction emoji. Currently, it can be one of "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""
+    [<DataMember(Name = "emoji")>]
+    Emoji: string
+  }
+  static member Create(``type``: string, emoji: string) = 
+    {
+      Type = ``type``
+      Emoji = emoji
+    }
+
+/// The reaction is based on a custom emoji.
+and [<CLIMutable>] ReactionTypeCustomEmoji =
+  {
+    /// Type of the reaction, always “custom_emoji”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Custom emoji identifier
+    [<DataMember(Name = "custom_emoji_id")>]
+    CustomEmojiId: string
+  }
+  static member Create(``type``: string, customEmojiId: string) = 
+    {
+      Type = ``type``
+      CustomEmojiId = customEmojiId
+    }
+
+/// Represents a reaction added to a message along with the number of times it was added.
+and [<CLIMutable>] ReactionCount =
+  {
+    /// Type of the reaction
+    [<DataMember(Name = "type")>]
+    Type: ReactionType
+    /// Number of times the reaction was added
+    [<DataMember(Name = "total_count")>]
+    TotalCount: int64
+  }
+  static member Create(``type``: ReactionType, totalCount: int64) = 
+    {
+      Type = ``type``
+      TotalCount = totalCount
+    }
+
+/// This object represents a change of a reaction on a message performed by a user.
+and [<CLIMutable>] MessageReactionUpdated =
+  {
+    /// The chat containing the message the user reacted to
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique identifier of the message inside the chat
+    [<DataMember(Name = "message_id")>]
+    MessageId: int64
+    /// The user that changed the reaction, if the user isn't anonymous
+    [<DataMember(Name = "user")>]
+    User: User option
+    /// The chat on behalf of which the reaction was changed, if the user is anonymous
+    [<DataMember(Name = "actor_chat")>]
+    ActorChat: Chat option
+    /// Date of the change in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// Previous list of reaction types that were set by the user
+    [<DataMember(Name = "old_reaction")>]
+    OldReaction: ReactionType[]
+    /// New list of reaction types that have been set by the user
+    [<DataMember(Name = "new_reaction")>]
+    NewReaction: ReactionType[]
+  }
+  static member Create(chat: Chat, messageId: int64, date: DateTime, oldReaction: ReactionType[], newReaction: ReactionType[], ?user: User, ?actorChat: Chat) = 
+    {
+      Chat = chat
+      MessageId = messageId
+      Date = date
+      OldReaction = oldReaction
+      NewReaction = newReaction
+      User = user
+      ActorChat = actorChat
+    }
+
+/// This object represents reaction changes on a message with anonymous reactions.
+and [<CLIMutable>] MessageReactionCountUpdated =
+  {
+    /// The chat containing the message
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique message identifier inside the chat
+    [<DataMember(Name = "message_id")>]
+    MessageId: int64
+    /// Date of the change in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// List of reactions that are present on the message
+    [<DataMember(Name = "reactions")>]
+    Reactions: ReactionCount[]
+  }
+  static member Create(chat: Chat, messageId: int64, date: DateTime, reactions: ReactionCount[]) = 
+    {
+      Chat = chat
+      MessageId = messageId
+      Date = date
+      Reactions = reactions
     }
 
 /// This object represents a forum topic.
@@ -2535,6 +3128,144 @@ and [<CLIMutable>] MenuButtonDefault =
   static member Create(``type``: string) = 
     {
       Type = ``type``
+    }
+
+/// This object describes the source of a chat boost. It can be one of
+and ChatBoostSource =
+  | Premium of ChatBoostSourcePremium
+  | GiftCode of ChatBoostSourceGiftCode
+  | Giveaway of ChatBoostSourceGiveaway
+
+/// The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
+and [<CLIMutable>] ChatBoostSourcePremium =
+  {
+    /// Source of the boost, always “premium”
+    [<DataMember(Name = "source")>]
+    Source: string
+    /// User that boosted the chat
+    [<DataMember(Name = "user")>]
+    User: User
+  }
+  static member Create(source: string, user: User) = 
+    {
+      Source = source
+      User = user
+    }
+
+/// The boost was obtained by the creation of Telegram Premium gift codes to boost a chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+and [<CLIMutable>] ChatBoostSourceGiftCode =
+  {
+    /// Source of the boost, always “gift_code”
+    [<DataMember(Name = "source")>]
+    Source: string
+    /// User for which the gift code was created
+    [<DataMember(Name = "user")>]
+    User: User
+  }
+  static member Create(source: string, user: User) = 
+    {
+      Source = source
+      User = user
+    }
+
+/// The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+and [<CLIMutable>] ChatBoostSourceGiveaway =
+  {
+    /// Source of the boost, always “giveaway”
+    [<DataMember(Name = "source")>]
+    Source: string
+    /// Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn't sent yet.
+    [<DataMember(Name = "giveaway_message_id")>]
+    GiveawayMessageId: int64
+    /// User that won the prize in the giveaway if any
+    [<DataMember(Name = "user")>]
+    User: User option
+    /// True, if the giveaway was completed, but there was no user to win the prize
+    [<DataMember(Name = "is_unclaimed")>]
+    IsUnclaimed: bool option
+  }
+  static member Create(source: string, giveawayMessageId: int64, ?user: User, ?isUnclaimed: bool) = 
+    {
+      Source = source
+      GiveawayMessageId = giveawayMessageId
+      User = user
+      IsUnclaimed = isUnclaimed
+    }
+
+/// This object contains information about a chat boost.
+and [<CLIMutable>] ChatBoost =
+  {
+    /// Unique identifier of the boost
+    [<DataMember(Name = "boost_id")>]
+    BoostId: string
+    /// Point in time (Unix timestamp) when the chat was boosted
+    [<DataMember(Name = "add_date")>]
+    AddDate: int64
+    /// Point in time (Unix timestamp) when the boost will automatically expire, unless the booster's Telegram Premium subscription is prolonged
+    [<DataMember(Name = "expiration_date")>]
+    ExpirationDate: int64
+    /// Source of the added boost
+    [<DataMember(Name = "source")>]
+    Source: ChatBoostSource
+  }
+  static member Create(boostId: string, addDate: int64, expirationDate: int64, source: ChatBoostSource) = 
+    {
+      BoostId = boostId
+      AddDate = addDate
+      ExpirationDate = expirationDate
+      Source = source
+    }
+
+/// This object represents a boost added to a chat or changed.
+and [<CLIMutable>] ChatBoostUpdated =
+  {
+    /// Chat which was boosted
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Infomation about the chat boost
+    [<DataMember(Name = "boost")>]
+    Boost: ChatBoost
+  }
+  static member Create(chat: Chat, boost: ChatBoost) = 
+    {
+      Chat = chat
+      Boost = boost
+    }
+
+/// This object represents a boost removed from a chat.
+and [<CLIMutable>] ChatBoostRemoved =
+  {
+    /// Chat which was boosted
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique identifier of the boost
+    [<DataMember(Name = "boost_id")>]
+    BoostId: string
+    /// Point in time (Unix timestamp) when the boost was removed
+    [<DataMember(Name = "remove_date")>]
+    RemoveDate: int64
+    /// Source of the removed boost
+    [<DataMember(Name = "source")>]
+    Source: ChatBoostSource
+  }
+  static member Create(chat: Chat, boostId: string, removeDate: int64, source: ChatBoostSource) = 
+    {
+      Chat = chat
+      BoostId = boostId
+      RemoveDate = removeDate
+      Source = source
+    }
+
+/// This object represents a list of boosts added to a chat by a user.
+and [<CLIMutable>] UserChatBoosts =
+  {
+    /// The list of boosts added to the chat by the user
+    [<DataMember(Name = "boosts")>]
+    Boosts: ChatBoost[]
+  }
+  static member Create(boosts: ChatBoost[]) = 
+    {
+      Boosts = boosts
     }
 
 /// Describes why a request was unsuccessful.
@@ -4058,16 +4789,16 @@ and [<CLIMutable>] InputTextMessageContent =
     /// List of special entities that appear in message text, which can be specified instead of parse_mode
     [<DataMember(Name = "entities")>]
     Entities: MessageEntity[] option
-    /// Disables link previews for links in the sent message
-    [<DataMember(Name = "disable_web_page_preview")>]
-    DisableWebPagePreview: bool option
+    /// Link preview generation options for the message
+    [<DataMember(Name = "link_preview_options")>]
+    LinkPreviewOptions: LinkPreviewOptions option
   }
-  static member Create(messageText: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?disableWebPagePreview: bool) = 
+  static member Create(messageText: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions) = 
     {
       MessageText = messageText
       ParseMode = parseMode
       Entities = entities
-      DisableWebPagePreview = disableWebPagePreview
+      LinkPreviewOptions = linkPreviewOptions
     }
 
 /// Represents the content of a location message to be sent as the result of an inline query.
