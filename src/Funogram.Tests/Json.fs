@@ -14,6 +14,14 @@ let ``JSON deserializing MessageEntity`` () =
   | Error e -> failwith e.Description
 
 [<Fact>]
+let ``JSON deserializing MessageEntity as Object`` () =
+  let a = parseJson(Constants.jsonTestObjResultString)
+    
+  match a with
+  | Ok r -> shouldEqual true (r <> null)
+  | Error e -> failwith e.Description
+
+[<Fact>]
 let ``JSON serializing MessageEntity``() =
   Constants.jsonTestObj
   |> toJsonString
@@ -68,7 +76,6 @@ let ``JSON deserializing MaskPosition`` () =
   |> function
   | Ok result -> shouldEqual result Constants.testMaskPosition
   | Error error -> failwith error.Description
-    
 
 [<Fact>]
 let ``JSON serializing MaskPosition`` () =
@@ -89,7 +96,7 @@ let ``JSON deserializing ForwardMessage`` () =
   |> function
   | Ok result -> shouldEqual result Constants.jsonMessageForward
   | Error error -> failwith error.Description
-    
+
 [<Fact>]
 let ``JSON serializing params dictionary`` () =
   Constants.paramsDictionary
@@ -101,7 +108,7 @@ let ``JSON serializing forward message request`` () =
   Constants.forwardMessageReq
   |> toJsonBotRequestString
   |> shouldEqual Constants.jsonForwardMessageReq
-  
+
 [<Fact>]
 let ``JSON deserializing ChatMember``() =
   Constants.jsonTestObjChatMemberResultString

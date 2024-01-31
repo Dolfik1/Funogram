@@ -4,6 +4,7 @@ open System
 open System.Net
 open System.Net.Http
 open System.Runtime.CompilerServices
+open Funogram.Types
 open Utf8Json
 open Utf8Json.Resolvers
 
@@ -74,7 +75,7 @@ let internal parseJsonStream<'a> (data: Stream) =
       Exception("Can't parse json") |> Result.Error
 
 let internal parseJsonStreamApiResponse<'a> (data: Stream) =
-  match parseJsonStream<Types.ApiResponse<'a>> data with
+  match parseJsonStream<ApiResponse<'a>> data with
   | Ok x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
 
   | Ok x when x.Description.IsSome && x.ErrorCode.IsSome -> 
@@ -376,7 +377,7 @@ module Api =
     let fn = mkRequestGenerator<'a> ()
     fun (request: IBotRequest) -> fn (request :?> 'a) ""
   
-  let makeRequestAsync config (request: IRequestBase<'a>) =
+  let makeRequestAsync<'a> config (request: IBotRequest) =
     async {
       let client = config.Client
       let url = getUrl config request.MethodName
@@ -400,7 +401,6 @@ module Api =
       else
         return Error { Description = "HTTP_ERROR"; ErrorCode = int result.StatusCode }
     }
-    
 
   let makeJsonBodyRequestAsync config (request: IRequestBase<'a>) =
     async {
