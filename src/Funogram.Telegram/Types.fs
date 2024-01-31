@@ -74,25 +74,25 @@ and EditMessageResult =
 /// At most one of the optional parameters can be present in any given update.
 and [<CLIMutable>] Update =
   {
-    /// The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you're using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
+    /// The update's unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you're using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.
     [<DataMember(Name = "update_id")>]
     UpdateId: int64
     /// New incoming message of any kind - text, photo, sticker, etc.
     [<DataMember(Name = "message")>]
     Message: Message option
-    /// New version of a message that is known to the bot and was edited
+    /// New version of a message that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
     [<DataMember(Name = "edited_message")>]
     EditedMessage: Message option
     /// New incoming channel post of any kind - text, photo, sticker, etc.
     [<DataMember(Name = "channel_post")>]
     ChannelPost: Message option
-    /// New version of a channel post that is known to the bot and was edited
+    /// New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
     [<DataMember(Name = "edited_channel_post")>]
     EditedChannelPost: Message option
     /// A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to receive these updates. The update isn't received for reactions set by bots.
     [<DataMember(Name = "message_reaction")>]
     MessageReaction: MessageReactionUpdated option
-    /// Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of allowed_updates to receive these updates.
+    /// Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify "message_reaction_count" in the list of allowed_updates to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.
     [<DataMember(Name = "message_reaction_count")>]
     MessageReactionCount: MessageReactionCountUpdated option
     /// New incoming inline query
@@ -110,7 +110,7 @@ and [<CLIMutable>] Update =
     /// New incoming pre-checkout query. Contains full information about checkout
     [<DataMember(Name = "pre_checkout_query")>]
     PreCheckoutQuery: PreCheckoutQuery option
-    /// New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot
+    /// New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
     [<DataMember(Name = "poll")>]
     Poll: Poll option
     /// A user changed their answer in a non-anonymous poll. Bots receive new votes only in polls that were sent by the bot itself.
@@ -1911,7 +1911,7 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     /// The placeholder to be shown in the input field when the keyboard is active; 1-64 characters
     [<DataMember(Name = "input_field_placeholder")>]
     InputFieldPlaceholder: string option
-    /// Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+    /// Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
     /// 
     /// Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
     [<DataMember(Name = "selective")>]
@@ -1928,9 +1928,6 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     }
 
 /// This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.
-/// Note:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
-/// Note:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.
-/// Note:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.
 /// Note:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.
 and [<CLIMutable>] KeyboardButton =
   {
@@ -2049,7 +2046,7 @@ and [<CLIMutable>] ReplyKeyboardRemove =
     /// Requests clients to remove the custom keyboard (user will not be able to summon this keyboard; if you want to hide the keyboard from sight but keep it accessible, use one_time_keyboard in ReplyKeyboardMarkup)
     [<DataMember(Name = "remove_keyboard")>]
     RemoveKeyboard: bool
-    /// Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+    /// Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
     /// 
     /// Example: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven't voted yet.
     [<DataMember(Name = "selective")>]
@@ -2062,7 +2059,6 @@ and [<CLIMutable>] ReplyKeyboardRemove =
     }
 
 /// This object represents an inline keyboard that appears right next to the message it belongs to.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.
 and [<CLIMutable>] InlineKeyboardMarkup =
   {
     /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
@@ -2080,7 +2076,7 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// Label text on the button
     [<DataMember(Name = "text")>]
     Text: string
-    /// HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.
+    /// HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
     [<DataMember(Name = "url")>]
     Url: string option
     /// Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes
@@ -2228,7 +2224,7 @@ and [<CLIMutable>] ForceReply =
     /// The placeholder to be shown in the input field when the reply is active; 1-64 characters
     [<DataMember(Name = "input_field_placeholder")>]
     InputFieldPlaceholder: string option
-    /// Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply (has reply_to_message_id), sender of the original message.
+    /// Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot's message is a reply to a message in the same chat and forum topic, sender of the original message.
     [<DataMember(Name = "selective")>]
     Selective: bool option
   }
@@ -4043,7 +4039,6 @@ and [<CLIMutable>] InlineQueryResultVideo =
     }
 
 /// Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultAudio =
   {
     /// Type of the result, must be audio
@@ -4096,7 +4091,6 @@ and [<CLIMutable>] InlineQueryResultAudio =
     }
 
 /// Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultVoice =
   {
     /// Type of the result, must be voice
@@ -4145,7 +4139,6 @@ and [<CLIMutable>] InlineQueryResultVoice =
     }
 
 /// Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultDocument =
   {
     /// Type of the result, must be document
@@ -4210,7 +4203,6 @@ and [<CLIMutable>] InlineQueryResultDocument =
     }
 
 /// Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultLocation =
   {
     /// Type of the result, must be location
@@ -4275,7 +4267,6 @@ and [<CLIMutable>] InlineQueryResultLocation =
     }
 
 /// Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultVenue =
   {
     /// Type of the result, must be venue
@@ -4344,7 +4335,6 @@ and [<CLIMutable>] InlineQueryResultVenue =
     }
 
 /// Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultContact =
   {
     /// Type of the result, must be contact
@@ -4397,7 +4387,6 @@ and [<CLIMutable>] InlineQueryResultContact =
     }
 
 /// Represents a Game.
-/// Note: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.
 and [<CLIMutable>] InlineQueryResultGame =
   {
     /// Type of the result, must be game
@@ -4558,7 +4547,6 @@ and [<CLIMutable>] InlineQueryResultCachedMpeg4Gif =
     }
 
 /// Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.
-/// Note: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedSticker =
   {
     /// Type of the result, must be sticker
@@ -4587,7 +4575,6 @@ and [<CLIMutable>] InlineQueryResultCachedSticker =
     }
 
 /// Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedDocument =
   {
     /// Type of the result, must be document
@@ -4684,7 +4671,6 @@ and [<CLIMutable>] InlineQueryResultCachedVideo =
     }
 
 /// Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedVoice =
   {
     /// Type of the result, must be voice
@@ -4729,7 +4715,6 @@ and [<CLIMutable>] InlineQueryResultCachedVoice =
     }
 
 /// Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.
-/// Note: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.
 and [<CLIMutable>] InlineQueryResultCachedAudio =
   {
     /// Type of the result, must be audio
@@ -5015,7 +5000,7 @@ and [<CLIMutable>] ChosenInlineResult =
     }
 
 /// Describes an inline message sent by a Web App on behalf of a user.
-/// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).
+/// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.
 and [<CLIMutable>] SentWebAppMessage =
   {
     /// Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
