@@ -11,6 +11,7 @@ type ChatId =
 type InputFile = 
   | Url of Uri 
   | File of string * Stream
+  | FileBytes of string * byte[]
   | FileId of string
 
 type ChatType =
