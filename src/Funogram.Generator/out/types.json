@@ -9,7 +9,7 @@
           {
             "OriginalName": "update_id",
             "ConvertedName": "UpdateId",
-            "Description": "The update\u0027s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you\u0027re using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.",
+            "Description": "The update\u0027s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you\u0027re using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -25,7 +25,7 @@
           {
             "OriginalName": "edited_message",
             "ConvertedName": "EditedMessage",
-            "Description": "New version of a message that is known to the bot and was edited",
+            "Description": "New version of a message that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
             "Optional": true
@@ -41,7 +41,7 @@
           {
             "OriginalName": "edited_channel_post",
             "ConvertedName": "EditedChannelPost",
-            "Description": "New version of a channel post that is known to the bot and was edited",
+            "Description": "New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
             "Optional": true
@@ -57,7 +57,7 @@
           {
             "OriginalName": "message_reaction_count",
             "ConvertedName": "MessageReactionCount",
-            "Description": "Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify \u0022message_reaction_count\u0022 in the list of allowed_updates to receive these updates.",
+            "Description": "Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify \u0022message_reaction_count\u0022 in the list of allowed_updates to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.",
             "OriginalFieldType": "MessageReactionCountUpdated",
             "ConvertedFieldType": "MessageReactionCountUpdated",
             "Optional": true
@@ -105,7 +105,7 @@
           {
             "OriginalName": "poll",
             "ConvertedName": "Poll",
-            "Description": "New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot",
+            "Description": "New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot",
             "OriginalFieldType": "Poll",
             "ConvertedFieldType": "Poll",
             "Optional": true
@@ -3469,7 +3469,7 @@
           {
             "OriginalName": "selective",
             "ConvertedName": "Selective",
-            "Description": "Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply (has reply_to_message_id), sender of the original message.\n\nExample: A user requests to change the bot\u0027s language, bot replies to the request with a keyboard to select the new language. Other users in the group don\u0027t see the keyboard.",
+            "Description": "Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply to a message in the same chat and forum topic, sender of the original message.\n\nExample: A user requests to change the bot\u0027s language, bot replies to the request with a keyboard to select the new language. Other users in the group don\u0027t see the keyboard.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3480,7 +3480,7 @@
   },
   {
     "Name": "KeyboardButton",
-    "Description": "This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.\nNote:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.",
+    "Description": "This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -3700,7 +3700,7 @@
           {
             "OriginalName": "selective",
             "ConvertedName": "Selective",
-            "Description": "Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply (has reply_to_message_id), sender of the original message.\n\nExample: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven\u0027t voted yet.",
+            "Description": "Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply to a message in the same chat and forum topic, sender of the original message.\n\nExample: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven\u0027t voted yet.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3711,7 +3711,7 @@
   },
   {
     "Name": "InlineKeyboardMarkup",
-    "Description": "This object represents an inline keyboard that appears right next to the message it belongs to.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.",
+    "Description": "This object represents an inline keyboard that appears right next to the message it belongs to.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -3746,7 +3746,7 @@
           {
             "OriginalName": "url",
             "ConvertedName": "Url",
-            "Description": "HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=\u003Cuser_id\u003E can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.",
+            "Description": "HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=\u003Cuser_id\u003E can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -4006,7 +4006,7 @@
           {
             "OriginalName": "selective",
             "ConvertedName": "Selective",
-            "Description": "Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply (has reply_to_message_id), sender of the original message.",
+            "Description": "Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply to a message in the same chat and forum topic, sender of the original message.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -7464,7 +7464,7 @@
   },
   {
     "Name": "InlineQueryResultAudio",
-    "Description": "Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7563,7 +7563,7 @@
   },
   {
     "Name": "InlineQueryResultVoice",
-    "Description": "Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7654,7 +7654,7 @@
   },
   {
     "Name": "InlineQueryResultDocument",
-    "Description": "Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7777,7 +7777,7 @@
   },
   {
     "Name": "InlineQueryResultLocation",
-    "Description": "Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7900,7 +7900,7 @@
   },
   {
     "Name": "InlineQueryResultVenue",
-    "Description": "Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8031,7 +8031,7 @@
   },
   {
     "Name": "InlineQueryResultContact",
-    "Description": "Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8130,7 +8130,7 @@
   },
   {
     "Name": "InlineQueryResultGame",
-    "Description": "Represents a Game.\nNote: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.",
+    "Description": "Represents a Game.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8430,7 +8430,7 @@
   },
   {
     "Name": "InlineQueryResultCachedSticker",
-    "Description": "Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.\nNote: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.",
+    "Description": "Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8481,7 +8481,7 @@
   },
   {
     "Name": "InlineQueryResultCachedDocument",
-    "Description": "Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8663,7 +8663,7 @@
   },
   {
     "Name": "InlineQueryResultCachedVoice",
-    "Description": "Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8746,7 +8746,7 @@
   },
   {
     "Name": "InlineQueryResultCachedAudio",
-    "Description": "Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -9294,7 +9294,7 @@
   },
   {
     "Name": "SentWebAppMessage",
-    "Description": "Describes an inline message sent by a Web App on behalf of a user.\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).",
+    "Description": "Describes an inline message sent by a Web App on behalf of a user.\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
