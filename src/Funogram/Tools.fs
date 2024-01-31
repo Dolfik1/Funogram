@@ -4,6 +4,7 @@ open System
 open System.Net
 open System.Net.Http
 open System.Runtime.CompilerServices
+open System.Text
 open Funogram.Types
 open Utf8Json
 open Utf8Json.Resolvers
@@ -15,7 +16,6 @@ do ()
 open System.Collections.Concurrent
 open System.IO
 open System.Linq.Expressions
-open Funogram.Types
 open Funogram.Resolvers
 open TypeShape.Core
 open Utf8Json.FSharp
@@ -111,36 +111,61 @@ let toJsonBotRequest (request: IBotRequest) =
   toJson.Invoke(request)  
 
 module Api =
-  type File = string * Stream
+  type File =
+    | Stream of string * Stream
+    | Bytes of string * byte[]
 
-  let isFile (case: ShapeFSharpUnionCase<'T>) =
-    case.Fields
-    |> Array.map (fun x -> x.Member.Type) = [|typeof<string>;typeof<Stream>|]
+  let isFileStream (case: ShapeFSharpUnionCase<'T>) =
+    case.Fields.Length = 2 && case.Fields[0].Member.Type = typeof<string> && case.Fields[1].Member.Type = typeof<Stream>
         
-  let readFile =
+  let isFileBytes (case: ShapeFSharpUnionCase<'T>) =
+    case.Fields.Length = 2 && case.Fields[0].Member.Type = typeof<string> && case.Fields[1].Member.Type = typeof<byte[]>
+        
+  let readFileStream =
     fun (x: 'T) (case: ShapeFSharpUnionCase<'T>) ->
       let a = 
-        case.Fields.[0].Accept {
+        case.Fields[0].Accept {
           new IMemberVisitor<'T, 'T -> string> with
-            member __.Visit (shape : ShapeMember<'T, 'a>) =
+            member _.Visit (shape : ShapeMember<'T, 'a>) =
               let cast c = (box c) :?> string
               shape.Get >> cast
           }
 
       let b = 
-        case.Fields.[1].Accept {
+        case.Fields[1].Accept {
            new IMemberVisitor<'T, 'T -> Stream> with
-             member __.Visit (shape : ShapeMember<'T, 'b>) =
+             member _.Visit (shape : ShapeMember<'T, 'b>) =
                let cast c = (box c) :?> Stream
                shape.Get >> cast
         }
-      (a x, b x)
+
+      File.Stream (a x, b x)
+  
+  let readFileBytes =
+    fun (x: 'T) (case: ShapeFSharpUnionCase<'T>) ->
+      let a = 
+        case.Fields[0].Accept {
+          new IMemberVisitor<'T, 'T -> string> with
+            member _.Visit (shape : ShapeMember<'T, 'a>) =
+              let cast c = (box c) :?> string
+              shape.Get >> cast
+          }
+
+      let b = 
+        case.Fields[1].Accept {
+           new IMemberVisitor<'T, 'T -> byte[]> with
+             member _.Visit (shape : ShapeMember<'T, 'b>) =
+               let cast c = (box c) :?> byte[]
+               shape.Get >> cast
+        }
+
+      File.Bytes (a x, b x)
   
   let fileFinders = ConcurrentDictionary<Type, obj>()
   let rec mkFilesFinder<'T> () : 'T -> File[] =
     let mkMemberFinder (shape : IShapeMember<'T>) =
        shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
-         member __.Visit (shape : ShapeMember<'T, 'a>) =
+         member _.Visit (shape : ShapeMember<'T, 'a>) =
           let fieldFinder = mkFilesFinder<'a>()
           fieldFinder << shape.Get }    
     let wrap(p : 'a -> File[]) = unbox<'T -> File[]> p
@@ -149,14 +174,14 @@ module Api =
     | Shape.FSharpOption s ->
       s.Element.Accept {
         new ITypeVisitor<'T -> File[]> with
-          member __.Visit<'a> () =
+          member _.Visit<'a> () =
             let tp = mkFilesFinder<'a>()
             wrap(function None -> [||] | Some t -> (tp t))
       }
     | Shape.FSharpList s ->
       s.Element.Accept {
         new ITypeVisitor<'T -> File[]> with
-          member __.Visit<'a> () =
+          member _.Visit<'a> () =
             let tp = mkFilesFinder<'a>()
             wrap(fun ts -> ts |> Seq.map tp |> Array.concat)
         }
@@ -164,7 +189,7 @@ module Api =
     | Shape.Array s when s.Rank = 1 ->
       s.Element.Accept {
         new ITypeVisitor<'T -> File[]> with
-          member __.Visit<'a> () =
+          member _.Visit<'a> () =
             let tp = mkFilesFinder<'a> ()
             fun (t: 'T) ->
               let r = t |> box :?> seq<'a>
@@ -174,7 +199,7 @@ module Api =
     | Shape.Tuple (:? ShapeTuple<'T> as shape) ->
       let mkElemFinder (shape : IShapeMember<'T>) =
         shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
-          member __.Visit (shape : ShapeMember<'T, 'Field>) =
+          member _.Visit (shape : ShapeMember<'T, 'Field>) =
             let fieldFinder = mkFilesFinder<'Field>()
             fieldFinder << shape.Get }
 
@@ -188,13 +213,13 @@ module Api =
     | Shape.FSharpSet s ->
       s.Accept {
         new IFSharpSetVisitor<'T -> File[]> with
-          member __.Visit<'a when 'a : comparison> () =
+          member _.Visit<'a when 'a : comparison> () =
             let tp = mkFilesFinder<'a>()
             wrap(fun (s:Set<'a>) -> s |> Seq.map tp |> Array.concat)
       }
     | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
       let fieldPrinters : ('T -> File[]) [] = 
-        shape.Fields |> Array.map (fun f -> mkMemberFinder f)
+        shape.Fields |> Array.map mkMemberFinder
 
       fun (r:'T) ->
         fieldPrinters |> Seq.map (fun fp -> fp r) |> Array.concat
@@ -202,15 +227,17 @@ module Api =
       let cases : ShapeFSharpUnionCase<'T> [] = shape.UnionCases // all union cases
       let mkUnionCasePrinter (case : ShapeFSharpUnionCase<'T>) =
         let readFile =
-          if isFile case then
-            readFile |> Some
+          if isFileStream case then
+            readFileStream |> Some
+          elif isFileBytes case then
+            readFileBytes |> Some
           else None
         
         let fieldPrinters = case.Fields |> Array.map mkMemberFinder
         fun (x: 'T) ->
           match readFile with
           | Some fn ->
-            [|fn x case|]
+            [| fn x case |]
           | None ->
             fieldPrinters 
             |> Seq.map (fun fp -> fp x) 
@@ -240,10 +267,10 @@ module Api =
     let inline ($) _ x = x
   
     let mkGenerateInMember (shape : IShapeMember<'DeclaringType>) =
-     shape.Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> string -> MultipartFormDataContent -> bool> with
-       member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
-         let inFieldFinder = mkRequestGenerator<'Field>()
-         inFieldFinder << shape.Get }
+      shape.Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> string -> MultipartFormDataContent -> bool> with
+        member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
+          let inFieldFinder = mkRequestGenerator<'Field>()
+          inFieldFinder << shape.Get }
 
     let wrap(p : 'a -> string -> MultipartFormDataContent -> bool) =
       unbox<'T -> string -> MultipartFormDataContent -> bool> p
@@ -253,7 +280,11 @@ module Api =
         fileFinders.GetOrAdd(typeof<'v>, Func<Type, obj>(fun x -> mkFilesFinder<'v> () |> box))
         |> unbox<'v -> File[]>
       let files = finder a
-      files |> Seq.iter (fun (name, stream) -> data.Add(new StreamContent(stream), name, name))
+      files |> Seq.iter (fun x ->
+        match x with
+        | File.Stream (name, stream) -> data.Add(new StreamContent(stream), name, name)
+        | File.Bytes (name, bytes) -> data.Add(new ByteArrayContent(bytes), name, name)
+      )
     
     let strf a b = new StringContent(sprintf a b)
     
@@ -303,7 +334,7 @@ module Api =
     | Shape.FSharpOption s ->
       s.Element.Accept {
         new ITypeVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member __.Visit<'a> () =
+          member _.Visit<'a> () =
             let tp = mkRequestGenerator<'a>()
             wrap(fun x prop data ->
               match x with
@@ -313,7 +344,7 @@ module Api =
     | Shape.FSharpList s ->
       s.Element.Accept {
         new ITypeVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member __.Visit<'a> () =
+          member _.Visit<'a> () =
             fun x prop data ->
               let json = toJson x
               data.Add(new ByteArrayContent(json), prop)
@@ -323,7 +354,7 @@ module Api =
     | Shape.Array s when s.Rank = 1 ->
       s.Element.Accept {
         new ITypeVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member __.Visit<'a> () =
+          member _.Visit<'a> () =
             fun x prop data ->
               let json = toJson x
               data.Add(new ByteArrayContent(json), prop)
@@ -333,7 +364,7 @@ module Api =
     | Shape.FSharpSet s ->
       s.Accept {
         new IFSharpSetVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member __.Visit<'a when 'a : comparison> () =
+          member _.Visit<'a when 'a : comparison> () =
             fun x prop data ->
               let json = toJson x
               data.Add(new ByteArrayContent(json), prop)
@@ -346,8 +377,10 @@ module Api =
         let isEnum = case.Fields.Length = 0
 
         let readFile =
-          if isFile case then
-            readFile |> Some
+          if isFileStream case then
+            readFileStream |> Some
+          elif isFileBytes case then
+            readFileBytes |> Some
           else None
         
         if isEnum then
@@ -358,8 +391,12 @@ module Api =
           fun (x: 'T) (prop: string) (data: MultipartFormDataContent) ->
             match readFile with
             | Some fn ->
-              let (n, s) = fn x case
-              data.Add(new StreamContent(s), prop, n) $ true
+              let file = fn x case
+              match file with
+              | Stream (name, stream) ->
+                data.Add(new StreamContent(stream), prop, name) $ true
+              | Bytes (name, bytes) ->
+                data.Add(new ByteArrayContent(bytes), prop, name) $ true
             | None ->
               let fieldPrinters = case.Fields |> Array.map mkGenerateInMember
               fieldPrinters

@@ -30,14 +30,18 @@ module internal Resolvers =
           else yield c
     }
     String.Concat(chars).ToLower()
-
+  
   let mkMemberSerializer (case: ShapeFSharpUnionCase<'DeclaringType>) =
-    let isFile = case.Fields |> Array.map (fun x -> x.Member.Type) = [|typeof<string>; typeof<Stream>|]
+    let isFile =
+      case.Fields.Length = 2
+        && case.Fields[0].Member.Type = typeof<string>
+        && (case.Fields[1].Member.Type = typeof<Stream> || case.Fields[1].Member.Type = typeof<byte[]>)
+    
     if case.Fields.Length = 0 then
       fun _ _ -> Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
     else
       case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> IJsonFormatterResolver -> byte[]> with
-        member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
+        member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
           fun value resolver ->
             let mutable myWriter = JsonWriter()
             
