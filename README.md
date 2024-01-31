@@ -1,7 +1,7 @@
 ![.NET Core](https://github.com/Dolfik1/Funogram/workflows/.NET/badge.svg)
 [![NuGet](https://img.shields.io/nuget/v/Funogram.svg)](https://www.nuget.org/packages/Funogram/)
 [![NuGet](https://img.shields.io/nuget/v/Funogram.Telegram.svg)](https://www.nuget.org/packages/Funogram.Telegram/)
-[![NuGet](https://img.shields.io/badge/Bot%20API-6.7-blue?logo=telegram)](https://www.nuget.org/packages/Funogram.Telegram/)
+[![NuGet](https://img.shields.io/badge/Bot%20API-7.0-blue?logo=telegram)](https://www.nuget.org/packages/Funogram.Telegram/)
 
 <img src="https://github.com/Dolfik1/Funogram/raw/master/docs/files/img/logo.png" alt="Funogram Logo" width="200" align="right" />
 
