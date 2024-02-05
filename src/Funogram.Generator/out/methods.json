@@ -2,12 +2,12 @@
   {
     "OriginalName": "getUpdates",
     "ConvertedName": "GetUpdates",
-    "Description": "Use this method to receive incoming updates using long polling (wiki). An Array of Update objects is returned.",
+    "Description": "Use this method to receive incoming updates using long polling (wiki). Returns an Array of Update objects.",
     "Fields": [
       {
         "OriginalName": "offset",
         "ConvertedName": "Offset",
-        "Description": "Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will forgotten.",
+        "Description": "Identifier of the first update to be returned. Must be greater by one than the highest among the identifiers of previously received updates. By default, updates starting with the earliest unconfirmed update are returned. An update is considered confirmed as soon as getUpdates is called with an offset higher than its update_id. The negative offset can be specified to retrieve updates starting from -offset update from the end of the updates queue. All previous updates will be forgotten.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -31,7 +31,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u201Cmessage\u201D, \u201Cedited_channel_post\u201D, \u201Ccallback_query\u201D] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -80,7 +80,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u201Cmessage\u201D, \u201Cedited_channel_post\u201D, \u201Ccallback_query\u201D] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member (default). If not specified, the previous setting will be used.\nPlease note that this parameter doesn\u0027t affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.\nPlease note that this parameter doesn\u0027t affect updates created before the call to the setWebhook, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -168,6 +168,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "text",
         "ConvertedName": "Text",
         "Description": "Text of the message to be sent, 1-4096 characters after entities parsing",
@@ -192,11 +200,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "disable_web_page_preview",
-        "ConvertedName": "DisableWebPagePreview",
-        "Description": "Disables link previews for links in this message",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "link_preview_options",
+        "ConvertedName": "LinkPreviewOptions",
+        "Description": "Link preview generation options for the message",
+        "OriginalFieldType": "LinkPreviewOptions",
+        "ConvertedFieldType": "LinkPreviewOptions",
         "Optional": true
       },
       {
@@ -216,19 +224,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -246,7 +246,7 @@
   {
     "OriginalName": "forwardMessage",
     "ConvertedName": "ForwardMessage",
-    "Description": "Use this method to forward messages of any kind. Service messages can\u0027t be forwarded. On success, the sent Message is returned.",
+    "Description": "Use this method to forward messages of any kind. Service messages and messages with protected content can\u0027t be forwarded. On success, the sent Message is returned.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -255,6 +255,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "from_chat_id",
@@ -293,9 +301,9 @@
     "ConvertedReturnType": "Message"
   },
   {
-    "OriginalName": "copyMessage",
-    "ConvertedName": "CopyMessage",
-    "Description": "Use this method to copy messages of any kind. Service messages and invoice messages can\u0027t be copied. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
+    "OriginalName": "forwardMessages",
+    "ConvertedName": "ForwardMessages",
+    "Description": "Use this method to forward multiple messages of any kind. If some of the specified messages can\u0027t be found or forwarded, they are skipped. Service messages and messages with protected content can\u0027t be forwarded. Album grouping is kept for forwarded messages. On success, an array of MessageId of the sent messages is returned.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -304,6 +312,71 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "from_chat_id",
+        "ConvertedName": "FromChatId",
+        "Description": "Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "Identifiers of 1-100 messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order.",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      },
+      {
+        "OriginalName": "disable_notification",
+        "ConvertedName": "DisableNotification",
+        "Description": "Sends the messages silently. Users will receive a notification with no sound.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Protects the contents of the forwarded messages from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "array of MessageId",
+    "ConvertedReturnType": "MessageId[]"
+  },
+  {
+    "OriginalName": "copyMessage",
+    "ConvertedName": "CopyMessage",
+    "Description": "Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "from_chat_id",
@@ -362,19 +435,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -390,6 +455,71 @@
     "ConvertedReturnType": "MessageId"
   },
   {
+    "OriginalName": "copyMessages",
+    "ConvertedName": "CopyMessages",
+    "Description": "Use this method to copy messages of any kind. If some of the specified messages can\u0027t be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don\u0027t have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "from_chat_id",
+        "ConvertedName": "FromChatId",
+        "Description": "Unique identifier for the chat where the original messages were sent (or channel username in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "Identifiers of 1-100 messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order.",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      },
+      {
+        "OriginalName": "disable_notification",
+        "ConvertedName": "DisableNotification",
+        "Description": "Sends the messages silently. Users will receive a notification with no sound.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Protects the contents of the sent messages from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "remove_caption",
+        "ConvertedName": "RemoveCaption",
+        "Description": "Pass True to copy the messages without their captions",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "array of MessageId",
+    "ConvertedReturnType": "MessageId[]"
+  },
+  {
     "OriginalName": "sendPhoto",
     "ConvertedName": "SendPhoto",
     "Description": "Use this method to send photos. On success, the sent Message is returned.",
@@ -401,6 +531,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "photo",
@@ -435,6 +573,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "has_spoiler",
+        "ConvertedName": "HasSpoiler",
+        "Description": "Pass True if the photo needs to be covered with a spoiler animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
         "Description": "Sends the message silently. Users will receive a notification with no sound.",
@@ -451,19 +597,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -490,6 +628,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "audio",
@@ -548,8 +694,8 @@
         "Optional": true
       },
       {
-        "OriginalName": "thumb",
-        "ConvertedName": "Thumb",
+        "OriginalName": "thumbnail",
+        "ConvertedName": "Thumbnail",
         "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
@@ -572,19 +718,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -613,6 +751,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "document",
         "ConvertedName": "Document",
         "Description": "File to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB",
@@ -621,8 +767,8 @@
         "Optional": false
       },
       {
-        "OriginalName": "thumb",
-        "ConvertedName": "Thumb",
+        "OriginalName": "thumbnail",
+        "ConvertedName": "Thumbnail",
         "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
@@ -677,19 +823,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -716,6 +854,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "video",
@@ -750,8 +896,8 @@
         "Optional": true
       },
       {
-        "OriginalName": "thumb",
-        "ConvertedName": "Thumb",
+        "OriginalName": "thumbnail",
+        "ConvertedName": "Thumbnail",
         "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
@@ -782,9 +928,17 @@
         "Optional": true
       },
       {
+        "OriginalName": "has_spoiler",
+        "ConvertedName": "HasSpoiler",
+        "Description": "Pass True if the video needs to be covered with a spoiler animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "supports_streaming",
         "ConvertedName": "SupportsStreaming",
-        "Description": "Pass True, if the uploaded video is suitable for streaming",
+        "Description": "Pass True if the uploaded video is suitable for streaming",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -806,19 +960,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -845,6 +991,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "animation",
@@ -879,8 +1033,8 @@
         "Optional": true
       },
       {
-        "OriginalName": "thumb",
-        "ConvertedName": "Thumb",
+        "OriginalName": "thumbnail",
+        "ConvertedName": "Thumbnail",
         "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
@@ -911,6 +1065,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "has_spoiler",
+        "ConvertedName": "HasSpoiler",
+        "Description": "Pass True if the animation needs to be covered with a spoiler animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
         "Description": "Sends the message silently. Users will receive a notification with no sound.",
@@ -927,19 +1089,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -966,6 +1120,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "voice",
@@ -1024,19 +1186,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1065,6 +1219,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "video_note",
         "ConvertedName": "VideoNote",
         "Description": "Video note to send. Pass a file_id as String to send a video note that exists on the Telegram servers (recommended) or upload a new video using multipart/form-data. More information on Sending Files \u00BB. Sending video notes by a URL is currently unsupported",
@@ -1089,8 +1251,8 @@
         "Optional": true
       },
       {
-        "OriginalName": "thumb",
-        "ConvertedName": "Thumb",
+        "OriginalName": "thumbnail",
+        "ConvertedName": "Thumbnail",
         "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
@@ -1113,19 +1275,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1154,6 +1308,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "media",
         "ConvertedName": "Media",
         "Description": "A JSON-serialized array describing messages to be sent, must include 2-10 items",
@@ -1178,19 +1340,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the messages are a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       }
     ],
@@ -1209,6 +1363,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "latitude",
@@ -1275,19 +1437,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1303,128 +1457,6 @@
     "ConvertedReturnType": "Message"
   },
   {
-    "OriginalName": "editMessageLiveLocation",
-    "ConvertedName": "EditMessageLiveLocation",
-    "Description": "Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
-    "Fields": [
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "latitude",
-        "ConvertedName": "Latitude",
-        "Description": "Latitude of new location",
-        "OriginalFieldType": "Float number",
-        "ConvertedFieldType": "float",
-        "Optional": false
-      },
-      {
-        "OriginalName": "longitude",
-        "ConvertedName": "Longitude",
-        "Description": "Longitude of new location",
-        "OriginalFieldType": "Float number",
-        "ConvertedFieldType": "float",
-        "Optional": false
-      },
-      {
-        "OriginalName": "horizontal_accuracy",
-        "ConvertedName": "HorizontalAccuracy",
-        "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-        "OriginalFieldType": "Float number",
-        "ConvertedFieldType": "float",
-        "Optional": true
-      },
-      {
-        "OriginalName": "heading",
-        "ConvertedName": "Heading",
-        "Description": "Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "proximity_alert_radius",
-        "ConvertedName": "ProximityAlertRadius",
-        "Description": "The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for a new inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "stopMessageLiveLocation",
-    "ConvertedName": "StopMessageLiveLocation",
-    "Description": "Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.",
-    "Fields": [
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message with live location to stop",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for a new inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
     "OriginalName": "sendVenue",
     "ConvertedName": "SendVenue",
     "Description": "Use this method to send information about a venue. On success, the sent Message is returned.",
@@ -1436,6 +1468,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "latitude",
@@ -1518,19 +1558,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1557,6 +1589,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "phone_number",
@@ -1607,25 +1647,17 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1646,6 +1678,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "question",
@@ -1738,7 +1778,7 @@
       {
         "OriginalName": "is_closed",
         "ConvertedName": "IsClosed",
-        "Description": "Pass True, if the poll needs to be immediately closed. This can be useful for poll preview.",
+        "Description": "Pass True if the poll needs to be immediately closed. This can be useful for poll preview.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1760,19 +1800,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1801,6 +1833,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "emoji",
         "ConvertedName": "Emoji",
         "Description": "Emoji on which the dice throw animation is based. Currently, must be one of \u201C\u201D, \u201C\u201D, \u201C\u201D, \u201C\u201D, \u201C\u201D, or \u201C\u201D. Dice can have values 1-6 for \u201C\u201D, \u201C\u201D and \u201C\u201D, values 1-5 for \u201C\u201D and \u201C\u201D, and values 1-64 for \u201C\u201D. Defaults to \u201C\u201D",
@@ -1825,19 +1865,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -1866,12 +1898,61 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread; supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "action",
         "ConvertedName": "Action",
         "Description": "Type of action to broadcast. Choose one, depending on what the user is about to receive: typing for text messages, upload_photo for photos, record_video or upload_video for videos, record_voice or upload_voice for voice notes, upload_document for general files, choose_sticker for stickers, find_location for location data, record_video_note or upload_video_note for video notes.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "ChatAction",
         "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setMessageReaction",
+    "ConvertedName": "SetMessageReaction",
+    "Description": "Use this method to change the chosen reactions on a message. Service messages can\u0027t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Identifier of the target message. If the message belongs to a media group, the reaction is set to the first non-deleted message in the group instead.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "reaction",
+        "ConvertedName": "Reaction",
+        "Description": "New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.",
+        "OriginalFieldType": "Array of ReactionType",
+        "ConvertedFieldType": "ReactionType[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "is_big",
+        "ConvertedName": "IsBig",
+        "Description": "Pass True to set the reaction with a big animation",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
@@ -1951,7 +2032,7 @@
       {
         "OriginalName": "until_date",
         "ConvertedName": "UntilDate",
-        "Description": "Date when the user will be unbanned, unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.",
+        "Description": "Date when the user will be unbanned; Unix time. If user is banned for more than 366 days or less than 30 seconds from the current time they are considered to be banned forever. Applied for supergroups and channels only.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2031,9 +2112,17 @@
         "Optional": false
       },
       {
+        "OriginalName": "use_independent_chat_permissions",
+        "ConvertedName": "UseIndependentChatPermissions",
+        "Description": "Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "until_date",
         "ConvertedName": "UntilDate",
-        "Description": "Date when restrictions will be lifted for the user, unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever",
+        "Description": "Date when restrictions will be lifted for the user; Unix time. If user is restricted for more than 366 days or less than 30 seconds from the current time, they are considered to be restricted forever",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2066,7 +2155,7 @@
       {
         "OriginalName": "is_anonymous",
         "ConvertedName": "IsAnonymous",
-        "Description": "Pass True, if the administrator\u0027s presence in the chat is hidden",
+        "Description": "Pass True if the administrator\u0027s presence in the chat is hidden",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2074,23 +2163,7 @@
       {
         "OriginalName": "can_manage_chat",
         "ConvertedName": "CanManageChat",
-        "Description": "Pass True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_post_messages",
-        "ConvertedName": "CanPostMessages",
-        "Description": "Pass True, if the administrator can create channel posts, channels only",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_edit_messages",
-        "ConvertedName": "CanEditMessages",
-        "Description": "Pass True, if the administrator can edit messages of other users and can pin messages, channels only",
+        "Description": "Pass True if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2098,7 +2171,7 @@
       {
         "OriginalName": "can_delete_messages",
         "ConvertedName": "CanDeleteMessages",
-        "Description": "Pass True, if the administrator can delete messages of other users",
+        "Description": "Pass True if the administrator can delete messages of other users",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2106,7 +2179,7 @@
       {
         "OriginalName": "can_manage_video_chats",
         "ConvertedName": "CanManageVideoChats",
-        "Description": "Pass True, if the administrator can manage video chats",
+        "Description": "Pass True if the administrator can manage video chats",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2114,7 +2187,7 @@
       {
         "OriginalName": "can_restrict_members",
         "ConvertedName": "CanRestrictMembers",
-        "Description": "Pass True, if the administrator can restrict, ban or unban chat members",
+        "Description": "Pass True if the administrator can restrict, ban or unban chat members, or access supergroup statistics",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2122,7 +2195,7 @@
       {
         "OriginalName": "can_promote_members",
         "ConvertedName": "CanPromoteMembers",
-        "Description": "Pass True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by him)",
+        "Description": "Pass True if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by him)",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2130,7 +2203,7 @@
       {
         "OriginalName": "can_change_info",
         "ConvertedName": "CanChangeInfo",
-        "Description": "Pass True, if the administrator can change chat title, photo and other settings",
+        "Description": "Pass True if the administrator can change chat title, photo and other settings",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2138,7 +2211,23 @@
       {
         "OriginalName": "can_invite_users",
         "ConvertedName": "CanInviteUsers",
-        "Description": "Pass True, if the administrator can invite new users to the chat",
+        "Description": "Pass True if the administrator can invite new users to the chat",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_post_messages",
+        "ConvertedName": "CanPostMessages",
+        "Description": "Pass True if the administrator can post messages in the channel, or access channel statistics; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_edit_messages",
+        "ConvertedName": "CanEditMessages",
+        "Description": "Pass True if the administrator can edit messages of other users and can pin messages; channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2146,7 +2235,39 @@
       {
         "OriginalName": "can_pin_messages",
         "ConvertedName": "CanPinMessages",
-        "Description": "Pass True, if the administrator can pin messages, supergroups only",
+        "Description": "Pass True if the administrator can pin messages, supergroups only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_post_stories",
+        "ConvertedName": "CanPostStories",
+        "Description": "Pass True if the administrator can post stories in the channel; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_edit_stories",
+        "ConvertedName": "CanEditStories",
+        "Description": "Pass True if the administrator can edit stories posted by other users; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_delete_stories",
+        "ConvertedName": "CanDeleteStories",
+        "Description": "Pass True if the administrator can delete stories posted by other users; channels only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_manage_topics",
+        "ConvertedName": "CanManageTopics",
+        "Description": "Pass True if the user is allowed to create, rename, close, and reopen forum topics, supergroups only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2258,6 +2379,14 @@
         "OriginalFieldType": "ChatPermissions",
         "ConvertedFieldType": "ChatPermissions",
         "Optional": false
+      },
+      {
+        "OriginalName": "use_independent_chat_permissions",
+        "ConvertedName": "UseIndependentChatPermissions",
+        "Description": "Pass True if chat permissions are set independently. Otherwise, the can_send_other_messages and can_add_web_page_previews permissions will imply the can_send_messages, can_send_audios, can_send_documents, can_send_photos, can_send_videos, can_send_video_notes, and can_send_voice_notes permissions; the can_send_polls permission will imply the can_send_messages permission.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
@@ -2519,7 +2648,7 @@
       {
         "OriginalName": "title",
         "ConvertedName": "Title",
-        "Description": "New chat title, 1-255 characters",
+        "Description": "New chat title, 1-128 characters",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
@@ -2577,7 +2706,7 @@
       {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
-        "Description": "Pass True, if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.",
+        "Description": "Pass True if it is not necessary to send a notification to all chat members about the new pinned message. Notifications are always disabled in channels and private chats.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2648,7 +2777,7 @@
   {
     "OriginalName": "getChat",
     "ConvertedName": "GetChat",
-    "Description": "Use this method to get up to date information about the chat (current name of the user for one-on-one conversations, current username of a user, group or channel, etc.). Returns a Chat object on success.",
+    "Description": "Use this method to get up to date information about the chat. Returns a Chat object on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2665,7 +2794,7 @@
   {
     "OriginalName": "getChatAdministrators",
     "ConvertedName": "GetChatAdministrators",
-    "Description": "Use this method to get a list of administrators in a chat. On success, returns an Array of ChatMember objects that contains information about all chat administrators except other bots. If the chat is a group or a supergroup and no administrators were appointed, only the creator will be returned.",
+    "Description": "Use this method to get a list of administrators in a chat, which aren\u0027t bots. Returns an Array of ChatMember objects.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2699,7 +2828,7 @@
   {
     "OriginalName": "getChatMember",
     "ConvertedName": "GetChatMember",
-    "Description": "Use this method to get information about a member of a chat. Returns a ChatMember object on success.",
+    "Description": "Use this method to get information about a member of a chat. The method is only guaranteed to work for other users if the bot is an administrator in the chat. Returns a ChatMember object on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2764,6 +2893,306 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "getForumTopicIconStickers",
+    "ConvertedName": "GetForumTopicIconStickers",
+    "Description": "Use this method to get custom emoji stickers, which can be used as a forum topic icon by any user. Requires no parameters. Returns an Array of Sticker objects.",
+    "Fields": [],
+    "OriginalReturnType": "Array of Sticker",
+    "ConvertedReturnType": "Sticker[]"
+  },
+  {
+    "OriginalName": "createForumTopic",
+    "ConvertedName": "CreateForumTopic",
+    "Description": "Use this method to create a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns information about the created topic as a ForumTopic object.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Topic name, 1-128 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "icon_color",
+        "ConvertedName": "IconColor",
+        "Description": "Color of the topic icon in RGB format. Currently, must be one of 7322096 (0x6FB9F0), 16766590 (0xFFD67E), 13338331 (0xCB86DB), 9367192 (0x8EEE98), 16749490 (0xFF93B2), or 16478047 (0xFB6F5F)",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "icon_custom_emoji_id",
+        "ConvertedName": "IconCustomEmojiId",
+        "Description": "Unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "ForumTopic",
+    "ConvertedReturnType": "ForumTopic"
+  },
+  {
+    "OriginalName": "editForumTopic",
+    "ConvertedName": "EditForumTopic",
+    "Description": "Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread of the forum topic",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "New topic name, 0-128 characters. If not specified or empty, the current name of the topic will be kept",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "icon_custom_emoji_id",
+        "ConvertedName": "IconCustomEmojiId",
+        "Description": "New unique identifier of the custom emoji shown as the topic icon. Use getForumTopicIconStickers to get all allowed custom emoji identifiers. Pass an empty string to remove the icon. If not specified, the current icon will be kept",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "closeForumTopic",
+    "ConvertedName": "CloseForumTopic",
+    "Description": "Use this method to close an open topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread of the forum topic",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "reopenForumTopic",
+    "ConvertedName": "ReopenForumTopic",
+    "Description": "Use this method to reopen a closed topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread of the forum topic",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "deleteForumTopic",
+    "ConvertedName": "DeleteForumTopic",
+    "Description": "Use this method to delete a forum topic along with all its messages in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_delete_messages administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread of the forum topic",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "unpinAllForumTopicMessages",
+    "ConvertedName": "UnpinAllForumTopicMessages",
+    "Description": "Use this method to clear the list of pinned messages in a forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread of the forum topic",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "editGeneralForumTopic",
+    "ConvertedName": "EditGeneralForumTopic",
+    "Description": "Use this method to edit the name of the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "New topic name, 1-128 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "closeGeneralForumTopic",
+    "ConvertedName": "CloseGeneralForumTopic",
+    "Description": "Use this method to close an open \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "reopenGeneralForumTopic",
+    "ConvertedName": "ReopenGeneralForumTopic",
+    "Description": "Use this method to reopen a closed \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically unhidden if it was hidden. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "hideGeneralForumTopic",
+    "ConvertedName": "HideGeneralForumTopic",
+    "Description": "Use this method to hide the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. The topic will be automatically closed if it was open. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "unhideGeneralForumTopic",
+    "ConvertedName": "UnhideGeneralForumTopic",
+    "Description": "Use this method to unhide the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "unpinAllGeneralForumTopicMessages",
+    "ConvertedName": "UnpinAllGeneralForumTopicMessages",
+    "Description": "Use this method to clear the list of pinned messages in a General forum topic. The bot must be an administrator in the chat for this to work and must have the can_pin_messages administrator right in the supergroup. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "answerCallbackQuery",
     "ConvertedName": "AnswerCallbackQuery",
     "Description": "Use this method to send answers to callback queries sent from inline keyboards. The answer will be displayed to the user as a notification at the top of the chat screen or as an alert. On success, True is returned.",
@@ -2813,9 +3242,34 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "getUserChatBoosts",
+    "ConvertedName": "GetUserChatBoosts",
+    "Description": "Use this method to get the list of boosts added to a chat by a user. Requires administrator rights in the chat. Returns a UserChatBoosts object.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the chat or username of the channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "UserChatBoosts",
+    "ConvertedReturnType": "UserChatBoosts"
+  },
+  {
     "OriginalName": "setMyCommands",
     "ConvertedName": "SetMyCommands",
-    "Description": "Use this method to change the list of the bot\u0027s commands. See https://core.telegram.org/bots#commands for more details about bot commands. Returns True on success.",
+    "Description": "Use this method to change the list of the bot\u0027s commands. See this manual for more details about bot commands. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "commands",
@@ -2873,7 +3327,7 @@
   {
     "OriginalName": "getMyCommands",
     "ConvertedName": "GetMyCommands",
-    "Description": "Use this method to get the current list of the bot\u0027s commands for the given scope and user language. Returns Array of BotCommand on success. If commands aren\u0027t set, an empty list is returned.",
+    "Description": "Use this method to get the current list of the bot\u0027s commands for the given scope and user language. Returns an Array of BotCommand objects. If commands aren\u0027t set, an empty list is returned.",
     "Fields": [
       {
         "OriginalName": "scope",
@@ -2894,6 +3348,132 @@
     ],
     "OriginalReturnType": "Array of BotCommand",
     "ConvertedReturnType": "BotCommand[]"
+  },
+  {
+    "OriginalName": "setMyName",
+    "ConvertedName": "SetMyName",
+    "Description": "Use this method to change the bot\u0027s name. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "New bot name; 0-64 characters. Pass an empty string to remove the dedicated name for the given language.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "language_code",
+        "ConvertedName": "LanguageCode",
+        "Description": "A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose language there is no dedicated name.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getMyName",
+    "ConvertedName": "GetMyName",
+    "Description": "Use this method to get the current bot name for the given user language. Returns BotName on success.",
+    "Fields": [
+      {
+        "OriginalName": "language_code",
+        "ConvertedName": "LanguageCode",
+        "Description": "A two-letter ISO 639-1 language code or an empty string",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "BotName",
+    "ConvertedReturnType": "BotName"
+  },
+  {
+    "OriginalName": "setMyDescription",
+    "ConvertedName": "SetMyDescription",
+    "Description": "Use this method to change the bot\u0027s description, which is shown in the chat with the bot if the chat is empty. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "description",
+        "ConvertedName": "Description",
+        "Description": "New bot description; 0-512 characters. Pass an empty string to remove the dedicated description for the given language.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "language_code",
+        "ConvertedName": "LanguageCode",
+        "Description": "A two-letter ISO 639-1 language code. If empty, the description will be applied to all users for whose language there is no dedicated description.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getMyDescription",
+    "ConvertedName": "GetMyDescription",
+    "Description": "Use this method to get the current bot description for the given user language. Returns BotDescription on success.",
+    "Fields": [
+      {
+        "OriginalName": "language_code",
+        "ConvertedName": "LanguageCode",
+        "Description": "A two-letter ISO 639-1 language code or an empty string",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "BotDescription",
+    "ConvertedReturnType": "BotDescription"
+  },
+  {
+    "OriginalName": "setMyShortDescription",
+    "ConvertedName": "SetMyShortDescription",
+    "Description": "Use this method to change the bot\u0027s short description, which is shown on the bot\u0027s profile page and is sent together with the link when users share the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "short_description",
+        "ConvertedName": "ShortDescription",
+        "Description": "New short description for the bot; 0-120 characters. Pass an empty string to remove the dedicated short description for the given language.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "language_code",
+        "ConvertedName": "LanguageCode",
+        "Description": "A two-letter ISO 639-1 language code. If empty, the short description will be applied to all users for whose language there is no dedicated short description.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getMyShortDescription",
+    "ConvertedName": "GetMyShortDescription",
+    "Description": "Use this method to get the current bot short description for the given user language. Returns BotShortDescription on success.",
+    "Fields": [
+      {
+        "OriginalName": "language_code",
+        "ConvertedName": "LanguageCode",
+        "Description": "A two-letter ISO 639-1 language code or an empty string",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "BotShortDescription",
+    "ConvertedReturnType": "BotShortDescription"
   },
   {
     "OriginalName": "setChatMenuButton",
@@ -2940,7 +3520,7 @@
   {
     "OriginalName": "setMyDefaultAdministratorRights",
     "ConvertedName": "SetMyDefaultAdministratorRights",
-    "Description": "Use this method to change the default administrator rights requested by the bot when it\u0027s added as an administrator to groups or channels. These rights will be suggested to users, but they are are free to modify the list before adding the bot. Returns True on success.",
+    "Description": "Use this method to change the default administrator rights requested by the bot when it\u0027s added as an administrator to groups or channels. These rights will be suggested to users, but they are free to modify the list before adding the bot. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "rights",
@@ -3033,11 +3613,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "disable_web_page_preview",
-        "ConvertedName": "DisableWebPagePreview",
-        "Description": "Disables link previews for links in this message",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "link_preview_options",
+        "ConvertedName": "LinkPreviewOptions",
+        "Description": "Link preview generation options for the message",
+        "OriginalFieldType": "LinkPreviewOptions",
+        "ConvertedFieldType": "LinkPreviewOptions",
         "Optional": true
       },
       {
@@ -3167,6 +3747,128 @@
     "ConvertedReturnType": "EditMessageResult"
   },
   {
+    "OriginalName": "editMessageLiveLocation",
+    "ConvertedName": "EditMessageLiveLocation",
+    "Description": "Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "latitude",
+        "ConvertedName": "Latitude",
+        "Description": "Latitude of new location",
+        "OriginalFieldType": "Float number",
+        "ConvertedFieldType": "float",
+        "Optional": false
+      },
+      {
+        "OriginalName": "longitude",
+        "ConvertedName": "Longitude",
+        "Description": "Longitude of new location",
+        "OriginalFieldType": "Float number",
+        "ConvertedFieldType": "float",
+        "Optional": false
+      },
+      {
+        "OriginalName": "horizontal_accuracy",
+        "ConvertedName": "HorizontalAccuracy",
+        "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
+        "OriginalFieldType": "Float number",
+        "ConvertedFieldType": "float",
+        "Optional": true
+      },
+      {
+        "OriginalName": "heading",
+        "ConvertedName": "Heading",
+        "Description": "Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "proximity_alert_radius",
+        "ConvertedName": "ProximityAlertRadius",
+        "Description": "The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for a new inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "stopMessageLiveLocation",
+    "ConvertedName": "StopMessageLiveLocation",
+    "Description": "Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message with live location to stop",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for a new inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
     "OriginalName": "editMessageReplyMarkup",
     "ConvertedName": "EditMessageReplyMarkup",
     "Description": "Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
@@ -3243,7 +3945,7 @@
   {
     "OriginalName": "deleteMessage",
     "ConvertedName": "DeleteMessage",
-    "Description": "Use this method to delete a message, including service messages, with the following limitations:\n- A message can only be deleted if it was sent less than 48 hours ago.\n- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.\n- Bots can delete outgoing messages in private chats, groups, and supergroups.\n- Bots can delete incoming messages in private chats.\n- Bots granted can_post_messages permissions can delete outgoing messages in channels.\n- If the bot is an administrator of a group, it can delete any message there.\n- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.\nReturns True on success.",
+    "Description": "Use this method to delete a message, including service messages, with the following limitations:\n- A message can only be deleted if it was sent less than 48 hours ago.\n- Service messages about a supergroup, channel, or forum topic creation can\u0027t be deleted.\n- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.\n- Bots can delete outgoing messages in private chats, groups, and supergroups.\n- Bots can delete incoming messages in private chats.\n- Bots granted can_post_messages permissions can delete outgoing messages in channels.\n- If the bot is an administrator of a group, it can delete any message there.\n- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.\nReturns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -3266,6 +3968,31 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "deleteMessages",
+    "ConvertedName": "DeleteMessages",
+    "Description": "Use this method to delete multiple messages simultaneously. If some of the specified messages can\u0027t be found, they are skipped. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "Identifiers of 1-100 messages to delete. See deleteMessage for limitations on which messages can be deleted",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "sendSticker",
     "ConvertedName": "SendSticker",
     "Description": "Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.",
@@ -3279,12 +4006,28 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "sticker",
         "ConvertedName": "Sticker",
-        "Description": "Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB",
+        "Description": "Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files \u00BB. Video stickers can only be sent by a file_id. Animated stickers can\u0027t be sent via an HTTP URL.",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
         "Optional": false
+      },
+      {
+        "OriginalName": "emoji",
+        "ConvertedName": "Emoji",
+        "Description": "Emoji associated with the sticker; only for just uploaded stickers",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
       },
       {
         "OriginalName": "disable_notification",
@@ -3303,19 +4046,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -3348,9 +4083,26 @@
     "ConvertedReturnType": "StickerSet"
   },
   {
+    "OriginalName": "getCustomEmojiStickers",
+    "ConvertedName": "GetCustomEmojiStickers",
+    "Description": "Use this method to get information about custom emoji stickers by their identifiers. Returns an Array of Sticker objects.",
+    "Fields": [
+      {
+        "OriginalName": "custom_emoji_ids",
+        "ConvertedName": "CustomEmojiIds",
+        "Description": "List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.",
+        "OriginalFieldType": "Array of String",
+        "ConvertedFieldType": "string[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "Array of Sticker",
+    "ConvertedReturnType": "Sticker[]"
+  },
+  {
     "OriginalName": "uploadStickerFile",
     "ConvertedName": "UploadStickerFile",
-    "Description": "Use this method to upload a .PNG file with a sticker for later use in createNewStickerSet and addStickerToSet methods (can be used multiple times). Returns the uploaded File on success.",
+    "Description": "Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (the file can be used multiple times). Returns the uploaded File on success.",
     "Fields": [
       {
         "OriginalName": "user_id",
@@ -3361,11 +4113,19 @@
         "Optional": false
       },
       {
-        "OriginalName": "png_sticker",
-        "ConvertedName": "PngSticker",
-        "Description": "PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. More information on Sending Files \u00BB",
+        "OriginalName": "sticker",
+        "ConvertedName": "Sticker",
+        "Description": "A file with the sticker in .WEBP, .PNG, .TGS, or .WEBM format. See https://core.telegram.org/stickers for technical requirements. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile",
         "ConvertedFieldType": "InputFile",
+        "Optional": false
+      },
+      {
+        "OriginalName": "sticker_format",
+        "ConvertedName": "StickerFormat",
+        "Description": "Format of the sticker, must be one of \u201Cstatic\u201D, \u201Canimated\u201D, \u201Cvideo\u201D",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": false
       }
     ],
@@ -3375,7 +4135,7 @@
   {
     "OriginalName": "createNewStickerSet",
     "ConvertedName": "CreateNewStickerSet",
-    "Description": "Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. You must use exactly one of the fields png_sticker, tgs_sticker, or webm_sticker. Returns True on success.",
+    "Description": "Use this method to create a new sticker set owned by a user. The bot will be able to edit the sticker set thus created. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "user_id",
@@ -3402,51 +4162,35 @@
         "Optional": false
       },
       {
-        "OriginalName": "png_sticker",
-        "ConvertedName": "PngSticker",
-        "Description": "PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB",
-        "OriginalFieldType": "InputFile or String",
-        "ConvertedFieldType": "InputFile",
-        "Optional": true
+        "OriginalName": "stickers",
+        "ConvertedName": "Stickers",
+        "Description": "A JSON-serialized list of 1-50 initial stickers to be added to the sticker set",
+        "OriginalFieldType": "Array of InputSticker",
+        "ConvertedFieldType": "InputSticker[]",
+        "Optional": false
       },
       {
-        "OriginalName": "tgs_sticker",
-        "ConvertedName": "TgsSticker",
-        "Description": "TGS animation with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#animated-sticker-requirements for technical requirements",
-        "OriginalFieldType": "InputFile",
-        "ConvertedFieldType": "InputFile",
-        "Optional": true
-      },
-      {
-        "OriginalName": "webm_sticker",
-        "ConvertedName": "WebmSticker",
-        "Description": "WEBM video with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#video-sticker-requirements for technical requirements",
-        "OriginalFieldType": "InputFile",
-        "ConvertedFieldType": "InputFile",
-        "Optional": true
-      },
-      {
-        "OriginalName": "emojis",
-        "ConvertedName": "Emojis",
-        "Description": "One or more emoji corresponding to the sticker",
+        "OriginalName": "sticker_format",
+        "ConvertedName": "StickerFormat",
+        "Description": "Format of stickers in the set, must be one of \u201Cstatic\u201D, \u201Canimated\u201D, \u201Cvideo\u201D",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
       },
       {
-        "OriginalName": "contains_masks",
-        "ConvertedName": "ContainsMasks",
-        "Description": "Pass True, if a set of mask stickers should be created",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "sticker_type",
+        "ConvertedName": "StickerType",
+        "Description": "Type of stickers in the set, pass \u201Cregular\u201D, \u201Cmask\u201D, or \u201Ccustom_emoji\u201D. By default, a regular sticker set is created.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
-        "OriginalName": "mask_position",
-        "ConvertedName": "MaskPosition",
-        "Description": "A JSON-serialized object for position where the mask should be placed on faces",
-        "OriginalFieldType": "MaskPosition",
-        "ConvertedFieldType": "MaskPosition",
+        "OriginalName": "needs_repainting",
+        "ConvertedName": "NeedsRepainting",
+        "Description": "Pass True if stickers in the sticker set must be repainted to the color of text when used in messages, the accent color if used as emoji status, white on chat photos, or another appropriate color based on context; for custom emoji sticker sets only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
         "Optional": true
       }
     ],
@@ -3456,7 +4200,7 @@
   {
     "OriginalName": "addStickerToSet",
     "ConvertedName": "AddStickerToSet",
-    "Description": "Use this method to add a new sticker to a set created by the bot. You must use exactly one of the fields png_sticker, tgs_sticker, or webm_sticker. Animated stickers can be added to animated sticker sets and only to them. Animated sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.",
+    "Description": "Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "user_id",
@@ -3475,44 +4219,12 @@
         "Optional": false
       },
       {
-        "OriginalName": "png_sticker",
-        "ConvertedName": "PngSticker",
-        "Description": "PNG image with the sticker, must be up to 512 kilobytes in size, dimensions must not exceed 512px, and either width or height must be exactly 512px. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB",
-        "OriginalFieldType": "InputFile or String",
-        "ConvertedFieldType": "InputFile",
-        "Optional": true
-      },
-      {
-        "OriginalName": "tgs_sticker",
-        "ConvertedName": "TgsSticker",
-        "Description": "TGS animation with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#animated-sticker-requirements for technical requirements",
-        "OriginalFieldType": "InputFile",
-        "ConvertedFieldType": "InputFile",
-        "Optional": true
-      },
-      {
-        "OriginalName": "webm_sticker",
-        "ConvertedName": "WebmSticker",
-        "Description": "WEBM video with the sticker, uploaded using multipart/form-data. See https://core.telegram.org/stickers#video-sticker-requirements for technical requirements",
-        "OriginalFieldType": "InputFile",
-        "ConvertedFieldType": "InputFile",
-        "Optional": true
-      },
-      {
-        "OriginalName": "emojis",
-        "ConvertedName": "Emojis",
-        "Description": "One or more emoji corresponding to the sticker",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "sticker",
+        "ConvertedName": "Sticker",
+        "Description": "A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set isn\u0027t changed.",
+        "OriginalFieldType": "InputSticker",
+        "ConvertedFieldType": "InputSticker",
         "Optional": false
-      },
-      {
-        "OriginalName": "mask_position",
-        "ConvertedName": "MaskPosition",
-        "Description": "A JSON-serialized object for position where the mask should be placed on faces",
-        "OriginalFieldType": "MaskPosition",
-        "ConvertedFieldType": "MaskPosition",
-        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
@@ -3561,9 +4273,109 @@
     "ConvertedReturnType": "bool"
   },
   {
-    "OriginalName": "setStickerSetThumb",
-    "ConvertedName": "SetStickerSetThumb",
-    "Description": "Use this method to set the thumbnail of a sticker set. Animated thumbnails can be set for animated sticker sets only. Video thumbnails can be set only for video sticker sets only. Returns True on success.",
+    "OriginalName": "setStickerEmojiList",
+    "ConvertedName": "SetStickerEmojiList",
+    "Description": "Use this method to change the list of emoji assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "sticker",
+        "ConvertedName": "Sticker",
+        "Description": "File identifier of the sticker",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "emoji_list",
+        "ConvertedName": "EmojiList",
+        "Description": "A JSON-serialized list of 1-20 emoji associated with the sticker",
+        "OriginalFieldType": "Array of String",
+        "ConvertedFieldType": "string[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setStickerKeywords",
+    "ConvertedName": "SetStickerKeywords",
+    "Description": "Use this method to change search keywords assigned to a regular or custom emoji sticker. The sticker must belong to a sticker set created by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "sticker",
+        "ConvertedName": "Sticker",
+        "Description": "File identifier of the sticker",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "keywords",
+        "ConvertedName": "Keywords",
+        "Description": "A JSON-serialized list of 0-20 search keywords for the sticker with total length of up to 64 characters",
+        "OriginalFieldType": "Array of String",
+        "ConvertedFieldType": "string[]",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setStickerMaskPosition",
+    "ConvertedName": "SetStickerMaskPosition",
+    "Description": "Use this method to change the mask position of a mask sticker. The sticker must belong to a sticker set that was created by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "sticker",
+        "ConvertedName": "Sticker",
+        "Description": "File identifier of the sticker",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "mask_position",
+        "ConvertedName": "MaskPosition",
+        "Description": "A JSON-serialized object with the position where the mask should be placed on faces. Omit the parameter to remove the mask position.",
+        "OriginalFieldType": "MaskPosition",
+        "ConvertedFieldType": "MaskPosition",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setStickerSetTitle",
+    "ConvertedName": "SetStickerSetTitle",
+    "Description": "Use this method to set the title of a created sticker set. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Sticker set name",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "title",
+        "ConvertedName": "Title",
+        "Description": "Sticker set title, 1-64 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setStickerSetThumbnail",
+    "ConvertedName": "SetStickerSetThumbnail",
+    "Description": "Use this method to set the thumbnail of a regular or mask sticker set. The format of the thumbnail file must match the format of the stickers in the set. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "name",
@@ -3582,12 +4394,54 @@
         "Optional": false
       },
       {
-        "OriginalName": "thumb",
-        "ConvertedName": "Thumb",
-        "Description": "A PNG image with the thumbnail, must be up to 128 kilobytes in size and have width and height exactly 100px, or a TGS animation with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements, or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB. Animated sticker set thumbnails can\u0027t be uploaded via HTTP URL.",
+        "OriginalName": "thumbnail",
+        "ConvertedName": "Thumbnail",
+        "Description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB. Animated and video sticker set thumbnails can\u0027t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
         "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setCustomEmojiStickerSetThumbnail",
+    "ConvertedName": "SetCustomEmojiStickerSetThumbnail",
+    "Description": "Use this method to set the thumbnail of a custom emoji sticker set. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Sticker set name",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "custom_emoji_id",
+        "ConvertedName": "CustomEmojiId",
+        "Description": "Custom emoji identifier of a sticker from the sticker set; pass an empty string to drop the thumbnail and use the first sticker as the thumbnail.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "deleteStickerSet",
+    "ConvertedName": "DeleteStickerSet",
+    "Description": "Use this method to delete a sticker set that was created by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Sticker set name",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
       }
     ],
     "OriginalReturnType": "True",
@@ -3625,7 +4479,7 @@
       {
         "OriginalName": "is_personal",
         "ConvertedName": "IsPersonal",
-        "Description": "Pass True, if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query",
+        "Description": "Pass True if results may be cached on the server side only for the user that sent the query. By default, results may be returned to any user who sends the same query.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3639,19 +4493,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "switch_pm_text",
-        "ConvertedName": "SwitchPmText",
-        "Description": "If passed, clients will display a button with specified text that switches the user to a private chat with the bot and sends the bot a start message with the parameter switch_pm_parameter",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "switch_pm_parameter",
-        "ConvertedName": "SwitchPmParameter",
-        "Description": "Deep-linking parameter for the /start message sent to the bot when user presses the switch button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.\n\nExample: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a \u0027Connect your YouTube account\u0027 button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot\u0027s inline capabilities.",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "button",
+        "ConvertedName": "Button",
+        "Description": "A JSON-serialized object describing a button to be shown above inline query results",
+        "OriginalFieldType": "InlineQueryResultsButton",
+        "ConvertedFieldType": "InlineQueryResultsButton",
         "Optional": true
       }
     ],
@@ -3695,6 +4541,14 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "title",
@@ -3811,7 +4665,7 @@
       {
         "OriginalName": "need_name",
         "ConvertedName": "NeedName",
-        "Description": "Pass True, if you require the user\u0027s full name to complete the order",
+        "Description": "Pass True if you require the user\u0027s full name to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3819,7 +4673,7 @@
       {
         "OriginalName": "need_phone_number",
         "ConvertedName": "NeedPhoneNumber",
-        "Description": "Pass True, if you require the user\u0027s phone number to complete the order",
+        "Description": "Pass True if you require the user\u0027s phone number to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3827,7 +4681,7 @@
       {
         "OriginalName": "need_email",
         "ConvertedName": "NeedEmail",
-        "Description": "Pass True, if you require the user\u0027s email address to complete the order",
+        "Description": "Pass True if you require the user\u0027s email address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3835,7 +4689,7 @@
       {
         "OriginalName": "need_shipping_address",
         "ConvertedName": "NeedShippingAddress",
-        "Description": "Pass True, if you require the user\u0027s shipping address to complete the order",
+        "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3843,7 +4697,7 @@
       {
         "OriginalName": "send_phone_number_to_provider",
         "ConvertedName": "SendPhoneNumberToProvider",
-        "Description": "Pass True, if the user\u0027s phone number should be sent to provider",
+        "Description": "Pass True if the user\u0027s phone number should be sent to provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3851,7 +4705,7 @@
       {
         "OriginalName": "send_email_to_provider",
         "ConvertedName": "SendEmailToProvider",
-        "Description": "Pass True, if the user\u0027s email address should be sent to provider",
+        "Description": "Pass True if the user\u0027s email address should be sent to provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3859,7 +4713,7 @@
       {
         "OriginalName": "is_flexible",
         "ConvertedName": "IsFlexible",
-        "Description": "Pass True, if the final price depends on the shipping method",
+        "Description": "Pass True if the final price depends on the shipping method",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3881,19 +4735,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -4020,7 +4866,7 @@
       {
         "OriginalName": "need_name",
         "ConvertedName": "NeedName",
-        "Description": "Pass True, if you require the user\u0027s full name to complete the order",
+        "Description": "Pass True if you require the user\u0027s full name to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4028,7 +4874,7 @@
       {
         "OriginalName": "need_phone_number",
         "ConvertedName": "NeedPhoneNumber",
-        "Description": "Pass True, if you require the user\u0027s phone number to complete the order",
+        "Description": "Pass True if you require the user\u0027s phone number to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4036,7 +4882,7 @@
       {
         "OriginalName": "need_email",
         "ConvertedName": "NeedEmail",
-        "Description": "Pass True, if you require the user\u0027s email address to complete the order",
+        "Description": "Pass True if you require the user\u0027s email address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4044,7 +4890,7 @@
       {
         "OriginalName": "need_shipping_address",
         "ConvertedName": "NeedShippingAddress",
-        "Description": "Pass True, if you require the user\u0027s shipping address to complete the order",
+        "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4052,7 +4898,7 @@
       {
         "OriginalName": "send_phone_number_to_provider",
         "ConvertedName": "SendPhoneNumberToProvider",
-        "Description": "Pass True, if the user\u0027s phone number should be sent to the provider",
+        "Description": "Pass True if the user\u0027s phone number should be sent to the provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4060,7 +4906,7 @@
       {
         "OriginalName": "send_email_to_provider",
         "ConvertedName": "SendEmailToProvider",
-        "Description": "Pass True, if the user\u0027s email address should be sent to the provider",
+        "Description": "Pass True if the user\u0027s email address should be sent to the provider",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4068,7 +4914,7 @@
       {
         "OriginalName": "is_flexible",
         "ConvertedName": "IsFlexible",
-        "Description": "Pass True, if the final price depends on the shipping method",
+        "Description": "Pass True if the final price depends on the shipping method",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4093,7 +4939,7 @@
       {
         "OriginalName": "ok",
         "ConvertedName": "Ok",
-        "Description": "Specify True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)",
+        "Description": "Pass True if delivery to the specified address is possible and False if there are any problems (for example, if delivery to the specified address is not possible)",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": false
@@ -4190,6 +5036,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "game_short_name",
         "ConvertedName": "GameShortName",
         "Description": "Short name of the game, serves as the unique identifier for the game. Set up your games via @BotFather.",
@@ -4214,19 +5068,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "reply_to_message_id",
-        "ConvertedName": "ReplyToMessageId",
-        "Description": "If the message is a reply, ID of the original message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "allow_sending_without_reply",
-        "ConvertedName": "AllowSendingWithoutReply",
-        "Description": "Pass True, if the message should be sent even if the specified replied-to message is not found",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
         "Optional": true
       },
       {
@@ -4265,7 +5111,7 @@
       {
         "OriginalName": "force",
         "ConvertedName": "Force",
-        "Description": "Pass True, if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters",
+        "Description": "Pass True if the high score is allowed to decrease. This can be useful when fixing mistakes or banning cheaters",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4273,7 +5119,7 @@
       {
         "OriginalName": "disable_edit_message",
         "ConvertedName": "DisableEditMessage",
-        "Description": "Pass True, if the game message should not be automatically edited to include the current scoreboard",
+        "Description": "Pass True if the game message should not be automatically edited to include the current scoreboard",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4309,7 +5155,7 @@
   {
     "OriginalName": "getGameHighScores",
     "ConvertedName": "GetGameHighScores",
-    "Description": "Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. On success, returns an Array of GameHighScore objects.",
+    "Description": "Use this method to get data for high score tables. Will return the score of the specified user and several of their neighbors in a game. Returns an Array of GameHighScore objects.",
     "Fields": [
       {
         "OriginalName": "user_id",

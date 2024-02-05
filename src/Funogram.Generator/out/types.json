@@ -9,7 +9,7 @@
           {
             "OriginalName": "update_id",
             "ConvertedName": "UpdateId",
-            "Description": "The update\u0027s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This ID becomes especially handy if you\u0027re using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.",
+            "Description": "The update\u0027s unique identifier. Update identifiers start from a certain positive number and increase sequentially. This identifier becomes especially handy if you\u0027re using webhooks, since it allows you to ignore repeated updates or to restore the correct update sequence, should they get out of order. If there are no new updates for at least a week, then identifier of the next update will be chosen randomly instead of sequentially.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -25,7 +25,7 @@
           {
             "OriginalName": "edited_message",
             "ConvertedName": "EditedMessage",
-            "Description": "New version of a message that is known to the bot and was edited",
+            "Description": "New version of a message that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
             "Optional": true
@@ -41,9 +41,25 @@
           {
             "OriginalName": "edited_channel_post",
             "ConvertedName": "EditedChannelPost",
-            "Description": "New version of a channel post that is known to the bot and was edited",
+            "Description": "New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "message_reaction",
+            "ConvertedName": "MessageReaction",
+            "Description": "A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify \u0022message_reaction\u0022 in the list of allowed_updates to receive these updates. The update isn\u0027t received for reactions set by bots.",
+            "OriginalFieldType": "MessageReactionUpdated",
+            "ConvertedFieldType": "MessageReactionUpdated",
+            "Optional": true
+          },
+          {
+            "OriginalName": "message_reaction_count",
+            "ConvertedName": "MessageReactionCount",
+            "Description": "Reactions to a message with anonymous reactions were changed. The bot must be an administrator in the chat and must explicitly specify \u0022message_reaction_count\u0022 in the list of allowed_updates to receive these updates. The updates are grouped and can be sent with delay up to a few minutes.",
+            "OriginalFieldType": "MessageReactionCountUpdated",
+            "ConvertedFieldType": "MessageReactionCountUpdated",
             "Optional": true
           },
           {
@@ -89,7 +105,7 @@
           {
             "OriginalName": "poll",
             "ConvertedName": "Poll",
-            "Description": "New poll state. Bots receive only updates about stopped polls and polls, which are sent by the bot",
+            "Description": "New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot",
             "OriginalFieldType": "Poll",
             "ConvertedFieldType": "Poll",
             "Optional": true
@@ -113,7 +129,7 @@
           {
             "OriginalName": "chat_member",
             "ConvertedName": "ChatMember",
-            "Description": "A chat member\u0027s status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify \u201Cchat_member\u201D in the list of allowed_updates to receive these updates.",
+            "Description": "A chat member\u0027s status was updated in a chat. The bot must be an administrator in the chat and must explicitly specify \u0022chat_member\u0022 in the list of allowed_updates to receive these updates.",
             "OriginalFieldType": "ChatMemberUpdated",
             "ConvertedFieldType": "ChatMemberUpdated",
             "Optional": true
@@ -125,6 +141,22 @@
             "OriginalFieldType": "ChatJoinRequest",
             "ConvertedFieldType": "ChatJoinRequest",
             "Optional": true
+          },
+          {
+            "OriginalName": "chat_boost",
+            "ConvertedName": "ChatBoost",
+            "Description": "A chat boost was added or changed. The bot must be an administrator in the chat to receive these updates.",
+            "OriginalFieldType": "ChatBoostUpdated",
+            "ConvertedFieldType": "ChatBoostUpdated",
+            "Optional": true
+          },
+          {
+            "OriginalName": "removed_chat_boost",
+            "ConvertedName": "RemovedChatBoost",
+            "Description": "A boost was removed from a chat. The bot must be an administrator in the chat to receive these updates.",
+            "OriginalFieldType": "ChatBoostRemoved",
+            "ConvertedFieldType": "ChatBoostRemoved",
+            "Optional": true
           }
         ]
       ]
@@ -132,7 +164,7 @@
   },
   {
     "Name": "WebhookInfo",
-    "Description": "Describes the current status of a webhook.\r\nAll types used in the Bot API responses are represented as JSON-objects.\r\nIt is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.",
+    "Description": "Describes the current status of a webhook.\nAll types used in the Bot API responses are represented as JSON-objects.\nIt is safe to use 32-bit signed integers for storing all Integer fields unless otherwise noted.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -368,11 +400,83 @@
             "Optional": true
           },
           {
+            "OriginalName": "is_forum",
+            "ConvertedName": "IsForum",
+            "Description": "True, if the supergroup chat is a forum (has topics enabled)",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "photo",
             "ConvertedName": "Photo",
             "Description": "Chat photo. Returned only in getChat.",
             "OriginalFieldType": "ChatPhoto",
             "ConvertedFieldType": "ChatPhoto",
+            "Optional": true
+          },
+          {
+            "OriginalName": "active_usernames",
+            "ConvertedName": "ActiveUsernames",
+            "Description": "If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "available_reactions",
+            "ConvertedName": "AvailableReactions",
+            "Description": "List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. Returned only in getChat.",
+            "OriginalFieldType": "Array of ReactionType",
+            "ConvertedFieldType": "ReactionType[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "accent_color_id",
+            "ConvertedName": "AccentColorId",
+            "Description": "Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. Returned only in getChat. Always returned in getChat.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "background_custom_emoji_id",
+            "ConvertedName": "BackgroundCustomEmojiId",
+            "Description": "Custom emoji identifier of emoji chosen by the chat for the reply header and link preview background. Returned only in getChat.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "profile_accent_color_id",
+            "ConvertedName": "ProfileAccentColorId",
+            "Description": "Identifier of the accent color for the chat\u0027s profile background. See profile accent colors for more details. Returned only in getChat.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "profile_background_custom_emoji_id",
+            "ConvertedName": "ProfileBackgroundCustomEmojiId",
+            "Description": "Custom emoji identifier of the emoji chosen by the chat for its profile background. Returned only in getChat.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "emoji_status_custom_emoji_id",
+            "ConvertedName": "EmojiStatusCustomEmojiId",
+            "Description": "Custom emoji identifier of the emoji status of the chat or the other party in a private chat. Returned only in getChat.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "emoji_status_expiration_date",
+            "ConvertedName": "EmojiStatusExpirationDate",
+            "Description": "Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any. Returned only in getChat.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -387,6 +491,14 @@
             "OriginalName": "has_private_forwards",
             "ConvertedName": "HasPrivateForwards",
             "Description": "True, if privacy settings of the other party in the private chat allows to use tg://user?id=\u003Cuser_id\u003E links only in chats with the user. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_restricted_voice_and_video_messages",
+            "ConvertedName": "HasRestrictedVoiceAndVideoMessages",
+            "Description": "True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -456,9 +568,33 @@
             "Optional": true
           },
           {
+            "OriginalName": "has_aggressive_anti_spam_enabled",
+            "ConvertedName": "HasAggressiveAntiSpamEnabled",
+            "Description": "True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_hidden_members",
+            "ConvertedName": "HasHiddenMembers",
+            "Description": "True, if non-administrators can only get the list of bots and administrators in the chat. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "has_protected_content",
             "ConvertedName": "HasProtectedContent",
             "Description": "True, if messages from the chat can\u0027t be forwarded to other chats. Returned only in getChat.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_visible_history",
+            "ConvertedName": "HasVisibleHistory",
+            "Description": "True, if new chat members will have access to old messages; available only to chat administrators. Returned only in getChat.",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -515,6 +651,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of a message thread to which the message belongs; for supergroups only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "from",
             "ConvertedName": "From",
             "Description": "Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.",
@@ -533,7 +677,7 @@
           {
             "OriginalName": "date",
             "ConvertedName": "Date",
-            "Description": "Date the message was sent in Unix time",
+            "Description": "Date the message was sent in Unix time. It is always a positive number, representing a valid date.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
             "Optional": false
@@ -541,57 +685,25 @@
           {
             "OriginalName": "chat",
             "ConvertedName": "Chat",
-            "Description": "Conversation the message belongs to",
+            "Description": "Chat the message belongs to",
             "OriginalFieldType": "Chat",
             "ConvertedFieldType": "Chat",
             "Optional": false
           },
           {
-            "OriginalName": "forward_from",
-            "ConvertedName": "ForwardFrom",
-            "Description": "For forwarded messages, sender of the original message",
-            "OriginalFieldType": "User",
-            "ConvertedFieldType": "User",
+            "OriginalName": "forward_origin",
+            "ConvertedName": "ForwardOrigin",
+            "Description": "Information about the original message for forwarded messages",
+            "OriginalFieldType": "MessageOrigin",
+            "ConvertedFieldType": "MessageOrigin",
             "Optional": true
           },
           {
-            "OriginalName": "forward_from_chat",
-            "ConvertedName": "ForwardFromChat",
-            "Description": "For messages forwarded from channels or from anonymous administrators, information about the original sender chat",
-            "OriginalFieldType": "Chat",
-            "ConvertedFieldType": "Chat",
-            "Optional": true
-          },
-          {
-            "OriginalName": "forward_from_message_id",
-            "ConvertedName": "ForwardFromMessageId",
-            "Description": "For messages forwarded from channels, identifier of the original message in the channel",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
-            "Optional": true
-          },
-          {
-            "OriginalName": "forward_signature",
-            "ConvertedName": "ForwardSignature",
-            "Description": "For forwarded messages that were originally sent in channels or by an anonymous chat administrator, signature of the message sender if present",
-            "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
-            "Optional": true
-          },
-          {
-            "OriginalName": "forward_sender_name",
-            "ConvertedName": "ForwardSenderName",
-            "Description": "Sender\u0027s name for messages forwarded from users who disallow adding a link to their account in forwarded messages",
-            "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
-            "Optional": true
-          },
-          {
-            "OriginalName": "forward_date",
-            "ConvertedName": "ForwardDate",
-            "Description": "For forwarded messages, date the original message was sent in Unix time",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "OriginalName": "is_topic_message",
+            "ConvertedName": "IsTopicMessage",
+            "Description": "True, if the message is sent to a forum topic",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -605,9 +717,25 @@
           {
             "OriginalName": "reply_to_message",
             "ConvertedName": "ReplyToMessage",
-            "Description": "For replies, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.",
+            "Description": "For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "external_reply",
+            "ConvertedName": "ExternalReply",
+            "Description": "Information about the message that is being replied to, which may come from another chat or forum topic",
+            "OriginalFieldType": "ExternalReplyInfo",
+            "ConvertedFieldType": "ExternalReplyInfo",
+            "Optional": true
+          },
+          {
+            "OriginalName": "quote",
+            "ConvertedName": "Quote",
+            "Description": "For replies that quote part of the original message, the quoted part of the message",
+            "OriginalFieldType": "TextQuote",
+            "ConvertedFieldType": "TextQuote",
             "Optional": true
           },
           {
@@ -667,6 +795,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "link_preview_options",
+            "ConvertedName": "LinkPreviewOptions",
+            "Description": "Options used for link preview generation for the message, if it is a text message and link preview options were changed",
+            "OriginalFieldType": "LinkPreviewOptions",
+            "ConvertedFieldType": "LinkPreviewOptions",
+            "Optional": true
+          },
+          {
             "OriginalName": "animation",
             "ConvertedName": "Animation",
             "Description": "Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set",
@@ -707,6 +843,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "story",
+            "ConvertedName": "Story",
+            "Description": "Message is a forwarded story",
+            "OriginalFieldType": "Story",
+            "ConvertedFieldType": "Story",
+            "Optional": true
+          },
+          {
             "OriginalName": "video",
             "ConvertedName": "Video",
             "Description": "Message is a video, information about the video",
@@ -744,6 +888,14 @@
             "Description": "For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_media_spoiler",
+            "ConvertedName": "HasMediaSpoiler",
+            "Description": "True, if the message media is covered by a spoiler animation",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -885,9 +1037,9 @@
           {
             "OriginalName": "pinned_message",
             "ConvertedName": "PinnedMessage",
-            "Description": "Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it is itself a reply.",
-            "OriginalFieldType": "Message",
-            "ConvertedFieldType": "Message",
+            "Description": "Specified message was pinned. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.",
+            "OriginalFieldType": "MaybeInaccessibleMessage",
+            "ConvertedFieldType": "MaybeInaccessibleMessage",
             "Optional": true
           },
           {
@@ -907,11 +1059,35 @@
             "Optional": true
           },
           {
+            "OriginalName": "users_shared",
+            "ConvertedName": "UsersShared",
+            "Description": "Service message: users were shared with the bot",
+            "OriginalFieldType": "UsersShared",
+            "ConvertedFieldType": "UsersShared",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_shared",
+            "ConvertedName": "ChatShared",
+            "Description": "Service message: a chat was shared with the bot",
+            "OriginalFieldType": "ChatShared",
+            "ConvertedFieldType": "ChatShared",
+            "Optional": true
+          },
+          {
             "OriginalName": "connected_website",
             "ConvertedName": "ConnectedWebsite",
             "Description": "The domain name of the website on which the user has logged in. More about Telegram Login \u00BB",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "write_access_allowed",
+            "ConvertedName": "WriteAccessAllowed",
+            "Description": "Service message: the user allowed the bot to write messages after adding it to the attachment or side menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess",
+            "OriginalFieldType": "WriteAccessAllowed",
+            "ConvertedFieldType": "WriteAccessAllowed",
             "Optional": true
           },
           {
@@ -928,6 +1104,86 @@
             "Description": "Service message. A user in the chat triggered another user\u0027s proximity alert while sharing Live Location.",
             "OriginalFieldType": "ProximityAlertTriggered",
             "ConvertedFieldType": "ProximityAlertTriggered",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_created",
+            "ConvertedName": "ForumTopicCreated",
+            "Description": "Service message: forum topic created",
+            "OriginalFieldType": "ForumTopicCreated",
+            "ConvertedFieldType": "ForumTopicCreated",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_edited",
+            "ConvertedName": "ForumTopicEdited",
+            "Description": "Service message: forum topic edited",
+            "OriginalFieldType": "ForumTopicEdited",
+            "ConvertedFieldType": "ForumTopicEdited",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_closed",
+            "ConvertedName": "ForumTopicClosed",
+            "Description": "Service message: forum topic closed",
+            "OriginalFieldType": "ForumTopicClosed",
+            "ConvertedFieldType": "ForumTopicClosed",
+            "Optional": true
+          },
+          {
+            "OriginalName": "forum_topic_reopened",
+            "ConvertedName": "ForumTopicReopened",
+            "Description": "Service message: forum topic reopened",
+            "OriginalFieldType": "ForumTopicReopened",
+            "ConvertedFieldType": "ForumTopicReopened",
+            "Optional": true
+          },
+          {
+            "OriginalName": "general_forum_topic_hidden",
+            "ConvertedName": "GeneralForumTopicHidden",
+            "Description": "Service message: the \u0027General\u0027 forum topic hidden",
+            "OriginalFieldType": "GeneralForumTopicHidden",
+            "ConvertedFieldType": "GeneralForumTopicHidden",
+            "Optional": true
+          },
+          {
+            "OriginalName": "general_forum_topic_unhidden",
+            "ConvertedName": "GeneralForumTopicUnhidden",
+            "Description": "Service message: the \u0027General\u0027 forum topic unhidden",
+            "OriginalFieldType": "GeneralForumTopicUnhidden",
+            "ConvertedFieldType": "GeneralForumTopicUnhidden",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway_created",
+            "ConvertedName": "GiveawayCreated",
+            "Description": "Service message: a scheduled giveaway was created",
+            "OriginalFieldType": "GiveawayCreated",
+            "ConvertedFieldType": "GiveawayCreated",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway",
+            "ConvertedName": "Giveaway",
+            "Description": "The message is a scheduled giveaway message",
+            "OriginalFieldType": "Giveaway",
+            "ConvertedFieldType": "Giveaway",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway_winners",
+            "ConvertedName": "GiveawayWinners",
+            "Description": "A giveaway with public winners was completed",
+            "OriginalFieldType": "GiveawayWinners",
+            "ConvertedFieldType": "GiveawayWinners",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway_completed",
+            "ConvertedName": "GiveawayCompleted",
+            "Description": "Service message: a giveaway without public winners was completed",
+            "OriginalFieldType": "GiveawayCompleted",
+            "ConvertedFieldType": "GiveawayCompleted",
             "Optional": true
           },
           {
@@ -1002,6 +1258,60 @@
     }
   },
   {
+    "Name": "InaccessibleMessage",
+    "Description": "This object describes a message that was deleted or is otherwise inaccessible to the bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat the message belonged to",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "message_id",
+            "ConvertedName": "MessageId",
+            "Description": "Unique message identifier inside the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Always 0. The field can be used to differentiate regular and inaccessible messages.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MaybeInaccessibleMessage",
+    "Description": "This object describes a message that can be inaccessible to the bot. It can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Message",
+            "CaseType": "Message"
+          },
+          {
+            "Name": "InaccessibleMessage",
+            "CaseType": "InaccessibleMessage"
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "MessageEntity",
     "Description": "This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.",
     "Kind": {
@@ -1011,7 +1321,7 @@
           {
             "OriginalName": "type",
             "ConvertedName": "Type",
-            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames)",
+            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Cblockquote\u201D (block quotation), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames), \u201Ccustom_emoji\u201D (for inline custom emoji stickers)",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -1052,6 +1362,510 @@
             "OriginalName": "language",
             "ConvertedName": "Language",
             "Description": "For \u201Cpre\u201D only, the programming language of the entity text",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "custom_emoji_id",
+            "ConvertedName": "CustomEmojiId",
+            "Description": "For \u201Ccustom_emoji\u201D only, unique identifier of the custom emoji. Use getCustomEmojiStickers to get full information about the sticker",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TextQuote",
+    "Description": "This object contains information about the quoted part of a message that is replied to by the given message.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the quoted part of a message that is replied to by the given message",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "entities",
+            "ConvertedName": "Entities",
+            "Description": "Special entities that appear in the quote. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are kept in quotes.",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "position",
+            "ConvertedName": "Position",
+            "Description": "Approximate quote position in the original message in UTF-16 code units as specified by the sender",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_manual",
+            "ConvertedName": "IsManual",
+            "Description": "True, if the quote was chosen manually by the message sender. Otherwise, the quote was added automatically by the server.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ExternalReplyInfo",
+    "Description": "This object contains information about a message that is being replied to, which may come from another chat or forum topic.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "origin",
+            "ConvertedName": "Origin",
+            "Description": "Origin of the message replied to by the given message",
+            "OriginalFieldType": "MessageOrigin",
+            "ConvertedFieldType": "MessageOrigin",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat the original message belongs to. Available only if the chat is a supergroup or a channel.",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
+            "OriginalName": "message_id",
+            "ConvertedName": "MessageId",
+            "Description": "Unique message identifier inside the original chat. Available only if the original chat is a supergroup or a channel.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "link_preview_options",
+            "ConvertedName": "LinkPreviewOptions",
+            "Description": "Options used for link preview generation for the original message, if it is a text message",
+            "OriginalFieldType": "LinkPreviewOptions",
+            "ConvertedFieldType": "LinkPreviewOptions",
+            "Optional": true
+          },
+          {
+            "OriginalName": "animation",
+            "ConvertedName": "Animation",
+            "Description": "Message is an animation, information about the animation",
+            "OriginalFieldType": "Animation",
+            "ConvertedFieldType": "Animation",
+            "Optional": true
+          },
+          {
+            "OriginalName": "audio",
+            "ConvertedName": "Audio",
+            "Description": "Message is an audio file, information about the file",
+            "OriginalFieldType": "Audio",
+            "ConvertedFieldType": "Audio",
+            "Optional": true
+          },
+          {
+            "OriginalName": "document",
+            "ConvertedName": "Document",
+            "Description": "Message is a general file, information about the file",
+            "OriginalFieldType": "Document",
+            "ConvertedFieldType": "Document",
+            "Optional": true
+          },
+          {
+            "OriginalName": "photo",
+            "ConvertedName": "Photo",
+            "Description": "Message is a photo, available sizes of the photo",
+            "OriginalFieldType": "Array of PhotoSize",
+            "ConvertedFieldType": "PhotoSize[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "Message is a sticker, information about the sticker",
+            "OriginalFieldType": "Sticker",
+            "ConvertedFieldType": "Sticker",
+            "Optional": true
+          },
+          {
+            "OriginalName": "story",
+            "ConvertedName": "Story",
+            "Description": "Message is a forwarded story",
+            "OriginalFieldType": "Story",
+            "ConvertedFieldType": "Story",
+            "Optional": true
+          },
+          {
+            "OriginalName": "video",
+            "ConvertedName": "Video",
+            "Description": "Message is a video, information about the video",
+            "OriginalFieldType": "Video",
+            "ConvertedFieldType": "Video",
+            "Optional": true
+          },
+          {
+            "OriginalName": "video_note",
+            "ConvertedName": "VideoNote",
+            "Description": "Message is a video note, information about the video message",
+            "OriginalFieldType": "VideoNote",
+            "ConvertedFieldType": "VideoNote",
+            "Optional": true
+          },
+          {
+            "OriginalName": "voice",
+            "ConvertedName": "Voice",
+            "Description": "Message is a voice message, information about the file",
+            "OriginalFieldType": "Voice",
+            "ConvertedFieldType": "Voice",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_media_spoiler",
+            "ConvertedName": "HasMediaSpoiler",
+            "Description": "True, if the message media is covered by a spoiler animation",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "contact",
+            "ConvertedName": "Contact",
+            "Description": "Message is a shared contact, information about the contact",
+            "OriginalFieldType": "Contact",
+            "ConvertedFieldType": "Contact",
+            "Optional": true
+          },
+          {
+            "OriginalName": "dice",
+            "ConvertedName": "Dice",
+            "Description": "Message is a dice with random value",
+            "OriginalFieldType": "Dice",
+            "ConvertedFieldType": "Dice",
+            "Optional": true
+          },
+          {
+            "OriginalName": "game",
+            "ConvertedName": "Game",
+            "Description": "Message is a game, information about the game. More about games \u00BB",
+            "OriginalFieldType": "Game",
+            "ConvertedFieldType": "Game",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway",
+            "ConvertedName": "Giveaway",
+            "Description": "Message is a scheduled giveaway, information about the giveaway",
+            "OriginalFieldType": "Giveaway",
+            "ConvertedFieldType": "Giveaway",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway_winners",
+            "ConvertedName": "GiveawayWinners",
+            "Description": "A giveaway with public winners was completed",
+            "OriginalFieldType": "GiveawayWinners",
+            "ConvertedFieldType": "GiveawayWinners",
+            "Optional": true
+          },
+          {
+            "OriginalName": "invoice",
+            "ConvertedName": "Invoice",
+            "Description": "Message is an invoice for a payment, information about the invoice. More about payments \u00BB",
+            "OriginalFieldType": "Invoice",
+            "ConvertedFieldType": "Invoice",
+            "Optional": true
+          },
+          {
+            "OriginalName": "location",
+            "ConvertedName": "Location",
+            "Description": "Message is a shared location, information about the location",
+            "OriginalFieldType": "Location",
+            "ConvertedFieldType": "Location",
+            "Optional": true
+          },
+          {
+            "OriginalName": "poll",
+            "ConvertedName": "Poll",
+            "Description": "Message is a native poll, information about the poll",
+            "OriginalFieldType": "Poll",
+            "ConvertedFieldType": "Poll",
+            "Optional": true
+          },
+          {
+            "OriginalName": "venue",
+            "ConvertedName": "Venue",
+            "Description": "Message is a venue, information about the venue",
+            "OriginalFieldType": "Venue",
+            "ConvertedFieldType": "Venue",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ReplyParameters",
+    "Description": "Describes reply parameters for the message that is being sent.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "message_id",
+            "ConvertedName": "MessageId",
+            "Description": "Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_id",
+            "ConvertedName": "ChatId",
+            "Description": "If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername)",
+            "OriginalFieldType": "Integer or String",
+            "ConvertedFieldType": "ChatId",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_sending_without_reply",
+            "ConvertedName": "AllowSendingWithoutReply",
+            "Description": "Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "quote",
+            "ConvertedName": "Quote",
+            "Description": "Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn\u0027t found in the original message.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "quote_parse_mode",
+            "ConvertedName": "QuoteParseMode",
+            "Description": "Mode for parsing entities in the quote. See formatting options for more details.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "quote_entities",
+            "ConvertedName": "QuoteEntities",
+            "Description": "A JSON-serialized list of special entities that appear in the quote. It can be specified instead of quote_parse_mode.",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "quote_position",
+            "ConvertedName": "QuotePosition",
+            "Description": "Position of the quote in the original message in UTF-16 code units",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageOrigin",
+    "Description": "This object describes the origin of a message. It can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "User",
+            "CaseType": "MessageOriginUser"
+          },
+          {
+            "Name": "HiddenUser",
+            "CaseType": "MessageOriginHiddenUser"
+          },
+          {
+            "Name": "Chat",
+            "CaseType": "MessageOriginChat"
+          },
+          {
+            "Name": "Channel",
+            "CaseType": "MessageOriginChannel"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageOriginUser",
+    "Description": "The message was originally sent by a known user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the message origin, always \u201Cuser\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the message was sent originally in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sender_user",
+            "ConvertedName": "SenderUser",
+            "Description": "User that sent the message originally",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageOriginHiddenUser",
+    "Description": "The message was originally sent by an unknown user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the message origin, always \u201Chidden_user\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the message was sent originally in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sender_user_name",
+            "ConvertedName": "SenderUserName",
+            "Description": "Name of the user that sent the message originally",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageOriginChat",
+    "Description": "The message was originally sent on behalf of a chat to a group chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the message origin, always \u201Cchat\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the message was sent originally in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sender_chat",
+            "ConvertedName": "SenderChat",
+            "Description": "Chat that sent the message originally",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "author_signature",
+            "ConvertedName": "AuthorSignature",
+            "Description": "For messages originally sent by an anonymous chat administrator, original message author signature",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageOriginChannel",
+    "Description": "The message was originally sent to a channel chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the message origin, always \u201Cchannel\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the message was sent originally in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Channel chat to which the message was originally sent",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "message_id",
+            "ConvertedName": "MessageId",
+            "Description": "Unique message identifier inside the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "author_signature",
+            "ConvertedName": "AuthorSignature",
+            "Description": "Signature of the original post author",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -1159,8 +1973,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Animation thumbnail as defined by sender",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1266,8 +2080,8 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the album cover to which the music file belongs",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1301,8 +2115,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Document thumbnail as defined by sender",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1334,6 +2148,13 @@
           }
         ]
       ]
+    }
+  },
+  {
+    "Name": "Story",
+    "Description": "This object represents a message about a forwarded story in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
     }
   },
   {
@@ -1384,8 +2205,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Video thumbnail",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1459,8 +2280,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Video thumbnail",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -1650,17 +2471,25 @@
             "Optional": false
           },
           {
+            "OriginalName": "voter_chat",
+            "ConvertedName": "VoterChat",
+            "Description": "The chat that changed the answer to the poll, if the voter is anonymous",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
             "OriginalName": "user",
             "ConvertedName": "User",
-            "Description": "The user, who changed the answer to the poll",
+            "Description": "The user that changed the answer to the poll, if the voter isn\u0027t anonymous",
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "option_ids",
             "ConvertedName": "OptionIds",
-            "Description": "0-based identifiers of answer options, chosen by the user. May be empty if the user retracted their vote.",
+            "Description": "0-based identifiers of chosen answer options. May be empty if the vote was retracted.",
             "OriginalFieldType": "Array of Integer",
             "ConvertedFieldType": "int64[]",
             "Optional": false
@@ -1992,6 +2821,185 @@
     }
   },
   {
+    "Name": "ForumTopicCreated",
+    "Description": "This object represents a service message about a new forum topic created in the chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the topic",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_color",
+            "ConvertedName": "IconColor",
+            "Description": "Color of the topic icon in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "Unique identifier of the custom emoji shown as the topic icon",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopicClosed",
+    "Description": "This object represents a service message about a forum topic closed in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "ForumTopicEdited",
+    "Description": "This object represents a service message about an edited forum topic.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "New name of the topic, if it was edited",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "New identifier of the custom emoji shown as the topic icon, if it was edited; an empty string if the icon was removed",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopicReopened",
+    "Description": "This object represents a service message about a forum topic reopened in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "GeneralForumTopicHidden",
+    "Description": "This object represents a service message about General forum topic hidden in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "GeneralForumTopicUnhidden",
+    "Description": "This object represents a service message about General forum topic unhidden in the chat. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "UsersShared",
+    "Description": "This object contains information about the users whose identifiers were shared with the bot using a KeyboardButtonRequestUsers button.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Identifier of the request",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user_ids",
+            "ConvertedName": "UserIds",
+            "Description": "Identifiers of the shared users. These numbers may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting them. But they have at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the users and could be unable to use these identifiers, unless the users are already known to the bot by some other means.",
+            "OriginalFieldType": "Array of Integer",
+            "ConvertedFieldType": "int64[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatShared",
+    "Description": "This object contains information about the chat whose identifier was shared with the bot using a KeyboardButtonRequestChat button.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Identifier of the request",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_id",
+            "ConvertedName": "ChatId",
+            "Description": "Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "WriteAccessAllowed",
+    "Description": "This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "from_request",
+            "ConvertedName": "FromRequest",
+            "Description": "True, if the access was granted after the user accepted an explicit request from a Web App sent by the method requestWriteAccess",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "web_app_name",
+            "ConvertedName": "WebAppName",
+            "Description": "Name of the Web App, if the access was granted when the Web App was launched from a link",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "from_attachment_menu",
+            "ConvertedName": "FromAttachmentMenu",
+            "Description": "True, if the access was granted when the bot was added to the attachment or side menu",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "VideoChatScheduled",
     "Description": "This object represents a service message about a video chat scheduled in the chat.",
     "Kind": {
@@ -2050,6 +3058,273 @@
             "OriginalFieldType": "Array of User",
             "ConvertedFieldType": "User[]",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "GiveawayCreated",
+    "Description": "This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
+    "Name": "Giveaway",
+    "Description": "This object represents a message about a scheduled giveaway.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chats",
+            "ConvertedName": "Chats",
+            "Description": "The list of chats which the user must join to participate in the giveaway",
+            "OriginalFieldType": "Array of Chat",
+            "ConvertedFieldType": "Chat[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "winners_selection_date",
+            "ConvertedName": "WinnersSelectionDate",
+            "Description": "Point in time (Unix timestamp) when winners of the giveaway will be selected",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "winner_count",
+            "ConvertedName": "WinnerCount",
+            "Description": "The number of users which are supposed to be selected as winners of the giveaway",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "only_new_members",
+            "ConvertedName": "OnlyNewMembers",
+            "Description": "True, if only users who join the chats after the giveaway started should be eligible to win",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_public_winners",
+            "ConvertedName": "HasPublicWinners",
+            "Description": "True, if the list of giveaway winners will be visible to everyone",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prize_description",
+            "ConvertedName": "PrizeDescription",
+            "Description": "Description of additional giveaway prize",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "country_codes",
+            "ConvertedName": "CountryCodes",
+            "Description": "A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways.",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "premium_subscription_month_count",
+            "ConvertedName": "PremiumSubscriptionMonthCount",
+            "Description": "The number of months the Telegram Premium subscription won from the giveaway will be active for",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "GiveawayWinners",
+    "Description": "This object represents a message about the completion of a giveaway with public winners.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "The chat that created the giveaway",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "giveaway_message_id",
+            "ConvertedName": "GiveawayMessageId",
+            "Description": "Identifier of the messsage with the giveaway in the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "winners_selection_date",
+            "ConvertedName": "WinnersSelectionDate",
+            "Description": "Point in time (Unix timestamp) when winners of the giveaway were selected",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "winner_count",
+            "ConvertedName": "WinnerCount",
+            "Description": "Total number of winners in the giveaway",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "winners",
+            "ConvertedName": "Winners",
+            "Description": "List of up to 100 winners of the giveaway",
+            "OriginalFieldType": "Array of User",
+            "ConvertedFieldType": "User[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "additional_chat_count",
+            "ConvertedName": "AdditionalChatCount",
+            "Description": "The number of other chats the user had to join in order to be eligible for the giveaway",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "premium_subscription_month_count",
+            "ConvertedName": "PremiumSubscriptionMonthCount",
+            "Description": "The number of months the Telegram Premium subscription won from the giveaway will be active for",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "unclaimed_prize_count",
+            "ConvertedName": "UnclaimedPrizeCount",
+            "Description": "Number of undistributed prizes",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "only_new_members",
+            "ConvertedName": "OnlyNewMembers",
+            "Description": "True, if only users who had joined the chats after the giveaway started were eligible to win",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "was_refunded",
+            "ConvertedName": "WasRefunded",
+            "Description": "True, if the giveaway was canceled because the payment for it was refunded",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prize_description",
+            "ConvertedName": "PrizeDescription",
+            "Description": "Description of additional giveaway prize",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "GiveawayCompleted",
+    "Description": "This object represents a service message about the completion of a giveaway without public winners.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "winner_count",
+            "ConvertedName": "WinnerCount",
+            "Description": "Number of winners in the giveaway",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "unclaimed_prize_count",
+            "ConvertedName": "UnclaimedPrizeCount",
+            "Description": "Number of undistributed prizes",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "giveaway_message",
+            "ConvertedName": "GiveawayMessage",
+            "Description": "Message with the giveaway that was completed, if it wasn\u0027t deleted",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "LinkPreviewOptions",
+    "Description": "Describes the options used for link preview generation.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "is_disabled",
+            "ConvertedName": "IsDisabled",
+            "Description": "True, if the link preview is disabled",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "url",
+            "ConvertedName": "Url",
+            "Description": "URL to use for the link preview. If empty, then the first URL found in the message text will be used",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prefer_small_media",
+            "ConvertedName": "PreferSmallMedia",
+            "Description": "True, if the media in the link preview is suppposed to be shrunk; ignored if the URL isn\u0027t explicitly specified or media size change isn\u0027t supported for the preview",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prefer_large_media",
+            "ConvertedName": "PreferLargeMedia",
+            "Description": "True, if the media in the link preview is suppposed to be enlarged; ignored if the URL isn\u0027t explicitly specified or media size change isn\u0027t supported for the preview",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_above_text",
+            "ConvertedName": "ShowAboveText",
+            "Description": "True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -2160,6 +3435,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "is_persistent",
+            "ConvertedName": "IsPersistent",
+            "Description": "Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "resize_keyboard",
             "ConvertedName": "ResizeKeyboard",
             "Description": "Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app\u0027s standard keyboard.",
@@ -2186,7 +3469,7 @@
           {
             "OriginalName": "selective",
             "ConvertedName": "Selective",
-            "Description": "Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply (has reply_to_message_id), sender of the original message.\n\nExample: A user requests to change the bot\u0027s language, bot replies to the request with a keyboard to select the new language. Other users in the group don\u0027t see the keyboard.",
+            "Description": "Use this parameter if you want to show the keyboard to specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply to a message in the same chat and forum topic, sender of the original message.\n\nExample: A user requests to change the bot\u0027s language, bot replies to the request with a keyboard to select the new language. Other users in the group don\u0027t see the keyboard.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2197,7 +3480,7 @@
   },
   {
     "Name": "KeyboardButton",
-    "Description": "This object represents one button of the reply keyboard. For simple text buttons String can be used instead of this object to specify text of the button. Optional fields web_app, request_contact, request_location, and request_poll are mutually exclusive.\r\nNote:request_contact and request_location options will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.\nNote:request_poll option will only work in Telegram versions released after 23 January, 2020. Older clients will display unsupported message.\nNote:web_app option will only work in Telegram versions released after 16 April, 2022. Older clients will display unsupported message.",
+    "Description": "This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2209,6 +3492,22 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "request_users",
+            "ConvertedName": "RequestUsers",
+            "Description": "If specified, pressing the button will open a list of suitable users. Identifiers of selected users will be sent to the bot in a \u201Cusers_shared\u201D service message. Available in private chats only.",
+            "OriginalFieldType": "KeyboardButtonRequestUsers",
+            "ConvertedFieldType": "KeyboardButtonRequestUsers",
+            "Optional": true
+          },
+          {
+            "OriginalName": "request_chat",
+            "ConvertedName": "RequestChat",
+            "Description": "If specified, pressing the button will open a list of suitable chats. Tapping on a chat will send its identifier to the bot in a \u201Cchat_shared\u201D service message. Available in private chats only.",
+            "OriginalFieldType": "KeyboardButtonRequestChat",
+            "ConvertedFieldType": "KeyboardButtonRequestChat",
+            "Optional": true
           },
           {
             "OriginalName": "request_contact",
@@ -2240,6 +3539,124 @@
             "Description": "If specified, the described Web App will be launched when the button is pressed. The Web App will be able to send a \u201Cweb_app_data\u201D service message. Available in private chats only.",
             "OriginalFieldType": "WebAppInfo",
             "ConvertedFieldType": "WebAppInfo",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "KeyboardButtonRequestUsers",
+    "Description": "This object defines the criteria used to request suitable users. The identifiers of the selected users will be shared with the bot when the corresponding button is pressed. More about requesting users \u00BB",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user_is_bot",
+            "ConvertedName": "UserIsBot",
+            "Description": "Pass True to request bots, pass False to request regular users. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "user_is_premium",
+            "ConvertedName": "UserIsPremium",
+            "Description": "Pass True to request premium users, pass False to request non-premium users. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "max_quantity",
+            "ConvertedName": "MaxQuantity",
+            "Description": "The maximum number of users to be selected; 1-10. Defaults to 1.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "KeyboardButtonRequestChat",
+    "Description": "This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More about requesting chats \u00BB",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "request_id",
+            "ConvertedName": "RequestId",
+            "Description": "Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_is_channel",
+            "ConvertedName": "ChatIsChannel",
+            "Description": "Pass True to request a channel chat, pass False to request a group or a supergroup chat.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat_is_forum",
+            "ConvertedName": "ChatIsForum",
+            "Description": "Pass True to request a forum supergroup, pass False to request a non-forum chat. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_has_username",
+            "ConvertedName": "ChatHasUsername",
+            "Description": "Pass True to request a supergroup or a channel with a username, pass False to request a chat without a username. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_is_created",
+            "ConvertedName": "ChatIsCreated",
+            "Description": "Pass True to request a chat owned by the user. Otherwise, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "user_administrator_rights",
+            "ConvertedName": "UserAdministratorRights",
+            "Description": "A JSON-serialized object listing the required administrator rights of the user in the chat. The rights must be a superset of bot_administrator_rights. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "ChatAdministratorRights",
+            "ConvertedFieldType": "ChatAdministratorRights",
+            "Optional": true
+          },
+          {
+            "OriginalName": "bot_administrator_rights",
+            "ConvertedName": "BotAdministratorRights",
+            "Description": "A JSON-serialized object listing the required administrator rights of the bot in the chat. The rights must be a subset of user_administrator_rights. If not specified, no additional restrictions are applied.",
+            "OriginalFieldType": "ChatAdministratorRights",
+            "ConvertedFieldType": "ChatAdministratorRights",
+            "Optional": true
+          },
+          {
+            "OriginalName": "bot_is_member",
+            "ConvertedName": "BotIsMember",
+            "Description": "Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]
@@ -2283,7 +3700,7 @@
           {
             "OriginalName": "selective",
             "ConvertedName": "Selective",
-            "Description": "Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply (has reply_to_message_id), sender of the original message.\n\nExample: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven\u0027t voted yet.",
+            "Description": "Use this parameter if you want to remove the keyboard for specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply to a message in the same chat and forum topic, sender of the original message.\n\nExample: A user votes in a poll, bot returns confirmation message in reply to the vote and removes the keyboard for that user, while still showing the keyboard with poll options to users who haven\u0027t voted yet.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2294,7 +3711,7 @@
   },
   {
     "Name": "InlineKeyboardMarkup",
-    "Description": "This object represents an inline keyboard that appears right next to the message it belongs to.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will display unsupported message.",
+    "Description": "This object represents an inline keyboard that appears right next to the message it belongs to.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2329,7 +3746,7 @@
           {
             "OriginalName": "url",
             "ConvertedName": "Url",
-            "Description": "HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=\u003Cuser_id\u003E can be used to mention a user by their ID without using a username, if this is allowed by their privacy settings.",
+            "Description": "HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=\u003Cuser_id\u003E can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2361,7 +3778,7 @@
           {
             "OriginalName": "switch_inline_query",
             "ConvertedName": "SwitchInlineQuery",
-            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted.\n\nNote: This offers an easy way for users to start using your bot in inline mode when they are currently in a private chat with it. Especially useful when combined with switch_pm\u2026 actions - in this case the user will be automatically returned to the chat they switched from, skipping the chat selection screen.",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2372,6 +3789,14 @@
             "Description": "If set, pressing the button will insert the bot\u0027s username and the specified inline query in the current chat\u0027s input field. May be empty, in which case only the bot\u0027s username will be inserted.\n\nThis offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "switch_inline_query_chosen_chat",
+            "ConvertedName": "SwitchInlineQueryChosenChat",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field",
+            "OriginalFieldType": "SwitchInlineQueryChosenChat",
+            "ConvertedFieldType": "SwitchInlineQueryChosenChat",
             "Optional": true
           },
           {
@@ -2396,7 +3821,7 @@
   },
   {
     "Name": "LoginUrl",
-    "Description": "This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:\r\nTelegram apps support these buttons as of version 5.7.",
+    "Description": "This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:\nTelegram apps support these buttons as of version 5.7.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2438,6 +3863,57 @@
     }
   },
   {
+    "Name": "SwitchInlineQueryChosenChat",
+    "Description": "This object represents an inline button that switches the current user to inline mode in a chosen chat, with an optional default inline query.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "query",
+            "ConvertedName": "Query",
+            "Description": "The default inline query to be inserted in the input field. If left empty, only the bot\u0027s username will be inserted",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_user_chats",
+            "ConvertedName": "AllowUserChats",
+            "Description": "True, if private chats with users can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_bot_chats",
+            "ConvertedName": "AllowBotChats",
+            "Description": "True, if private chats with bots can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_group_chats",
+            "ConvertedName": "AllowGroupChats",
+            "Description": "True, if group and supergroup chats can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "allow_channel_chats",
+            "ConvertedName": "AllowChannelChats",
+            "Description": "True, if channel chats can be chosen",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "CallbackQuery",
     "Description": "This object represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.",
     "Kind": {
@@ -2463,9 +3939,9 @@
           {
             "OriginalName": "message",
             "ConvertedName": "Message",
-            "Description": "Message with the callback button that originated the query. Note that message content and message date will not be available if the message is too old",
-            "OriginalFieldType": "Message",
-            "ConvertedFieldType": "Message",
+            "Description": "Message sent by the bot with the callback button that originated the query",
+            "OriginalFieldType": "MaybeInaccessibleMessage",
+            "ConvertedFieldType": "MaybeInaccessibleMessage",
             "Optional": true
           },
           {
@@ -2530,7 +4006,7 @@
           {
             "OriginalName": "selective",
             "ConvertedName": "Selective",
-            "Description": "Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply (has reply_to_message_id), sender of the original message.",
+            "Description": "Use this parameter if you want to force reply from specific users only. Targets: 1) users that are @mentioned in the text of the Message object; 2) if the bot\u0027s message is a reply to a message in the same chat and forum topic, sender of the original message.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2683,7 +4159,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "Description": "True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -2707,7 +4183,7 @@
           {
             "OriginalName": "can_restrict_members",
             "ConvertedName": "CanRestrictMembers",
-            "Description": "True, if the administrator can restrict, ban or unban chat members",
+            "Description": "True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -2715,7 +4191,7 @@
           {
             "OriginalName": "can_promote_members",
             "ConvertedName": "CanPromoteMembers",
-            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
+            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -2739,7 +4215,7 @@
           {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
-            "Description": "True, if the administrator can post in the channel; channels only",
+            "Description": "True, if the administrator can post messages in the channel, or access channel statistics; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2761,9 +4237,108 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_post_stories",
+            "ConvertedName": "CanPostStories",
+            "Description": "True, if the administrator can post stories in the channel; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_stories",
+            "ConvertedName": "CanEditStories",
+            "Description": "True, if the administrator can edit stories posted by other users; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_delete_stories",
+            "ConvertedName": "CanDeleteStories",
+            "Description": "True, if the administrator can delete stories posted by other users; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "can_manage_voice_chats",
             "ConvertedName": "CanManageVoiceChats",
             "Description": "DEPRECATED: use can_manage_video_chats instead",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatMemberUpdated",
+    "Description": "This object represents changes in the status of a chat member.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat the user belongs to",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "from",
+            "ConvertedName": "From",
+            "Description": "Performer of the action, which resulted in the change",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the change was done in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "old_chat_member",
+            "ConvertedName": "OldChatMember",
+            "Description": "Previous information about the chat member",
+            "OriginalFieldType": "ChatMember",
+            "ConvertedFieldType": "ChatMember",
+            "Optional": false
+          },
+          {
+            "OriginalName": "new_chat_member",
+            "ConvertedName": "NewChatMember",
+            "Description": "New information about the chat member",
+            "OriginalFieldType": "ChatMember",
+            "ConvertedFieldType": "ChatMember",
+            "Optional": false
+          },
+          {
+            "OriginalName": "invite_link",
+            "ConvertedName": "InviteLink",
+            "Description": "Chat invite link, which was used by the user to join the chat; for joining by invite link events only.",
+            "OriginalFieldType": "ChatInviteLink",
+            "ConvertedFieldType": "ChatInviteLink",
+            "Optional": true
+          },
+          {
+            "OriginalName": "via_chat_folder_invite_link",
+            "ConvertedName": "ViaChatFolderInviteLink",
+            "Description": "True, if the user joined the chat via a chat folder invite link",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2892,7 +4467,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, chat statistics, message statistics in channels, see channel members, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "Description": "True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -2916,7 +4491,7 @@
           {
             "OriginalName": "can_restrict_members",
             "ConvertedName": "CanRestrictMembers",
-            "Description": "True, if the administrator can restrict, ban or unban chat members",
+            "Description": "True, if the administrator can restrict, ban or unban chat members, or access supergroup statistics",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -2924,7 +4499,7 @@
           {
             "OriginalName": "can_promote_members",
             "ConvertedName": "CanPromoteMembers",
-            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that he has promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
+            "Description": "True, if the administrator can add new administrators with a subset of their own privileges or demote administrators that they have promoted, directly or indirectly (promoted by administrators that were appointed by the user)",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -2948,7 +4523,7 @@
           {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
-            "Description": "True, if the administrator can post in the channel; channels only",
+            "Description": "True, if the administrator can post messages in the channel, or access channel statistics; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2965,6 +4540,38 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages; groups and supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_post_stories",
+            "ConvertedName": "CanPostStories",
+            "Description": "True, if the administrator can post stories in the channel; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_stories",
+            "ConvertedName": "CanEditStories",
+            "Description": "True, if the administrator can edit stories posted by other users; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_delete_stories",
+            "ConvertedName": "CanDeleteStories",
+            "Description": "True, if the administrator can delete stories posted by other users; channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3048,41 +4655,57 @@
             "Optional": false
           },
           {
-            "OriginalName": "can_change_info",
-            "ConvertedName": "CanChangeInfo",
-            "Description": "True, if the user is allowed to change the chat title, photo and other settings",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_invite_users",
-            "ConvertedName": "CanInviteUsers",
-            "Description": "True, if the user is allowed to invite new users to the chat",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
-            "OriginalName": "can_pin_messages",
-            "ConvertedName": "CanPinMessages",
-            "Description": "True, if the user is allowed to pin messages",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
             "OriginalName": "can_send_messages",
             "ConvertedName": "CanSendMessages",
-            "Description": "True, if the user is allowed to send text messages, contacts, locations and venues",
+            "Description": "True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
           },
           {
-            "OriginalName": "can_send_media_messages",
-            "ConvertedName": "CanSendMediaMessages",
-            "Description": "True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes",
+            "OriginalName": "can_send_audios",
+            "ConvertedName": "CanSendAudios",
+            "Description": "True, if the user is allowed to send audios",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_documents",
+            "ConvertedName": "CanSendDocuments",
+            "Description": "True, if the user is allowed to send documents",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_photos",
+            "ConvertedName": "CanSendPhotos",
+            "Description": "True, if the user is allowed to send photos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_videos",
+            "ConvertedName": "CanSendVideos",
+            "Description": "True, if the user is allowed to send videos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_video_notes",
+            "ConvertedName": "CanSendVideoNotes",
+            "Description": "True, if the user is allowed to send video notes",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_send_voice_notes",
+            "ConvertedName": "CanSendVoiceNotes",
+            "Description": "True, if the user is allowed to send voice notes",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -3112,9 +4735,41 @@
             "Optional": false
           },
           {
+            "OriginalName": "can_change_info",
+            "ConvertedName": "CanChangeInfo",
+            "Description": "True, if the user is allowed to change the chat title, photo and other settings",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_invite_users",
+            "ConvertedName": "CanInviteUsers",
+            "Description": "True, if the user is allowed to invite new users to the chat",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_pin_messages",
+            "ConvertedName": "CanPinMessages",
+            "Description": "True, if the user is allowed to pin messages",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create forum topics",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
             "OriginalName": "until_date",
             "ConvertedName": "UntilDate",
-            "Description": "Date when restrictions will be lifted for this user; unix time. If 0, then the user is restricted forever",
+            "Description": "Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
             "Optional": false
@@ -3176,69 +4831,10 @@
           {
             "OriginalName": "until_date",
             "ConvertedName": "UntilDate",
-            "Description": "Date when restrictions will be lifted for this user; unix time. If 0, then the user is banned forever",
+            "Description": "Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "DateTime",
             "Optional": false
-          }
-        ]
-      ]
-    }
-  },
-  {
-    "Name": "ChatMemberUpdated",
-    "Description": "This object represents changes in the status of a chat member.",
-    "Kind": {
-      "Case": "Fields",
-      "Fields": [
-        [
-          {
-            "OriginalName": "chat",
-            "ConvertedName": "Chat",
-            "Description": "Chat the user belongs to",
-            "OriginalFieldType": "Chat",
-            "ConvertedFieldType": "Chat",
-            "Optional": false
-          },
-          {
-            "OriginalName": "from",
-            "ConvertedName": "From",
-            "Description": "Performer of the action, which resulted in the change",
-            "OriginalFieldType": "User",
-            "ConvertedFieldType": "User",
-            "Optional": false
-          },
-          {
-            "OriginalName": "date",
-            "ConvertedName": "Date",
-            "Description": "Date the change was done in Unix time",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
-            "Optional": false
-          },
-          {
-            "OriginalName": "old_chat_member",
-            "ConvertedName": "OldChatMember",
-            "Description": "Previous information about the chat member",
-            "OriginalFieldType": "ChatMember",
-            "ConvertedFieldType": "ChatMember",
-            "Optional": false
-          },
-          {
-            "OriginalName": "new_chat_member",
-            "ConvertedName": "NewChatMember",
-            "Description": "New information about the chat member",
-            "OriginalFieldType": "ChatMember",
-            "ConvertedFieldType": "ChatMember",
-            "Optional": false
-          },
-          {
-            "OriginalName": "invite_link",
-            "ConvertedName": "InviteLink",
-            "Description": "Chat invite link, which was used by the user to join the chat; for joining by invite link events only.",
-            "OriginalFieldType": "ChatInviteLink",
-            "ConvertedFieldType": "ChatInviteLink",
-            "Optional": true
           }
         ]
       ]
@@ -3265,6 +4861,14 @@
             "Description": "User that sent the join request",
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user_chat_id",
+            "ConvertedName": "UserChatId",
+            "Description": "Identifier of a private chat with the user who sent the join request. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot can use this identifier for 5 minutes to send messages until the join request is processed, assuming no other administrator contacted the user.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": false
           },
           {
@@ -3305,15 +4909,55 @@
           {
             "OriginalName": "can_send_messages",
             "ConvertedName": "CanSendMessages",
-            "Description": "True, if the user is allowed to send text messages, contacts, locations and venues",
+            "Description": "True, if the user is allowed to send text messages, contacts, giveaways, giveaway winners, invoices, locations and venues",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
-            "OriginalName": "can_send_media_messages",
-            "ConvertedName": "CanSendMediaMessages",
-            "Description": "True, if the user is allowed to send audios, documents, photos, videos, video notes and voice notes, implies can_send_messages",
+            "OriginalName": "can_send_audios",
+            "ConvertedName": "CanSendAudios",
+            "Description": "True, if the user is allowed to send audios",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_documents",
+            "ConvertedName": "CanSendDocuments",
+            "Description": "True, if the user is allowed to send documents",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_photos",
+            "ConvertedName": "CanSendPhotos",
+            "Description": "True, if the user is allowed to send photos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_videos",
+            "ConvertedName": "CanSendVideos",
+            "Description": "True, if the user is allowed to send videos",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_video_notes",
+            "ConvertedName": "CanSendVideoNotes",
+            "Description": "True, if the user is allowed to send video notes",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_send_voice_notes",
+            "ConvertedName": "CanSendVoiceNotes",
+            "Description": "True, if the user is allowed to send voice notes",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3321,7 +4965,7 @@
           {
             "OriginalName": "can_send_polls",
             "ConvertedName": "CanSendPolls",
-            "Description": "True, if the user is allowed to send polls, implies can_send_messages",
+            "Description": "True, if the user is allowed to send polls",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3329,7 +4973,7 @@
           {
             "OriginalName": "can_send_other_messages",
             "ConvertedName": "CanSendOtherMessages",
-            "Description": "True, if the user is allowed to send animations, games, stickers and use inline bots, implies can_send_media_messages",
+            "Description": "True, if the user is allowed to send animations, games, stickers and use inline bots",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3337,7 +4981,7 @@
           {
             "OriginalName": "can_add_web_page_previews",
             "ConvertedName": "CanAddWebPagePreviews",
-            "Description": "True, if the user is allowed to add web page previews to their messages, implies can_send_media_messages",
+            "Description": "True, if the user is allowed to add web page previews to their messages",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3362,6 +5006,14 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages. Ignored in public supergroups",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_topics",
+            "ConvertedName": "CanManageTopics",
+            "Description": "True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3392,6 +5044,259 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ReactionType",
+    "Description": "This object describes the type of a reaction. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Emoji",
+            "CaseType": "ReactionTypeEmoji"
+          },
+          {
+            "Name": "CustomEmoji",
+            "CaseType": "ReactionTypeCustomEmoji"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ReactionTypeEmoji",
+    "Description": "The reaction is based on an emoji.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the reaction, always \u201Cemoji\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "emoji",
+            "ConvertedName": "Emoji",
+            "Description": "Reaction emoji. Currently, it can be one of \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022, \u0022\u0022",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ReactionTypeCustomEmoji",
+    "Description": "The reaction is based on a custom emoji.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the reaction, always \u201Ccustom_emoji\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "custom_emoji_id",
+            "ConvertedName": "CustomEmojiId",
+            "Description": "Custom emoji identifier",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ReactionCount",
+    "Description": "Represents a reaction added to a message along with the number of times it was added.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the reaction",
+            "OriginalFieldType": "ReactionType",
+            "ConvertedFieldType": "ReactionType",
+            "Optional": false
+          },
+          {
+            "OriginalName": "total_count",
+            "ConvertedName": "TotalCount",
+            "Description": "Number of times the reaction was added",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageReactionUpdated",
+    "Description": "This object represents a change of a reaction on a message performed by a user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "The chat containing the message the user reacted to",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "message_id",
+            "ConvertedName": "MessageId",
+            "Description": "Unique identifier of the message inside the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "The user that changed the reaction, if the user isn\u0027t anonymous",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "actor_chat",
+            "ConvertedName": "ActorChat",
+            "Description": "The chat on behalf of which the reaction was changed, if the user is anonymous",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date of the change in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "old_reaction",
+            "ConvertedName": "OldReaction",
+            "Description": "Previous list of reaction types that were set by the user",
+            "OriginalFieldType": "Array of ReactionType",
+            "ConvertedFieldType": "ReactionType[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "new_reaction",
+            "ConvertedName": "NewReaction",
+            "Description": "New list of reaction types that have been set by the user",
+            "OriginalFieldType": "Array of ReactionType",
+            "ConvertedFieldType": "ReactionType[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "MessageReactionCountUpdated",
+    "Description": "This object represents reaction changes on a message with anonymous reactions.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "The chat containing the message",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "message_id",
+            "ConvertedName": "MessageId",
+            "Description": "Unique message identifier inside the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date of the change in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "reactions",
+            "ConvertedName": "Reactions",
+            "Description": "List of reactions that are present on the message",
+            "OriginalFieldType": "Array of ReactionCount",
+            "ConvertedFieldType": "ReactionCount[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ForumTopic",
+    "Description": "This object represents a forum topic.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of the forum topic",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the topic",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_color",
+            "ConvertedName": "IconColor",
+            "Description": "Color of the topic icon in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "icon_custom_emoji_id",
+            "ConvertedName": "IconCustomEmojiId",
+            "Description": "Unique identifier of the custom emoji shown as the topic icon",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
           }
         ]
       ]
@@ -3629,8 +5534,65 @@
     }
   },
   {
+    "Name": "BotName",
+    "Description": "This object represents the bot\u0027s name.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "The bot\u0027s name",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BotDescription",
+    "Description": "This object represents the bot\u0027s description.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "description",
+            "ConvertedName": "Description",
+            "Description": "The bot\u0027s description",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BotShortDescription",
+    "Description": "This object represents the bot\u0027s short description.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "short_description",
+            "ConvertedName": "ShortDescription",
+            "Description": "The bot\u0027s short description",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "MenuButton",
-    "Description": "This object describes the bot\u0027s menu button in a private chat. It should be one of\r\nIf a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.",
+    "Description": "This object describes the bot\u0027s menu button in a private chat. It should be one of\nIf a menu button other than MenuButtonDefault is set for a private chat, then it is applied in the chat. Otherwise the default menu button is applied. By default, the menu button opens the list of bot commands.",
     "Kind": {
       "Case": "Cases",
       "Fields": [
@@ -3718,6 +5680,258 @@
             "Description": "Type of the button, must be default",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostSource",
+    "Description": "This object describes the source of a chat boost. It can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Premium",
+            "CaseType": "ChatBoostSourcePremium"
+          },
+          {
+            "Name": "GiftCode",
+            "CaseType": "ChatBoostSourceGiftCode"
+          },
+          {
+            "Name": "Giveaway",
+            "CaseType": "ChatBoostSourceGiveaway"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostSourcePremium",
+    "Description": "The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "source",
+            "ConvertedName": "Source",
+            "Description": "Source of the boost, always \u201Cpremium\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "User that boosted the chat",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostSourceGiftCode",
+    "Description": "The boost was obtained by the creation of Telegram Premium gift codes to boost a chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "source",
+            "ConvertedName": "Source",
+            "Description": "Source of the boost, always \u201Cgift_code\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "User for which the gift code was created",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostSourceGiveaway",
+    "Description": "The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "source",
+            "ConvertedName": "Source",
+            "Description": "Source of the boost, always \u201Cgiveaway\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "giveaway_message_id",
+            "ConvertedName": "GiveawayMessageId",
+            "Description": "Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn\u0027t sent yet.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "User that won the prize in the giveaway if any",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_unclaimed",
+            "ConvertedName": "IsUnclaimed",
+            "Description": "True, if the giveaway was completed, but there was no user to win the prize",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoost",
+    "Description": "This object contains information about a chat boost.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "boost_id",
+            "ConvertedName": "BoostId",
+            "Description": "Unique identifier of the boost",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "add_date",
+            "ConvertedName": "AddDate",
+            "Description": "Point in time (Unix timestamp) when the chat was boosted",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "expiration_date",
+            "ConvertedName": "ExpirationDate",
+            "Description": "Point in time (Unix timestamp) when the boost will automatically expire, unless the booster\u0027s Telegram Premium subscription is prolonged",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "source",
+            "ConvertedName": "Source",
+            "Description": "Source of the added boost",
+            "OriginalFieldType": "ChatBoostSource",
+            "ConvertedFieldType": "ChatBoostSource",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostUpdated",
+    "Description": "This object represents a boost added to a chat or changed.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat which was boosted",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "boost",
+            "ConvertedName": "Boost",
+            "Description": "Infomation about the chat boost",
+            "OriginalFieldType": "ChatBoost",
+            "ConvertedFieldType": "ChatBoost",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostRemoved",
+    "Description": "This object represents a boost removed from a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat which was boosted",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "boost_id",
+            "ConvertedName": "BoostId",
+            "Description": "Unique identifier of the boost",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "remove_date",
+            "ConvertedName": "RemoveDate",
+            "Description": "Point in time (Unix timestamp) when the boost was removed",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "source",
+            "ConvertedName": "Source",
+            "Description": "Source of the removed boost",
+            "OriginalFieldType": "ChatBoostSource",
+            "ConvertedFieldType": "ChatBoostSource",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UserChatBoosts",
+    "Description": "This object represents a list of boosts added to a chat by a user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "boosts",
+            "ConvertedName": "Boosts",
+            "Description": "The list of boosts added to the chat by the user",
+            "OriginalFieldType": "Array of ChatBoost",
+            "ConvertedFieldType": "ChatBoost[]",
             "Optional": false
           }
         ]
@@ -3828,6 +6042,14 @@
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
             "Optional": true
+          },
+          {
+            "OriginalName": "has_spoiler",
+            "ConvertedName": "HasSpoiler",
+            "Description": "Pass True if the photo needs to be covered with a spoiler animation",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -3857,8 +6079,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -3915,7 +6137,15 @@
           {
             "OriginalName": "supports_streaming",
             "ConvertedName": "SupportsStreaming",
-            "Description": "Pass True, if the uploaded video is suitable for streaming",
+            "Description": "Pass True if the uploaded video is suitable for streaming",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_spoiler",
+            "ConvertedName": "HasSpoiler",
+            "Description": "Pass True if the video needs to be covered with a spoiler animation",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3948,8 +6178,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4002,6 +6232,14 @@
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
+          },
+          {
+            "OriginalName": "has_spoiler",
+            "ConvertedName": "HasSpoiler",
+            "Description": "Pass True if the animation needs to be covered with a spoiler animation",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -4031,8 +6269,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4114,8 +6352,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
             "OriginalFieldType": "InputFile or String",
             "ConvertedFieldType": "InputFile",
@@ -4188,6 +6426,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the sticker, currently one of \u201Cregular\u201D, \u201Cmask\u201D, \u201Ccustom_emoji\u201D. The type of the sticker is independent from its format, which is determined by the fields is_animated and is_video.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
             "OriginalName": "width",
             "ConvertedName": "Width",
             "Description": "Sticker width",
@@ -4220,8 +6466,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Sticker thumbnail in the .WEBP or .JPG format",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -4246,7 +6492,7 @@
           {
             "OriginalName": "premium_animation",
             "ConvertedName": "PremiumAnimation",
-            "Description": "Premium animation for the sticker, if the sticker is premium",
+            "Description": "For premium regular stickers, premium animation for the sticker",
             "OriginalFieldType": "File",
             "ConvertedFieldType": "File",
             "Optional": true
@@ -4257,6 +6503,22 @@
             "Description": "For mask stickers, the position where the mask should be placed",
             "OriginalFieldType": "MaskPosition",
             "ConvertedFieldType": "MaskPosition",
+            "Optional": true
+          },
+          {
+            "OriginalName": "custom_emoji_id",
+            "ConvertedName": "CustomEmojiId",
+            "Description": "For custom emoji stickers, unique identifier of the custom emoji",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "needs_repainting",
+            "ConvertedName": "NeedsRepainting",
+            "Description": "True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji status, white color on chat photos, or another appropriate color in other places",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -4295,6 +6557,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "sticker_type",
+            "ConvertedName": "StickerType",
+            "Description": "Type of stickers in the set, currently one of \u201Cregular\u201D, \u201Cmask\u201D, \u201Ccustom_emoji\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
             "OriginalName": "is_animated",
             "ConvertedName": "IsAnimated",
             "Description": "True, if the sticker set contains animated stickers",
@@ -4311,14 +6581,6 @@
             "Optional": false
           },
           {
-            "OriginalName": "contains_masks",
-            "ConvertedName": "ContainsMasks",
-            "Description": "True, if the sticker set contains masks",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
-          },
-          {
             "OriginalName": "stickers",
             "ConvertedName": "Stickers",
             "Description": "List of all set stickers",
@@ -4327,8 +6589,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb",
-            "ConvertedName": "Thumb",
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
             "Description": "Sticker set thumbnail in the .WEBP, .TGS, or .WEBM format",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
@@ -4376,6 +6638,49 @@
             "OriginalFieldType": "Float number",
             "ConvertedFieldType": "float",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputSticker",
+    "Description": "This object describes a sticker to be added to a sticker set.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. Animated and video stickers can\u0027t be uploaded via HTTP URL. More information on Sending Files \u00BB",
+            "OriginalFieldType": "InputFile or String",
+            "ConvertedFieldType": "InputFile",
+            "Optional": false
+          },
+          {
+            "OriginalName": "emoji_list",
+            "ConvertedName": "EmojiList",
+            "Description": "List of 1-20 emoji associated with the sticker",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "mask_position",
+            "ConvertedName": "MaskPosition",
+            "Description": "Position where the mask should be placed on faces. For \u201Cmask\u201D stickers only.",
+            "OriginalFieldType": "MaskPosition",
+            "ConvertedFieldType": "MaskPosition",
+            "Optional": true
+          },
+          {
+            "OriginalName": "keywords",
+            "ConvertedName": "Keywords",
+            "Description": "List of 0-20 search keywords for the sticker with total length of up to 64 characters. For \u201Cregular\u201D and \u201Ccustom_emoji\u201D stickers only.",
+            "OriginalFieldType": "Array of String",
+            "ConvertedFieldType": "string[]",
+            "Optional": true
           }
         ]
       ]
@@ -4441,8 +6746,43 @@
     }
   },
   {
+    "Name": "InlineQueryResultsButton",
+    "Description": "This object represents a button to be shown above inline query results. You must use exactly one of the optional fields.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Label text on the button",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "web_app",
+            "ConvertedName": "WebApp",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to switch back to the inline mode using the method switchInlineQuery inside the Web App.",
+            "OriginalFieldType": "WebAppInfo",
+            "ConvertedFieldType": "WebAppInfo",
+            "Optional": true
+          },
+          {
+            "OriginalName": "start_parameter",
+            "ConvertedName": "StartParameter",
+            "Description": "Deep-linking parameter for the /start message sent to the bot when a user presses the button. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.\n\nExample: An inline bot that sends YouTube videos can ask the user to connect the bot to their YouTube account to adapt search results accordingly. To do this, it displays a \u0027Connect your YouTube account\u0027 button above the results, or even before showing any. The user presses the button, switches to a private chat with the bot and, in doing so, passes a start parameter that instructs the bot to return an OAuth link. Once done, the bot can offer a switch_inline button so that the user can easily return to the chat where they wanted to use the bot\u0027s inline capabilities.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "InlineQueryResult",
-    "Description": "This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:\r\nNote: All URLs passed in inline query results will be available to end users and therefore must be assumed to be public.",
+    "Description": "This object represents one result of an inline query. Telegram clients currently support results of the following 20 types:\nNote: All URLs passed in inline query results will be available to end users and therefore must be assumed to be public.",
     "Kind": {
       "Case": "Cases",
       "Fields": [
@@ -4589,7 +6929,7 @@
           {
             "OriginalName": "hide_url",
             "ConvertedName": "HideUrl",
-            "Description": "Pass True, if you don\u0027t want the URL to be shown in the message",
+            "Description": "Pass True if you don\u0027t want the URL to be shown in the message",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -4603,24 +6943,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -4662,8 +7002,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the thumbnail for the photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -4801,16 +7141,16 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
           },
           {
-            "OriginalName": "thumb_mime_type",
-            "ConvertedName": "ThumbMimeType",
+            "OriginalName": "thumbnail_mime_type",
+            "ConvertedName": "ThumbnailMimeType",
             "Description": "MIME type of the thumbnail, must be one of \u201Cimage/jpeg\u201D, \u201Cimage/gif\u201D, or \u201Cvideo/mp4\u201D. Defaults to \u201Cimage/jpeg\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -4924,16 +7264,16 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the static (JPEG or GIF) or animated (MPEG4) thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
           },
           {
-            "OriginalName": "thumb_mime_type",
-            "ConvertedName": "ThumbMimeType",
+            "OriginalName": "thumbnail_mime_type",
+            "ConvertedName": "ThumbnailMimeType",
             "Description": "MIME type of the thumbnail, must be one of \u201Cimage/jpeg\u201D, \u201Cimage/gif\u201D, or \u201Cvideo/mp4\u201D. Defaults to \u201Cimage/jpeg\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -5031,8 +7371,8 @@
             "Optional": false
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the thumbnail (JPEG only) for the video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
@@ -5124,7 +7464,7 @@
   },
   {
     "Name": "InlineQueryResultAudio",
-    "Description": "Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to an MP3 audio file. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5223,7 +7563,7 @@
   },
   {
     "Name": "InlineQueryResultVoice",
-    "Description": "Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a voice recording in an .OGG container encoded with OPUS. By default, this voice recording will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the the voice message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5314,7 +7654,7 @@
   },
   {
     "Name": "InlineQueryResultDocument",
-    "Description": "Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a file. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file. Currently, only .PDF and .ZIP files can be sent using this method.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5408,24 +7748,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "URL of the thumbnail (JPEG only) for the file",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -5437,7 +7777,7 @@
   },
   {
     "Name": "InlineQueryResultLocation",
-    "Description": "Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a location on a map. By default, the location will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the location.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5531,24 +7871,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -5560,7 +7900,7 @@
   },
   {
     "Name": "InlineQueryResultVenue",
-    "Description": "Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a venue. By default, the venue will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the venue.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5662,24 +8002,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -5691,7 +8031,7 @@
   },
   {
     "Name": "InlineQueryResultContact",
-    "Description": "Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a contact with a phone number. By default, this contact will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the contact.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5761,24 +8101,24 @@
             "Optional": true
           },
           {
-            "OriginalName": "thumb_url",
-            "ConvertedName": "ThumbUrl",
+            "OriginalName": "thumbnail_url",
+            "ConvertedName": "ThumbnailUrl",
             "Description": "Url of the thumbnail for the result",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_width",
-            "ConvertedName": "ThumbWidth",
+            "OriginalName": "thumbnail_width",
+            "ConvertedName": "ThumbnailWidth",
             "Description": "Thumbnail width",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
-            "OriginalName": "thumb_height",
-            "ConvertedName": "ThumbHeight",
+            "OriginalName": "thumbnail_height",
+            "ConvertedName": "ThumbnailHeight",
             "Description": "Thumbnail height",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
@@ -5790,7 +8130,7 @@
   },
   {
     "Name": "InlineQueryResultGame",
-    "Description": "Represents a Game.\r\nNote: This will only work in Telegram versions released after October 1, 2016. Older clients will not display any inline results if a game result is among them.",
+    "Description": "Represents a Game.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6090,7 +8430,7 @@
   },
   {
     "Name": "InlineQueryResultCachedSticker",
-    "Description": "Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.\r\nNote: This will only work in Telegram versions released after 9 April, 2016 for static stickers and after 06 July, 2019 for animated stickers. Older clients will ignore them.",
+    "Description": "Represents a link to a sticker stored on the Telegram servers. By default, this sticker will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the sticker.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6141,7 +8481,7 @@
   },
   {
     "Name": "InlineQueryResultCachedDocument",
-    "Description": "Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a file stored on the Telegram servers. By default, this file will be sent by the user with an optional caption. Alternatively, you can use input_message_content to send a message with the specified content instead of the file.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6323,7 +8663,7 @@
   },
   {
     "Name": "InlineQueryResultCachedVoice",
-    "Description": "Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to a voice message stored on the Telegram servers. By default, this voice message will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the voice message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6406,7 +8746,7 @@
   },
   {
     "Name": "InlineQueryResultCachedAudio",
-    "Description": "Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.\r\nNote: This will only work in Telegram versions released after 9 April, 2016. Older clients will ignore them.",
+    "Description": "Represents a link to an MP3 audio file stored on the Telegram servers. By default, this audio file will be sent by the user. Alternatively, you can use input_message_content to send a message with the specified content instead of the audio.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6542,11 +8882,11 @@
             "Optional": true
           },
           {
-            "OriginalName": "disable_web_page_preview",
-            "ConvertedName": "DisableWebPagePreview",
-            "Description": "Disables link previews for links in the sent message",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
+            "OriginalName": "link_preview_options",
+            "ConvertedName": "LinkPreviewOptions",
+            "Description": "Link preview generation options for the message",
+            "OriginalFieldType": "LinkPreviewOptions",
+            "ConvertedFieldType": "LinkPreviewOptions",
             "Optional": true
           }
         ]
@@ -6844,7 +9184,7 @@
           {
             "OriginalName": "need_name",
             "ConvertedName": "NeedName",
-            "Description": "Pass True, if you require the user\u0027s full name to complete the order",
+            "Description": "Pass True if you require the user\u0027s full name to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6852,7 +9192,7 @@
           {
             "OriginalName": "need_phone_number",
             "ConvertedName": "NeedPhoneNumber",
-            "Description": "Pass True, if you require the user\u0027s phone number to complete the order",
+            "Description": "Pass True if you require the user\u0027s phone number to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6860,7 +9200,7 @@
           {
             "OriginalName": "need_email",
             "ConvertedName": "NeedEmail",
-            "Description": "Pass True, if you require the user\u0027s email address to complete the order",
+            "Description": "Pass True if you require the user\u0027s email address to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6868,7 +9208,7 @@
           {
             "OriginalName": "need_shipping_address",
             "ConvertedName": "NeedShippingAddress",
-            "Description": "Pass True, if you require the user\u0027s shipping address to complete the order",
+            "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6876,7 +9216,7 @@
           {
             "OriginalName": "send_phone_number_to_provider",
             "ConvertedName": "SendPhoneNumberToProvider",
-            "Description": "Pass True, if the user\u0027s phone number should be sent to provider",
+            "Description": "Pass True if the user\u0027s phone number should be sent to provider",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6884,7 +9224,7 @@
           {
             "OriginalName": "send_email_to_provider",
             "ConvertedName": "SendEmailToProvider",
-            "Description": "Pass True, if the user\u0027s email address should be sent to provider",
+            "Description": "Pass True if the user\u0027s email address should be sent to provider",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6892,7 +9232,7 @@
           {
             "OriginalName": "is_flexible",
             "ConvertedName": "IsFlexible",
-            "Description": "Pass True, if the final price depends on the shipping method",
+            "Description": "Pass True if the final price depends on the shipping method",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6903,7 +9243,7 @@
   },
   {
     "Name": "ChosenInlineResult",
-    "Description": "Represents a result of an inline query that was chosen by the user and sent to their chat partner.\r\nNote: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.",
+    "Description": "Represents a result of an inline query that was chosen by the user and sent to their chat partner.\nNote: It is necessary to enable inline feedback via @BotFather in order to receive these objects in updates.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6954,7 +9294,7 @@
   },
   {
     "Name": "SentWebAppMessage",
-    "Description": "Describes an inline message sent by a Web App on behalf of a user.\r\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot. Please note that users will need Telegram v.4.0 or higher to use payments (released on May 18, 2017).",
+    "Description": "Describes an inline message sent by a Web App on behalf of a user.\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7298,7 +9638,7 @@
   },
   {
     "Name": "PreCheckoutQuery",
-    "Description": "This object contains information about an incoming pre-checkout query.\r\nTelegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.",
+    "Description": "This object contains information about an incoming pre-checkout query.\nTelegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -7960,7 +10300,7 @@
   },
   {
     "Name": "PassportElementErrorUnspecified",
-    "Description": "Represents an issue in an unspecified place. The error is considered resolved when new data is added.\r\nYour bot can offer users HTML5 games to play solo or to compete against each other in groups and one-on-one chats. Create games via @BotFather using the /newgame command. Please note that this kind of power requires responsibility: you will need to accept the terms for each game that your bots will be offering.",
+    "Description": "Represents an issue in an unspecified place. The error is considered resolved when new data is added.\nYour bot can offer users HTML5 games to play solo or to compete against each other in groups and one-on-one chats. Create games via @BotFather using the /newgame command. Please note that this kind of power requires responsibility: you will need to accept the terms for each game that your bots will be offering.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -8069,7 +10409,7 @@
   },
   {
     "Name": "GameHighScore",
-    "Description": "This object represents one row of the high scores table for a game.\r\nAnd that\u0027s about all we\u0027ve got for now.\nIf you\u0027ve got any questions, please check out our Bot FAQ \u00BB",
+    "Description": "This object represents one row of the high scores table for a game.\nAnd that\u0027s about all we\u0027ve got for now.\nIf you\u0027ve got any questions, please check out our Bot FAQ \u00BB",
     "Kind": {
       "Case": "Fields",
       "Fields": [

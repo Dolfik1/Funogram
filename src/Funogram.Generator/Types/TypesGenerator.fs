@@ -27,6 +27,7 @@ type ChatId =
 type InputFile = 
   | Url of Uri 
   | File of string * Stream
+  | FileBytes of string * byte[]
   | FileId of string
 
 type ChatType =
@@ -34,6 +35,7 @@ type ChatType =
   | Group
   | [<DataMember(Name = "supergroup")>] SuperGroup
   | Channel
+  | Sender
   | Unknown
 
 /// Message text parsing mode
@@ -184,7 +186,7 @@ let generate config =
 
       |> (fun code ->
         match tp.Kind with
-        | Stub -> code |> Code.setIndent 1 |> Code.printNewLine "class end"
+        | Stub -> code |> Code.setIndent 1 |> Code.printNewLine "new() = {}"
         | Cases cases -> generateCasesBody cases code
         | Fields fields -> code |> generateFieldsBody tp fields |> generateFieldsCreateMember tp fields)
 

@@ -2,9 +2,10 @@ module Funogram.Generator.Helpers
 
 open System
 open System.IO.Enumeration
-open System.Text
 open System.Text.Json
 open System.Text.Json.Serialization
+
+open FSharp.Data
 
 let reservedKeywords =
   [
@@ -24,6 +25,7 @@ let typeMap =
     "Float number", "float"
     "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply", "Markup"
     "array of Messages", "Message[]"
+    "array of MessageId", "MessageId[]"
     "InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo", "InputMedia"
     "Message or True", "EditMessageResult"
   ] |> Map.ofList
@@ -86,4 +88,12 @@ let getJsonSerializerOptions () =
 
 let compareWildcard (expression: string) (value: string) =
   FileSystemName.MatchesSimpleExpression(expression, value, false)
-      
+
+let private normalize (text: string) =
+  text.ReplaceLineEndings("\n")
+
+let directInnerText (node: HtmlNode) =
+  normalize <| node.DirectInnerText()
+
+let innerText (node: HtmlNode) =
+  normalize <| node.InnerText()

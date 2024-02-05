@@ -2,6 +2,7 @@
 module Funogram.Telegram.Api
 
 open Funogram.Telegram
+open Funogram.Telegram.Types
 open Types
 
 let deleteWebhookBase () =
@@ -15,7 +16,7 @@ let sendMessageByChatName chatName text = Req.SendMessage.Make(ChatId.String cha
 
 let sendMessageMarkup chatId text replyMarkup = Req.SendMessage.Make(ChatId.Int chatId, text, replyMarkup = replyMarkup)
 
-let sendMessageReply chatId text replyToMessageId = Req.SendMessage.Make(ChatId.Int chatId, text, replyToMessageId = replyToMessageId)
+let sendMessageReply chatId text replyToMessageId = Req.SendMessage.Make(ChatId.Int chatId, text, replyParameters = ReplyParameters.Create replyToMessageId)
 
 let forwardMessage chatId fromChatId messageId = Req.ForwardMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId)
 
@@ -124,9 +125,9 @@ let private deleteMessageBase chatId messageId =
 let deleteMessage chatId messageId = deleteMessageBase (ChatId.Int chatId) messageId
 let deleteMessageByChatName chatName messageId = deleteMessageBase (ChatId.String chatName) messageId
 
-let answerInlineQueryBase inlineQueryId results cacheTime isPersonal nextOffset switchPmText switchPmParameter =
+let answerInlineQueryBase inlineQueryId results cacheTime (isPersonal: bool option) nextOffset button =
   ({ InlineQueryId = inlineQueryId; Results = results; CacheTime = cacheTime;
-  IsPersonal = isPersonal; NextOffset = nextOffset; SwitchPmText = switchPmText; SwitchPmParameter = switchPmParameter }: Req.AnswerInlineQuery)
+  IsPersonal = isPersonal; NextOffset = nextOffset; Button = button }: Req.AnswerInlineQuery)
 
 let private answerShippingQueryBase shippingQueryId ok shippingOptions errorMessage = 
   ({ ShippingQueryId = shippingQueryId; Ok = ok; 
@@ -165,7 +166,7 @@ let getGameHighScoresInline userId inlineMessageId =
 let getStickerSet name =
   ({ Name = name }: Req.GetStickerSet)
 
-let uploadStickerFile userId pngSticker =
-  ({ UserId = userId; PngSticker = pngSticker }: Req.UploadStickerFile)
+let uploadStickerFile userId sticker stickerFormat =
+  ({ UserId = userId; Sticker = sticker; StickerFormat = stickerFormat }: Req.UploadStickerFile)
 let setStickerPositionInSet sticker position =
   ({ Sticker = sticker; Position = position }: Req.SetStickerPositionInSet)

@@ -8,7 +8,8 @@ open System.Net
 type BotWebHook = { Listener: HttpListener; ValidateRequest: HttpListenerRequest -> bool }
 
 type BotConfig = 
-  { Token: string
+  { IsTest: bool
+    Token: string
     Offset: int64 option
     Limit: int64 option
     Timeout: int64 option

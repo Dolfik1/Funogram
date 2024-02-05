@@ -30,14 +30,18 @@ module internal Resolvers =
           else yield c
     }
     String.Concat(chars).ToLower()
-
+  
   let mkMemberSerializer (case: ShapeFSharpUnionCase<'DeclaringType>) =
-    let isFile = case.Fields |> Array.map (fun x -> x.Member.Type) = [|typeof<string>; typeof<Stream>|]
+    let isFile =
+      case.Fields.Length = 2
+        && case.Fields[0].Member.Type = typeof<string>
+        && (case.Fields[1].Member.Type = typeof<Stream> || case.Fields[1].Member.Type = typeof<byte[]>)
+    
     if case.Fields.Length = 0 then
       fun _ _ -> Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
     else
       case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> IJsonFormatterResolver -> byte[]> with
-        member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
+        member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
           fun value resolver ->
             let mutable myWriter = JsonWriter()
             
@@ -183,7 +187,20 @@ module internal Resolvers =
           reader.AdvanceOffset(newOffset - offset)
           value
         | None ->
-          failwithf "Internal error: Cannot match type \"%s\" by fields. Please create issue on https://github.com/Dolfik1/Funogram/issues" typeof<'a>.FullName
+          // try to find most similar type
+          let item =
+            cases |> Array.maxBy (fun (caseNames, tp) ->
+              if jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value) then
+                jsonCaseNames |> Seq.sumBy (fun n -> if caseNames |> Set.contains n then 1 else 0)
+              else
+                -1
+            )
+
+          let idx = cases |> Array.findIndex (fun x -> x = item)
+          let value, newOffset = deserializers.[idx] buffer offset resolver
+          reader.AdvanceOffset(newOffset - offset)
+          value
+          // failwithf "Internal error: Cannot match type \"%s\" by fields. Please create issue on https://github.com/Dolfik1/Funogram/issues" typeof<'a>.FullName
 
   let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
   let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64

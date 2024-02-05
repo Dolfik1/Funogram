@@ -3,6 +3,7 @@
 open System
 open System.IO
 open System.Net.Http
+open System.Net.Sockets
 open Funogram.Telegram
 open Funogram.Telegram.Sscanf
 open Funogram.Telegram.Types
@@ -15,7 +16,8 @@ let TokenFileName = "token"
 [<RequireQualifiedAccess>]
 module Config =
   let defaultConfig =
-    { Token = ""
+    { IsTest = false
+      Token = ""
       Offset = Some 0L
       Limit = Some 100
       Timeout = Some 60000
@@ -105,7 +107,7 @@ let private runBot config me updateArrived updatesArrived =
       async {
         try
           let! updatesResult =
-            Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout)
+            Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout, ?allowedUpdates = (config.AllowedUpdates |> Option.map Seq.toArray))
             |> bot
 
           match updatesResult with
@@ -115,10 +117,30 @@ let private runBot config me updateArrived updatesArrived =
             return! loopAsync offset // send new offset
           | Error e ->
             config.OnError (e.AsException() :> Exception)
+
+            // add delay in case of HTTP error
+            // for example: the server may be "busy"
+            if e.Description = "HTTP_ERROR" then
+              do! Async.Sleep 1000
+
             return! loopAsync offset
-          | _ -> return! loopAsync offset
-        with ex ->
+          | _ ->
+            return! loopAsync offset
+        with
+        | :? HttpRequestException as e ->
+          // in case of HTTP error we should not increment offset
+          config.OnError e
+          do! Async.Sleep 1000
+          return! loopAsync offset
+
+        | :? AggregateException as e when e.InnerExceptions <> null && e.InnerExceptions |> Seq.exists (fun x -> (x :? HttpRequestException) || (x :? SocketException)) ->
+          config.OnError e
+          do! Async.Sleep 1000
+          return! loopAsync offset
+
+        | ex ->
           config.OnError ex
+          // in case of "general" error we should increment offset to skip problematic update
           return! loopAsync (offset + 1L)
         return! loopAsync offset
       }

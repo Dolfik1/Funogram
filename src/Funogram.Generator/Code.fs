@@ -21,7 +21,7 @@ let private appendIndent code =
   { code with StringBuilder = code.StringBuilder.Append(indent) }
 
 let private appendLine code =
-  { code with StringBuilder = code.StringBuilder.AppendLine() }
+  { code with StringBuilder = code.StringBuilder.Append("\n") }
 
 let increaseIndent code =
   { code with CurrentIndent = code.CurrentIndent + 1 }

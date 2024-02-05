@@ -54,6 +54,7 @@ let private returnTypeRegexes =
     Regex("On success, an ([A|a]rray of \w+|\w+)\s")
     Regex("An ([A|a]rray of \w+|\w+) objects is returned")
     Regex("[R|r]eturns basic information about the bot in form of a ([A|a]rray of \w+|\w+)")
+    Regex("[R|r]eturns information about the created topic as a ([A|a]rray of \w+|\w+)")
 
     Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
 
@@ -90,14 +91,14 @@ let private parseReturnType (str: string) =
 
 let private isMethodSection (node: HtmlNode) =
   if node.Name() = "h4" then
-    let text = node.DirectInnerText()
+    let text = Helpers.directInnerText node
     let onlyLetters = text |> Seq.forall Char.IsLetter
     onlyLetters && text.Length > 0 && Char.IsLower text.[0]
   else
     false
 
 let inline private tryFindField (elements: HtmlNode list) (m: Map<string, int>) name =
-  m |> Map.tryFind name |> Option.map (fun i -> elements.[i].InnerText())
+  m |> Map.tryFind name |> Option.map (fun i -> Helpers.innerText elements.[i])
 
 let inline private defaultFieldValue v =
   match v with
@@ -108,14 +109,14 @@ let inline private defaultFieldValue v =
 
 let private parseFields (table: HtmlNode) =
   let columns = table.CssSelect("thead > tr > th")
-  let firstHeaderColumnName = columns |> List.tryHead |> Option.map (fun x -> x.DirectInnerText())
+  let firstHeaderColumnName = columns |> List.tryHead |> Option.map Helpers.directInnerText
 
   match firstHeaderColumnName with
   | Some "Field" -> Array.empty
   | _ ->
     let columns = 
       columns
-      |> Seq.mapi (fun i n -> n.DirectInnerText(), i)
+      |> Seq.mapi (fun i n -> Helpers.directInnerText n, i)
       |> Map.ofSeq
 
 
@@ -207,7 +208,7 @@ let parse (config: ParseConfig) =
         let methodStart = isMethodSection node
         if methodStart then
           currentMethodNodeIndex <- 0
-          let methodName = node.DirectInnerText()
+          let methodName = Helpers.directInnerText node
           printfn "Processing method %s" methodName
 
           match currentApiType with
@@ -226,7 +227,7 @@ let parse (config: ParseConfig) =
 
         elif currentMethodNodeIndex = 0 && node.Name() = "p" then
           currentMethodNodeIndex <- 1
-          let desc = node.InnerText() 
+          let desc = Helpers.innerText node
           match currentApiType with
           | Some tp ->
             let returnType = parseReturnType desc
