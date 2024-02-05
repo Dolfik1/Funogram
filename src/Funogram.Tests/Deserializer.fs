@@ -61,5 +61,11 @@ let ``Deserializer should work``(): unit =
 }"""
     let input = Encoding.UTF8.GetBytes brokenUpdate
     use stream = new MemoryStream(input)
-    let result = Tools.parseJsonStreamApiResponse<Update[]> stream
-    Assert.True(Result.isOk result)
+    match Tools.parseJsonStreamApiResponse<Update[]> stream with
+    | Error e -> Assert.True(false, e.ToString())
+    | Ok result ->
+
+    let update = Assert.Single result
+    match update.Message with
+    | None -> Assert.True(false, "No message")
+    | Some message -> Assert.Equal(1L, message.MessageId)
