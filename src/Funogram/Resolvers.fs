@@ -1,18 +1,18 @@
 ﻿namespace Funogram
 
 open System
+open System.Collections.Generic
 open System.IO
 open System.Runtime.CompilerServices
 open System.Runtime.Serialization
 open System.Text
-open Utf8Json
+open System.Text.Json
+open System.Text.Json.Serialization
+open TypeShape.Core
 
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 do ()
 module internal Resolvers =
-  
-  open TypeShape.Core
-
   let getSnakeCaseName (name: string) =
     let chars =
       seq {
@@ -30,6 +30,9 @@ module internal Resolvers =
           else yield c
     }
     String.Concat(chars).ToLower()
+
+  let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+  let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
   
   let mkMemberSerializer (case: ShapeFSharpUnionCase<'DeclaringType>) =
     let isFile =
@@ -38,44 +41,60 @@ module internal Resolvers =
         && (case.Fields[1].Member.Type = typeof<Stream> || case.Fields[1].Member.Type = typeof<byte[]>)
     
     if case.Fields.Length = 0 then
-      fun _ _ -> Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
+      fun (writer: Utf8JsonWriter) _ options ->
+        let name = getSnakeCaseName case.CaseInfo.Name
+        writer.WriteStringValue(name)
+        // Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
     else
-      case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> IJsonFormatterResolver -> byte[]> with
+      case.Fields[0].Accept { new IMemberVisitor<'DeclaringType, Utf8JsonWriter -> 'DeclaringType -> JsonSerializerOptions -> unit> with
         member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
-          fun value resolver ->
-            let mutable myWriter = JsonWriter()
-            
+          fun writer value options ->
             if isFile then
               let str = box (shape.Get value) |> unbox<string>
-              myWriter.WriteString(sprintf "attach://%s" str)
+              writer.WriteStringValue($"attach://{str}")
             else
-              resolver.GetFormatterWithVerify<'Field>()
-                .Serialize(&myWriter, shape.Get value, resolver)
-            myWriter.ToUtf8ByteArray()
+              let v = shape.Get value
+              let converter = options.GetConverter(v.GetType())
+              let c = converter :?> JsonConverter<'a>
+              c.Write(writer, v, options)
       }
   
+  [<Interface>]
+  type IUnionDeserializer<'T> =
+    abstract member Deserialize: reader: byref<Utf8JsonReader> * options: JsonSerializerOptions -> 'T
+  
+  type CaseFullDeserializer<'DeclaringType, 'Field>(shape: ShapeMember<'DeclaringType, 'Field>, init: unit -> 'DeclaringType) =
+    member x.Deserialize(reader: byref<Utf8JsonReader>, options: JsonSerializerOptions) =
+      let converter = options.GetConverter(typeof<'DeclaringType>) :?> JsonConverter<'Field>
+      converter.Read(&reader, typeof<'DeclaringType>, options) |> shape.Set (init ())
+
+  type CaseNameDeserializer<'DeclaringType>(init: unit -> 'DeclaringType) =
+    member x.Deserialize(reader: byref<Utf8JsonReader>, options: JsonSerializerOptions) =
+      reader.Read() |> ignore
+      init ()
+
   let mkMemberDeserializer (case: ShapeFSharpUnionCase<'DeclaringType>) (init: unit -> 'DeclaringType) =
     if case.Fields.Length = 0 then
-      fun value offset _ ->
-        let mutable myReader = JsonReader(value, offset)
-        myReader.ReadNext()
-        let offset = myReader.GetCurrentOffsetUnsafe()
-        (init(), offset)
+      { new IUnionDeserializer<'DeclaringType> with
+          member x.Deserialize(reader, _) =
+            //reader.Read() |> ignore
+            init ()
+      }
     else
-      case.Fields.[0].Accept { new IMemberVisitor<'DeclaringType, byte[] -> int -> IJsonFormatterResolver -> ('DeclaringType * int)> with
-        member __.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
-          fun value offset resolver ->
-            let mutable myReader = JsonReader(value, offset)
-            let v =
-              resolver.GetFormatterWithVerify<'Field>()
-                .Deserialize(&myReader, resolver)
-            let offset = myReader.GetCurrentOffsetUnsafe()
-            (shape.Set (init()) v, offset)
-    }
+      case.Fields[0].Accept { new IMemberVisitor<'DeclaringType, IUnionDeserializer<'DeclaringType>> with
+          member x.Visit (shape: ShapeMember<'DeclaringType, 'Field>) =
+            { new IUnionDeserializer<'DeclaringType> with
+                member x.Deserialize(reader, options) =
+                  let converter = options.GetConverter(typeof<'Field>)
+                  let converter = converter :?> JsonConverter<'Field>
+                  converter.Read(&reader, typeof<'Field>, options) |> shape.Set (init ())
+            }
+      }
 
-  type FunogramDiscriminatedUnionFormatter<'a>() =
+  type DiscriminatedUnionConverter<'a>() =
+    inherit JsonConverter<'a>()
     
-    let shape = Core.shapeof<'a>
+    let shape = shapeof<'a>
     let union =
       match shape with
       | Shape.FSharpUnion (:? ShapeFSharpUnion<'a> as union) -> union
@@ -109,7 +128,7 @@ module internal Resolvers =
     
     let serializers =
       union.UnionCases
-      |> Seq.map (fun case -> mkMemberSerializer case)
+      |> Seq.map mkMemberSerializer
       |> Seq.toArray
       
     let deserializers =
@@ -117,111 +136,110 @@ module internal Resolvers =
       |> Seq.map (fun case -> mkMemberDeserializer case case.CreateUninitialized)
       |> Seq.toArray
     
-    // this serializer/deserializer is used to match union case by set of fields
-    interface IJsonFormatter<'a> with
-      member x.Serialize(writer, value, resolver) =
-        let serialize = serializers.[union.GetTag value] // all union cases
-        writer.WriteRaw(serialize value resolver)
-      
-      member x.Deserialize(reader, resolver) =
-        // read list of properties
-        let mutable loop = true
-        
-        let buffer = reader.GetBufferUnsafe()
-        let offset = reader.GetCurrentOffsetUnsafe()
-        
-        let propReader = JsonReader(buffer, offset)
-        let mutable readProperty = false
-        let mutable level = 0
-        let mutable types: Type list = []
-        
-        let (jsonCaseNames, jsonCaseTypes) =
-          (seq {
-            while loop do
-              let token = propReader.GetCurrentJsonToken()
-              
-              if level = 0 && token <> JsonToken.BeginObject && enumUnion |> not then
-                types <-
-                  match token with
-                  | JsonToken.True | JsonToken.False -> [typeof<bool>]
-                  | JsonToken.String ->
-                    [typeof<string>]
-                  | JsonToken.Number -> [typeof<int>;typeof<int64>;typeof<float32>;typeof<float>]
-                  | _ -> failwith "Unknown type!"
-                loop <- false
-              else if enumUnion then
-                yield propReader.ReadString()
-                loop <- false
-              else
-                match token with
-                | JsonToken.BeginObject ->
-                  level <- level + 1
-                  readProperty <- true
-                | JsonToken.EndObject ->
-                  level <- level - 1
-                | JsonToken.ValueSeparator ->
-                  readProperty <- true
-                | JsonToken.None -> loop <- false
-                | _ -> ()
-                
-                if readProperty && level = 1 then
-                  propReader.ReadNext()
-                  yield propReader.ReadPropertyName()
-                  readProperty <- false
-                else if level = 0 then
-                  loop <- false
-                else
-                  readProperty <- false
-                  propReader.ReadNext()
-          } |> Seq.toList, types)
-        
-        let idx =
-          cases
-          |> Array.tryFindIndex (fun (caseNames, tp) ->
-            (jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value))
-            && jsonCaseNames |> Seq.forall (fun n ->
-               caseNames |> Set.contains n))
-        match idx with
-        | Some idx ->
-          let value, newOffset = deserializers.[idx] buffer offset resolver
-          reader.AdvanceOffset(newOffset - offset)
-          value
-        | None ->
-          // try to find most similar type
-          let item =
-            cases |> Array.maxBy (fun (caseNames, tp) ->
-              if jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value) then
-                jsonCaseNames |> Seq.sumBy (fun n -> if caseNames |> Set.contains n then 1 else 0)
-              else
-                -1
-            )
-
-          let idx = cases |> Array.findIndex (fun x -> x = item)
-          let value, newOffset = deserializers.[idx] buffer offset resolver
-          reader.AdvanceOffset(newOffset - offset)
-          value
-          // failwithf "Internal error: Cannot match type \"%s\" by fields. Please create issue on https://github.com/Dolfik1/Funogram/issues" typeof<'a>.FullName
-
-  let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-  let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
-  
-  type FunogramUnixTimestampDateTimeFormatter() =
-    let unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-    interface IJsonFormatter<DateTime> with
-      member x.Serialize(writer, value, _) =
-        writer.WriteInt64(toUnix value)
-              
-      member x.Deserialize(reader, _) =
-        let v = reader.ReadInt64() |> float
-        unixEpoch.AddSeconds(v)
-
-  type FunogramResolver() =
-    interface IJsonFormatterResolver with
-      member x.GetFormatter<'a>(): IJsonFormatter<'a> =
-        match shapeof<'a> with
-        | Shape.FSharpOption _ -> null
-        | Shape.FSharpUnion _ ->    
-          FunogramDiscriminatedUnionFormatter<'a>() :> IJsonFormatter<'a>
-        | _ -> null
+    override x.Write(writer, value, options) =
+      let serialize = serializers[union.GetTag value] // all union cases
+      serialize writer value options
     
-    static member Instance = FunogramResolver()
+    member x.ReadCasesOnly(reader: byref<Utf8JsonReader>) =
+      let mutable types: Type list = []
+      let caseNames = List<string>()
+
+      let reader = reader // copy reader
+      let mutable loop = true
+      let mutable first = true
+      
+      if reader.TokenType = JsonTokenType.StartObject then
+        reader.Read() |> ignore
+      
+      while loop do
+        let token = reader.TokenType
+        if first && not enumUnion then
+          loop <- false
+          types <-
+            match token with
+            | JsonTokenType.True | JsonTokenType.False -> [typeof<bool>]
+            | JsonTokenType.String -> [typeof<string>]
+            | JsonTokenType.Number -> [typeof<int>;typeof<int64>;typeof<float32>;typeof<float>]
+            | _ ->
+              types
+          
+          if types.Length > 0 then
+            loop <- false
+
+          first <- false
+
+        if enumUnion then
+          caseNames.Add(reader.GetString())
+          reader.Read() |> ignore
+          loop <- false
+        else
+          match token with
+          | JsonTokenType.PropertyName ->
+            caseNames.Add(reader.GetString())
+          | JsonTokenType.StartObject
+          | JsonTokenType.StartArray ->
+            reader.Skip()
+          | _ -> ()
+
+          loop <- reader.Read()
+
+      caseNames, types
+    
+    override x.Read(reader, _, options) =
+      // read list of properties
+      let t = typeof<'a>
+      
+      let jsonCaseNames, jsonCaseTypes = x.ReadCasesOnly(&reader)
+
+      let idx =
+        cases
+        |> Array.tryFindIndex (fun (caseNames, tp) ->
+          (jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value))
+          && jsonCaseNames |> Seq.forall (fun n ->
+             caseNames |> Set.contains n))
+      
+      match idx with
+      | Some idx ->
+        deserializers[idx].Deserialize(&reader, options)
+      | None ->
+        // try to find most similar type
+        let item =
+          cases |> Array.maxBy (fun (caseNames, tp) ->
+            if jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value) then
+              jsonCaseNames |> Seq.sumBy (fun n -> if caseNames |> Set.contains n then 1 else 0)
+            else
+              -1
+          )
+      
+        let idx = cases |> Array.findIndex (fun x -> x = item)
+        deserializers[idx].Deserialize(&reader, options)
+    
+    override x.CanConvert(typeToConvert) =
+      match TypeShape.Create(typeToConvert) with
+      | Shape.FSharpOption _ -> false
+      | Shape.FSharpUnion _ -> true
+      | _ -> false
+
+  type DiscriminatedUnionConverterFactory() =
+    inherit JsonConverterFactory()
+
+    override x.CreateConverter(typeToConvert, options) =
+      let g = typedefof<DiscriminatedUnionConverter<_>>.MakeGenericType(typeToConvert)
+      Activator.CreateInstance(g) :?> JsonConverter
+      
+    override x.CanConvert(typeToConvert) =
+      match TypeShape.Create(typeToConvert) with
+      | Shape.FSharpOption _ -> false
+      | Shape.FSharpUnion _ -> true
+      | _ -> false
+
+  type UnixTimestampDateTimeConverter() =
+    inherit JsonConverter<DateTime>()
+    let unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+
+    override x.Read(reader, _, _) =
+      let v = reader.GetInt64() |> float
+      unixEpoch.AddSeconds(v)
+      
+    override x.Write(writer, value, _) =
+      writer.WriteNumberValue(toUnix value)
