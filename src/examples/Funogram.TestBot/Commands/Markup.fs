@@ -18,7 +18,8 @@ let testRemoveKeyboard config chatId =
 let testInlineKeyboard config chatId =
   let keyboard =
     [|
-       [| InlineKeyboardButton.Create("Test", callbackData = "1234") |]
+       [| InlineKeyboardButton.Create("Test", callbackData = "callback1") |]
+       [| InlineKeyboardButton.Create("Replace", callbackData = "callback2") |]
     |]
   let markup = Markup.InlineKeyboardMarkup { InlineKeyboard = keyboard }
   sendMessageMarkup "That's inline keyboard!" markup config chatId
