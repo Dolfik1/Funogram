@@ -16,24 +16,8 @@ do ()
 open System.Collections.Concurrent
 open System.IO
 open System.Linq.Expressions
-open Funogram.Resolvers
+open Funogram.Converters
 open TypeShape.Core
-//
-// let internal formatters: IJsonFormatter[] = [|
-//   FunogramUnixTimestampDateTimeFormatter()
-// |]
-//
-// let internal resolvers: IJsonFormatterResolver[] =[|
-//   FunogramResolver.Instance
-//   FSharpResolver.Instance
-//   StandardResolver.ExcludeNullSnakeCase
-// |]
-//
-// let internal resolver =
-//   Resolvers.CompositeResolver.Create(
-//     formatters,
-//     resolvers
-//   )
 
 let internal options =
   let o =
@@ -82,7 +66,7 @@ let internal parseJsonStream<'a> (data: Stream) =
       let message = sprintf "%s in %s" ex.Message (sr.ReadToEnd())
       ArgumentException(message, ex) :> Exception |> Result.Error
     else
-      Exception("Can't parse json") |> Result.Error
+      Exception("Unable to parse json") |> Result.Error
 
 let internal parseJsonStreamApiResponse<'a> (data: Stream) =
   match parseJsonStream<ApiResponse<'a>> data with
@@ -334,7 +318,7 @@ module Api =
       fun (x: 'T) prop data ->
         if String.IsNullOrEmpty(prop) then
           fieldPrinters
-          |> Array.map (fun (prop, fp) -> fp x (getSnakeCaseName prop) data)
+          |> Array.map (fun (prop, fp) -> fp x (StringUtils.toSnakeCase prop) data)
           |> Array.contains true
         else
           let json = toJson x
@@ -394,7 +378,7 @@ module Api =
           else None
         
         if isEnum then
-          let name = getSnakeCaseName case.CaseInfo.Name
+          let name = StringUtils.toSnakeCase case.CaseInfo.Name
           fun _ (prop: string) (data: MultipartFormDataContent) ->
             data.Add(strf "%s" name, prop) $ true
         else
@@ -416,7 +400,7 @@ module Api =
       let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
       fun (u:'T) ->
         let tag : int = shape.GetTag u // get the underlying tag for the union case
-        casePrinters.[tag] u
+        casePrinters[tag] u
     | _ ->
       fun _ _ _ -> false
   

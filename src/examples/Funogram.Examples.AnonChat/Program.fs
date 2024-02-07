@@ -62,7 +62,7 @@ let usersState =
                 state
               elif state.SearchUsers.Length > 0 then
                 let idx = rnd.Next(0, state.SearchUsers.Length - 1)
-                let newTalkerId = state.SearchUsers.[idx]
+                let newTalkerId = state.SearchUsers[idx]
                 
                 
                 sendMessage from.Id anonFoundText ctx

@@ -69,7 +69,7 @@ let generateMakeMethodSignature apiType (fields: ApiTypeField[]) convertFn code 
   fields
   |> Seq.fold (fun code tp ->
     let o = if tp.IsOptional then "?" else ""
-    let c = if fields.[0] <> tp then ", " else ""
+    let c = if fields[0] <> tp then ", " else ""
 
     let argName = Helpers.toCamelCase tp.OriginalName |> Helpers.fixReservedKeywords
     let argType = convertFn tp
@@ -89,7 +89,7 @@ let generateMakeMethodInvocation apiType (fields: ApiTypeField[]) convertFn code
     
   fields
   |> Seq.fold (fun code tp ->
-    let c = if fields.[0] <> tp then ", " else ""
+    let c = if fields[0] <> tp then ", " else ""
 
     let argNameOriginal = Helpers.toCamelCase tp.OriginalName |> Helpers.fixReservedKeywords
     let argName = convertFn tp argNameOriginal
@@ -105,7 +105,7 @@ let generateMakeMethodInvocation apiType (fields: ApiTypeField[]) convertFn code
   |> Code.print ")"
 
 let generateMakeMethodOverloads apiType (fields: ApiTypeField[]) code =
-  if fields.Length = 0 || (fields.[0].ConvertedFieldType <> "ChatId") then
+  if fields.Length = 0 || (fields[0].ConvertedFieldType <> "ChatId") then
     code
   else
     let convertFieldSignatureType replaceType (tp: ApiTypeField) =

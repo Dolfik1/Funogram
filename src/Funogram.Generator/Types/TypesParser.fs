@@ -55,7 +55,7 @@ let private splitCaseNameAndType (typeName: string) (nameAndType: string) =
 
 let private isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
   let name = Helpers.innerText typeNodeInfo.TypeName
-  Char.IsUpper name.[0] && (name.Replace(" ", "").Length = name.Length)
+  Char.IsUpper name[0] && (name.Replace(" ", "").Length = name.Length)
 
 let private setConvertedFieldType (field: ApiTypeField) =
   { field with ConvertedFieldType = Helpers.convertTLTypeToFSharpType field.OriginalFieldType field.Description false }
@@ -66,14 +66,14 @@ let private parseApiTypeFields apiTypeName (node: HtmlNode) =
   |> Seq.map (fun n -> n.Elements()) 
   |> Seq.filter (fun e -> e.Length = 3)
   |> Seq.map (fun elements ->
-    let desc = Helpers.innerText elements.[2]
+    let desc = Helpers.innerText elements[2]
     let optionalIndex = desc.IndexOf("Optional. ") 
     let trimmedDesc = if optionalIndex >= 0 then desc.Substring(10) else desc
     {
-      OriginalName = Helpers.innerText elements.[0]
-      ConvertedName = elements.[0] |> Helpers.innerText |> Helpers.toPascalCase
+      OriginalName = Helpers.innerText elements[0]
+      ConvertedName = elements[0] |> Helpers.innerText |> Helpers.toPascalCase
       Description = trimmedDesc
-      OriginalFieldType = Helpers.innerText elements.[1]
+      OriginalFieldType = Helpers.innerText elements[1]
       ConvertedFieldType = ""
       Optional = Some (optionalIndex >= 0)
     } |> setConvertedFieldType

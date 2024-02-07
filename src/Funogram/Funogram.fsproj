@@ -18,7 +18,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Types.fs" />
-    <Compile Include="Resolvers.fs" />
+    <Compile Include="StringUtils.fs" />
+    <Compile Include="Converters.fs" />
     <Compile Include="Tools.fs" />
     <Compile Include="Api.fs" />
   </ItemGroup>

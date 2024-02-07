@@ -93,12 +93,12 @@ let private isMethodSection (node: HtmlNode) =
   if node.Name() = "h4" then
     let text = Helpers.directInnerText node
     let onlyLetters = text |> Seq.forall Char.IsLetter
-    onlyLetters && text.Length > 0 && Char.IsLower text.[0]
+    onlyLetters && text.Length > 0 && Char.IsLower text[0]
   else
     false
 
 let inline private tryFindField (elements: HtmlNode list) (m: Map<string, int>) name =
-  m |> Map.tryFind name |> Option.map (fun i -> Helpers.innerText elements.[i])
+  m |> Map.tryFind name |> Option.map (fun i -> Helpers.innerText elements[i])
 
 let inline private defaultFieldValue v =
   match v with

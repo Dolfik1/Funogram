@@ -5,31 +5,14 @@ open System.Collections.Generic
 open System.IO
 open System.Runtime.CompilerServices
 open System.Runtime.Serialization
-open System.Text
 open System.Text.Json
 open System.Text.Json.Serialization
 open TypeShape.Core
 
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 do ()
-module internal Resolvers =
-  let getSnakeCaseName (name: string) =
-    let chars =
-      seq {
-        let chars = name.ToCharArray()
-        for i in 0 .. chars.Length - 1 do
-          let c = chars.[i]
-          if Char.IsUpper(c) then
-            if i = 0 then
-              yield Char.ToLowerInvariant(c)
-            else if (Char.IsUpper(chars.[i - 1])) then
-              yield Char.ToLowerInvariant(c)
-            else
-              yield '_'
-              yield Char.ToLowerInvariant(c)
-          else yield c
-    }
-    String.Concat(chars).ToLower()
+module internal Converters =
+  open Funogram.StringUtils
 
   let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
   let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
@@ -41,10 +24,9 @@ module internal Resolvers =
         && (case.Fields[1].Member.Type = typeof<Stream> || case.Fields[1].Member.Type = typeof<byte[]>)
     
     if case.Fields.Length = 0 then
-      fun (writer: Utf8JsonWriter) _ options ->
-        let name = getSnakeCaseName case.CaseInfo.Name
+      fun (writer: Utf8JsonWriter) _ _ ->
+        let name = toSnakeCase case.CaseInfo.Name
         writer.WriteStringValue(name)
-        // Encoding.UTF8.GetBytes(getSnakeCaseName case.CaseInfo.Name |> sprintf "\"%s\"")
     else
       case.Fields[0].Accept { new IMemberVisitor<'DeclaringType, Utf8JsonWriter -> 'DeclaringType -> JsonSerializerOptions -> unit> with
         member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
@@ -69,7 +51,7 @@ module internal Resolvers =
       converter.Read(&reader, typeof<'DeclaringType>, options) |> shape.Set (init ())
 
   type CaseNameDeserializer<'DeclaringType>(init: unit -> 'DeclaringType) =
-    member x.Deserialize(reader: byref<Utf8JsonReader>, options: JsonSerializerOptions) =
+    member x.Deserialize(reader: byref<Utf8JsonReader>, _: JsonSerializerOptions) =
       reader.Read() |> ignore
       init ()
 
@@ -114,14 +96,14 @@ module internal Resolvers =
           
           let name =
             if dataMember.Length > 0
-            then dataMember.[0].Name
-            else c.CaseInfo.Name |> getSnakeCaseName
+            then dataMember[0].Name
+            else c.CaseInfo.Name |> toSnakeCase
           (Set.ofList [name], None)
         else
-          let tp = c.Fields.[0].Member.Type
+          let tp = c.Fields[0].Member.Type
           if tp.IsPrimitive then (Set.empty, Some tp)
           else (tp.GetProperties()
-                |> Seq.map(fun x -> x.Name |> getSnakeCaseName)
+                |> Seq.map(fun x -> x.Name |> toSnakeCase)
                 |> Set.ofSeq,
                 None))
       |> Seq.toArray
@@ -186,9 +168,6 @@ module internal Resolvers =
       caseNames, types
     
     override x.Read(reader, _, options) =
-      // read list of properties
-      let t = typeof<'a>
-      
       let jsonCaseNames, jsonCaseTypes = x.ReadCasesOnly(&reader)
 
       let idx =
@@ -223,7 +202,7 @@ module internal Resolvers =
   type DiscriminatedUnionConverterFactory() =
     inherit JsonConverterFactory()
 
-    override x.CreateConverter(typeToConvert, options) =
+    override x.CreateConverter(typeToConvert, _) =
       let g = typedefof<DiscriminatedUnionConverter<_>>.MakeGenericType(typeToConvert)
       Activator.CreateInstance(g) :?> JsonConverter
       
