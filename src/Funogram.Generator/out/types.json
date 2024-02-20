@@ -554,7 +554,15 @@
           {
             "OriginalName": "slow_mode_delay",
             "ConvertedName": "SlowModeDelay",
-            "Description": "For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user; in seconds. Returned only in getChat.",
+            "Description": "For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds. Returned only in getChat.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "unrestrict_boost_count",
+            "ConvertedName": "UnrestrictBoostCount",
+            "Description": "For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -616,6 +624,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "custom_emoji_sticker_set_name",
+            "ConvertedName": "CustomEmojiStickerSetName",
+            "Description": "For supergroups, the name of the group\u0027s custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
             "OriginalName": "linked_chat_id",
             "ConvertedName": "LinkedChatId",
             "Description": "Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.",
@@ -672,6 +688,14 @@
             "Description": "Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.",
             "OriginalFieldType": "Chat",
             "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
+            "OriginalName": "sender_boost_count",
+            "ConvertedName": "SenderBoostCount",
+            "Description": "If the sender of the message boosted the chat, the number of boosts added by the user",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -736,6 +760,14 @@
             "Description": "For replies that quote part of the original message, the quoted part of the message",
             "OriginalFieldType": "TextQuote",
             "ConvertedFieldType": "TextQuote",
+            "Optional": true
+          },
+          {
+            "OriginalName": "reply_to_story",
+            "ConvertedName": "ReplyToStory",
+            "Description": "For replies to a story, the original story",
+            "OriginalFieldType": "Story",
+            "ConvertedFieldType": "Story",
             "Optional": true
           },
           {
@@ -1104,6 +1136,14 @@
             "Description": "Service message. A user in the chat triggered another user\u0027s proximity alert while sharing Live Location.",
             "OriginalFieldType": "ProximityAlertTriggered",
             "ConvertedFieldType": "ProximityAlertTriggered",
+            "Optional": true
+          },
+          {
+            "OriginalName": "boost_added",
+            "ConvertedName": "BoostAdded",
+            "Description": "Service message: user boosted the chat",
+            "OriginalFieldType": "ChatBoostAdded",
+            "ConvertedFieldType": "ChatBoostAdded",
             "Optional": true
           },
           {
@@ -2152,9 +2192,29 @@
   },
   {
     "Name": "Story",
-    "Description": "This object represents a message about a forwarded story in the chat. Currently holds no information.",
+    "Description": "This object represents a story.",
     "Kind": {
-      "Case": "Stub"
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat that posted the story",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier for the story in the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
     }
   },
   {
@@ -2621,14 +2681,6 @@
       "Fields": [
         [
           {
-            "OriginalName": "longitude",
-            "ConvertedName": "Longitude",
-            "Description": "Longitude as defined by sender",
-            "OriginalFieldType": "Float",
-            "ConvertedFieldType": "float",
-            "Optional": false
-          },
-          {
             "OriginalName": "latitude",
             "ConvertedName": "Latitude",
             "Description": "Latitude as defined by sender",
@@ -2637,10 +2689,18 @@
             "Optional": false
           },
           {
+            "OriginalName": "longitude",
+            "ConvertedName": "Longitude",
+            "Description": "Longitude as defined by sender",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
             "OriginalName": "horizontal_accuracy",
             "ConvertedName": "HorizontalAccuracy",
             "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": true
           },
@@ -2812,6 +2872,25 @@
             "OriginalName": "message_auto_delete_time",
             "ConvertedName": "MessageAutoDeleteTime",
             "Description": "New auto-delete time for messages in the chat; in seconds",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBoostAdded",
+    "Description": "This object represents a service message about a user boosting a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "boost_count",
+            "ConvertedName": "BoostCount",
+            "Description": "Number of boosts added by the user",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -3163,7 +3242,7 @@
           {
             "OriginalName": "giveaway_message_id",
             "ConvertedName": "GiveawayMessageId",
-            "Description": "Identifier of the messsage with the giveaway in the chat",
+            "Description": "Identifier of the message with the giveaway in the chat",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -3305,7 +3384,7 @@
           {
             "OriginalName": "prefer_small_media",
             "ConvertedName": "PreferSmallMedia",
-            "Description": "True, if the media in the link preview is suppposed to be shrunk; ignored if the URL isn\u0027t explicitly specified or media size change isn\u0027t supported for the preview",
+            "Description": "True, if the media in the link preview is supposed to be shrunk; ignored if the URL isn\u0027t explicitly specified or media size change isn\u0027t supported for the preview",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3313,7 +3392,7 @@
           {
             "OriginalName": "prefer_large_media",
             "ConvertedName": "PreferLargeMedia",
-            "Description": "True, if the media in the link preview is suppposed to be enlarged; ignored if the URL isn\u0027t explicitly specified or media size change isn\u0027t supported for the preview",
+            "Description": "True, if the media in the link preview is supposed to be enlarged; ignored if the URL isn\u0027t explicitly specified or media size change isn\u0027t supported for the preview",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -4159,7 +4238,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "Description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -4213,6 +4292,30 @@
             "Optional": false
           },
           {
+            "OriginalName": "can_post_stories",
+            "ConvertedName": "CanPostStories",
+            "Description": "True, if the administrator can post stories to the chat",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_edit_stories",
+            "ConvertedName": "CanEditStories",
+            "Description": "True, if the administrator can edit stories posted by other users",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_delete_stories",
+            "ConvertedName": "CanDeleteStories",
+            "Description": "True, if the administrator can delete stories posted by other users",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
             "Description": "True, if the administrator can post messages in the channel, or access channel statistics; channels only",
@@ -4232,30 +4335,6 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages; groups and supergroups only",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
-            "OriginalName": "can_post_stories",
-            "ConvertedName": "CanPostStories",
-            "Description": "True, if the administrator can post stories in the channel; channels only",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
-            "OriginalName": "can_edit_stories",
-            "ConvertedName": "CanEditStories",
-            "Description": "True, if the administrator can edit stories posted by other users; channels only",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
-            "OriginalName": "can_delete_stories",
-            "ConvertedName": "CanDeleteStories",
-            "Description": "True, if the administrator can delete stories posted by other users; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -4467,7 +4546,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+            "Description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -4521,6 +4600,30 @@
             "Optional": false
           },
           {
+            "OriginalName": "can_post_stories",
+            "ConvertedName": "CanPostStories",
+            "Description": "True, if the administrator can post stories to the chat",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_edit_stories",
+            "ConvertedName": "CanEditStories",
+            "Description": "True, if the administrator can edit stories posted by other users",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "can_delete_stories",
+            "ConvertedName": "CanDeleteStories",
+            "Description": "True, if the administrator can delete stories posted by other users",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
             "Description": "True, if the administrator can post messages in the channel, or access channel statistics; channels only",
@@ -4540,30 +4643,6 @@
             "OriginalName": "can_pin_messages",
             "ConvertedName": "CanPinMessages",
             "Description": "True, if the user is allowed to pin messages; groups and supergroups only",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
-            "OriginalName": "can_post_stories",
-            "ConvertedName": "CanPostStories",
-            "Description": "True, if the administrator can post stories in the channel; channels only",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
-            "OriginalName": "can_edit_stories",
-            "ConvertedName": "CanEditStories",
-            "Description": "True, if the administrator can edit stories posted by other users; channels only",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
-            "OriginalName": "can_delete_stories",
-            "ConvertedName": "CanDeleteStories",
-            "Description": "True, if the administrator can delete stories posted by other users; channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -5867,7 +5946,7 @@
           {
             "OriginalName": "boost",
             "ConvertedName": "Boost",
-            "Description": "Infomation about the chat boost",
+            "Description": "Information about the chat boost",
             "OriginalFieldType": "ChatBoost",
             "ConvertedFieldType": "ChatBoost",
             "Optional": false
@@ -6619,7 +6698,7 @@
             "OriginalName": "x_shift",
             "ConvertedName": "XShift",
             "Description": "Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position.",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
           },
@@ -6627,7 +6706,7 @@
             "OriginalName": "y_shift",
             "ConvertedName": "YShift",
             "Description": "Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will place the mask just below the default mask position.",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
           },
@@ -6635,7 +6714,7 @@
             "OriginalName": "scale",
             "ConvertedName": "Scale",
             "Description": "Mask scaling coefficient. For example, 2.0 means double size.",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
           }
@@ -7802,7 +7881,7 @@
             "OriginalName": "latitude",
             "ConvertedName": "Latitude",
             "Description": "Location latitude in degrees",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
           },
@@ -7810,7 +7889,7 @@
             "OriginalName": "longitude",
             "ConvertedName": "Longitude",
             "Description": "Location longitude in degrees",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
           },
@@ -7826,7 +7905,7 @@
             "OriginalName": "horizontal_accuracy",
             "ConvertedName": "HorizontalAccuracy",
             "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": true
           },
@@ -8920,7 +8999,7 @@
             "OriginalName": "horizontal_accuracy",
             "ConvertedName": "HorizontalAccuracy",
             "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-            "OriginalFieldType": "Float number",
+            "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": true
           },

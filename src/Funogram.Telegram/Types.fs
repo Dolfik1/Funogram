@@ -332,9 +332,12 @@ and [<CLIMutable>] Chat =
     /// Default chat member permissions, for groups and supergroups. Returned only in getChat.
     [<DataMember(Name = "permissions")>]
     Permissions: ChatPermissions option
-    /// For supergroups, the minimum allowed delay between consecutive messages sent by each unpriviledged user; in seconds. Returned only in getChat.
+    /// For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds. Returned only in getChat.
     [<DataMember(Name = "slow_mode_delay")>]
     SlowModeDelay: int64 option
+    /// For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat.
+    [<DataMember(Name = "unrestrict_boost_count")>]
+    UnrestrictBoostCount: int64 option
     /// The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in getChat.
     [<DataMember(Name = "message_auto_delete_time")>]
     MessageAutoDeleteTime: int64 option
@@ -356,6 +359,9 @@ and [<CLIMutable>] Chat =
     /// True, if the bot can change the group sticker set. Returned only in getChat.
     [<DataMember(Name = "can_set_sticker_set")>]
     CanSetStickerSet: bool option
+    /// For supergroups, the name of the group's custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat.
+    [<DataMember(Name = "custom_emoji_sticker_set_name")>]
+    CustomEmojiStickerSetName: string option
     /// Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.
     [<DataMember(Name = "linked_chat_id")>]
     LinkedChatId: int64 option
@@ -363,16 +369,16 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?bio: string, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?linkedChatId: int64, ?activeUsernames: string[], ?accentColorId: int64, ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?availableReactions: ReactionType[], ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?slowModeDelay: int64, ?unrestrictBoostCount: int64, ?messageAutoDeleteTime: int64, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?availableReactions: ReactionType[], ?accentColorId: int64, ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?bio: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
-      JoinByRequest = joinByRequest
       Description = description
       InviteLink = inviteLink
       PinnedMessage = pinnedMessage
       Permissions = permissions
       SlowModeDelay = slowModeDelay
+      UnrestrictBoostCount = unrestrictBoostCount
       MessageAutoDeleteTime = messageAutoDeleteTime
       HasAggressiveAntiSpamEnabled = hasAggressiveAntiSpamEnabled
       HasHiddenMembers = hasHiddenMembers
@@ -380,25 +386,27 @@ and [<CLIMutable>] Chat =
       HasVisibleHistory = hasVisibleHistory
       StickerSetName = stickerSetName
       CanSetStickerSet = canSetStickerSet
+      CustomEmojiStickerSetName = customEmojiStickerSetName
+      JoinByRequest = joinByRequest
       JoinToSendMessages = joinToSendMessages
       HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasPrivateForwards = hasPrivateForwards
-      Bio = bio
       Title = title
       Username = username
       FirstName = firstName
       LastName = lastName
       IsForum = isForum
       Photo = photo
-      LinkedChatId = linkedChatId
       ActiveUsernames = activeUsernames
+      AvailableReactions = availableReactions
       AccentColorId = accentColorId
       BackgroundCustomEmojiId = backgroundCustomEmojiId
       ProfileAccentColorId = profileAccentColorId
       ProfileBackgroundCustomEmojiId = profileBackgroundCustomEmojiId
       EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
       EmojiStatusExpirationDate = emojiStatusExpirationDate
-      AvailableReactions = availableReactions
+      Bio = bio
+      LinkedChatId = linkedChatId
       Location = location
     }
 
@@ -417,6 +425,9 @@ and [<CLIMutable>] Message =
     /// Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
     [<DataMember(Name = "sender_chat")>]
     SenderChat: Chat option
+    /// If the sender of the message boosted the chat, the number of boosts added by the user
+    [<DataMember(Name = "sender_boost_count")>]
+    SenderBoostCount: int64 option
     /// Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     [<DataMember(Name = "date")>]
     Date: DateTime
@@ -441,6 +452,9 @@ and [<CLIMutable>] Message =
     /// For replies that quote part of the original message, the quoted part of the message
     [<DataMember(Name = "quote")>]
     Quote: TextQuote option
+    /// For replies to a story, the original story
+    [<DataMember(Name = "reply_to_story")>]
+    ReplyToStory: Story option
     /// Bot through which the message was sent
     [<DataMember(Name = "via_bot")>]
     ViaBot: User option
@@ -579,6 +593,9 @@ and [<CLIMutable>] Message =
     /// Service message. A user in the chat triggered another user's proximity alert while sharing Live Location.
     [<DataMember(Name = "proximity_alert_triggered")>]
     ProximityAlertTriggered: ProximityAlertTriggered option
+    /// Service message: user boosted the chat
+    [<DataMember(Name = "boost_added")>]
+    BoostAdded: ChatBoostAdded option
     /// Service message: forum topic created
     [<DataMember(Name = "forum_topic_created")>]
     ForumTopicCreated: ForumTopicCreated option
@@ -628,7 +645,7 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?chatShared: ChatShared, ?usersShared: UsersShared, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?leftChatMember: User, ?giveaway: Giveaway, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?giveawayCreated: GiveawayCreated, ?newChatMembers: User[], ?venue: Venue, ?webAppData: WebAppData, ?authorSignature: string, ?mediaGroupId: string, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?quote: TextQuote, ?text: string, ?externalReply: ExternalReplyInfo, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?replyToMessage: Message, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?animation: Animation, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?location: Location, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?chatShared: ChatShared, ?usersShared: UsersShared, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?channelChatCreated: bool, ?connectedWebsite: string, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?boostAdded: ChatBoostAdded, ?newChatMembers: User[], ?location: Location, ?venue: Venue, ?poll: Poll, ?mediaGroupId: string, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?authorSignature: string, ?webAppData: WebAppData, ?text: string, ?linkPreviewOptions: LinkPreviewOptions, ?game: Game, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
@@ -640,14 +657,15 @@ and [<CLIMutable>] Message =
       PinnedMessage = pinnedMessage
       MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
-      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       ChannelChatCreated = channelChatCreated
+      ConnectedWebsite = connectedWebsite
       SupergroupChatCreated = supergroupChatCreated
       GroupChatCreated = groupChatCreated
       DeleteChatPhoto = deleteChatPhoto
       NewChatPhoto = newChatPhoto
       NewChatTitle = newChatTitle
-      ConnectedWebsite = connectedWebsite
+      LeftChatMember = leftChatMember
+      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       WriteAccessAllowed = writeAccessAllowed
       PassportData = passportData
       ProximityAlertTriggered = proximityAlertTriggered
@@ -657,37 +675,38 @@ and [<CLIMutable>] Message =
       VideoChatScheduled = videoChatScheduled
       GiveawayCompleted = giveawayCompleted
       GiveawayWinners = giveawayWinners
-      LeftChatMember = leftChatMember
       Giveaway = giveaway
+      GiveawayCreated = giveawayCreated
       GeneralForumTopicUnhidden = generalForumTopicUnhidden
       GeneralForumTopicHidden = generalForumTopicHidden
       ForumTopicReopened = forumTopicReopened
       ForumTopicClosed = forumTopicClosed
       ForumTopicEdited = forumTopicEdited
       ForumTopicCreated = forumTopicCreated
-      GiveawayCreated = giveawayCreated
+      BoostAdded = boostAdded
       NewChatMembers = newChatMembers
+      Location = location
       Venue = venue
-      WebAppData = webAppData
-      AuthorSignature = authorSignature
+      Poll = poll
       MediaGroupId = mediaGroupId
       HasProtectedContent = hasProtectedContent
       EditDate = editDate
       ViaBot = viaBot
+      ReplyToStory = replyToStory
       Quote = quote
-      Text = text
       ExternalReply = externalReply
+      ReplyToMessage = replyToMessage
       IsAutomaticForward = isAutomaticForward
       IsTopicMessage = isTopicMessage
       ForwardOrigin = forwardOrigin
+      SenderBoostCount = senderBoostCount
       SenderChat = senderChat
       From = from
       MessageThreadId = messageThreadId
-      ReplyToMessage = replyToMessage
-      Entities = entities
+      AuthorSignature = authorSignature
+      WebAppData = webAppData
+      Text = text
       LinkPreviewOptions = linkPreviewOptions
-      Animation = animation
-      Poll = poll
       Game = game
       Dice = dice
       Contact = contact
@@ -702,7 +721,8 @@ and [<CLIMutable>] Message =
       Photo = photo
       Document = document
       Audio = audio
-      Location = location
+      Animation = animation
+      Entities = entities
       ReplyMarkup = replyMarkup
     }
 
@@ -1186,9 +1206,21 @@ and [<CLIMutable>] Document =
       FileSize = fileSize
     }
 
-/// This object represents a message about a forwarded story in the chat. Currently holds no information.
-and Story =
-  new() = {}
+/// This object represents a story.
+and [<CLIMutable>] Story =
+  {
+    /// Chat that posted the story
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique identifier for the story in the chat
+    [<DataMember(Name = "id")>]
+    Id: int64
+  }
+  static member Create(chat: Chat, id: int64) = 
+    {
+      Chat = chat
+      Id = id
+    }
 
 /// This object represents a video file.
 and [<CLIMutable>] Video =
@@ -1441,12 +1473,12 @@ and [<CLIMutable>] Poll =
 /// This object represents a point on the map.
 and [<CLIMutable>] Location =
   {
-    /// Longitude as defined by sender
-    [<DataMember(Name = "longitude")>]
-    Longitude: float
     /// Latitude as defined by sender
     [<DataMember(Name = "latitude")>]
     Latitude: float
+    /// Longitude as defined by sender
+    [<DataMember(Name = "longitude")>]
+    Longitude: float
     /// The radius of uncertainty for the location, measured in meters; 0-1500
     [<DataMember(Name = "horizontal_accuracy")>]
     HorizontalAccuracy: float option
@@ -1460,10 +1492,10 @@ and [<CLIMutable>] Location =
     [<DataMember(Name = "proximity_alert_radius")>]
     ProximityAlertRadius: int64 option
   }
-  static member Create(longitude: float, latitude: float, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64) = 
+  static member Create(latitude: float, longitude: float, ?horizontalAccuracy: float, ?livePeriod: int64, ?heading: int64, ?proximityAlertRadius: int64) = 
     {
-      Longitude = longitude
       Latitude = latitude
+      Longitude = longitude
       HorizontalAccuracy = horizontalAccuracy
       LivePeriod = livePeriod
       Heading = heading
@@ -1552,6 +1584,18 @@ and [<CLIMutable>] MessageAutoDeleteTimerChanged =
   static member Create(messageAutoDeleteTime: int64) = 
     {
       MessageAutoDeleteTime = messageAutoDeleteTime
+    }
+
+/// This object represents a service message about a user boosting a chat.
+and [<CLIMutable>] ChatBoostAdded =
+  {
+    /// Number of boosts added by the user
+    [<DataMember(Name = "boost_count")>]
+    BoostCount: int64
+  }
+  static member Create(boostCount: int64) = 
+    {
+      BoostCount = boostCount
     }
 
 /// This object represents a service message about a new forum topic created in the chat.
@@ -1748,7 +1792,7 @@ and [<CLIMutable>] GiveawayWinners =
     /// The chat that created the giveaway
     [<DataMember(Name = "chat")>]
     Chat: Chat
-    /// Identifier of the messsage with the giveaway in the chat
+    /// Identifier of the message with the giveaway in the chat
     [<DataMember(Name = "giveaway_message_id")>]
     GiveawayMessageId: int64
     /// Point in time (Unix timestamp) when winners of the giveaway were selected
@@ -1823,10 +1867,10 @@ and [<CLIMutable>] LinkPreviewOptions =
     /// URL to use for the link preview. If empty, then the first URL found in the message text will be used
     [<DataMember(Name = "url")>]
     Url: string option
-    /// True, if the media in the link preview is suppposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
+    /// True, if the media in the link preview is supposed to be shrunk; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
     [<DataMember(Name = "prefer_small_media")>]
     PreferSmallMedia: bool option
-    /// True, if the media in the link preview is suppposed to be enlarged; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
+    /// True, if the media in the link preview is supposed to be enlarged; ignored if the URL isn't explicitly specified or media size change isn't supported for the preview
     [<DataMember(Name = "prefer_large_media")>]
     PreferLargeMedia: bool option
     /// True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text
@@ -2310,7 +2354,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user's presence in the chat is hidden
     [<DataMember(Name = "is_anonymous")>]
     IsAnonymous: bool
-    /// True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    /// True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
     [<DataMember(Name = "can_manage_chat")>]
     CanManageChat: bool
     /// True, if the administrator can delete messages of other users
@@ -2331,6 +2375,15 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to invite new users to the chat
     [<DataMember(Name = "can_invite_users")>]
     CanInviteUsers: bool
+    /// True, if the administrator can post stories to the chat
+    [<DataMember(Name = "can_post_stories")>]
+    CanPostStories: bool
+    /// True, if the administrator can edit stories posted by other users
+    [<DataMember(Name = "can_edit_stories")>]
+    CanEditStories: bool
+    /// True, if the administrator can delete stories posted by other users
+    [<DataMember(Name = "can_delete_stories")>]
+    CanDeleteStories: bool
     /// True, if the administrator can post messages in the channel, or access channel statistics; channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
@@ -2340,15 +2393,6 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
-    /// True, if the administrator can post stories in the channel; channels only
-    [<DataMember(Name = "can_post_stories")>]
-    CanPostStories: bool option
-    /// True, if the administrator can edit stories posted by other users; channels only
-    [<DataMember(Name = "can_edit_stories")>]
-    CanEditStories: bool option
-    /// True, if the administrator can delete stories posted by other users; channels only
-    [<DataMember(Name = "can_delete_stories")>]
-    CanDeleteStories: bool option
     /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
@@ -2356,7 +2400,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canPostStories: bool, ?canEditStories: bool, ?canDeleteStories: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, canPostStories: bool, canEditStories: bool, canDeleteStories: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       IsAnonymous = isAnonymous
       CanManageChat = canManageChat
@@ -2366,12 +2410,12 @@ and [<CLIMutable>] ChatAdministratorRights =
       CanPromoteMembers = canPromoteMembers
       CanChangeInfo = canChangeInfo
       CanInviteUsers = canInviteUsers
-      CanPostMessages = canPostMessages
-      CanEditMessages = canEditMessages
-      CanPinMessages = canPinMessages
       CanPostStories = canPostStories
       CanEditStories = canEditStories
       CanDeleteStories = canDeleteStories
+      CanPostMessages = canPostMessages
+      CanEditMessages = canEditMessages
+      CanPinMessages = canPinMessages
       CanManageTopics = canManageTopics
       CanManageVoiceChats = canManageVoiceChats
     }
@@ -2460,7 +2504,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user's presence in the chat is hidden
     [<DataMember(Name = "is_anonymous")>]
     IsAnonymous: bool
-    /// True, if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege
+    /// True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
     [<DataMember(Name = "can_manage_chat")>]
     CanManageChat: bool
     /// True, if the administrator can delete messages of other users
@@ -2481,6 +2525,15 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user is allowed to invite new users to the chat
     [<DataMember(Name = "can_invite_users")>]
     CanInviteUsers: bool
+    /// True, if the administrator can post stories to the chat
+    [<DataMember(Name = "can_post_stories")>]
+    CanPostStories: bool
+    /// True, if the administrator can edit stories posted by other users
+    [<DataMember(Name = "can_edit_stories")>]
+    CanEditStories: bool
+    /// True, if the administrator can delete stories posted by other users
+    [<DataMember(Name = "can_delete_stories")>]
+    CanDeleteStories: bool
     /// True, if the administrator can post messages in the channel, or access channel statistics; channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
@@ -2490,15 +2543,6 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user is allowed to pin messages; groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
-    /// True, if the administrator can post stories in the channel; channels only
-    [<DataMember(Name = "can_post_stories")>]
-    CanPostStories: bool option
-    /// True, if the administrator can edit stories posted by other users; channels only
-    [<DataMember(Name = "can_edit_stories")>]
-    CanEditStories: bool option
-    /// True, if the administrator can delete stories posted by other users; channels only
-    [<DataMember(Name = "can_delete_stories")>]
-    CanDeleteStories: bool option
     /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
@@ -2509,26 +2553,26 @@ and [<CLIMutable>] ChatMemberAdministrator =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(status: string, canInviteUsers: bool, canPromoteMembers: bool, canRestrictMembers: bool, canManageVideoChats: bool, canChangeInfo: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canDeleteMessages: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canPostStories: bool, ?canEditStories: bool, ?canDeleteStories: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(status: string, canDeleteStories: bool, canEditStories: bool, canPostStories: bool, canInviteUsers: bool, canPromoteMembers: bool, canRestrictMembers: bool, canChangeInfo: bool, canDeleteMessages: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canManageVideoChats: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       Status = status
+      CanDeleteStories = canDeleteStories
+      CanEditStories = canEditStories
+      CanPostStories = canPostStories
       CanInviteUsers = canInviteUsers
       CanPromoteMembers = canPromoteMembers
       CanRestrictMembers = canRestrictMembers
-      CanManageVideoChats = canManageVideoChats
       CanChangeInfo = canChangeInfo
+      CanDeleteMessages = canDeleteMessages
       CanManageChat = canManageChat
       IsAnonymous = isAnonymous
       CanBeEdited = canBeEdited
       User = user
-      CanDeleteMessages = canDeleteMessages
+      CanManageVideoChats = canManageVideoChats
       CustomTitle = customTitle
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
-      CanPostStories = canPostStories
-      CanEditStories = canEditStories
-      CanDeleteStories = canDeleteStories
       CanManageTopics = canManageTopics
       CanManageVoiceChats = canManageVoiceChats
     }
@@ -3219,7 +3263,7 @@ and [<CLIMutable>] ChatBoostUpdated =
     /// Chat which was boosted
     [<DataMember(Name = "chat")>]
     Chat: Chat
-    /// Infomation about the chat boost
+    /// Information about the chat boost
     [<DataMember(Name = "boost")>]
     Boost: ChatBoost
   }

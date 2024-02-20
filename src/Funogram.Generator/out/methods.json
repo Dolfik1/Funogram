@@ -1376,7 +1376,7 @@
         "OriginalName": "latitude",
         "ConvertedName": "Latitude",
         "Description": "Latitude of the location",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": false
       },
@@ -1384,7 +1384,7 @@
         "OriginalName": "longitude",
         "ConvertedName": "Longitude",
         "Description": "Longitude of the location",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": false
       },
@@ -1392,7 +1392,7 @@
         "OriginalName": "horizontal_accuracy",
         "ConvertedName": "HorizontalAccuracy",
         "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": true
       },
@@ -1481,7 +1481,7 @@
         "OriginalName": "latitude",
         "ConvertedName": "Latitude",
         "Description": "Latitude of the venue",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": false
       },
@@ -1489,7 +1489,7 @@
         "OriginalName": "longitude",
         "ConvertedName": "Longitude",
         "Description": "Longitude of the venue",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": false
       },
@@ -2163,7 +2163,7 @@
       {
         "OriginalName": "can_manage_chat",
         "ConvertedName": "CanManageChat",
-        "Description": "Pass True if the administrator can access the chat event log, boost list in channels, see channel members, report spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other administrator privilege",
+        "Description": "Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2217,6 +2217,30 @@
         "Optional": true
       },
       {
+        "OriginalName": "can_post_stories",
+        "ConvertedName": "CanPostStories",
+        "Description": "Pass True if the administrator can post stories to the chat",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_edit_stories",
+        "ConvertedName": "CanEditStories",
+        "Description": "Pass True if the administrator can edit stories posted by other users",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_delete_stories",
+        "ConvertedName": "CanDeleteStories",
+        "Description": "Pass True if the administrator can delete stories posted by other users",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "can_post_messages",
         "ConvertedName": "CanPostMessages",
         "Description": "Pass True if the administrator can post messages in the channel, or access channel statistics; channels only",
@@ -2236,30 +2260,6 @@
         "OriginalName": "can_pin_messages",
         "ConvertedName": "CanPinMessages",
         "Description": "Pass True if the administrator can pin messages, supergroups only",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_post_stories",
-        "ConvertedName": "CanPostStories",
-        "Description": "Pass True if the administrator can post stories in the channel; channels only",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_edit_stories",
-        "ConvertedName": "CanEditStories",
-        "Description": "Pass True if the administrator can edit stories posted by other users; channels only",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "can_delete_stories",
-        "ConvertedName": "CanDeleteStories",
-        "Description": "Pass True if the administrator can delete stories posted by other users; channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3779,7 +3779,7 @@
         "OriginalName": "latitude",
         "ConvertedName": "Latitude",
         "Description": "Latitude of new location",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": false
       },
@@ -3787,7 +3787,7 @@
         "OriginalName": "longitude",
         "ConvertedName": "Longitude",
         "Description": "Longitude of new location",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": false
       },
@@ -3795,7 +3795,7 @@
         "OriginalName": "horizontal_accuracy",
         "ConvertedName": "HorizontalAccuracy",
         "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-        "OriginalFieldType": "Float number",
+        "OriginalFieldType": "Float",
         "ConvertedFieldType": "float",
         "Optional": true
       },
