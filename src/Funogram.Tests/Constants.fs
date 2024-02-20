@@ -8,7 +8,7 @@ open Funogram.Types
 module Constants =
   let private ok = sprintf """{"ok":true,"result":%s}"""
     
-  let testDate = System.DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
+  let testDate = DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
   let testDateUnix = 4651649271L
   let testForwardOrigin = MessageOrigin.HiddenUser(
                             MessageOriginHiddenUser.Create(
@@ -39,8 +39,8 @@ module Constants =
   let jsonTestEditResult3ApiString = """{"ok":true,"result":{"message_id":123,"from":{"id":321,"is_bot":true,"first_name":"FSharpBot","username":"FSharpBot"},"chat":{"id":123,"first_name":"Test","last_name":"Test","username":"test","type":"private"},"date":4651649271,"edit_date":4651649271,"text":"Updated"}}"""
 
 
-  let testMaskPosition = { MaskPosition.Point = MaskPoint.Eyes; XShift = 0.0; YShift = 0.0; Scale = 0.0 }
-  let jsonTestMaskPosition = """{"point":"eyes","x_shift":0,"y_shift":0,"scale":0}"""
+  let testMaskPosition = { MaskPosition.Point = MaskPoint.Eyes; XShift = 1.0; YShift = 2.0; Scale = 3.0 }
+  let jsonTestMaskPosition = """{"point":"eyes","x_shift":1,"y_shift":2,"scale":3}"""
   let jsonTestMaskPositionResult = ok jsonTestMaskPosition
 
 

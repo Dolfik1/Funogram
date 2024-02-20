@@ -5,9 +5,9 @@ open System.Net
 open System.Net.Http
 open System.Runtime.CompilerServices
 open System.Text
+open System.Text.Json
+open System.Text.Json.Serialization
 open Funogram.Types
-open Utf8Json
-open Utf8Json.Resolvers
 
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 [<assembly:InternalsVisibleTo("Funogram.Telegram")>]
@@ -16,25 +16,20 @@ do ()
 open System.Collections.Concurrent
 open System.IO
 open System.Linq.Expressions
-open Funogram.Resolvers
+open Funogram.Converters
 open TypeShape.Core
-open Utf8Json.FSharp
 
-let internal formatters: IJsonFormatter[] = [|
-  FunogramUnixTimestampDateTimeFormatter()
-|]
-
-let internal resolvers: IJsonFormatterResolver[] =[|
-  FunogramResolver.Instance
-  FSharpResolver.Instance
-  StandardResolver.ExcludeNullSnakeCase
-|]
-
-let internal resolver =
-  Resolvers.CompositeResolver.Create(
-    formatters,
-    resolvers
-  )
+let internal options =
+  let o =
+    JsonSerializerOptions(
+      WriteIndented = false,
+      PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+      DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    )
+  o.Converters.Add(DiscriminatedUnionConverterFactory())
+  o.Converters.Add(UnixTimestampDateTimeConverter())
+  o.Converters.Add(OptionConverterFactory())
+  o
 
 let private getUrl (config: BotConfig) methodName = 
   let botToken = sprintf "%s%s" (config.ApiEndpointUrl |> string) config.Token
@@ -49,22 +44,22 @@ let internal getUnix (date: DateTime) =
 
 let internal parseJson<'a> (data: byte[]) =
   try
-    match JsonSerializer.Deserialize<ApiResponse<'a>>(data, resolver) with
+    match JsonSerializer.Deserialize<ApiResponse<'a>>(data, options) with
     | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
     | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
       Error { Description = x.Description.Value
               ErrorCode = x.ErrorCode.Value }
-    | _ -> 
+    | x -> 
       Error { Description = "Unknown error"
               ErrorCode = -1 }
   with ex ->
-    let json = System.Text.Encoding.UTF8.GetString data
+    let json = Encoding.UTF8.GetString data
     let message = sprintf "%s in %s" ex.Message json
     ArgumentException(message, ex) |> raise
 
 let internal parseJsonStream<'a> (data: Stream) =
   try
-    JsonSerializer.Deserialize<'a>(data, resolver) |> Ok
+    JsonSerializer.Deserialize<'a>(data, options) |> Ok
   with ex ->
     if data.CanSeek then 
       data.Seek(0L, SeekOrigin.Begin) |> ignore
@@ -72,7 +67,7 @@ let internal parseJsonStream<'a> (data: Stream) =
       let message = sprintf "%s in %s" ex.Message (sr.ReadToEnd())
       ArgumentException(message, ex) :> Exception |> Result.Error
     else
-      Exception("Can't parse json") |> Result.Error
+      Exception("Unable to parse json") |> Result.Error
 
 let internal parseJsonStreamApiResponse<'a> (data: Stream) =
   match parseJsonStream<ApiResponse<'a>> data with
@@ -88,7 +83,7 @@ let internal parseJsonStreamApiResponse<'a> (data: Stream) =
     Error { Description = "Unknown error"; ErrorCode = -1 }
 
 [<ReflectedDefinition>]
-let toJson (o: 'a) = JsonSerializer.Serialize<'a>(o, resolver)
+let toJson (o: 'a) = JsonSerializer.SerializeToUtf8Bytes<'a>(o, options)
 
 let private toJsonMethodInfo =
   System.Reflection.Assembly.GetExecutingAssembly()
@@ -246,7 +241,7 @@ module Api =
       let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
       fun (u:'T) ->
         let tag : int = shape.GetTag u // get the underlying tag for the union case
-        casePrinters.[tag] u
+        casePrinters[tag] u
     | _ -> fun _ -> [||]
 
   let multipartSerializers = ConcurrentDictionary<Type, IBotRequest -> MultipartFormDataContent -> bool>()
@@ -324,7 +319,7 @@ module Api =
       fun (x: 'T) prop data ->
         if String.IsNullOrEmpty(prop) then
           fieldPrinters
-          |> Array.map (fun (prop, fp) -> fp x (getSnakeCaseName prop) data)
+          |> Array.map (fun (prop, fp) -> fp x (StringUtils.toSnakeCase prop) data)
           |> Array.contains true
         else
           let json = toJson x
@@ -384,7 +379,7 @@ module Api =
           else None
         
         if isEnum then
-          let name = getSnakeCaseName case.CaseInfo.Name
+          let name = StringUtils.toSnakeCase case.CaseInfo.Name
           fun _ (prop: string) (data: MultipartFormDataContent) ->
             data.Add(strf "%s" name, prop) $ true
         else
@@ -406,7 +401,7 @@ module Api =
       let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
       fun (u:'T) ->
         let tag : int = shape.GetTag u // get the underlying tag for the union case
-        casePrinters.[tag] u
+        casePrinters[tag] u
     | _ ->
       fun _ _ _ -> false
   
@@ -445,8 +440,8 @@ module Api =
       let url = getUrl config request.MethodName
       
       use ms = new MemoryStream()
-      JsonSerializer.Serialize(ms, request, resolver)
-      
+      JsonSerializer.Serialize(ms, request, options)
+
       use content = new StreamContent(ms)
       let! result = client.PostAsync(url, content) |> Async.AwaitTask
   

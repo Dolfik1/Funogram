@@ -25,9 +25,10 @@ let defaultText = """⭐️Available test commands:
   /cmdscan stringA stringB - Test cmdScan, concatenate stringA and stringB"""
   
 let updateArrived (ctx: UpdateContext) =
-  let fromId () = ctx.Update.Message.Value.From.Value.Id
 
-  let wrap fn = fn ctx.Config (fromId ())
+  let wrap fn =
+    let fromId () = ctx.Update.Message.Value.From.Value.Id
+    fn ctx.Config (fromId ())
   
   let result =
     processCommands ctx [|
@@ -55,4 +56,17 @@ let updateArrived (ctx: UpdateContext) =
     |]
 
   if result then
-    Api.sendMessage (fromId()) defaultText |> bot ctx.Config
+    match ctx.Update.CallbackQuery with
+    | Some ({ Data = Some "callback2" } as c) ->
+      match c.Message with
+      | Some (MaybeInaccessibleMessage.Message msg) ->
+        let inlineKeyboardMarkup = InlineKeyboardMarkup.Create([| [| InlineKeyboardButton.Create("Changed!", callbackData = "Test") |] |])
+        Req.EditMessageReplyMarkup.Make(msg.Chat.Id, msg.MessageId, replyMarkup = inlineKeyboardMarkup)
+        |> bot ctx.Config
+      | _ -> ()
+    | _ -> ()
+    
+    match ctx.Update.Message with
+    | Some { From = Some { Id = id } } ->
+      Api.sendMessage id defaultText |> bot ctx.Config
+    | _ -> ()

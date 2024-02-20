@@ -85,16 +85,16 @@ let sscanf (pf:PrintfFormat<_,_,_,_,'t>) s : 't =
 
   let matches =
     (groups, formatters)
-    ||> Seq.map2 (fun g f -> g.Value |> parsers.[f])
+    ||> Seq.map2 (fun g f -> g.Value |> parsers[f])
     |> Seq.toArray
 
   if matches.Length = 1 then
-    coerce matches.[0] typeof<'t> :?> 't
+    coerce matches[0] typeof<'t> :?> 't
   else
     let tupleTypes = FSharpType.GetTupleElements(typeof<'t>)
     let matches =
       (matches,tupleTypes)
-      ||> Array.map2 ( fun a b -> coerce a b)
+      ||> Array.map2 coerce
     FSharpValue.MakeTuple(matches, typeof<'t>) :?> 't
 
 
@@ -123,11 +123,11 @@ let sscanfci (pf:PrintfFormat<_,_,_,_,'t>) s : 't =
 
   let matches =
     (groups, formatters)
-    ||> Seq.map2 (fun g f -> g.Value |> parsers.[f])
+    ||> Seq.map2 (fun g f -> g.Value |> parsers[f])
     |> Seq.toArray
 
   if matches.Length = 1 then
-    coerce matches.[0] typeof<'t> :?> 't
+    coerce matches[0] typeof<'t> :?> 't
   else
     let tupleTypes = FSharpType.GetTupleElements(typeof<'t>)
     let matches = (matches, tupleTypes) ||> Array.map2 ( fun a b -> coerce a b)
