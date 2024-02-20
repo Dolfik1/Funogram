@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <Version>7.0.0.3-preview1</Version>
+        <Version>7.0.0.3-preview2</Version>
         <Authors>Nikolay Matyushin</Authors>
         <Product>Funogram.Telegram</Product>
         <Title>Funogram.Telegram</Title>

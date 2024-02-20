@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
-    <VersionPrefix>2.1.0-preview1</VersionPrefix>
+    <VersionPrefix>2.1.0-preview2</VersionPrefix>
     <Authors>Nikolay Matyushin</Authors>
     <Product>Funogram</Product>
     <Description>Funogram is a functional Telegram Bot Api library for F#</Description>

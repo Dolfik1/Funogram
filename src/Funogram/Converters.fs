@@ -8,6 +8,7 @@ open System.Runtime.Serialization
 open System.Text.Json
 open System.Text.Json.Serialization
 open TypeShape.Core
+open TypeShape.Core.SubtypeExtensions
 
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 do ()
@@ -222,3 +223,38 @@ module internal Converters =
       
     override x.Write(writer, value, _) =
       writer.WriteNumberValue(toUnix value)
+  
+  type OptionConverter<'T>() =
+    inherit JsonConverter<Option<'T>>()
+
+    override x.Read(reader, _, options) =
+      match reader.TokenType with
+      | JsonTokenType.Null ->
+        None
+      | _ ->
+        let converter = options.GetConverter(typeof<'T>)
+        let c = converter :?> JsonConverter<'T>
+        c.Read(&reader, typeof<'T>, options) |> Some
+
+    override x.Write(writer, value, options) =
+      match value with
+      | Some v ->
+        let converter = options.GetConverter(typeof<'T>)
+        let c = converter :?> JsonConverter<'T>
+        c.Write(writer, v, options)
+      | None ->
+        writer.WriteNullValue()
+
+  type OptionConverterFactory() =
+    inherit JsonConverterFactory()
+
+    override x.CreateConverter(typeToConvert, _) =
+      let innerType = typeToConvert.GetGenericArguments()[0]
+      let optionConverterType = typedefof<OptionConverter<_>>.MakeGenericType(innerType)
+      Activator.CreateInstance(optionConverterType) :?> JsonConverter
+      
+    override x.CanConvert(typeToConvert) =
+      match TypeShape.Create(typeToConvert) with
+      | Shape.FSharpOption _ -> true
+      | _ -> false
+    

@@ -28,6 +28,7 @@ let internal options =
     )
   o.Converters.Add(DiscriminatedUnionConverterFactory())
   o.Converters.Add(UnixTimestampDateTimeConverter())
+  o.Converters.Add(OptionConverterFactory())
   o
 
 let private getUrl (config: BotConfig) methodName = 
