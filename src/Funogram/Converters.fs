@@ -84,7 +84,7 @@ module internal Converters =
       | _ -> failwith "Unsupported type"
     
     let enumUnion = union.UnionCases |> Seq.forall (fun x -> x.Fields.Length = 0)
-    
+
     let cases =
       union.UnionCases
       |> Seq.map (fun c ->
@@ -245,6 +245,8 @@ module internal Converters =
       | None ->
         writer.WriteNullValue()
 
+  // The FSharpOptionTypeConverter in STJ seems to be broken
+  // There is no stable repro to check this, so I used my own Option converter
   type OptionConverterFactory() =
     inherit JsonConverterFactory()
 
