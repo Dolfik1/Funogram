@@ -90,6 +90,18 @@ and [<CLIMutable>] Update =
     /// New version of a channel post that is known to the bot and was edited. This update may at times be triggered by changes to message fields that are either unavailable or not actively used by your bot.
     [<DataMember(Name = "edited_channel_post")>]
     EditedChannelPost: Message option
+    /// The bot was connected to or disconnected from a business account, or a user edited an existing connection with the bot
+    [<DataMember(Name = "business_connection")>]
+    BusinessConnection: BusinessConnection option
+    /// New non-service message from a connected business account
+    [<DataMember(Name = "business_message")>]
+    BusinessMessage: Message option
+    /// New version of a message from a connected business account
+    [<DataMember(Name = "edited_business_message")>]
+    EditedBusinessMessage: Message option
+    /// Messages were deleted from a connected business account
+    [<DataMember(Name = "deleted_business_messages")>]
+    DeletedBusinessMessages: BusinessMessagesDeleted option
     /// A reaction to a message was changed by a user. The bot must be an administrator in the chat and must explicitly specify "message_reaction" in the list of allowed_updates to receive these updates. The update isn't received for reactions set by bots.
     [<DataMember(Name = "message_reaction")>]
     MessageReaction: MessageReactionUpdated option
@@ -133,7 +145,7 @@ and [<CLIMutable>] Update =
     [<DataMember(Name = "removed_chat_boost")>]
     RemovedChatBoost: ChatBoostRemoved option
   }
-  static member Create(updateId: int64, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?chatBoost: ChatBoostUpdated, ?callbackQuery: CallbackQuery, ?inlineQuery: InlineQuery, ?messageReactionCount: MessageReactionCountUpdated, ?messageReaction: MessageReactionUpdated, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?chosenInlineResult: ChosenInlineResult, ?removedChatBoost: ChatBoostRemoved) = 
+  static member Create(updateId: int64, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?callbackQuery: CallbackQuery, ?chosenInlineResult: ChosenInlineResult, ?chatBoost: ChatBoostUpdated, ?inlineQuery: InlineQuery, ?messageReaction: MessageReactionUpdated, ?deletedBusinessMessages: BusinessMessagesDeleted, ?editedBusinessMessage: Message, ?businessMessage: Message, ?businessConnection: BusinessConnection, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?messageReactionCount: MessageReactionCountUpdated, ?removedChatBoost: ChatBoostRemoved) = 
     {
       UpdateId = updateId
       ChatJoinRequest = chatJoinRequest
@@ -143,16 +155,20 @@ and [<CLIMutable>] Update =
       Poll = poll
       PreCheckoutQuery = preCheckoutQuery
       ShippingQuery = shippingQuery
-      ChatBoost = chatBoost
       CallbackQuery = callbackQuery
+      ChosenInlineResult = chosenInlineResult
+      ChatBoost = chatBoost
       InlineQuery = inlineQuery
-      MessageReactionCount = messageReactionCount
       MessageReaction = messageReaction
+      DeletedBusinessMessages = deletedBusinessMessages
+      EditedBusinessMessage = editedBusinessMessage
+      BusinessMessage = businessMessage
+      BusinessConnection = businessConnection
       EditedChannelPost = editedChannelPost
       ChannelPost = channelPost
       EditedMessage = editedMessage
       Message = message
-      ChosenInlineResult = chosenInlineResult
+      MessageReactionCount = messageReactionCount
       RemovedChatBoost = removedChatBoost
     }
 
@@ -238,8 +254,11 @@ and [<CLIMutable>] User =
     /// True, if the bot supports inline queries. Returned only in getMe.
     [<DataMember(Name = "supports_inline_queries")>]
     SupportsInlineQueries: bool option
+    /// True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe.
+    [<DataMember(Name = "can_connect_to_business")>]
+    CanConnectToBusiness: bool option
   }
-  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool) = 
+  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool, ?canConnectToBusiness: bool) = 
     {
       Id = id
       IsBot = isBot
@@ -252,6 +271,7 @@ and [<CLIMutable>] User =
       CanJoinGroups = canJoinGroups
       CanReadAllGroupMessages = canReadAllGroupMessages
       SupportsInlineQueries = supportsInlineQueries
+      CanConnectToBusiness = canConnectToBusiness
     }
 
 /// This object represents a chat.
@@ -284,6 +304,21 @@ and [<CLIMutable>] Chat =
     /// If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.
     [<DataMember(Name = "active_usernames")>]
     ActiveUsernames: string[] option
+    /// For private chats, the date of birth of the user. Returned only in getChat.
+    [<DataMember(Name = "birthdate")>]
+    Birthdate: Birthdate option
+    /// For private chats with business accounts, the intro of the business. Returned only in getChat.
+    [<DataMember(Name = "business_intro")>]
+    BusinessIntro: BusinessIntro option
+    /// For private chats with business accounts, the location of the business. Returned only in getChat.
+    [<DataMember(Name = "business_location")>]
+    BusinessLocation: BusinessLocation option
+    /// For private chats with business accounts, the opening hours of the business. Returned only in getChat.
+    [<DataMember(Name = "business_opening_hours")>]
+    BusinessOpeningHours: BusinessOpeningHours option
+    /// For private chats, the personal channel of the user. Returned only in getChat.
+    [<DataMember(Name = "personal_chat")>]
+    PersonalChat: Chat option
     /// List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. Returned only in getChat.
     [<DataMember(Name = "available_reactions")>]
     AvailableReactions: ReactionType[] option
@@ -369,10 +404,13 @@ and [<CLIMutable>] Chat =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: ChatType, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?slowModeDelay: int64, ?unrestrictBoostCount: int64, ?messageAutoDeleteTime: int64, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?joinByRequest: bool, ?joinToSendMessages: bool, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasPrivateForwards: bool, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?availableReactions: ReactionType[], ?accentColorId: int64, ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?bio: string, ?linkedChatId: int64, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: ChatType, ?hasRestrictedVoiceAndVideoMessages: bool, ?joinToSendMessages: bool, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?slowModeDelay: int64, ?unrestrictBoostCount: int64, ?messageAutoDeleteTime: int64, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?hasPrivateForwards: bool, ?bio: string, ?emojiStatusExpirationDate: int64, ?emojiStatusCustomEmojiId: string, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?businessIntro: BusinessIntro, ?businessLocation: BusinessLocation, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?availableReactions: ReactionType[], ?accentColorId: int64, ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?linkedChatId: int64, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
+      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
+      JoinToSendMessages = joinToSendMessages
+      JoinByRequest = joinByRequest
       Description = description
       InviteLink = inviteLink
       PinnedMessage = pinnedMessage
@@ -387,10 +425,10 @@ and [<CLIMutable>] Chat =
       StickerSetName = stickerSetName
       CanSetStickerSet = canSetStickerSet
       CustomEmojiStickerSetName = customEmojiStickerSetName
-      JoinByRequest = joinByRequest
-      JoinToSendMessages = joinToSendMessages
-      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasPrivateForwards = hasPrivateForwards
+      Bio = bio
+      EmojiStatusExpirationDate = emojiStatusExpirationDate
+      EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
       Title = title
       Username = username
       FirstName = firstName
@@ -398,14 +436,16 @@ and [<CLIMutable>] Chat =
       IsForum = isForum
       Photo = photo
       ActiveUsernames = activeUsernames
+      Birthdate = birthdate
+      BusinessIntro = businessIntro
+      BusinessLocation = businessLocation
+      BusinessOpeningHours = businessOpeningHours
+      PersonalChat = personalChat
       AvailableReactions = availableReactions
       AccentColorId = accentColorId
       BackgroundCustomEmojiId = backgroundCustomEmojiId
       ProfileAccentColorId = profileAccentColorId
       ProfileBackgroundCustomEmojiId = profileBackgroundCustomEmojiId
-      EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
-      EmojiStatusExpirationDate = emojiStatusExpirationDate
-      Bio = bio
       LinkedChatId = linkedChatId
       Location = location
     }
@@ -428,9 +468,15 @@ and [<CLIMutable>] Message =
     /// If the sender of the message boosted the chat, the number of boosts added by the user
     [<DataMember(Name = "sender_boost_count")>]
     SenderBoostCount: int64 option
+    /// The bot that actually sent the message on behalf of the business account. Available only for outgoing messages sent on behalf of the connected business account.
+    [<DataMember(Name = "sender_business_bot")>]
+    SenderBusinessBot: User option
     /// Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     [<DataMember(Name = "date")>]
     Date: DateTime
+    /// Unique identifier of the business connection from which the message was received. If non-empty, the message belongs to a chat of the corresponding business account that is independent from any potential bot chat which might share the same identifier.
+    [<DataMember(Name = "business_connection_id")>]
+    BusinessConnectionId: string option
     /// Chat the message belongs to
     [<DataMember(Name = "chat")>]
     Chat: Chat
@@ -464,6 +510,9 @@ and [<CLIMutable>] Message =
     /// True, if the message can't be forwarded
     [<DataMember(Name = "has_protected_content")>]
     HasProtectedContent: bool option
+    /// True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
+    [<DataMember(Name = "is_from_offline")>]
+    IsFromOffline: bool option
     /// The unique identifier of a media message group this message belongs to
     [<DataMember(Name = "media_group_id")>]
     MediaGroupId: string option
@@ -645,30 +694,30 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?chatShared: ChatShared, ?usersShared: UsersShared, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?channelChatCreated: bool, ?connectedWebsite: string, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?boostAdded: ChatBoostAdded, ?newChatMembers: User[], ?location: Location, ?venue: Venue, ?poll: Poll, ?mediaGroupId: string, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?authorSignature: string, ?webAppData: WebAppData, ?text: string, ?linkPreviewOptions: LinkPreviewOptions, ?game: Game, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?entities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?usersShared: UsersShared, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?supergroupChatCreated: bool, ?chatShared: ChatShared, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?channelChatCreated: bool, ?connectedWebsite: string, ?passportData: PassportData, ?location: Location, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?writeAccessAllowed: WriteAccessAllowed, ?giveawayCreated: GiveawayCreated, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?venue: Venue, ?game: Game, ?webAppData: WebAppData, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isFromOffline: bool, ?isAutomaticForward: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?isTopicMessage: bool, ?poll: Poll, ?mediaGroupId: string, ?text: string, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?authorSignature: string, ?video: Video, ?sticker: Sticker, ?photo: PhotoSize[], ?document: Document, ?audio: Audio, ?animation: Animation, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?story: Story, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
-      ChatShared = chatShared
       UsersShared = usersShared
       SuccessfulPayment = successfulPayment
       Invoice = invoice
       PinnedMessage = pinnedMessage
       MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
-      ChannelChatCreated = channelChatCreated
-      ConnectedWebsite = connectedWebsite
+      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       SupergroupChatCreated = supergroupChatCreated
+      ChatShared = chatShared
       GroupChatCreated = groupChatCreated
       DeleteChatPhoto = deleteChatPhoto
       NewChatPhoto = newChatPhoto
       NewChatTitle = newChatTitle
       LeftChatMember = leftChatMember
-      MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
-      WriteAccessAllowed = writeAccessAllowed
+      NewChatMembers = newChatMembers
+      ChannelChatCreated = channelChatCreated
+      ConnectedWebsite = connectedWebsite
       PassportData = passportData
-      ProximityAlertTriggered = proximityAlertTriggered
+      Location = location
       VideoChatParticipantsInvited = videoChatParticipantsInvited
       VideoChatEnded = videoChatEnded
       VideoChatStarted = videoChatStarted
@@ -676,19 +725,19 @@ and [<CLIMutable>] Message =
       GiveawayCompleted = giveawayCompleted
       GiveawayWinners = giveawayWinners
       Giveaway = giveaway
+      WriteAccessAllowed = writeAccessAllowed
       GiveawayCreated = giveawayCreated
-      GeneralForumTopicUnhidden = generalForumTopicUnhidden
       GeneralForumTopicHidden = generalForumTopicHidden
       ForumTopicReopened = forumTopicReopened
       ForumTopicClosed = forumTopicClosed
       ForumTopicEdited = forumTopicEdited
       ForumTopicCreated = forumTopicCreated
       BoostAdded = boostAdded
-      NewChatMembers = newChatMembers
-      Location = location
+      ProximityAlertTriggered = proximityAlertTriggered
+      GeneralForumTopicUnhidden = generalForumTopicUnhidden
       Venue = venue
-      Poll = poll
-      MediaGroupId = mediaGroupId
+      Game = game
+      WebAppData = webAppData
       HasProtectedContent = hasProtectedContent
       EditDate = editDate
       ViaBot = viaBot
@@ -696,18 +745,19 @@ and [<CLIMutable>] Message =
       Quote = quote
       ExternalReply = externalReply
       ReplyToMessage = replyToMessage
+      IsFromOffline = isFromOffline
       IsAutomaticForward = isAutomaticForward
-      IsTopicMessage = isTopicMessage
       ForwardOrigin = forwardOrigin
+      BusinessConnectionId = businessConnectionId
+      SenderBusinessBot = senderBusinessBot
       SenderBoostCount = senderBoostCount
       SenderChat = senderChat
       From = from
       MessageThreadId = messageThreadId
-      AuthorSignature = authorSignature
-      WebAppData = webAppData
+      IsTopicMessage = isTopicMessage
+      Poll = poll
+      MediaGroupId = mediaGroupId
       Text = text
-      LinkPreviewOptions = linkPreviewOptions
-      Game = game
       Dice = dice
       Contact = contact
       HasMediaSpoiler = hasMediaSpoiler
@@ -715,14 +765,16 @@ and [<CLIMutable>] Message =
       Caption = caption
       Voice = voice
       VideoNote = videoNote
+      AuthorSignature = authorSignature
       Video = video
-      Story = story
       Sticker = sticker
       Photo = photo
       Document = document
       Audio = audio
       Animation = animation
+      LinkPreviewOptions = linkPreviewOptions
       Entities = entities
+      Story = story
       ReplyMarkup = replyMarkup
     }
 
@@ -929,10 +981,10 @@ and [<CLIMutable>] ReplyParameters =
     /// Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
     [<DataMember(Name = "message_id")>]
     MessageId: int64
-    /// If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername)
+    /// If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId option
-    /// Pass True if the message should be sent even if the specified message to be replied to is not found; can be used only for replies in the same chat and forum topic.
+    /// Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.
     [<DataMember(Name = "allow_sending_without_reply")>]
     AllowSendingWithoutReply: bool option
     /// Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, and custom_emoji entities. The message will fail to send if the quote isn't found in the original message.
@@ -1650,23 +1702,51 @@ and GeneralForumTopicHidden =
 and GeneralForumTopicUnhidden =
   new() = {}
 
+/// This object contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button.
+and [<CLIMutable>] SharedUser =
+  {
+    /// Identifier of the shared user. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the user and could be unable to use this identifier, unless the user is already known to the bot by some other means.
+    [<DataMember(Name = "user_id")>]
+    UserId: int64
+    /// First name of the user, if the name was requested by the bot
+    [<DataMember(Name = "first_name")>]
+    FirstName: string option
+    /// Last name of the user, if the name was requested by the bot
+    [<DataMember(Name = "last_name")>]
+    LastName: string option
+    /// Username of the user, if the username was requested by the bot
+    [<DataMember(Name = "username")>]
+    Username: string option
+    /// Available sizes of the chat photo, if the photo was requested by the bot
+    [<DataMember(Name = "photo")>]
+    Photo: PhotoSize[] option
+  }
+  static member Create(userId: int64, ?firstName: string, ?lastName: string, ?username: string, ?photo: PhotoSize[]) = 
+    {
+      UserId = userId
+      FirstName = firstName
+      LastName = lastName
+      Username = username
+      Photo = photo
+    }
+
 /// This object contains information about the users whose identifiers were shared with the bot using a KeyboardButtonRequestUsers button.
 and [<CLIMutable>] UsersShared =
   {
     /// Identifier of the request
     [<DataMember(Name = "request_id")>]
     RequestId: int64
-    /// Identifiers of the shared users. These numbers may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting them. But they have at most 52 significant bits, so 64-bit integers or double-precision float types are safe for storing these identifiers. The bot may not have access to the users and could be unable to use these identifiers, unless the users are already known to the bot by some other means.
-    [<DataMember(Name = "user_ids")>]
-    UserIds: int64[]
+    /// Information about users shared with the bot.
+    [<DataMember(Name = "users")>]
+    Users: SharedUser[]
   }
-  static member Create(requestId: int64, userIds: int64[]) = 
+  static member Create(requestId: int64, users: SharedUser[]) = 
     {
       RequestId = requestId
-      UserIds = userIds
+      Users = users
     }
 
-/// This object contains information about the chat whose identifier was shared with the bot using a KeyboardButtonRequestChat button.
+/// This object contains information about a chat that was shared with the bot using a KeyboardButtonRequestChat button.
 and [<CLIMutable>] ChatShared =
   {
     /// Identifier of the request
@@ -1675,11 +1755,23 @@ and [<CLIMutable>] ChatShared =
     /// Identifier of the shared chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier. The bot may not have access to the chat and could be unable to use this identifier, unless the chat is already known to the bot by some other means.
     [<DataMember(Name = "chat_id")>]
     ChatId: int64
+    /// Title of the chat, if the title was requested by the bot.
+    [<DataMember(Name = "title")>]
+    Title: string option
+    /// Username of the chat, if the username was requested by the bot and available.
+    [<DataMember(Name = "username")>]
+    Username: string option
+    /// Available sizes of the chat photo, if the photo was requested by the bot
+    [<DataMember(Name = "photo")>]
+    Photo: PhotoSize[] option
   }
-  static member Create(requestId: int64, chatId: int64) = 
+  static member Create(requestId: int64, chatId: int64, ?title: string, ?username: string, ?photo: PhotoSize[]) = 
     {
       RequestId = requestId
       ChatId = chatId
+      Title = title
+      Username = username
+      Photo = photo
     }
 
 /// This object represents a service message about a user allowing a bot to write messages after adding it to the attachment menu, launching a Web App from a link, or accepting an explicit request from a Web App sent by the method requestWriteAccess.
@@ -2009,7 +2101,7 @@ and [<CLIMutable>] KeyboardButton =
       WebApp = webApp
     }
 
-/// This object defines the criteria used to request suitable users. The identifiers of the selected users will be shared with the bot when the corresponding button is pressed. More about requesting users »
+/// This object defines the criteria used to request suitable users. Information about the selected users will be shared with the bot when the corresponding button is pressed. More about requesting users »
 and [<CLIMutable>] KeyboardButtonRequestUsers =
   {
     /// Signed 32-bit identifier of the request that will be received back in the UsersShared object. Must be unique within the message
@@ -2024,16 +2116,28 @@ and [<CLIMutable>] KeyboardButtonRequestUsers =
     /// The maximum number of users to be selected; 1-10. Defaults to 1.
     [<DataMember(Name = "max_quantity")>]
     MaxQuantity: int64 option
+    /// Pass True to request the users' first and last name
+    [<DataMember(Name = "request_name")>]
+    RequestName: bool option
+    /// Pass True to request the users' username
+    [<DataMember(Name = "request_username")>]
+    RequestUsername: bool option
+    /// Pass True to request the users' photo
+    [<DataMember(Name = "request_photo")>]
+    RequestPhoto: bool option
   }
-  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool, ?maxQuantity: int64) = 
+  static member Create(requestId: int64, ?userIsBot: bool, ?userIsPremium: bool, ?maxQuantity: int64, ?requestName: bool, ?requestUsername: bool, ?requestPhoto: bool) = 
     {
       RequestId = requestId
       UserIsBot = userIsBot
       UserIsPremium = userIsPremium
       MaxQuantity = maxQuantity
+      RequestName = requestName
+      RequestUsername = requestUsername
+      RequestPhoto = requestPhoto
     }
 
-/// This object defines the criteria used to request a suitable chat. The identifier of the selected chat will be shared with the bot when the corresponding button is pressed. More about requesting chats »
+/// This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the сhat if appropriate More about requesting chats »
 and [<CLIMutable>] KeyboardButtonRequestChat =
   {
     /// Signed 32-bit identifier of the request, which will be received back in the ChatShared object. Must be unique within the message
@@ -2060,8 +2164,17 @@ and [<CLIMutable>] KeyboardButtonRequestChat =
     /// Pass True to request a chat with the bot as a member. Otherwise, no additional restrictions are applied.
     [<DataMember(Name = "bot_is_member")>]
     BotIsMember: bool option
+    /// Pass True to request the chat's title
+    [<DataMember(Name = "request_title")>]
+    RequestTitle: bool option
+    /// Pass True to request the chat's username
+    [<DataMember(Name = "request_username")>]
+    RequestUsername: bool option
+    /// Pass True to request the chat's photo
+    [<DataMember(Name = "request_photo")>]
+    RequestPhoto: bool option
   }
-  static member Create(requestId: int64, chatIsChannel: bool, ?chatIsForum: bool, ?chatHasUsername: bool, ?chatIsCreated: bool, ?userAdministratorRights: ChatAdministratorRights, ?botAdministratorRights: ChatAdministratorRights, ?botIsMember: bool) = 
+  static member Create(requestId: int64, chatIsChannel: bool, ?chatIsForum: bool, ?chatHasUsername: bool, ?chatIsCreated: bool, ?userAdministratorRights: ChatAdministratorRights, ?botAdministratorRights: ChatAdministratorRights, ?botIsMember: bool, ?requestTitle: bool, ?requestUsername: bool, ?requestPhoto: bool) = 
     {
       RequestId = requestId
       ChatIsChannel = chatIsChannel
@@ -2071,6 +2184,9 @@ and [<CLIMutable>] KeyboardButtonRequestChat =
       UserAdministratorRights = userAdministratorRights
       BotAdministratorRights = botAdministratorRights
       BotIsMember = botIsMember
+      RequestTitle = requestTitle
+      RequestUsername = requestUsername
+      RequestPhoto = requestPhoto
     }
 
 /// This object represents type of a poll, which is allowed to be created and sent when the corresponding button is pressed.
@@ -2384,16 +2500,16 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the administrator can delete stories posted by other users
     [<DataMember(Name = "can_delete_stories")>]
     CanDeleteStories: bool
-    /// True, if the administrator can post messages in the channel, or access channel statistics; channels only
+    /// True, if the administrator can post messages in the channel, or access channel statistics; for channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
-    /// True, if the administrator can edit messages of other users and can pin messages; channels only
+    /// True, if the administrator can edit messages of other users and can pin messages; for channels only
     [<DataMember(Name = "can_edit_messages")>]
     CanEditMessages: bool option
-    /// True, if the user is allowed to pin messages; groups and supergroups only
+    /// True, if the user is allowed to pin messages; for groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
-    /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+    /// True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
     /// DEPRECATED: use can_manage_video_chats instead
@@ -2534,16 +2650,16 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the administrator can delete stories posted by other users
     [<DataMember(Name = "can_delete_stories")>]
     CanDeleteStories: bool
-    /// True, if the administrator can post messages in the channel, or access channel statistics; channels only
+    /// True, if the administrator can post messages in the channel, or access channel statistics; for channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
-    /// True, if the administrator can edit messages of other users and can pin messages; channels only
+    /// True, if the administrator can edit messages of other users and can pin messages; for channels only
     [<DataMember(Name = "can_edit_messages")>]
     CanEditMessages: bool option
-    /// True, if the user is allowed to pin messages; groups and supergroups only
+    /// True, if the user is allowed to pin messages; for groups and supergroups only
     [<DataMember(Name = "can_pin_messages")>]
     CanPinMessages: bool option
-    /// True, if the user is allowed to create, rename, close, and reopen forum topics; supergroups only
+    /// True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
     /// Custom title for this user
@@ -2803,6 +2919,94 @@ and [<CLIMutable>] ChatPermissions =
       CanInviteUsers = canInviteUsers
       CanPinMessages = canPinMessages
       CanManageTopics = canManageTopics
+    }
+
+/// 
+and [<CLIMutable>] Birthdate =
+  {
+    /// Day of the user's birth; 1-31
+    [<DataMember(Name = "day")>]
+    Day: int64
+    /// Month of the user's birth; 1-12
+    [<DataMember(Name = "month")>]
+    Month: int64
+    /// Year of the user's birth
+    [<DataMember(Name = "year")>]
+    Year: int64 option
+  }
+  static member Create(day: int64, month: int64, ?year: int64) = 
+    {
+      Day = day
+      Month = month
+      Year = year
+    }
+
+/// 
+and [<CLIMutable>] BusinessIntro =
+  {
+    /// Title text of the business intro
+    [<DataMember(Name = "title")>]
+    Title: string option
+    /// Message text of the business intro
+    [<DataMember(Name = "message")>]
+    Message: string option
+    /// Sticker of the business intro
+    [<DataMember(Name = "sticker")>]
+    Sticker: Sticker option
+  }
+  static member Create(?title: string, ?message: string, ?sticker: Sticker) = 
+    {
+      Title = title
+      Message = message
+      Sticker = sticker
+    }
+
+/// 
+and [<CLIMutable>] BusinessLocation =
+  {
+    /// Address of the business
+    [<DataMember(Name = "address")>]
+    Address: string
+    /// Location of the business
+    [<DataMember(Name = "location")>]
+    Location: Location option
+  }
+  static member Create(address: string, ?location: Location) = 
+    {
+      Address = address
+      Location = location
+    }
+
+/// 
+and [<CLIMutable>] BusinessOpeningHoursInterval =
+  {
+    /// The minute's sequence number in a week, starting on Monday, marking the start of the time interval during which the business is open; 0 - 7 * 24 * 60
+    [<DataMember(Name = "opening_minute")>]
+    OpeningMinute: int64
+    /// The minute's sequence number in a week, starting on Monday, marking the end of the time interval during which the business is open; 0 - 8 * 24 * 60
+    [<DataMember(Name = "closing_minute")>]
+    ClosingMinute: int64
+  }
+  static member Create(openingMinute: int64, closingMinute: int64) = 
+    {
+      OpeningMinute = openingMinute
+      ClosingMinute = closingMinute
+    }
+
+/// 
+and [<CLIMutable>] BusinessOpeningHours =
+  {
+    /// Unique name of the time zone for which the opening hours are defined
+    [<DataMember(Name = "time_zone_name")>]
+    TimeZoneName: string
+    /// List of time intervals describing business opening hours
+    [<DataMember(Name = "opening_hours")>]
+    OpeningHours: BusinessOpeningHoursInterval[]
+  }
+  static member Create(timeZoneName: string, openingHours: BusinessOpeningHoursInterval[]) = 
+    {
+      TimeZoneName = timeZoneName
+      OpeningHours = openingHours
     }
 
 /// Represents a location to which a chat is connected.
@@ -3309,6 +3513,58 @@ and [<CLIMutable>] UserChatBoosts =
       Boosts = boosts
     }
 
+/// Describes the connection of the bot with a business account.
+and [<CLIMutable>] BusinessConnection =
+  {
+    /// Unique identifier of the business connection
+    [<DataMember(Name = "id")>]
+    Id: string
+    /// Business account user that created the business connection
+    [<DataMember(Name = "user")>]
+    User: User
+    /// Identifier of a private chat with the user who created the business connection. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a 64-bit integer or double-precision float type are safe for storing this identifier.
+    [<DataMember(Name = "user_chat_id")>]
+    UserChatId: int64
+    /// Date the connection was established in Unix time
+    [<DataMember(Name = "date")>]
+    Date: DateTime
+    /// True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
+    [<DataMember(Name = "can_reply")>]
+    CanReply: bool
+    /// True, if the connection is active
+    [<DataMember(Name = "is_enabled")>]
+    IsEnabled: bool
+  }
+  static member Create(id: string, user: User, userChatId: int64, date: DateTime, canReply: bool, isEnabled: bool) = 
+    {
+      Id = id
+      User = user
+      UserChatId = userChatId
+      Date = date
+      CanReply = canReply
+      IsEnabled = isEnabled
+    }
+
+/// This object is received when messages are deleted from a connected business account.
+and [<CLIMutable>] BusinessMessagesDeleted =
+  {
+    /// Unique identifier of the business connection
+    [<DataMember(Name = "business_connection_id")>]
+    BusinessConnectionId: string
+    /// Information about a chat in the business account. The bot may not have access to the chat or the corresponding user.
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// A JSON-serialized list of identifiers of deleted messages in the chat of the business account
+    [<DataMember(Name = "message_ids")>]
+    MessageIds: int64[]
+  }
+  static member Create(businessConnectionId: string, chat: Chat, messageIds: int64[]) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      Chat = chat
+      MessageIds = messageIds
+    }
+
 /// Describes why a request was unsuccessful.
 and [<CLIMutable>] ResponseParameters =
   {
@@ -3625,12 +3881,6 @@ and [<CLIMutable>] StickerSet =
     /// Type of stickers in the set, currently one of “regular”, “mask”, “custom_emoji”
     [<DataMember(Name = "sticker_type")>]
     StickerType: string
-    /// True, if the sticker set contains animated stickers
-    [<DataMember(Name = "is_animated")>]
-    IsAnimated: bool
-    /// True, if the sticker set contains video stickers
-    [<DataMember(Name = "is_video")>]
-    IsVideo: bool
     /// List of all set stickers
     [<DataMember(Name = "stickers")>]
     Stickers: Sticker[]
@@ -3638,13 +3888,11 @@ and [<CLIMutable>] StickerSet =
     [<DataMember(Name = "thumbnail")>]
     Thumbnail: PhotoSize option
   }
-  static member Create(name: string, title: string, stickerType: string, isAnimated: bool, isVideo: bool, stickers: Sticker[], ?thumbnail: PhotoSize) = 
+  static member Create(name: string, title: string, stickerType: string, stickers: Sticker[], ?thumbnail: PhotoSize) = 
     {
       Name = name
       Title = title
       StickerType = stickerType
-      IsAnimated = isAnimated
-      IsVideo = isVideo
       Stickers = stickers
       Thumbnail = thumbnail
     }
@@ -3679,6 +3927,9 @@ and [<CLIMutable>] InputSticker =
     /// The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
     [<DataMember(Name = "sticker")>]
     Sticker: InputFile
+    /// Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video
+    [<DataMember(Name = "format")>]
+    Format: string
     /// List of 1-20 emoji associated with the sticker
     [<DataMember(Name = "emoji_list")>]
     EmojiList: string[]
@@ -3689,9 +3940,10 @@ and [<CLIMutable>] InputSticker =
     [<DataMember(Name = "keywords")>]
     Keywords: string[] option
   }
-  static member Create(sticker: InputFile, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) = 
+  static member Create(sticker: InputFile, format: string, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) = 
     {
       Sticker = sticker
+      Format = format
       EmojiList = emojiList
       MaskPosition = maskPosition
       Keywords = keywords
@@ -5320,28 +5572,28 @@ and [<CLIMutable>] EncryptedPassportElement =
     /// Element type. One of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”, “phone_number”, “email”.
     [<DataMember(Name = "type")>]
     Type: string
-    /// Base64-encoded encrypted Telegram Passport element data provided by the user, available for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Base64-encoded encrypted Telegram Passport element data provided by the user; available only for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
     [<DataMember(Name = "data")>]
     Data: string option
-    /// User's verified phone number, available only for “phone_number” type
+    /// User's verified phone number; available only for “phone_number” type
     [<DataMember(Name = "phone_number")>]
     PhoneNumber: string option
-    /// User's verified email address, available only for “email” type
+    /// User's verified email address; available only for “email” type
     [<DataMember(Name = "email")>]
     Email: string option
-    /// Array of encrypted files with documents provided by the user, available for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Array of encrypted files with documents provided by the user; available only for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
     [<DataMember(Name = "files")>]
     Files: PassportFile[] option
-    /// Encrypted file with the front side of the document, provided by the user. Available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Encrypted file with the front side of the document, provided by the user; available only for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
     [<DataMember(Name = "front_side")>]
     FrontSide: PassportFile option
-    /// Encrypted file with the reverse side of the document, provided by the user. Available for “driver_license” and “identity_card”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Encrypted file with the reverse side of the document, provided by the user; available only for “driver_license” and “identity_card”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
     [<DataMember(Name = "reverse_side")>]
     ReverseSide: PassportFile option
-    /// Encrypted file with the selfie of the user holding a document, provided by the user; available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Encrypted file with the selfie of the user holding a document, provided by the user; available if requested for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
     [<DataMember(Name = "selfie")>]
     Selfie: PassportFile option
-    /// Array of encrypted files with translated versions of documents provided by the user. Available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    /// Array of encrypted files with translated versions of documents provided by the user; available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
     [<DataMember(Name = "translation")>]
     Translation: PassportFile[] option
     /// Base64-encoded element hash for using in PassportElementErrorUnspecified
