@@ -160,6 +160,14 @@
     "Description": "Use this method to send text messages. On success, the sent Message is returned.",
     "Fields": [
       {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
         "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
@@ -234,7 +242,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -332,7 +340,7 @@
       {
         "OriginalName": "message_ids",
         "ConvertedName": "MessageIds",
-        "Description": "Identifiers of 1-100 messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order.",
+        "Description": "A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to forward. The identifiers must be specified in a strictly increasing order.",
         "OriginalFieldType": "Array of Integer",
         "ConvertedFieldType": "int64[]",
         "Optional": false
@@ -486,7 +494,7 @@
       {
         "OriginalName": "message_ids",
         "ConvertedName": "MessageIds",
-        "Description": "Identifiers of 1-100 messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order.",
+        "Description": "A JSON-serialized list of 1-100 identifiers of messages in the chat from_chat_id to copy. The identifiers must be specified in a strictly increasing order.",
         "OriginalFieldType": "Array of Integer",
         "ConvertedFieldType": "int64[]",
         "Optional": false
@@ -524,6 +532,14 @@
     "ConvertedName": "SendPhoto",
     "Description": "Use this method to send photos. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -607,7 +623,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -621,6 +637,14 @@
     "ConvertedName": "SendAudio",
     "Description": "Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -728,7 +752,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -742,6 +766,14 @@
     "ConvertedName": "SendDocument",
     "Description": "Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -833,7 +865,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -847,6 +879,14 @@
     "ConvertedName": "SendVideo",
     "Description": "Use this method to send video files, Telegram clients support MPEG4 videos (other formats may be sent as Document). On success, the sent Message is returned. Bots can currently send video files of up to 50 MB in size, this limit may be changed in the future.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -970,7 +1010,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -984,6 +1024,14 @@
     "ConvertedName": "SendAnimation",
     "Description": "Use this method to send animation files (GIF or H.264/MPEG-4 AVC video without sound). On success, the sent Message is returned. Bots can currently send animation files of up to 50 MB in size, this limit may be changed in the future.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1099,7 +1147,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1113,6 +1161,14 @@
     "ConvertedName": "SendVoice",
     "Description": "Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1196,7 +1252,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1210,6 +1266,14 @@
     "ConvertedName": "SendVideoNote",
     "Description": "As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1285,7 +1349,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1299,6 +1363,14 @@
     "ConvertedName": "SendMediaGroup",
     "Description": "Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1356,6 +1428,14 @@
     "ConvertedName": "SendLocation",
     "Description": "Use this method to send point on the map. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1447,7 +1527,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1461,6 +1541,14 @@
     "ConvertedName": "SendVenue",
     "Description": "Use this method to send information about a venue. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1568,7 +1656,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1582,6 +1670,14 @@
     "ConvertedName": "SendContact",
     "Description": "Use this method to send phone contacts. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1657,7 +1753,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1671,6 +1767,14 @@
     "ConvertedName": "SendPoll",
     "Description": "Use this method to send a native poll. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1810,7 +1914,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1824,6 +1928,14 @@
     "ConvertedName": "SendDice",
     "Description": "Use this method to send an animated emoji that will display a random value. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -1875,7 +1987,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1890,6 +2002,14 @@
     "Description": "Use this method when you need to tell the user that something is happening on the bot\u0027s side. The status is set for 5 seconds or less (when a message arrives from your bot, Telegram clients clear its typing status). Returns True on success.",
     "Fields": [
       {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the action will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
         "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
@@ -1900,7 +2020,7 @@
       {
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
-        "Description": "Unique identifier for the target message thread; supergroups only",
+        "Description": "Unique identifier for the target message thread; for supergroups only",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1941,7 +2061,7 @@
       {
         "OriginalName": "reaction",
         "ConvertedName": "Reaction",
-        "Description": "New list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.",
+        "Description": "A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.",
         "OriginalFieldType": "Array of ReactionType",
         "ConvertedFieldType": "ReactionType[]",
         "Optional": true
@@ -2243,7 +2363,7 @@
       {
         "OriginalName": "can_post_messages",
         "ConvertedName": "CanPostMessages",
-        "Description": "Pass True if the administrator can post messages in the channel, or access channel statistics; channels only",
+        "Description": "Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2251,7 +2371,7 @@
       {
         "OriginalName": "can_edit_messages",
         "ConvertedName": "CanEditMessages",
-        "Description": "Pass True if the administrator can edit messages of other users and can pin messages; channels only",
+        "Description": "Pass True if the administrator can edit messages of other users and can pin messages; for channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2259,7 +2379,7 @@
       {
         "OriginalName": "can_pin_messages",
         "ConvertedName": "CanPinMessages",
-        "Description": "Pass True if the administrator can pin messages, supergroups only",
+        "Description": "Pass True if the administrator can pin messages; for supergroups only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2267,7 +2387,7 @@
       {
         "OriginalName": "can_manage_topics",
         "ConvertedName": "CanManageTopics",
-        "Description": "Pass True if the user is allowed to create, rename, close, and reopen forum topics, supergroups only",
+        "Description": "Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3267,6 +3387,23 @@
     "ConvertedReturnType": "UserChatBoosts"
   },
   {
+    "OriginalName": "getBusinessConnection",
+    "ConvertedName": "GetBusinessConnection",
+    "Description": "Use this method to get information about the connection of the bot with a business account. Returns a BusinessConnection object on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "BusinessConnection",
+    "ConvertedReturnType": "BusinessConnection"
+  },
+  {
     "OriginalName": "setMyCommands",
     "ConvertedName": "SetMyCommands",
     "Description": "Use this method to change the list of the bot\u0027s commands. See this manual for more details about bot commands. Returns True on success.",
@@ -3983,7 +4120,7 @@
       {
         "OriginalName": "message_ids",
         "ConvertedName": "MessageIds",
-        "Description": "Identifiers of 1-100 messages to delete. See deleteMessage for limitations on which messages can be deleted",
+        "Description": "A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted",
         "OriginalFieldType": "Array of Integer",
         "ConvertedFieldType": "int64[]",
         "Optional": false
@@ -3997,6 +4134,14 @@
     "ConvertedName": "SendSticker",
     "Description": "Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -4016,7 +4161,7 @@
       {
         "OriginalName": "sticker",
         "ConvertedName": "Sticker",
-        "Description": "Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP or .TGS sticker using multipart/form-data. More information on Sending Files \u00BB. Video stickers can only be sent by a file_id. Animated stickers can\u0027t be sent via an HTTP URL.",
+        "Description": "Sticker to send. Pass a file_id as String to send a file that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a .WEBP sticker from the Internet, or upload a new .WEBP, .TGS, or .WEBM sticker using multipart/form-data. More information on Sending Files \u00BB. Video and animated stickers can\u0027t be sent via an HTTP URL.",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
         "Optional": false
@@ -4056,7 +4201,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -4090,7 +4235,7 @@
       {
         "OriginalName": "custom_emoji_ids",
         "ConvertedName": "CustomEmojiIds",
-        "Description": "List of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.",
+        "Description": "A JSON-serialized list of custom emoji identifiers. At most 200 custom emoji identifiers can be specified.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": false
@@ -4102,7 +4247,7 @@
   {
     "OriginalName": "uploadStickerFile",
     "ConvertedName": "UploadStickerFile",
-    "Description": "Use this method to upload a file with a sticker for later use in the createNewStickerSet and addStickerToSet methods (the file can be used multiple times). Returns the uploaded File on success.",
+    "Description": "Use this method to upload a file with a sticker for later use in the createNewStickerSet, addStickerToSet, or replaceStickerInSet methods (the file can be used multiple times). Returns the uploaded File on success.",
     "Fields": [
       {
         "OriginalName": "user_id",
@@ -4170,14 +4315,6 @@
         "Optional": false
       },
       {
-        "OriginalName": "sticker_format",
-        "ConvertedName": "StickerFormat",
-        "Description": "Format of stickers in the set, must be one of \u201Cstatic\u201D, \u201Canimated\u201D, \u201Cvideo\u201D",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": false
-      },
-      {
         "OriginalName": "sticker_type",
         "ConvertedName": "StickerType",
         "Description": "Type of stickers in the set, pass \u201Cregular\u201D, \u201Cmask\u201D, or \u201Ccustom_emoji\u201D. By default, a regular sticker set is created.",
@@ -4200,7 +4337,7 @@
   {
     "OriginalName": "addStickerToSet",
     "ConvertedName": "AddStickerToSet",
-    "Description": "Use this method to add a new sticker to a set created by the bot. The format of the added sticker must match the format of the other stickers in the set. Emoji sticker sets can have up to 200 stickers. Animated and video sticker sets can have up to 50 stickers. Static sticker sets can have up to 120 stickers. Returns True on success.",
+    "Description": "Use this method to add a new sticker to a set created by the bot. Emoji sticker sets can have up to 200 stickers. Other sticker sets can have up to 120 stickers. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "user_id",
@@ -4266,6 +4403,47 @@
         "Description": "File identifier of the sticker",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "replaceStickerInSet",
+    "ConvertedName": "ReplaceStickerInSet",
+    "Description": "Use this method to replace an existing sticker in a sticker set with a new one. The method is equivalent to calling deleteStickerFromSet, then addStickerToSet, then setStickerPositionInSet. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "User identifier of the sticker set owner",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Sticker set name",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "old_sticker",
+        "ConvertedName": "OldSticker",
+        "Description": "File identifier of the replaced sticker",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "sticker",
+        "ConvertedName": "Sticker",
+        "Description": "A JSON-serialized object with information about the added sticker. If exactly the same sticker had already been added to the set, then the set remains unchanged.",
+        "OriginalFieldType": "InputSticker",
+        "ConvertedFieldType": "InputSticker",
         "Optional": false
       }
     ],
@@ -4400,6 +4578,14 @@
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
         "Optional": true
+      },
+      {
+        "OriginalName": "format",
+        "ConvertedName": "Format",
+        "Description": "Format of the thumbnail, must be one of \u201Cstatic\u201D for a .WEBP or .PNG image, \u201Canimated\u201D for a .TGS animation, or \u201Cvideo\u201D for a WEBM video",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
       }
     ],
     "OriginalReturnType": "True",
@@ -5028,6 +5214,14 @@
     "Description": "Use this method to send a game. On success, the sent Message is returned.",
     "Fields": [
       {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
         "Description": "Unique identifier for the target chat",
@@ -5078,7 +5272,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for an inline keyboard. If empty, one \u0027Play game_title\u0027 button will be shown. If not empty, the first button must launch the game.",
+        "Description": "A JSON-serialized object for an inline keyboard. If empty, one \u0027Play game_title\u0027 button will be shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a business account.",
         "OriginalFieldType": "InlineKeyboardMarkup",
         "ConvertedFieldType": "InlineKeyboardMarkup",
         "Optional": true
