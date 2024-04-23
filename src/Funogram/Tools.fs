@@ -1,8 +1,9 @@
 module Funogram.Tools
 
 open System
-open System.Net
+open System.IO
 open System.Net.Http
+open System.Net.Http.Headers
 open System.Runtime.CompilerServices
 open System.Text
 open System.Text.Json
@@ -14,10 +15,66 @@ open Funogram.Types
 do ()
 
 open System.Collections.Concurrent
-open System.IO
 open System.Linq.Expressions
 open Funogram.Converters
 open TypeShape.Core
+
+module internal RequestLogger =
+  type Logger =
+    {
+      Text: StringBuilder
+      Logger: IBotLogger
+    }
+  
+  let createIfRequired (config: BotConfig) =
+    match config.RequestLogger with
+    | Some logger when logger.Enabled -> { Text = StringBuilder(); Logger = logger } |> Some
+    | _ -> None
+  
+  let appendReqAsync (url: string) (content: MultipartFormDataContent) (hasData: bool) (logger: Logger) =
+    task {
+      let req = if hasData then "POST" else "GET"
+      let sb = logger.Text.Append("Req: ").Append(req).Append(" ").AppendLine(url)
+      try
+        if hasData then
+          sb.AppendLine("multipart/form-data") |> ignore
+          for item in content do
+            sb.Append(item.Headers.ContentDisposition.Name) |> ignore
+            match item with
+            | :? StringContent as s ->
+              let! s = s.ReadAsStringAsync()
+              sb.Append("=").Append(s).AppendLine() |> ignore
+            | :? ByteArrayContent as b ->
+              let fileName = item.Headers.ContentDisposition.FileName
+              if String.IsNullOrEmpty(fileName) then
+                let! b = b.ReadAsByteArrayAsync()
+                let s = Encoding.UTF8.GetString(b)
+                sb.Append("=").AppendLine(s) |> ignore
+              else
+                sb.Append("=[file ").Append(fileName).AppendLine("]") |> ignore
+            | _ -> ()
+      with | _ -> ()
+    }
+  
+  let appendReqJson (url: string) (data: byte[]) (logger: Logger) =
+    logger.Text
+      .Append("Req: POST ")
+      .AppendLine(url)
+      .AppendLine("application/json")
+      .AppendLine(Encoding.UTF8.GetString(data)) |> ignore
+    
+  
+  let appendResAndWriteAsync (stream: Stream) (logger: Logger) =
+    async {
+      let! data = stream.AsyncRead(int stream.Length)
+      logger.Text.Append("Res: ").Append(Encoding.UTF8.GetString(data)) |> ignore
+      stream.Seek(0, SeekOrigin.Begin) |> ignore
+      logger.Logger.Log(logger.Text.ToString())
+    }
+  
+  let appendResExceptionAndWrite (e: exn) (logger: Logger) =
+    logger.Text.Append("Res: ").Append(e.ToString()) |> ignore
+    logger.Logger.Log(logger.Text.ToString())
 
 let internal options =
   let o =
@@ -422,29 +479,55 @@ module Api =
 
       use content = new MultipartFormDataContent()
       let hasData = serialize request content
+      
+      let logger = RequestLogger.createIfRequired config
+      match logger with
+      | Some logger -> do! logger |> RequestLogger.appendReqAsync url content hasData |> Async.AwaitTask
+      | _ -> ()
 
-      let! result =
-        if hasData then client.PostAsync(url, content) |> Async.AwaitTask
-        else client.GetAsync(url) |> Async.AwaitTask
-  
-      if result.StatusCode = HttpStatusCode.OK then
+      let mutable statusCode = -1
+      try
+        let! result =
+          if hasData then client.PostAsync(url, content) |> Async.AwaitTask
+          else client.GetAsync(url) |> Async.AwaitTask
+        
+        statusCode <- result.StatusCode |> int
+        
         use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
+        match logger with
+        | Some logger -> do! logger |> RequestLogger.appendResAndWriteAsync stream
+        | _ -> ()
         return parseJsonStreamApiResponse<'a> stream
-      else
-        return Error { Description = "HTTP_ERROR"; ErrorCode = int result.StatusCode }
+      with
+      | e ->
+        logger |> Option.iter (RequestLogger.appendResExceptionAndWrite e)
+        return Error { Description = "HTTP_ERROR"; ErrorCode = statusCode }
     }
 
-  let makeJsonBodyRequestAsync config (request: IRequestBase<'a>) =
+  let makeJsonBodyRequestAsync<'a, 'b when 'a :> IRequestBase<'b>> config (request: 'a) =
     async {
       let client = config.Client
       let url = getUrl config request.MethodName
       
-      use ms = new MemoryStream()
-      JsonSerializer.Serialize(ms, request, options)
-
-      use content = new StreamContent(ms)
-      let! result = client.PostAsync(url, content) |> Async.AwaitTask
-  
-      use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
-      return parseJsonStreamApiResponse<'a> stream
+      let logger = RequestLogger.createIfRequired config
+      
+      let bytes = JsonSerializer.SerializeToUtf8Bytes(request, options)
+      logger |> Option.iter (RequestLogger.appendReqJson url bytes)
+      
+      let mutable statusCode = -1
+      try
+        use content = new ByteArrayContent(bytes)
+        content.Headers.ContentType <- MediaTypeHeaderValue.Parse("application/json")
+        let! result = client.PostAsync(url, content) |> Async.AwaitTask
+        statusCode <- result.StatusCode |> int
+        
+        use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
+        match logger with
+        | Some logger -> do! logger |> RequestLogger.appendResAndWriteAsync stream
+        | _ -> ()
+        return parseJsonStreamApiResponse<'a> stream
+      with
+      | e ->
+        logger |> Option.iter (RequestLogger.appendResExceptionAndWrite e)
+        return Error { Description = "HTTP_ERROR"; ErrorCode = statusCode }
     }
