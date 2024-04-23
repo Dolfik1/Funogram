@@ -4,7 +4,6 @@ open System
 open System.Collections.Generic
 open System.IO
 open System.Runtime.CompilerServices
-open System.Runtime.Serialization
 open System.Text.Json
 open System.Text.Json.Serialization
 open TypeShape.Core
@@ -25,8 +24,8 @@ module internal Converters =
         && (case.Fields[1].Member.Type = typeof<Stream> || case.Fields[1].Member.Type = typeof<byte[]>)
     
     if case.Fields.Length = 0 then
+      let name = caseName case.CaseInfo
       fun (writer: Utf8JsonWriter) _ _ ->
-        let name = toSnakeCase case.CaseInfo.Name
         writer.WriteStringValue(name)
     else
       case.Fields[0].Accept { new IMemberVisitor<'DeclaringType, Utf8JsonWriter -> 'DeclaringType -> JsonSerializerOptions -> unit> with
@@ -89,17 +88,7 @@ module internal Converters =
       union.UnionCases
       |> Seq.map (fun c ->
         if c.Fields.Length = 0 then
-          let dataMember =
-            c.CaseInfo.GetCustomAttributes(typeof<DataMemberAttribute>)
-            |> Seq.cast<DataMemberAttribute>
-            |> Seq.filter (fun x -> String.IsNullOrEmpty(x.Name) |> not)
-            |> Seq.toArray
-          
-          let name =
-            if dataMember.Length > 0
-            then dataMember[0].Name
-            else c.CaseInfo.Name |> toSnakeCase
-          (Set.ofList [name], None)
+          (Set.ofList [caseName c.CaseInfo], None)
         else
           let tp = c.Fields[0].Member.Type
           if tp.IsPrimitive then (Set.empty, Some tp)

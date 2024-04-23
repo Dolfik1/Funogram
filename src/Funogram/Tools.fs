@@ -379,7 +379,7 @@ module Api =
           else None
         
         if isEnum then
-          let name = StringUtils.toSnakeCase case.CaseInfo.Name
+          let name = StringUtils.caseName case.CaseInfo
           fun _ (prop: string) (data: MultipartFormDataContent) ->
             data.Add(strf "%s" name, prop) $ true
         else
@@ -422,7 +422,7 @@ module Api =
 
       use content = new MultipartFormDataContent()
       let hasData = serialize request content
-      
+
       let! result =
         if hasData then client.PostAsync(url, content) |> Async.AwaitTask
         else client.GetAsync(url) |> Async.AwaitTask

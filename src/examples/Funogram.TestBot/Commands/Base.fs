@@ -15,6 +15,7 @@ let defaultText = """⭐️Available test commands:
   /send_message7 - Test inline keyboard
   /send_message8 - Test multiple media
   /send_message9 - Test multiple media as bytes
+  /send_message10 - MarkdownV2 test
     
   /send_action - Test action
 
@@ -46,6 +47,7 @@ let updateArrived (ctx: UpdateContext) =
        
       cmd "/send_message8" (fun _ -> Files.testUploadAndSendPhotoGroup |> wrap)
       cmd "/send_message9" (fun _ -> Files.testUploadAndSendPhotoGroupAsBytes |> wrap)
+      cmd "/send_message10" (fun _ -> TextMessages.testMarkdownV2 |> wrap)
 
       cmd "/forward_message" (fun _ -> TextMessages.testForwardMessage ctx |> wrap)
 

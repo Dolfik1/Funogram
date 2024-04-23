@@ -28,6 +28,8 @@ type ParseMode =
   | Markdown
   /// Html parse syntax
   | HTML
+  /// MarkdownV2 parse syntax
+  | [<DataMember(Name = "MarkdownV2")>] MarkdownV2
 
 /// Type of action to broadcast
 type ChatAction =
