@@ -4,6 +4,7 @@ open Funogram.Telegram
 open Funogram.Telegram.Bot
 open Funogram.TestBot.Core
 open Funogram.Telegram.Types
+open Funogram.Tools
 
 let private sendMessageFormatted text parseMode config chatId =
   Req.SendMessage.Make(ChatId.Int chatId, text, parseMode = parseMode) |> bot config
@@ -62,7 +63,14 @@ let HtmlExample = """
 """
 
 let testMarkdown = sendMessageFormatted MarkdownExample ParseMode.Markdown
-let testMarkdownV2 = sendMessageFormatted MarkdownV2Example ParseMode.MarkdownV2
+let testMarkdownV2 jsonBody config chatId =
+  if jsonBody then
+    Req.SendMessage.Make(ChatId.Int chatId, MarkdownV2Example, parseMode = ParseMode.MarkdownV2)
+    |> Api.makeJsonBodyRequestAsync config
+    |> Async.Ignore
+    |> Async.Start
+  else
+    sendMessageFormatted MarkdownV2Example ParseMode.MarkdownV2 config chatId
 let testHtml = sendMessageFormatted HtmlExample ParseMode.HTML
 let testNoWebpageAndNotification config chatId =
   Req.SendMessage.Make(

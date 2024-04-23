@@ -7,6 +7,10 @@ open System.Net
 
 type BotWebHook = { Listener: HttpListener; ValidateRequest: HttpListenerRequest -> bool }
 
+type IBotLogger =
+  abstract member Log: message: string -> unit
+  abstract member Enabled: bool
+
 type BotConfig = 
   { IsTest: bool
     Token: string
@@ -17,7 +21,8 @@ type BotConfig =
     OnError: Exception -> unit
     ApiEndpointUrl: Uri
     Client: HttpClient
-    WebHook: BotWebHook option }
+    WebHook: BotWebHook option
+    RequestLogger: IBotLogger option }
 
 type IBotRequest =
   [<IgnoreDataMember>]

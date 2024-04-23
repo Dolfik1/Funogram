@@ -25,14 +25,15 @@ module Config =
       Client = new HttpClient()
       ApiEndpointUrl = Uri("https://api.telegram.org/bot")
       WebHook = None
-      OnError = (fun e -> printfn "%A" e) }
+      OnError = printfn "%A"
+      RequestLogger = None }
 
   let withReadTokenFromFile config =
     if File.Exists(TokenFileName) then
       { config with Token = File.ReadAllText(TokenFileName) }
     else
       printf "Please, enter bot token: "
-      let token = System.Console.ReadLine()
+      let token = Console.ReadLine()
       File.WriteAllText(TokenFileName, token)
       { config with Token = token }
 
