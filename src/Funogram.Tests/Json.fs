@@ -116,3 +116,9 @@ let ``JSON deserializing ChatMember``() =
   |> function
   | Ok result -> shouldEqual result Constants.jsonTestObjChatMember
   | Error error -> failwith error.Description
+
+[<Fact>]
+let ``JSON serializing send message request`` () =
+  Constants.sendMessageReq
+  |> toJsonBotRequestString
+  |> shouldEqual Constants.jsonSendMessageReq
