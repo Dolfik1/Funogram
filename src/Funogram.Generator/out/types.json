@@ -57,7 +57,7 @@
           {
             "OriginalName": "business_message",
             "ConvertedName": "BusinessMessage",
-            "Description": "New non-service message from a connected business account",
+            "Description": "New message from a connected business account",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
             "Optional": true
@@ -402,7 +402,7 @@
           {
             "OriginalName": "type",
             "ConvertedName": "Type",
-            "Description": "Type of chat, can be either \u201Cprivate\u201D, \u201Cgroup\u201D, \u201Csupergroup\u201D or \u201Cchannel\u201D",
+            "Description": "Type of the chat, can be either \u201Cprivate\u201D, \u201Cgroup\u201D, \u201Csupergroup\u201D or \u201Cchannel\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "ChatType",
             "Optional": false
@@ -446,11 +446,94 @@
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatFullInfo",
+    "Description": "This object contains full information about a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier for this chat. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the chat, can be either \u201Cprivate\u201D, \u201Cgroup\u201D, \u201Csupergroup\u201D or \u201Cchannel\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "title",
+            "ConvertedName": "Title",
+            "Description": "Title, for supergroups, channels and group chats",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "username",
+            "ConvertedName": "Username",
+            "Description": "Username, for private chats, supergroups and channels if available",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "first_name",
+            "ConvertedName": "FirstName",
+            "Description": "First name of the other party in a private chat",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "last_name",
+            "ConvertedName": "LastName",
+            "Description": "Last name of the other party in a private chat",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_forum",
+            "ConvertedName": "IsForum",
+            "Description": "True, if the supergroup chat is a forum (has topics enabled)",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "accent_color_id",
+            "ConvertedName": "AccentColorId",
+            "Description": "Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "max_reaction_count",
+            "ConvertedName": "MaxReactionCount",
+            "Description": "The maximum number of reactions that can be set on a message in the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
           },
           {
             "OriginalName": "photo",
             "ConvertedName": "Photo",
-            "Description": "Chat photo. Returned only in getChat.",
+            "Description": "Chat photo",
             "OriginalFieldType": "ChatPhoto",
             "ConvertedFieldType": "ChatPhoto",
             "Optional": true
@@ -458,7 +541,7 @@
           {
             "OriginalName": "active_usernames",
             "ConvertedName": "ActiveUsernames",
-            "Description": "If non-empty, the list of all active chat usernames; for private chats, supergroups and channels. Returned only in getChat.",
+            "Description": "If non-empty, the list of all active chat usernames; for private chats, supergroups and channels",
             "OriginalFieldType": "Array of String",
             "ConvertedFieldType": "string[]",
             "Optional": true
@@ -466,7 +549,7 @@
           {
             "OriginalName": "birthdate",
             "ConvertedName": "Birthdate",
-            "Description": "For private chats, the date of birth of the user. Returned only in getChat.",
+            "Description": "For private chats, the date of birth of the user",
             "OriginalFieldType": "Birthdate",
             "ConvertedFieldType": "Birthdate",
             "Optional": true
@@ -474,7 +557,7 @@
           {
             "OriginalName": "business_intro",
             "ConvertedName": "BusinessIntro",
-            "Description": "For private chats with business accounts, the intro of the business. Returned only in getChat.",
+            "Description": "For private chats with business accounts, the intro of the business",
             "OriginalFieldType": "BusinessIntro",
             "ConvertedFieldType": "BusinessIntro",
             "Optional": true
@@ -482,7 +565,7 @@
           {
             "OriginalName": "business_location",
             "ConvertedName": "BusinessLocation",
-            "Description": "For private chats with business accounts, the location of the business. Returned only in getChat.",
+            "Description": "For private chats with business accounts, the location of the business",
             "OriginalFieldType": "BusinessLocation",
             "ConvertedFieldType": "BusinessLocation",
             "Optional": true
@@ -490,7 +573,7 @@
           {
             "OriginalName": "business_opening_hours",
             "ConvertedName": "BusinessOpeningHours",
-            "Description": "For private chats with business accounts, the opening hours of the business. Returned only in getChat.",
+            "Description": "For private chats with business accounts, the opening hours of the business",
             "OriginalFieldType": "BusinessOpeningHours",
             "ConvertedFieldType": "BusinessOpeningHours",
             "Optional": true
@@ -498,7 +581,7 @@
           {
             "OriginalName": "personal_chat",
             "ConvertedName": "PersonalChat",
-            "Description": "For private chats, the personal channel of the user. Returned only in getChat.",
+            "Description": "For private chats, the personal channel of the user",
             "OriginalFieldType": "Chat",
             "ConvertedFieldType": "Chat",
             "Optional": true
@@ -506,23 +589,15 @@
           {
             "OriginalName": "available_reactions",
             "ConvertedName": "AvailableReactions",
-            "Description": "List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed. Returned only in getChat.",
+            "Description": "List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed.",
             "OriginalFieldType": "Array of ReactionType",
             "ConvertedFieldType": "ReactionType[]",
             "Optional": true
           },
           {
-            "OriginalName": "accent_color_id",
-            "ConvertedName": "AccentColorId",
-            "Description": "Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details. Returned only in getChat. Always returned in getChat.",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
-            "Optional": true
-          },
-          {
             "OriginalName": "background_custom_emoji_id",
             "ConvertedName": "BackgroundCustomEmojiId",
-            "Description": "Custom emoji identifier of emoji chosen by the chat for the reply header and link preview background. Returned only in getChat.",
+            "Description": "Custom emoji identifier of the emoji chosen by the chat for the reply header and link preview background",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -530,7 +605,7 @@
           {
             "OriginalName": "profile_accent_color_id",
             "ConvertedName": "ProfileAccentColorId",
-            "Description": "Identifier of the accent color for the chat\u0027s profile background. See profile accent colors for more details. Returned only in getChat.",
+            "Description": "Identifier of the accent color for the chat\u0027s profile background. See profile accent colors for more details.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -538,7 +613,7 @@
           {
             "OriginalName": "profile_background_custom_emoji_id",
             "ConvertedName": "ProfileBackgroundCustomEmojiId",
-            "Description": "Custom emoji identifier of the emoji chosen by the chat for its profile background. Returned only in getChat.",
+            "Description": "Custom emoji identifier of the emoji chosen by the chat for its profile background",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -546,7 +621,7 @@
           {
             "OriginalName": "emoji_status_custom_emoji_id",
             "ConvertedName": "EmojiStatusCustomEmojiId",
-            "Description": "Custom emoji identifier of the emoji status of the chat or the other party in a private chat. Returned only in getChat.",
+            "Description": "Custom emoji identifier of the emoji status of the chat or the other party in a private chat",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -554,7 +629,7 @@
           {
             "OriginalName": "emoji_status_expiration_date",
             "ConvertedName": "EmojiStatusExpirationDate",
-            "Description": "Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any. Returned only in getChat.",
+            "Description": "Expiration date of the emoji status of the chat or the other party in a private chat, in Unix time, if any",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -562,7 +637,7 @@
           {
             "OriginalName": "bio",
             "ConvertedName": "Bio",
-            "Description": "Bio of the other party in a private chat. Returned only in getChat.",
+            "Description": "Bio of the other party in a private chat",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -570,7 +645,7 @@
           {
             "OriginalName": "has_private_forwards",
             "ConvertedName": "HasPrivateForwards",
-            "Description": "True, if privacy settings of the other party in the private chat allows to use tg://user?id=\u003Cuser_id\u003E links only in chats with the user. Returned only in getChat.",
+            "Description": "True, if privacy settings of the other party in the private chat allows to use tg://user?id=\u003Cuser_id\u003E links only in chats with the user",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -578,7 +653,7 @@
           {
             "OriginalName": "has_restricted_voice_and_video_messages",
             "ConvertedName": "HasRestrictedVoiceAndVideoMessages",
-            "Description": "True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat. Returned only in getChat.",
+            "Description": "True, if the privacy settings of the other party restrict sending voice and video note messages in the private chat",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -586,7 +661,7 @@
           {
             "OriginalName": "join_to_send_messages",
             "ConvertedName": "JoinToSendMessages",
-            "Description": "True, if users need to join the supergroup before they can send messages. Returned only in getChat.",
+            "Description": "True, if users need to join the supergroup before they can send messages",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -594,7 +669,7 @@
           {
             "OriginalName": "join_by_request",
             "ConvertedName": "JoinByRequest",
-            "Description": "True, if all users directly joining the supergroup need to be approved by supergroup administrators. Returned only in getChat.",
+            "Description": "True, if all users directly joining the supergroup without using an invite link need to be approved by supergroup administrators",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -602,7 +677,7 @@
           {
             "OriginalName": "description",
             "ConvertedName": "Description",
-            "Description": "Description, for groups, supergroups and channel chats. Returned only in getChat.",
+            "Description": "Description, for groups, supergroups and channel chats",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -610,7 +685,7 @@
           {
             "OriginalName": "invite_link",
             "ConvertedName": "InviteLink",
-            "Description": "Primary invite link, for groups, supergroups and channel chats. Returned only in getChat.",
+            "Description": "Primary invite link, for groups, supergroups and channel chats",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -618,7 +693,7 @@
           {
             "OriginalName": "pinned_message",
             "ConvertedName": "PinnedMessage",
-            "Description": "The most recent pinned message (by sending date). Returned only in getChat.",
+            "Description": "The most recent pinned message (by sending date)",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
             "Optional": true
@@ -626,7 +701,7 @@
           {
             "OriginalName": "permissions",
             "ConvertedName": "Permissions",
-            "Description": "Default chat member permissions, for groups and supergroups. Returned only in getChat.",
+            "Description": "Default chat member permissions, for groups and supergroups",
             "OriginalFieldType": "ChatPermissions",
             "ConvertedFieldType": "ChatPermissions",
             "Optional": true
@@ -634,7 +709,7 @@
           {
             "OriginalName": "slow_mode_delay",
             "ConvertedName": "SlowModeDelay",
-            "Description": "For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds. Returned only in getChat.",
+            "Description": "For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -642,7 +717,7 @@
           {
             "OriginalName": "unrestrict_boost_count",
             "ConvertedName": "UnrestrictBoostCount",
-            "Description": "For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions. Returned only in getChat.",
+            "Description": "For supergroups, the minimum number of boosts that a non-administrator user needs to add in order to ignore slow mode and chat permissions",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -650,7 +725,7 @@
           {
             "OriginalName": "message_auto_delete_time",
             "ConvertedName": "MessageAutoDeleteTime",
-            "Description": "The time after which all messages sent to the chat will be automatically deleted; in seconds. Returned only in getChat.",
+            "Description": "The time after which all messages sent to the chat will be automatically deleted; in seconds",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -658,7 +733,7 @@
           {
             "OriginalName": "has_aggressive_anti_spam_enabled",
             "ConvertedName": "HasAggressiveAntiSpamEnabled",
-            "Description": "True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators. Returned only in getChat.",
+            "Description": "True, if aggressive anti-spam checks are enabled in the supergroup. The field is only available to chat administrators.",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -666,7 +741,7 @@
           {
             "OriginalName": "has_hidden_members",
             "ConvertedName": "HasHiddenMembers",
-            "Description": "True, if non-administrators can only get the list of bots and administrators in the chat. Returned only in getChat.",
+            "Description": "True, if non-administrators can only get the list of bots and administrators in the chat",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -674,7 +749,7 @@
           {
             "OriginalName": "has_protected_content",
             "ConvertedName": "HasProtectedContent",
-            "Description": "True, if messages from the chat can\u0027t be forwarded to other chats. Returned only in getChat.",
+            "Description": "True, if messages from the chat can\u0027t be forwarded to other chats",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -682,7 +757,7 @@
           {
             "OriginalName": "has_visible_history",
             "ConvertedName": "HasVisibleHistory",
-            "Description": "True, if new chat members will have access to old messages; available only to chat administrators. Returned only in getChat.",
+            "Description": "True, if new chat members will have access to old messages; available only to chat administrators",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -690,7 +765,7 @@
           {
             "OriginalName": "sticker_set_name",
             "ConvertedName": "StickerSetName",
-            "Description": "For supergroups, name of group sticker set. Returned only in getChat.",
+            "Description": "For supergroups, name of the group sticker set",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -698,7 +773,7 @@
           {
             "OriginalName": "can_set_sticker_set",
             "ConvertedName": "CanSetStickerSet",
-            "Description": "True, if the bot can change the group sticker set. Returned only in getChat.",
+            "Description": "True, if the bot can change the group sticker set",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -706,7 +781,7 @@
           {
             "OriginalName": "custom_emoji_sticker_set_name",
             "ConvertedName": "CustomEmojiStickerSetName",
-            "Description": "For supergroups, the name of the group\u0027s custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group. Returned only in getChat.",
+            "Description": "For supergroups, the name of the group\u0027s custom emoji sticker set. Custom emoji from this set can be used by all users and bots in the group.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -714,7 +789,7 @@
           {
             "OriginalName": "linked_chat_id",
             "ConvertedName": "LinkedChatId",
-            "Description": "Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier. Returned only in getChat.",
+            "Description": "Unique identifier for the linked chat, i.e. the discussion group identifier for a channel and vice versa; for supergroups and channel chats. This identifier may be greater than 32 bits and some programming languages may have difficulty/silent defects in interpreting it. But it is smaller than 52 bits, so a signed 64 bit integer or double-precision float type are safe for storing this identifier.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -722,7 +797,7 @@
           {
             "OriginalName": "location",
             "ConvertedName": "Location",
-            "Description": "For supergroups, the location to which the supergroup is connected. Returned only in getChat.",
+            "Description": "For supergroups, the location to which the supergroup is connected",
             "OriginalFieldType": "ChatLocation",
             "ConvertedFieldType": "ChatLocation",
             "Optional": true
@@ -1248,6 +1323,14 @@
             "Description": "Service message: user boosted the chat",
             "OriginalFieldType": "ChatBoostAdded",
             "ConvertedFieldType": "ChatBoostAdded",
+            "Optional": true
+          },
+          {
+            "OriginalName": "chat_background_set",
+            "ConvertedName": "ChatBackgroundSet",
+            "Description": "Service message: chat background set",
+            "OriginalFieldType": "ChatBackground",
+            "ConvertedFieldType": "ChatBackground",
             "Optional": true
           },
           {
@@ -2608,12 +2691,55 @@
             "Optional": false
           },
           {
+            "OriginalName": "text_entities",
+            "ConvertedName": "TextEntities",
+            "Description": "Special entities that appear in the option text. Currently, only custom emoji entities are allowed in poll option texts",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
             "OriginalName": "voter_count",
             "ConvertedName": "VoterCount",
             "Description": "Number of users that voted for this option",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputPollOption",
+    "Description": "This object contains information about one answer option in a poll to send.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Option text, 1-100 characters",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text_parse_mode",
+            "ConvertedName": "TextParseMode",
+            "Description": "Mode for parsing entities in the text. See formatting options for more details. Currently, only custom emoji entities are allowed",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "text_entities",
+            "ConvertedName": "TextEntities",
+            "Description": "A JSON-serialized list of special entities that appear in the poll option text. It can be specified instead of text_parse_mode",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
           }
         ]
       ]
@@ -2684,6 +2810,14 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "question_entities",
+            "ConvertedName": "QuestionEntities",
+            "Description": "Special entities that appear in the question. Currently, only custom emoji entities are allowed in poll questions",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
           },
           {
             "OriginalName": "options",
@@ -3004,6 +3138,344 @@
     }
   },
   {
+    "Name": "BackgroundFill",
+    "Description": "This object describes the way a background is filled based on the selected colors. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Solid",
+            "CaseType": "BackgroundFillSolid"
+          },
+          {
+            "Name": "Gradient",
+            "CaseType": "BackgroundFillGradient"
+          },
+          {
+            "Name": "FreeformGradient",
+            "CaseType": "BackgroundFillFreeformGradient"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundFillSolid",
+    "Description": "The background is filled using the selected color.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background fill, always \u201Csolid\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "color",
+            "ConvertedName": "Color",
+            "Description": "The color of the background fill in the RGB24 format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundFillGradient",
+    "Description": "The background is a gradient fill.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background fill, always \u201Cgradient\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "top_color",
+            "ConvertedName": "TopColor",
+            "Description": "Top color of the gradient in the RGB24 format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "bottom_color",
+            "ConvertedName": "BottomColor",
+            "Description": "Bottom color of the gradient in the RGB24 format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "rotation_angle",
+            "ConvertedName": "RotationAngle",
+            "Description": "Clockwise rotation angle of the background fill in degrees; 0-359",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundFillFreeformGradient",
+    "Description": "The background is a freeform gradient that rotates after every message in the chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background fill, always \u201Cfreeform_gradient\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "colors",
+            "ConvertedName": "Colors",
+            "Description": "A list of the 3 or 4 base colors that are used to generate the freeform gradient in the RGB24 format",
+            "OriginalFieldType": "Array of Integer",
+            "ConvertedFieldType": "int64[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundType",
+    "Description": "This object describes the type of a background. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Fill",
+            "CaseType": "BackgroundTypeFill"
+          },
+          {
+            "Name": "Wallpaper",
+            "CaseType": "BackgroundTypeWallpaper"
+          },
+          {
+            "Name": "Pattern",
+            "CaseType": "BackgroundTypePattern"
+          },
+          {
+            "Name": "ChatTheme",
+            "CaseType": "BackgroundTypeChatTheme"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundTypeFill",
+    "Description": "The background is automatically filled based on the selected colors.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background, always \u201Cfill\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "fill",
+            "ConvertedName": "Fill",
+            "Description": "The background fill",
+            "OriginalFieldType": "BackgroundFill",
+            "ConvertedFieldType": "BackgroundFill",
+            "Optional": false
+          },
+          {
+            "OriginalName": "dark_theme_dimming",
+            "ConvertedName": "DarkThemeDimming",
+            "Description": "Dimming of the background in dark themes, as a percentage; 0-100",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundTypeWallpaper",
+    "Description": "The background is a wallpaper in the JPEG format.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background, always \u201Cwallpaper\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "document",
+            "ConvertedName": "Document",
+            "Description": "Document with the wallpaper",
+            "OriginalFieldType": "Document",
+            "ConvertedFieldType": "Document",
+            "Optional": false
+          },
+          {
+            "OriginalName": "dark_theme_dimming",
+            "ConvertedName": "DarkThemeDimming",
+            "Description": "Dimming of the background in dark themes, as a percentage; 0-100",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_blurred",
+            "ConvertedName": "IsBlurred",
+            "Description": "True, if the wallpaper is downscaled to fit in a 450x450 square and then box-blurred with radius 12",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_moving",
+            "ConvertedName": "IsMoving",
+            "Description": "True, if the background moves slightly when the device is tilted",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundTypePattern",
+    "Description": "The background is a PNG or TGV (gzipped subset of SVG with MIME type \u201Capplication/x-tgwallpattern\u201D) pattern to be combined with the background fill chosen by the user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background, always \u201Cpattern\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "document",
+            "ConvertedName": "Document",
+            "Description": "Document with the pattern",
+            "OriginalFieldType": "Document",
+            "ConvertedFieldType": "Document",
+            "Optional": false
+          },
+          {
+            "OriginalName": "fill",
+            "ConvertedName": "Fill",
+            "Description": "The background fill that is combined with the pattern",
+            "OriginalFieldType": "BackgroundFill",
+            "ConvertedFieldType": "BackgroundFill",
+            "Optional": false
+          },
+          {
+            "OriginalName": "intensity",
+            "ConvertedName": "Intensity",
+            "Description": "Intensity of the pattern when it is shown above the filled background; 0-100",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_inverted",
+            "ConvertedName": "IsInverted",
+            "Description": "True, if the background fill must be applied only to the pattern itself. All other pixels are black in this case. For dark themes only",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_moving",
+            "ConvertedName": "IsMoving",
+            "Description": "True, if the background moves slightly when the device is tilted",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "BackgroundTypeChatTheme",
+    "Description": "The background is taken directly from a built-in chat theme.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background, always \u201Cchat_theme\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "theme_name",
+            "ConvertedName": "ThemeName",
+            "Description": "Name of the chat theme, which is usually an emoji",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChatBackground",
+    "Description": "This object represents a chat background.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the background",
+            "OriginalFieldType": "BackgroundType",
+            "ConvertedFieldType": "BackgroundType",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ForumTopicCreated",
     "Description": "This object represents a service message about a new forum topic created in the chat.",
     "Kind": {
@@ -3095,7 +3567,7 @@
   },
   {
     "Name": "SharedUser",
-    "Description": "This object contains information about a user that was shared with the bot using a KeyboardButtonRequestUser button.",
+    "Description": "This object contains information about a user that was shared with the bot using a KeyboardButtonRequestUsers button.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -3679,7 +4151,7 @@
   },
   {
     "Name": "ReplyKeyboardMarkup",
-    "Description": "This object represents a custom keyboard with reply options (see Introduction to bots for details and examples).",
+    "Description": "This object represents a custom keyboard with reply options (see Introduction to bots for details and examples). Not supported in channels and for messages sent on behalf of a Telegram Business account.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -3845,7 +4317,7 @@
           {
             "OriginalName": "request_name",
             "ConvertedName": "RequestName",
-            "Description": "Pass True to request the users\u0027 first and last name",
+            "Description": "Pass True to request the users\u0027 first and last names",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3853,7 +4325,7 @@
           {
             "OriginalName": "request_username",
             "ConvertedName": "RequestUsername",
-            "Description": "Pass True to request the users\u0027 username",
+            "Description": "Pass True to request the users\u0027 usernames",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3861,7 +4333,7 @@
           {
             "OriginalName": "request_photo",
             "ConvertedName": "RequestPhoto",
-            "Description": "Pass True to request the users\u0027 photo",
+            "Description": "Pass True to request the users\u0027 photos",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -3872,7 +4344,7 @@
   },
   {
     "Name": "KeyboardButtonRequestChat",
-    "Description": "This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the \u0441hat if appropriate More about requesting chats \u00BB",
+    "Description": "This object defines the criteria used to request a suitable chat. Information about the selected chat will be shared with the bot when the corresponding button is pressed. The bot will be granted requested rights in the chat if appropriate. More about requesting chats \u00BB.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -3990,7 +4462,7 @@
   },
   {
     "Name": "ReplyKeyboardRemove",
-    "Description": "Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup).",
+    "Description": "Upon receiving a message with this object, Telegram clients will remove the current custom keyboard and display the default letter-keyboard. By default, custom keyboards are displayed until a new keyboard is sent by a bot. An exception is made for one-time keyboards that are hidden immediately after the user presses a button (see ReplyKeyboardMarkup). Not supported in channels and for messages sent on behalf of a Telegram Business account.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -4060,7 +4532,7 @@
           {
             "OriginalName": "callback_data",
             "ConvertedName": "CallbackData",
-            "Description": "Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes",
+            "Description": "Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -4068,7 +4540,7 @@
           {
             "OriginalName": "web_app",
             "ConvertedName": "WebApp",
-            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot.",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a Telegram Business account.",
             "OriginalFieldType": "WebAppInfo",
             "ConvertedFieldType": "WebAppInfo",
             "Optional": true
@@ -4084,7 +4556,7 @@
           {
             "OriginalName": "switch_inline_query",
             "ConvertedName": "SwitchInlineQuery",
-            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted.",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -4092,7 +4564,7 @@
           {
             "OriginalName": "switch_inline_query_current_chat",
             "ConvertedName": "SwitchInlineQueryCurrentChat",
-            "Description": "If set, pressing the button will insert the bot\u0027s username and the specified inline query in the current chat\u0027s input field. May be empty, in which case only the bot\u0027s username will be inserted.\n\nThis offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options.",
+            "Description": "If set, pressing the button will insert the bot\u0027s username and the specified inline query in the current chat\u0027s input field. May be empty, in which case only the bot\u0027s username will be inserted.\n\nThis offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -4100,7 +4572,7 @@
           {
             "OriginalName": "switch_inline_query_chosen_chat",
             "ConvertedName": "SwitchInlineQueryChosenChat",
-            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.",
             "OriginalFieldType": "SwitchInlineQueryChosenChat",
             "ConvertedFieldType": "SwitchInlineQueryChosenChat",
             "Optional": true
@@ -4288,7 +4760,7 @@
   },
   {
     "Name": "ForceReply",
-    "Description": "Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot\u0027s message and tapped \u0027Reply\u0027). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode.",
+    "Description": "Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot\u0027s message and tapped \u0027Reply\u0027). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a Telegram Business account.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -4529,7 +5001,7 @@
           {
             "OriginalName": "can_edit_stories",
             "ConvertedName": "CanEditStories",
-            "Description": "True, if the administrator can edit stories posted by other users",
+            "Description": "True, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat\u0027s story archive",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -4639,6 +5111,14 @@
             "Description": "Chat invite link, which was used by the user to join the chat; for joining by invite link events only.",
             "OriginalFieldType": "ChatInviteLink",
             "ConvertedFieldType": "ChatInviteLink",
+            "Optional": true
+          },
+          {
+            "OriginalName": "via_join_request",
+            "ConvertedName": "ViaJoinRequest",
+            "Description": "True, if the user joined the chat after sending a direct join request without using an invite link and being approved by an administrator",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -4837,7 +5317,7 @@
           {
             "OriginalName": "can_edit_stories",
             "ConvertedName": "CanEditStories",
-            "Description": "True, if the administrator can edit stories posted by other users",
+            "Description": "True, if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat\u0027s story archive",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -5330,7 +5810,7 @@
   },
   {
     "Name": "Birthdate",
-    "Description": "",
+    "Description": "Describes the birthdate of a user.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5365,7 +5845,7 @@
   },
   {
     "Name": "BusinessIntro",
-    "Description": "",
+    "Description": "Contains information about the start page settings of a Telegram Business account.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5400,7 +5880,7 @@
   },
   {
     "Name": "BusinessLocation",
-    "Description": "",
+    "Description": "Contains information about the location of a Telegram Business account.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5427,7 +5907,7 @@
   },
   {
     "Name": "BusinessOpeningHoursInterval",
-    "Description": "",
+    "Description": "Describes an interval of time during which a business is open.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5454,7 +5934,7 @@
   },
   {
     "Name": "BusinessOpeningHours",
-    "Description": "",
+    "Description": "Describes the opening hours of a business.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6480,7 +6960,7 @@
           {
             "OriginalName": "message_ids",
             "ConvertedName": "MessageIds",
-            "Description": "A JSON-serialized list of identifiers of deleted messages in the chat of the business account",
+            "Description": "The list of identifiers of deleted messages in the chat of the business account",
             "OriginalFieldType": "Array of Integer",
             "ConvertedFieldType": "int64[]",
             "Optional": false
@@ -8376,7 +8856,7 @@
           {
             "OriginalName": "live_period",
             "ConvertedName": "LivePeriod",
-            "Description": "Period in seconds for which the location can be updated, should be between 60 and 86400.",
+            "Description": "Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -9470,7 +9950,7 @@
           {
             "OriginalName": "live_period",
             "ConvertedName": "LivePeriod",
-            "Description": "Period in seconds for which the location can be updated, should be between 60 and 86400.",
+            "Description": "Period in seconds during which the location can be updated, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true

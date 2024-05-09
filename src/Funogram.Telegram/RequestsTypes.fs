@@ -656,7 +656,9 @@ type SendPoll =
     ChatId: ChatId
     MessageThreadId: int64 option
     Question: string
-    Options: string[]
+    QuestionParseMode: string option
+    QuestionEntities: MessageEntity[] option
+    Options: InputPollOption[]
     IsAnonymous: bool option
     Type: string option
     AllowsMultipleAnswers: bool option
@@ -672,12 +674,14 @@ type SendPoll =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, question: string, options: string[], ?businessConnectionId: string, ?protectContent: bool, ?disableNotification: bool, ?isClosed: bool, ?closeDate: int64, ?openPeriod: int64, ?explanationEntities: MessageEntity[], ?explanation: string, ?replyParameters: ReplyParameters, ?correctOptionId: int64, ?allowsMultipleAnswers: bool, ?``type``: string, ?isAnonymous: bool, ?messageThreadId: int64, ?explanationParseMode: string, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, question: string, options: InputPollOption[], ?businessConnectionId: string, ?protectContent: bool, ?disableNotification: bool, ?isClosed: bool, ?closeDate: int64, ?openPeriod: int64, ?explanationEntities: MessageEntity[], ?explanationParseMode: string, ?correctOptionId: int64, ?replyParameters: ReplyParameters, ?allowsMultipleAnswers: bool, ?``type``: string, ?isAnonymous: bool, ?questionEntities: MessageEntity[], ?questionParseMode: string, ?messageThreadId: int64, ?explanation: string, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       Question = question
+      QuestionParseMode = questionParseMode
+      QuestionEntities = questionEntities
       Options = options
       IsAnonymous = isAnonymous
       Type = ``type``
@@ -694,10 +698,10 @@ type SendPoll =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, question: string, options: string[], ?businessConnectionId: string, ?protectContent: bool, ?disableNotification: bool, ?isClosed: bool, ?closeDate: int64, ?openPeriod: int64, ?explanationEntities: MessageEntity[], ?explanation: string, ?replyParameters: ReplyParameters, ?correctOptionId: int64, ?allowsMultipleAnswers: bool, ?``type``: string, ?isAnonymous: bool, ?messageThreadId: int64, ?explanationParseMode: string, ?replyMarkup: Markup) = 
-    SendPoll.Make(ChatId.Int chatId, question, options, ?businessConnectionId = businessConnectionId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?isClosed = isClosed, ?closeDate = closeDate, ?openPeriod = openPeriod, ?explanationEntities = explanationEntities, ?explanation = explanation, ?replyParameters = replyParameters, ?correctOptionId = correctOptionId, ?allowsMultipleAnswers = allowsMultipleAnswers, ?``type`` = ``type``, ?isAnonymous = isAnonymous, ?messageThreadId = messageThreadId, ?explanationParseMode = explanationParseMode, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, question: string, options: string[], ?businessConnectionId: string, ?protectContent: bool, ?disableNotification: bool, ?isClosed: bool, ?closeDate: int64, ?openPeriod: int64, ?explanationEntities: MessageEntity[], ?explanation: string, ?replyParameters: ReplyParameters, ?correctOptionId: int64, ?allowsMultipleAnswers: bool, ?``type``: string, ?isAnonymous: bool, ?messageThreadId: int64, ?explanationParseMode: string, ?replyMarkup: Markup) = 
-    SendPoll.Make(ChatId.String chatId, question, options, ?businessConnectionId = businessConnectionId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?isClosed = isClosed, ?closeDate = closeDate, ?openPeriod = openPeriod, ?explanationEntities = explanationEntities, ?explanation = explanation, ?replyParameters = replyParameters, ?correctOptionId = correctOptionId, ?allowsMultipleAnswers = allowsMultipleAnswers, ?``type`` = ``type``, ?isAnonymous = isAnonymous, ?messageThreadId = messageThreadId, ?explanationParseMode = explanationParseMode, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, question: string, options: InputPollOption[], ?businessConnectionId: string, ?protectContent: bool, ?disableNotification: bool, ?isClosed: bool, ?closeDate: int64, ?openPeriod: int64, ?explanationEntities: MessageEntity[], ?explanationParseMode: string, ?correctOptionId: int64, ?replyParameters: ReplyParameters, ?allowsMultipleAnswers: bool, ?``type``: string, ?isAnonymous: bool, ?questionEntities: MessageEntity[], ?questionParseMode: string, ?messageThreadId: int64, ?explanation: string, ?replyMarkup: Markup) = 
+    SendPoll.Make(ChatId.Int chatId, question, options, ?businessConnectionId = businessConnectionId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?isClosed = isClosed, ?closeDate = closeDate, ?openPeriod = openPeriod, ?explanationEntities = explanationEntities, ?explanationParseMode = explanationParseMode, ?correctOptionId = correctOptionId, ?replyParameters = replyParameters, ?allowsMultipleAnswers = allowsMultipleAnswers, ?``type`` = ``type``, ?isAnonymous = isAnonymous, ?questionEntities = questionEntities, ?questionParseMode = questionParseMode, ?messageThreadId = messageThreadId, ?explanation = explanation, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, question: string, options: InputPollOption[], ?businessConnectionId: string, ?protectContent: bool, ?disableNotification: bool, ?isClosed: bool, ?closeDate: int64, ?openPeriod: int64, ?explanationEntities: MessageEntity[], ?explanationParseMode: string, ?correctOptionId: int64, ?replyParameters: ReplyParameters, ?allowsMultipleAnswers: bool, ?``type``: string, ?isAnonymous: bool, ?questionEntities: MessageEntity[], ?questionParseMode: string, ?messageThreadId: int64, ?explanation: string, ?replyMarkup: Markup) = 
+    SendPoll.Make(ChatId.String chatId, question, options, ?businessConnectionId = businessConnectionId, ?protectContent = protectContent, ?disableNotification = disableNotification, ?isClosed = isClosed, ?closeDate = closeDate, ?openPeriod = openPeriod, ?explanationEntities = explanationEntities, ?explanationParseMode = explanationParseMode, ?correctOptionId = correctOptionId, ?replyParameters = replyParameters, ?allowsMultipleAnswers = allowsMultipleAnswers, ?``type`` = ``type``, ?isAnonymous = isAnonymous, ?questionEntities = questionEntities, ?questionParseMode = questionParseMode, ?messageThreadId = messageThreadId, ?explanation = explanation, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendPoll"
     
@@ -1238,7 +1242,7 @@ type GetChat =
     GetChat.Make(ChatId.Int chatId)
   static member Make(chatId: string) = 
     GetChat.Make(ChatId.String chatId)
-  interface IRequestBase<Chat> with
+  interface IRequestBase<ChatFullInfo> with
     member _.MethodName = "getChat"
     
 type GetChatAdministrators =
@@ -1813,18 +1817,20 @@ type EditMessageLiveLocation =
     InlineMessageId: string option
     Latitude: float
     Longitude: float
+    LivePeriod: int64 option
     HorizontalAccuracy: float option
     Heading: int64 option
     ProximityAlertRadius: int64 option
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Make(latitude: float, longitude: float, ?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?horizontalAccuracy: float, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Make(latitude: float, longitude: float, ?chatId: ChatId, ?messageId: int64, ?inlineMessageId: string, ?livePeriod: int64, ?horizontalAccuracy: float, ?heading: int64, ?proximityAlertRadius: int64, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       ChatId = chatId
       MessageId = messageId
       InlineMessageId = inlineMessageId
       Latitude = latitude
       Longitude = longitude
+      LivePeriod = livePeriod
       HorizontalAccuracy = horizontalAccuracy
       Heading = heading
       ProximityAlertRadius = proximityAlertRadius
