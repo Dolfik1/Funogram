@@ -242,7 +242,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -453,7 +453,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -623,7 +623,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -752,7 +752,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -865,7 +865,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1010,7 +1010,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1147,7 +1147,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1159,7 +1159,7 @@
   {
     "OriginalName": "sendVoice",
     "ConvertedName": "SendVoice",
-    "Description": "Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.",
+    "Description": "Use this method to send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .OGG file encoded with OPUS, or in .MP3 format, or in .M4A format (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -1252,7 +1252,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1349,7 +1349,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1479,7 +1479,7 @@
       {
         "OriginalName": "live_period",
         "ConvertedName": "LivePeriod",
-        "Description": "Period in seconds for which the location will be updated (see Live Locations, should be between 60 and 86400.",
+        "Description": "Period in seconds during which the location will be updated (see Live Locations, should be between 60 and 86400, or 0x7FFFFFFF for live locations that can be edited indefinitely.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1527,7 +1527,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1656,7 +1656,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1753,7 +1753,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1800,11 +1800,27 @@
         "Optional": false
       },
       {
+        "OriginalName": "question_parse_mode",
+        "ConvertedName": "QuestionParseMode",
+        "Description": "Mode for parsing entities in the question. See formatting options for more details. Currently, only custom emoji entities are allowed",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "question_entities",
+        "ConvertedName": "QuestionEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of question_parse_mode",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
         "OriginalName": "options",
         "ConvertedName": "Options",
-        "Description": "A JSON-serialized list of answer options, 2-10 strings 1-100 characters each",
-        "OriginalFieldType": "Array of String",
-        "ConvertedFieldType": "string[]",
+        "Description": "A JSON-serialized list of 2-10 answer options",
+        "OriginalFieldType": "Array of InputPollOption",
+        "ConvertedFieldType": "InputPollOption[]",
         "Optional": false
       },
       {
@@ -1858,7 +1874,7 @@
       {
         "OriginalName": "explanation_entities",
         "ConvertedName": "ExplanationEntities",
-        "Description": "A JSON-serialized list of special entities that appear in the poll explanation, which can be specified instead of parse_mode",
+        "Description": "A JSON-serialized list of special entities that appear in the poll explanation. It can be specified instead of explanation_parse_mode",
         "OriginalFieldType": "Array of MessageEntity",
         "ConvertedFieldType": "MessageEntity[]",
         "Optional": true
@@ -1914,7 +1930,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -1987,7 +2003,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -2347,7 +2363,7 @@
       {
         "OriginalName": "can_edit_stories",
         "ConvertedName": "CanEditStories",
-        "Description": "Pass True if the administrator can edit stories posted by other users",
+        "Description": "Pass True if the administrator can edit stories posted by other users, post stories to the chat page, pin chat stories, and access the chat\u0027s story archive",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2897,7 +2913,7 @@
   {
     "OriginalName": "getChat",
     "ConvertedName": "GetChat",
-    "Description": "Use this method to get up to date information about the chat. Returns a Chat object on success.",
+    "Description": "Use this method to get up-to-date information about the chat. Returns a ChatFullInfo object on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2908,8 +2924,8 @@
         "Optional": false
       }
     ],
-    "OriginalReturnType": "Chat",
-    "ConvertedReturnType": "Chat"
+    "OriginalReturnType": "ChatFullInfo",
+    "ConvertedReturnType": "ChatFullInfo"
   },
   {
     "OriginalName": "getChatAdministrators",
@@ -3929,6 +3945,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "live_period",
+        "ConvertedName": "LivePeriod",
+        "Description": "New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "horizontal_accuracy",
         "ConvertedName": "HorizontalAccuracy",
         "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
@@ -4201,7 +4225,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
         "Optional": true
@@ -5272,7 +5296,7 @@
       {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for an inline keyboard. If empty, one \u0027Play game_title\u0027 button will be shown. If not empty, the first button must launch the game. Not supported for messages sent on behalf of a business account.",
+        "Description": "A JSON-serialized object for an inline keyboard. If empty, one \u0027Play game_title\u0027 button will be shown. If not empty, the first button must launch the game.",
         "OriginalFieldType": "InlineKeyboardMarkup",
         "ConvertedFieldType": "InlineKeyboardMarkup",
         "Optional": true
