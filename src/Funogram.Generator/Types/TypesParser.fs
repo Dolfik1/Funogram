@@ -241,3 +241,37 @@ let parse (config: ParseConfig) =
     ()
     
   types
+
+let mergeCustomFields (customFieldsPath: string) (types: ApiType[]) =
+  if File.Exists customFieldsPath then
+    let serializerOptions = Helpers.getJsonSerializerOptions ()
+
+    use file = File.OpenRead customFieldsPath
+    let result =
+      JsonSerializer.Deserialize<ApiType[]>(file, serializerOptions)
+      |> Seq.map (fun x -> x.Name, x) |> Map.ofSeq
+    
+    let types = [|
+      for tp in types do
+        match result |> Map.tryFind tp.Name with
+        | Some typeWithCustomFields ->
+          match tp.Kind, typeWithCustomFields.Kind with
+          | ApiTypeKind.Fields fields, ApiTypeKind.Fields extraFields ->
+            let mergedFields = Array.append fields extraFields
+            let mergedFieldsDistinct = mergedFields |> Array.distinctBy (_.ConvertedName)
+            
+            if mergedFields.Length <> mergedFieldsDistinct.Length then
+              failwith $"Custom fields must be unique (type {tp.Name}).\nTelegram API fields:\n%A{fields}\nCustom fields:\n%A{extraFields}"
+            
+            yield { tp with Kind = ApiTypeKind.Fields mergedFields }
+          | ApiTypeKind.Stub, kind ->
+            yield { tp with Kind = kind }
+          | _ ->
+            yield tp
+        | None -> yield tp
+    |]
+    
+    types
+  else
+    printfn "WARN: Custom fields file not found at path %s" customFieldsPath
+    types

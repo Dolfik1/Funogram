@@ -19,6 +19,7 @@
         <Compile Include="Program.fs" />
         <Content Include="RemapTypes.json" />
         <Content Include="RemapMethods.json" />
+        <Content Include="CustomFields.json" />
     </ItemGroup>
 
     <ItemGroup>

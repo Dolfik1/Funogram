@@ -38,6 +38,7 @@ let processAsync (args: CliArguments list) =
       |> TypesParser.withResultPath (Path.Combine(Constants.OutputDir, "types.json"))
       |> TypesParser.loadRemapData "./RemapTypes.json"
       |> TypesParser.parse
+      |> TypesParser.mergeCustomFields "./CustomFields.json"
       
       |> TypesGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.TypesFileName))
       |> TypesGenerator.generate
