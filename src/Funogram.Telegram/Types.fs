@@ -2058,8 +2058,16 @@ and [<CLIMutable>] VideoChatScheduled =
     }
 
 /// This object represents a service message about a video chat started in the chat. Currently holds no information.
-and VideoChatStarted =
-  new() = {}
+and [<CLIMutable>] VideoChatStarted =
+  {
+    /// Unique identifier of video chat (not present in Bot API at the moment, for internal use)
+    [<DataMember(Name = "id")>]
+    Id: int64 option
+  }
+  static member Create(?id: int64) = 
+    {
+      Id = id
+    }
 
 /// This object represents a service message about a video chat ended in the chat.
 and [<CLIMutable>] VideoChatEnded =
@@ -2067,10 +2075,14 @@ and [<CLIMutable>] VideoChatEnded =
     /// Video chat duration in seconds
     [<DataMember(Name = "duration")>]
     Duration: int64
+    /// Unique identifier of video chat (not present in Bot API at the moment, for internal use)
+    [<DataMember(Name = "id")>]
+    Id: int64 option
   }
-  static member Create(duration: int64) = 
+  static member Create(duration: int64, ?id: int64) = 
     {
       Duration = duration
+      Id = id
     }
 
 /// This object represents a service message about new members invited to a video chat.
