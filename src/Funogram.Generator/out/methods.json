@@ -232,6 +232,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -368,7 +376,7 @@
   {
     "OriginalName": "copyMessage",
     "ConvertedName": "CopyMessage",
-    "Description": "Use this method to copy messages of any kind. Service messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
+    "Description": "Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -427,6 +435,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media. Ignored if a new caption isn\u0027t specified.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
         "Description": "Sends the message silently. Users will receive a notification with no sound.",
@@ -465,7 +481,7 @@
   {
     "OriginalName": "copyMessages",
     "ConvertedName": "CopyMessages",
-    "Description": "Use this method to copy messages of any kind. If some of the specified messages can\u0027t be found or copied, they are skipped. Service messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don\u0027t have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.",
+    "Description": "Use this method to copy messages of any kind. If some of the specified messages can\u0027t be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don\u0027t have a link to the original message. Album grouping is kept for copied messages. On success, an array of MessageId of the sent messages is returned.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -589,6 +605,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "has_spoiler",
         "ConvertedName": "HasSpoiler",
         "Description": "Pass True if the photo needs to be covered with a spoiler animation",
@@ -610,6 +634,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -742,6 +774,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -852,6 +892,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -968,6 +1016,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "has_spoiler",
         "ConvertedName": "HasSpoiler",
         "Description": "Pass True if the video needs to be covered with a spoiler animation",
@@ -997,6 +1053,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -1113,6 +1177,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "has_spoiler",
         "ConvertedName": "HasSpoiler",
         "Description": "Pass True if the animation needs to be covered with a spoiler animation",
@@ -1134,6 +1206,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -1242,6 +1322,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1339,6 +1427,111 @@
         "Optional": true
       },
       {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "Description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
+        "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
+        "ConvertedFieldType": "Markup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message",
+    "ConvertedReturnType": "Message"
+  },
+  {
+    "OriginalName": "sendPaidMedia",
+    "ConvertedName": "SendPaidMedia",
+    "Description": "Use this method to send paid media to channel chats. On success, the sent Message is returned.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "star_count",
+        "ConvertedName": "StarCount",
+        "Description": "The number of Telegram Stars that must be paid to buy access to the media",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "media",
+        "ConvertedName": "Media",
+        "Description": "A JSON-serialized array describing the media to be sent; up to 10 items",
+        "OriginalFieldType": "Array of InputPaidMedia",
+        "ConvertedFieldType": "InputPaidMedia[]",
+        "Optional": false
+      },
+      {
+        "OriginalName": "caption",
+        "ConvertedName": "Caption",
+        "Description": "Media caption, 0-1024 characters after entities parsing",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "parse_mode",
+        "ConvertedName": "ParseMode",
+        "Description": "Mode for parsing entities in the media caption. See formatting options for more details.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "ParseMode",
+        "Optional": true
+      },
+      {
+        "OriginalName": "caption_entities",
+        "ConvertedName": "CaptionEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "disable_notification",
+        "ConvertedName": "DisableNotification",
+        "Description": "Sends the message silently. Users will receive a notification with no sound.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1409,6 +1602,14 @@
         "Description": "Protects the contents of the sent messages from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -1514,6 +1715,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -1646,6 +1855,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1740,6 +1957,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -1920,6 +2145,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1990,6 +2223,14 @@
         "Description": "Protects the contents of the sent message from forwarding",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -3715,8 +3956,16 @@
   {
     "OriginalName": "editMessageText",
     "ConvertedName": "EditMessageText",
-    "Description": "Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Description": "Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -3788,8 +4037,16 @@
   {
     "OriginalName": "editMessageCaption",
     "ConvertedName": "EditMessageCaption",
-    "Description": "Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Description": "Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -3839,6 +4096,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_markup",
         "ConvertedName": "ReplyMarkup",
         "Description": "A JSON-serialized object for an inline keyboard.",
@@ -3853,8 +4118,16 @@
   {
     "OriginalName": "editMessageMedia",
     "ConvertedName": "EditMessageMedia",
-    "Description": "Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Description": "Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -3904,6 +4177,14 @@
     "ConvertedName": "EditMessageLiveLocation",
     "Description": "Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -3994,6 +4275,14 @@
     "Description": "Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.",
     "Fields": [
       {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
         "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
@@ -4032,8 +4321,16 @@
   {
     "OriginalName": "editMessageReplyMarkup",
     "ConvertedName": "EditMessageReplyMarkup",
-    "Description": "Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Description": "Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -4075,6 +4372,14 @@
     "ConvertedName": "StopPoll",
     "Description": "Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
@@ -4212,6 +4517,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -4787,15 +5100,15 @@
       {
         "OriginalName": "provider_token",
         "ConvertedName": "ProviderToken",
-        "Description": "Payment provider token, obtained via @BotFather",
+        "Description": "Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
-        "Optional": false
+        "Optional": true
       },
       {
         "OriginalName": "currency",
         "ConvertedName": "Currency",
-        "Description": "Three-letter ISO 4217 currency code, see more on currencies",
+        "Description": "Three-letter ISO 4217 currency code, see more on currencies. Pass \u201CXTR\u201D for payments in Telegram Stars.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
@@ -4803,7 +5116,7 @@
       {
         "OriginalName": "prices",
         "ConvertedName": "Prices",
-        "Description": "Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)",
+        "Description": "Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.",
         "OriginalFieldType": "Array of LabeledPrice",
         "ConvertedFieldType": "LabeledPrice[]",
         "Optional": false
@@ -4811,7 +5124,7 @@
       {
         "OriginalName": "max_tip_amount",
         "ConvertedName": "MaxTipAmount",
-        "Description": "The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0",
+        "Description": "The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -4875,7 +5188,7 @@
       {
         "OriginalName": "need_name",
         "ConvertedName": "NeedName",
-        "Description": "Pass True if you require the user\u0027s full name to complete the order",
+        "Description": "Pass True if you require the user\u0027s full name to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4883,7 +5196,7 @@
       {
         "OriginalName": "need_phone_number",
         "ConvertedName": "NeedPhoneNumber",
-        "Description": "Pass True if you require the user\u0027s phone number to complete the order",
+        "Description": "Pass True if you require the user\u0027s phone number to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4891,7 +5204,7 @@
       {
         "OriginalName": "need_email",
         "ConvertedName": "NeedEmail",
-        "Description": "Pass True if you require the user\u0027s email address to complete the order",
+        "Description": "Pass True if you require the user\u0027s email address to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4899,7 +5212,7 @@
       {
         "OriginalName": "need_shipping_address",
         "ConvertedName": "NeedShippingAddress",
-        "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
+        "Description": "Pass True if you require the user\u0027s shipping address to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4907,7 +5220,7 @@
       {
         "OriginalName": "send_phone_number_to_provider",
         "ConvertedName": "SendPhoneNumberToProvider",
-        "Description": "Pass True if the user\u0027s phone number should be sent to provider",
+        "Description": "Pass True if the user\u0027s phone number should be sent to the provider. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4915,7 +5228,7 @@
       {
         "OriginalName": "send_email_to_provider",
         "ConvertedName": "SendEmailToProvider",
-        "Description": "Pass True if the user\u0027s email address should be sent to provider",
+        "Description": "Pass True if the user\u0027s email address should be sent to the provider. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4923,7 +5236,7 @@
       {
         "OriginalName": "is_flexible",
         "ConvertedName": "IsFlexible",
-        "Description": "Pass True if the final price depends on the shipping method",
+        "Description": "Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4942,6 +5255,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
@@ -4996,15 +5317,15 @@
       {
         "OriginalName": "provider_token",
         "ConvertedName": "ProviderToken",
-        "Description": "Payment provider token, obtained via BotFather",
+        "Description": "Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
-        "Optional": false
+        "Optional": true
       },
       {
         "OriginalName": "currency",
         "ConvertedName": "Currency",
-        "Description": "Three-letter ISO 4217 currency code, see more on currencies",
+        "Description": "Three-letter ISO 4217 currency code, see more on currencies. Pass \u201CXTR\u201D for payments in Telegram Stars.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
@@ -5012,7 +5333,7 @@
       {
         "OriginalName": "prices",
         "ConvertedName": "Prices",
-        "Description": "Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)",
+        "Description": "Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.",
         "OriginalFieldType": "Array of LabeledPrice",
         "ConvertedFieldType": "LabeledPrice[]",
         "Optional": false
@@ -5020,7 +5341,7 @@
       {
         "OriginalName": "max_tip_amount",
         "ConvertedName": "MaxTipAmount",
-        "Description": "The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0",
+        "Description": "The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -5076,7 +5397,7 @@
       {
         "OriginalName": "need_name",
         "ConvertedName": "NeedName",
-        "Description": "Pass True if you require the user\u0027s full name to complete the order",
+        "Description": "Pass True if you require the user\u0027s full name to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5084,7 +5405,7 @@
       {
         "OriginalName": "need_phone_number",
         "ConvertedName": "NeedPhoneNumber",
-        "Description": "Pass True if you require the user\u0027s phone number to complete the order",
+        "Description": "Pass True if you require the user\u0027s phone number to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5092,7 +5413,7 @@
       {
         "OriginalName": "need_email",
         "ConvertedName": "NeedEmail",
-        "Description": "Pass True if you require the user\u0027s email address to complete the order",
+        "Description": "Pass True if you require the user\u0027s email address to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5100,7 +5421,7 @@
       {
         "OriginalName": "need_shipping_address",
         "ConvertedName": "NeedShippingAddress",
-        "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
+        "Description": "Pass True if you require the user\u0027s shipping address to complete the order. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5108,7 +5429,7 @@
       {
         "OriginalName": "send_phone_number_to_provider",
         "ConvertedName": "SendPhoneNumberToProvider",
-        "Description": "Pass True if the user\u0027s phone number should be sent to the provider",
+        "Description": "Pass True if the user\u0027s phone number should be sent to the provider. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5116,7 +5437,7 @@
       {
         "OriginalName": "send_email_to_provider",
         "ConvertedName": "SendEmailToProvider",
-        "Description": "Pass True if the user\u0027s email address should be sent to the provider",
+        "Description": "Pass True if the user\u0027s email address should be sent to the provider. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5124,7 +5445,7 @@
       {
         "OriginalName": "is_flexible",
         "ConvertedName": "IsFlexible",
-        "Description": "Pass True if the final price depends on the shipping method",
+        "Description": "Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -5208,6 +5529,56 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "getStarTransactions",
+    "ConvertedName": "GetStarTransactions",
+    "Description": "Returns the bot\u0027s Telegram Star transactions in chronological order. On success, returns a StarTransactions object.",
+    "Fields": [
+      {
+        "OriginalName": "offset",
+        "ConvertedName": "Offset",
+        "Description": "Number of transactions to skip in the response",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "limit",
+        "ConvertedName": "Limit",
+        "Description": "The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "StarTransactions",
+    "ConvertedReturnType": "StarTransactions"
+  },
+  {
+    "OriginalName": "refundStarPayment",
+    "ConvertedName": "RefundStarPayment",
+    "Description": "Refunds a successful payment in Telegram Stars. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Identifier of the user whose payment will be refunded",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "telegram_payment_charge_id",
+        "ConvertedName": "TelegramPaymentChargeId",
+        "Description": "Telegram payment identifier",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "setPassportDataErrors",
     "ConvertedName": "SetPassportDataErrors",
     "Description": "Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.",
@@ -5283,6 +5654,14 @@
         "Description": "Protects the contents of the sent message from forwarding and saving",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
         "Optional": true
       },
       {
