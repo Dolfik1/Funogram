@@ -65,7 +65,7 @@ let updateArrived (ctx: UpdateContext) =
       match c.Message with
       | Some (MaybeInaccessibleMessage.Message msg) ->
         let inlineKeyboardMarkup = InlineKeyboardMarkup.Create([| [| InlineKeyboardButton.Create("Changed!", callbackData = "Test") |] |])
-        Req.EditMessageReplyMarkup.Make(msg.Chat.Id, msg.MessageId, replyMarkup = inlineKeyboardMarkup)
+        Req.EditMessageReplyMarkup.Make(chatId = ChatId.Int msg.Chat.Id, messageId = msg.MessageId, replyMarkup = inlineKeyboardMarkup)
         |> bot ctx.Config
       | _ -> ()
     | _ -> ()

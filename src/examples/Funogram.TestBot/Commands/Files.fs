@@ -18,6 +18,7 @@ let testUploadAndSendPhotoGroup config (chatId: int64) =
       ParseMode = None
       CaptionEntities = None
       HasSpoiler = None
+      ShowCaptionAboveMedia = None
     } |> InputMedia.Photo
   
   let image1 = Http.RequestStream(PhotoUrl).ResponseStream
@@ -38,6 +39,7 @@ let testUploadAndSendPhotoGroupAsBytes config (chatId: int64) =
       ParseMode = None
       CaptionEntities = None
       HasSpoiler = None
+      ShowCaptionAboveMedia = None
     } |> InputMedia.Photo
   
   use image1 = Http.RequestStream(PhotoUrl).ResponseStream
