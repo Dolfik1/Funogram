@@ -117,8 +117,8 @@ let editMessageMediaBase chatId messageId inlineMessageId media replyMarkup =
 let editMessageReplyMarkupBase (chatId: ChatId option) messageId inlineMessageId replyMarkup =
   Req.EditMessageReplyMarkup.Make(?chatId = chatId, ?messageId = messageId, ?inlineMessageId = inlineMessageId, ?replyMarkup = replyMarkup)
 
-let stopPollBase chatId messageId replyMarkup =
-  ({ ChatId = chatId; MessageId = messageId; ReplyMarkup = replyMarkup }: Req.StopPoll)
+let stopPollBase chatId messageId replyMarkup businessConnectionId =
+  ({ ChatId = chatId; MessageId = messageId; ReplyMarkup = replyMarkup; BusinessConnectionId = businessConnectionId }: Req.StopPoll)
 
 let private deleteMessageBase chatId messageId = 
   ({ ChatId = chatId; MessageId = messageId }: Req.DeleteMessage)

@@ -51,6 +51,11 @@ let processAsync (args: CliArguments list) =
       
       |> MethodsGenerator.mkGenerator (Path.Combine(Constants.CodeOutputDir, Constants.MethodsFileName))
       |> MethodsGenerator.generate
+    
+    VersionParser.mkParser html
+    |> VersionParser.withBuildPropsPath (Path.Combine(Constants.CodeOutputDir, Constants.BuildPropsFileName))
+    |> VersionParser.withReadmePath (Path.Combine(Constants.RootDir, Constants.ReadmeFileName))
+    |> VersionParser.parseAndWrite
   }
 
 [<EntryPoint>]

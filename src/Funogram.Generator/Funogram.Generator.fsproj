@@ -16,6 +16,7 @@
         <Compile Include="Types\Types.fs" />
         <Compile Include="Types\TypesParser.fs" />
         <Compile Include="Types\TypesGenerator.fs" />
+        <Compile Include="VersionParser.fs" />
         <Compile Include="Program.fs" />
         <Content Include="RemapTypes.json" />
         <Content Include="RemapMethods.json" />

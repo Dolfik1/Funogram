@@ -707,6 +707,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_send_paid_media",
+            "ConvertedName": "CanSendPaidMedia",
+            "Description": "True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "slow_mode_delay",
             "ConvertedName": "SlowModeDelay",
             "Description": "For supergroups, the minimum allowed delay between consecutive messages sent by each unprivileged user; in seconds",
@@ -1014,6 +1022,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "effect_id",
+            "ConvertedName": "EffectId",
+            "Description": "Unique identifier of the message effect added to the message",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
             "OriginalName": "animation",
             "ConvertedName": "Animation",
             "Description": "Message is an animation, information about the animation. For backward compatibility, when this field is set, the document field will also be set",
@@ -1035,6 +1051,14 @@
             "Description": "Message is a general file, information about the file",
             "OriginalFieldType": "Document",
             "ConvertedFieldType": "Document",
+            "Optional": true
+          },
+          {
+            "OriginalName": "paid_media",
+            "ConvertedName": "PaidMedia",
+            "Description": "Message contains paid media; information about the paid media",
+            "OriginalFieldType": "PaidMediaInfo",
+            "ConvertedFieldType": "PaidMediaInfo",
             "Optional": true
           },
           {
@@ -1088,7 +1112,7 @@
           {
             "OriginalName": "caption",
             "ConvertedName": "Caption",
-            "Description": "Caption for the animation, audio, document, photo, video or voice",
+            "Description": "Caption for the animation, audio, document, paid media, photo, video or voice",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -1099,6 +1123,14 @@
             "Description": "For messages with a caption, special entities like usernames, URLs, bot commands, etc. that appear in the caption",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "True, if the caption must be shown above the message media",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -1267,6 +1299,14 @@
             "Description": "Message is a service message about a successful payment, information about the payment. More about payments \u00BB",
             "OriginalFieldType": "SuccessfulPayment",
             "ConvertedFieldType": "SuccessfulPayment",
+            "Optional": true
+          },
+          {
+            "OriginalName": "refunded_payment",
+            "ConvertedName": "RefundedPayment",
+            "Description": "Message is a service message about a refunded payment, information about the payment. More about payments \u00BB",
+            "OriginalFieldType": "RefundedPayment",
+            "ConvertedFieldType": "RefundedPayment",
             "Optional": true
           },
           {
@@ -1548,7 +1588,7 @@
           {
             "OriginalName": "type",
             "ConvertedName": "Type",
-            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Cblockquote\u201D (block quotation), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames), \u201Ccustom_emoji\u201D (for inline custom emoji stickers)",
+            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Cblockquote\u201D (block quotation), \u201Cexpandable_blockquote\u201D (collapsed-by-default block quotation), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames), \u201Ccustom_emoji\u201D (for inline custom emoji stickers)",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -1709,6 +1749,14 @@
             "Description": "Message is a general file, information about the file",
             "OriginalFieldType": "Document",
             "ConvertedFieldType": "Document",
+            "Optional": true
+          },
+          {
+            "OriginalName": "paid_media",
+            "ConvertedName": "PaidMedia",
+            "Description": "Message contains paid media; information about the paid media",
+            "OriginalFieldType": "PaidMediaInfo",
+            "ConvertedFieldType": "PaidMediaInfo",
             "Optional": true
           },
           {
@@ -2178,7 +2226,7 @@
           {
             "OriginalName": "width",
             "ConvertedName": "Width",
-            "Description": "Video width as defined by sender",
+            "Description": "Video width as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2186,7 +2234,7 @@
           {
             "OriginalName": "height",
             "ConvertedName": "Height",
-            "Description": "Video height as defined by sender",
+            "Description": "Video height as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2194,7 +2242,7 @@
           {
             "OriginalName": "duration",
             "ConvertedName": "Duration",
-            "Description": "Duration of the video in seconds as defined by sender",
+            "Description": "Duration of the video in seconds as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2202,7 +2250,7 @@
           {
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
-            "Description": "Animation thumbnail as defined by sender",
+            "Description": "Animation thumbnail as defined by the sender",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
             "Optional": true
@@ -2210,7 +2258,7 @@
           {
             "OriginalName": "file_name",
             "ConvertedName": "FileName",
-            "Description": "Original animation filename as defined by sender",
+            "Description": "Original animation filename as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2218,7 +2266,7 @@
           {
             "OriginalName": "mime_type",
             "ConvertedName": "MimeType",
-            "Description": "MIME type of the file as defined by sender",
+            "Description": "MIME type of the file as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2261,7 +2309,7 @@
           {
             "OriginalName": "duration",
             "ConvertedName": "Duration",
-            "Description": "Duration of the audio in seconds as defined by sender",
+            "Description": "Duration of the audio in seconds as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2269,7 +2317,7 @@
           {
             "OriginalName": "performer",
             "ConvertedName": "Performer",
-            "Description": "Performer of the audio as defined by sender or by audio tags",
+            "Description": "Performer of the audio as defined by the sender or by audio tags",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2277,7 +2325,7 @@
           {
             "OriginalName": "title",
             "ConvertedName": "Title",
-            "Description": "Title of the audio as defined by sender or by audio tags",
+            "Description": "Title of the audio as defined by the sender or by audio tags",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2285,7 +2333,7 @@
           {
             "OriginalName": "file_name",
             "ConvertedName": "FileName",
-            "Description": "Original filename as defined by sender",
+            "Description": "Original filename as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2293,7 +2341,7 @@
           {
             "OriginalName": "mime_type",
             "ConvertedName": "MimeType",
-            "Description": "MIME type of the file as defined by sender",
+            "Description": "MIME type of the file as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2344,7 +2392,7 @@
           {
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
-            "Description": "Document thumbnail as defined by sender",
+            "Description": "Document thumbnail as defined by the sender",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
             "Optional": true
@@ -2352,7 +2400,7 @@
           {
             "OriginalName": "file_name",
             "ConvertedName": "FileName",
-            "Description": "Original filename as defined by sender",
+            "Description": "Original filename as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2360,7 +2408,7 @@
           {
             "OriginalName": "mime_type",
             "ConvertedName": "MimeType",
-            "Description": "MIME type of the file as defined by sender",
+            "Description": "MIME type of the file as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2430,7 +2478,7 @@
           {
             "OriginalName": "width",
             "ConvertedName": "Width",
-            "Description": "Video width as defined by sender",
+            "Description": "Video width as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2438,7 +2486,7 @@
           {
             "OriginalName": "height",
             "ConvertedName": "Height",
-            "Description": "Video height as defined by sender",
+            "Description": "Video height as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2446,7 +2494,7 @@
           {
             "OriginalName": "duration",
             "ConvertedName": "Duration",
-            "Description": "Duration of the video in seconds as defined by sender",
+            "Description": "Duration of the video in seconds as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2462,7 +2510,7 @@
           {
             "OriginalName": "file_name",
             "ConvertedName": "FileName",
-            "Description": "Original filename as defined by sender",
+            "Description": "Original filename as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2470,7 +2518,7 @@
           {
             "OriginalName": "mime_type",
             "ConvertedName": "MimeType",
-            "Description": "MIME type of the file as defined by sender",
+            "Description": "MIME type of the file as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2513,7 +2561,7 @@
           {
             "OriginalName": "length",
             "ConvertedName": "Length",
-            "Description": "Video width and height (diameter of the video message) as defined by sender",
+            "Description": "Video width and height (diameter of the video message) as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2521,7 +2569,7 @@
           {
             "OriginalName": "duration",
             "ConvertedName": "Duration",
-            "Description": "Duration of the video in seconds as defined by sender",
+            "Description": "Duration of the video in seconds as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2572,7 +2620,7 @@
           {
             "OriginalName": "duration",
             "ConvertedName": "Duration",
-            "Description": "Duration of the audio in seconds as defined by sender",
+            "Description": "Duration of the audio in seconds as defined by the sender",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -2580,7 +2628,7 @@
           {
             "OriginalName": "mime_type",
             "ConvertedName": "MimeType",
-            "Description": "MIME type of the file as defined by sender",
+            "Description": "MIME type of the file as defined by the sender",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2592,6 +2640,153 @@
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "PaidMediaInfo",
+    "Description": "Describes the paid media added to a message.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "star_count",
+            "ConvertedName": "StarCount",
+            "Description": "The number of Telegram Stars that must be paid to buy access to the media",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "paid_media",
+            "ConvertedName": "PaidMedia",
+            "Description": "Information about the paid media",
+            "OriginalFieldType": "Array of PaidMedia",
+            "ConvertedFieldType": "PaidMedia[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "PaidMedia",
+    "Description": "This object describes paid media. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Preview",
+            "CaseType": "PaidMediaPreview"
+          },
+          {
+            "Name": "Photo",
+            "CaseType": "PaidMediaPhoto"
+          },
+          {
+            "Name": "Video",
+            "CaseType": "PaidMediaVideo"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "PaidMediaPreview",
+    "Description": "The paid media isn\u0027t available before the payment.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the paid media, always \u201Cpreview\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "width",
+            "ConvertedName": "Width",
+            "Description": "Media width as defined by the sender",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "height",
+            "ConvertedName": "Height",
+            "Description": "Media height as defined by the sender",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "duration",
+            "ConvertedName": "Duration",
+            "Description": "Duration of the media in seconds as defined by the sender",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "PaidMediaPhoto",
+    "Description": "The paid media is a photo.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the paid media, always \u201Cphoto\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "photo",
+            "ConvertedName": "Photo",
+            "Description": "The photo",
+            "OriginalFieldType": "Array of PhotoSize",
+            "ConvertedFieldType": "PhotoSize[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "PaidMediaVideo",
+    "Description": "The paid media is a video.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the paid media, always \u201Cvideo\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "video",
+            "ConvertedName": "Video",
+            "Description": "The video",
+            "OriginalFieldType": "Video",
+            "ConvertedFieldType": "Video",
+            "Optional": false
           }
         ]
       ]
@@ -2712,7 +2907,7 @@
   },
   {
     "Name": "InputPollOption",
-    "Description": "This object contains information about one answer option in a poll to send.",
+    "Description": "This object contains information about one answer option in a poll to be sent.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -2921,7 +3116,7 @@
           {
             "OriginalName": "latitude",
             "ConvertedName": "Latitude",
-            "Description": "Latitude as defined by sender",
+            "Description": "Latitude as defined by the sender",
             "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
@@ -2929,7 +3124,7 @@
           {
             "OriginalName": "longitude",
             "ConvertedName": "Longitude",
-            "Description": "Longitude as defined by sender",
+            "Description": "Longitude as defined by the sender",
             "OriginalFieldType": "Float",
             "ConvertedFieldType": "float",
             "Optional": false
@@ -4210,7 +4405,7 @@
   },
   {
     "Name": "KeyboardButton",
-    "Description": "This object represents one button of the reply keyboard. For simple text buttons, String can be used instead of this object to specify the button text. The optional fields web_app, request_users, request_chat, request_contact, request_location, and request_poll are mutually exclusive.\nNote:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.",
+    "Description": "This object represents one button of the reply keyboard. At most one of the optional fields must be used to specify type of the button. For simple text buttons, String can be used instead of this object to specify the button text.\nNote:request_users and request_chat options will only work in Telegram versions released after 3 February, 2023. Older clients will display unsupported message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -4508,7 +4703,7 @@
   },
   {
     "Name": "InlineKeyboardButton",
-    "Description": "This object represents one button of an inline keyboard. You must use exactly one of the optional fields.",
+    "Description": "This object represents one button of an inline keyboard. Exactly one of the optional fields must be used to specify type of the button.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -4532,7 +4727,7 @@
           {
             "OriginalName": "callback_data",
             "ConvertedName": "CallbackData",
-            "Description": "Data to be sent in a callback query to the bot when button is pressed, 1-64 bytes. Not supported for messages sent on behalf of a Telegram Business account.",
+            "Description": "Data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -4588,7 +4783,7 @@
           {
             "OriginalName": "pay",
             "ConvertedName": "Pay",
-            "Description": "Specify True, to send a Pay button.\n\nNOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.",
+            "Description": "Specify True, to send a Pay button. Substrings \u201C\u201D and \u201CXTR\u201D in the buttons\u0027s text will be replaced with a Telegram Star icon.\n\nNOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6595,7 +6790,7 @@
           {
             "OriginalName": "web_app",
             "ConvertedName": "WebApp",
-            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery.",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Alternatively, a t.me link to a Web App of the bot can be specified in the object instead of the Web App\u0027s URL, in which case the Web App will be opened as if the user pressed the link.",
             "OriginalFieldType": "WebAppInfo",
             "ConvertedFieldType": "WebAppInfo",
             "Optional": false
@@ -7075,6 +7270,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "has_spoiler",
             "ConvertedName": "HasSpoiler",
             "Description": "Pass True if the photo needs to be covered with a spoiler animation",
@@ -7139,6 +7342,14 @@
             "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -7238,6 +7449,14 @@
             "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -7431,6 +7650,119 @@
     "Description": "This object represents the contents of a file to be uploaded. Must be posted using multipart/form-data in the usual way that files are uploaded via the browser.",
     "Kind": {
       "Case": "Stub"
+    }
+  },
+  {
+    "Name": "InputPaidMedia",
+    "Description": "This object describes the paid media to be sent. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Photo",
+            "CaseType": "InputPaidMediaPhoto"
+          },
+          {
+            "Name": "Video",
+            "CaseType": "InputPaidMediaVideo"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputPaidMediaPhoto",
+    "Description": "The paid media to send is a photo.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the media, must be photo",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "media",
+            "ConvertedName": "Media",
+            "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "InputFile",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputPaidMediaVideo",
+    "Description": "The paid media to send is a video.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the media, must be video",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "media",
+            "ConvertedName": "Media",
+            "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "InputFile",
+            "Optional": false
+          },
+          {
+            "OriginalName": "thumbnail",
+            "ConvertedName": "Thumbnail",
+            "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
+            "OriginalFieldType": "InputFile or String",
+            "ConvertedFieldType": "InputFile",
+            "Optional": true
+          },
+          {
+            "OriginalName": "width",
+            "ConvertedName": "Width",
+            "Description": "Video width",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "height",
+            "ConvertedName": "Height",
+            "Description": "Video height",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "duration",
+            "ConvertedName": "Duration",
+            "Description": "Video duration in seconds",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "supports_streaming",
+            "ConvertedName": "SupportsStreaming",
+            "Description": "Pass True if the uploaded video is suitable for streaming",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
     }
   },
   {
@@ -8089,6 +8421,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "reply_markup",
             "ConvertedName": "ReplyMarkup",
             "Description": "Inline keyboard attached to the message",
@@ -8209,6 +8549,14 @@
             "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -8335,6 +8683,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "reply_markup",
             "ConvertedName": "ReplyMarkup",
             "Description": "Inline keyboard attached to the message",
@@ -8431,6 +8787,14 @@
             "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -9266,6 +9630,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "reply_markup",
             "ConvertedName": "ReplyMarkup",
             "Description": "Inline keyboard attached to the message",
@@ -9349,6 +9721,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "reply_markup",
             "ConvertedName": "ReplyMarkup",
             "Description": "Inline keyboard attached to the message",
@@ -9429,6 +9809,14 @@
             "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -9662,6 +10050,14 @@
             "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
             "OriginalFieldType": "Array of MessageEntity",
             "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "show_caption_above_media",
+            "ConvertedName": "ShowCaptionAboveMedia",
+            "Description": "Pass True, if the caption must be shown above the message media",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           },
           {
@@ -10127,15 +10523,15 @@
           {
             "OriginalName": "provider_token",
             "ConvertedName": "ProviderToken",
-            "Description": "Payment provider token, obtained via @BotFather",
+            "Description": "Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "currency",
             "ConvertedName": "Currency",
-            "Description": "Three-letter ISO 4217 currency code, see more on currencies",
+            "Description": "Three-letter ISO 4217 currency code, see more on currencies. Pass \u201CXTR\u201D for payments in Telegram Stars.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10143,7 +10539,7 @@
           {
             "OriginalName": "prices",
             "ConvertedName": "Prices",
-            "Description": "Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.)",
+            "Description": "Price breakdown, a JSON-serialized list of components (e.g. product price, tax, discount, delivery cost, delivery tax, bonus, etc.). Must contain exactly one item for payments in Telegram Stars.",
             "OriginalFieldType": "Array of LabeledPrice",
             "ConvertedFieldType": "LabeledPrice[]",
             "Optional": false
@@ -10151,7 +10547,7 @@
           {
             "OriginalName": "max_tip_amount",
             "ConvertedName": "MaxTipAmount",
-            "Description": "The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0",
+            "Description": "The maximum accepted amount for tips in the smallest units of the currency (integer, not float/double). For example, for a maximum tip of US$ 1.45 pass max_tip_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies). Defaults to 0. Not supported for payments in Telegram Stars.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -10207,7 +10603,7 @@
           {
             "OriginalName": "need_name",
             "ConvertedName": "NeedName",
-            "Description": "Pass True if you require the user\u0027s full name to complete the order",
+            "Description": "Pass True if you require the user\u0027s full name to complete the order. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10215,7 +10611,7 @@
           {
             "OriginalName": "need_phone_number",
             "ConvertedName": "NeedPhoneNumber",
-            "Description": "Pass True if you require the user\u0027s phone number to complete the order",
+            "Description": "Pass True if you require the user\u0027s phone number to complete the order. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10223,7 +10619,7 @@
           {
             "OriginalName": "need_email",
             "ConvertedName": "NeedEmail",
-            "Description": "Pass True if you require the user\u0027s email address to complete the order",
+            "Description": "Pass True if you require the user\u0027s email address to complete the order. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10231,7 +10627,7 @@
           {
             "OriginalName": "need_shipping_address",
             "ConvertedName": "NeedShippingAddress",
-            "Description": "Pass True if you require the user\u0027s shipping address to complete the order",
+            "Description": "Pass True if you require the user\u0027s shipping address to complete the order. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10239,7 +10635,7 @@
           {
             "OriginalName": "send_phone_number_to_provider",
             "ConvertedName": "SendPhoneNumberToProvider",
-            "Description": "Pass True if the user\u0027s phone number should be sent to provider",
+            "Description": "Pass True if the user\u0027s phone number should be sent to the provider. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10247,7 +10643,7 @@
           {
             "OriginalName": "send_email_to_provider",
             "ConvertedName": "SendEmailToProvider",
-            "Description": "Pass True if the user\u0027s email address should be sent to provider",
+            "Description": "Pass True if the user\u0027s email address should be sent to the provider. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10255,7 +10651,7 @@
           {
             "OriginalName": "is_flexible",
             "ConvertedName": "IsFlexible",
-            "Description": "Pass True if the final price depends on the shipping method",
+            "Description": "Pass True if the final price depends on the shipping method. Ignored for payments in Telegram Stars.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10395,7 +10791,7 @@
           {
             "OriginalName": "currency",
             "ConvertedName": "Currency",
-            "Description": "Three-letter ISO 4217 currency code",
+            "Description": "Three-letter ISO 4217 currency code, or \u201CXTR\u201D for payments in Telegram Stars",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10559,7 +10955,7 @@
           {
             "OriginalName": "currency",
             "ConvertedName": "Currency",
-            "Description": "Three-letter ISO 4217 currency code",
+            "Description": "Three-letter ISO 4217 currency code, or \u201CXTR\u201D for payments in Telegram Stars",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10575,7 +10971,7 @@
           {
             "OriginalName": "invoice_payload",
             "ConvertedName": "InvoicePayload",
-            "Description": "Bot specified invoice payload",
+            "Description": "Bot-specified invoice payload",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10617,6 +11013,57 @@
     }
   },
   {
+    "Name": "RefundedPayment",
+    "Description": "This object contains basic information about a refunded payment.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "currency",
+            "ConvertedName": "Currency",
+            "Description": "Three-letter ISO 4217 currency code, or \u201CXTR\u201D for payments in Telegram Stars. Currently, always \u201CXTR\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "total_amount",
+            "ConvertedName": "TotalAmount",
+            "Description": "Total refunded price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45, total_amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "invoice_payload",
+            "ConvertedName": "InvoicePayload",
+            "Description": "Bot-specified invoice payload",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "telegram_payment_charge_id",
+            "ConvertedName": "TelegramPaymentChargeId",
+            "Description": "Telegram payment identifier",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "provider_payment_charge_id",
+            "ConvertedName": "ProviderPaymentChargeId",
+            "Description": "Provider payment identifier",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ShippingQuery",
     "Description": "This object contains information about an incoming shipping query.",
     "Kind": {
@@ -10642,7 +11089,7 @@
           {
             "OriginalName": "invoice_payload",
             "ConvertedName": "InvoicePayload",
-            "Description": "Bot specified invoice payload",
+            "Description": "Bot-specified invoice payload",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10661,7 +11108,7 @@
   },
   {
     "Name": "PreCheckoutQuery",
-    "Description": "This object contains information about an incoming pre-checkout query.\nTelegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.",
+    "Description": "This object contains information about an incoming pre-checkout query.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -10685,7 +11132,7 @@
           {
             "OriginalName": "currency",
             "ConvertedName": "Currency",
-            "Description": "Three-letter ISO 4217 currency code",
+            "Description": "Three-letter ISO 4217 currency code, or \u201CXTR\u201D for payments in Telegram Stars",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10701,7 +11148,7 @@
           {
             "OriginalName": "invoice_payload",
             "ConvertedName": "InvoicePayload",
-            "Description": "Bot specified invoice payload",
+            "Description": "Bot-specified invoice payload",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10721,6 +11168,299 @@
             "OriginalFieldType": "OrderInfo",
             "ConvertedFieldType": "OrderInfo",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RevenueWithdrawalState",
+    "Description": "This object describes the state of a revenue withdrawal operation. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Pending",
+            "CaseType": "RevenueWithdrawalStatePending"
+          },
+          {
+            "Name": "Succeeded",
+            "CaseType": "RevenueWithdrawalStateSucceeded"
+          },
+          {
+            "Name": "Failed",
+            "CaseType": "RevenueWithdrawalStateFailed"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RevenueWithdrawalStatePending",
+    "Description": "The withdrawal is in progress.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the state, always \u201Cpending\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RevenueWithdrawalStateSucceeded",
+    "Description": "The withdrawal succeeded.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the state, always \u201Csucceeded\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the withdrawal was completed in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "url",
+            "ConvertedName": "Url",
+            "Description": "An HTTPS URL that can be used to see transaction details",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RevenueWithdrawalStateFailed",
+    "Description": "The withdrawal failed and the transaction was refunded.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the state, always \u201Cfailed\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartner",
+    "Description": "This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "User",
+            "CaseType": "TransactionPartnerUser"
+          },
+          {
+            "Name": "Fragment",
+            "CaseType": "TransactionPartnerFragment"
+          },
+          {
+            "Name": "TelegramAds",
+            "CaseType": "TransactionPartnerTelegramAds"
+          },
+          {
+            "Name": "Other",
+            "CaseType": "TransactionPartnerOther"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartnerUser",
+    "Description": "Describes a transaction with a user.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Cuser\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "Information about the user",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          },
+          {
+            "OriginalName": "invoice_payload",
+            "ConvertedName": "InvoicePayload",
+            "Description": "Bot-specified invoice payload",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartnerFragment",
+    "Description": "Describes a withdrawal transaction with Fragment.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Cfragment\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "withdrawal_state",
+            "ConvertedName": "WithdrawalState",
+            "Description": "State of the transaction if the transaction is outgoing",
+            "OriginalFieldType": "RevenueWithdrawalState",
+            "ConvertedFieldType": "RevenueWithdrawalState",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartnerTelegramAds",
+    "Description": "Describes a withdrawal transaction to the Telegram Ads platform.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Ctelegram_ads\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartnerOther",
+    "Description": "Describes a transaction with an unknown source or recipient.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Cother\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StarTransaction",
+    "Description": "Describes a Telegram Star transaction.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "amount",
+            "ConvertedName": "Amount",
+            "Description": "Number of Telegram Stars transferred by the transaction",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "date",
+            "ConvertedName": "Date",
+            "Description": "Date the transaction was created in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": false
+          },
+          {
+            "OriginalName": "source",
+            "ConvertedName": "Source",
+            "Description": "Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions",
+            "OriginalFieldType": "TransactionPartner",
+            "ConvertedFieldType": "TransactionPartner",
+            "Optional": true
+          },
+          {
+            "OriginalName": "receiver",
+            "ConvertedName": "Receiver",
+            "Description": "Receiver of an outgoing transaction (e.g., a user for a purchase refund, Fragment for a withdrawal). Only for outgoing transactions",
+            "OriginalFieldType": "TransactionPartner",
+            "ConvertedFieldType": "TransactionPartner",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StarTransactions",
+    "Description": "Contains a list of Telegram Star transactions.\nTelegram Passport is a unified authorization method for services that require personal identification. Users can upload their documents once, then instantly share their data with services that require real-world ID (finance, ICOs, etc.). Please see the manual for details.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "transactions",
+            "ConvertedName": "Transactions",
+            "Description": "The list of transactions",
+            "OriginalFieldType": "Array of StarTransaction",
+            "ConvertedFieldType": "StarTransaction[]",
+            "Optional": false
           }
         ]
       ]
