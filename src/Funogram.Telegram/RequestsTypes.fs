@@ -532,9 +532,11 @@ type SendVideoNote =
     
 type SendPaidMedia =
   {
+    BusinessConnectionId: string option
     ChatId: ChatId
     StarCount: int64
     Media: InputPaidMedia[]
+    Payload: string option
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
@@ -544,11 +546,13 @@ type SendPaidMedia =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, starCount: int64, media: InputPaidMedia[], ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, starCount: int64, media: InputPaidMedia[], ?businessConnectionId: string, ?payload: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
+      BusinessConnectionId = businessConnectionId
       ChatId = chatId
       StarCount = starCount
       Media = media
+      Payload = payload
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -558,10 +562,10 @@ type SendPaidMedia =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, starCount: int64, media: InputPaidMedia[], ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendPaidMedia.Make(ChatId.Int chatId, starCount, media, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, starCount: int64, media: InputPaidMedia[], ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendPaidMedia.Make(ChatId.String chatId, starCount, media, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, starCount: int64, media: InputPaidMedia[], ?businessConnectionId: string, ?payload: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendPaidMedia.Make(ChatId.Int chatId, starCount, media, ?businessConnectionId = businessConnectionId, ?payload = payload, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, starCount: int64, media: InputPaidMedia[], ?businessConnectionId: string, ?payload: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendPaidMedia.Make(ChatId.String chatId, starCount, media, ?businessConnectionId = businessConnectionId, ?payload = payload, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendPaidMedia"
     
@@ -1118,6 +1122,46 @@ type EditChatInviteLink =
   interface IRequestBase<ChatInviteLink> with
     member _.MethodName = "editChatInviteLink"
     
+type CreateChatSubscriptionInviteLink =
+  {
+    ChatId: ChatId
+    Name: string option
+    SubscriptionPeriod: int64
+    SubscriptionPrice: int64
+  }
+  static member Make(chatId: ChatId, subscriptionPeriod: int64, subscriptionPrice: int64, ?name: string) = 
+    {
+      ChatId = chatId
+      Name = name
+      SubscriptionPeriod = subscriptionPeriod
+      SubscriptionPrice = subscriptionPrice
+    }
+  static member Make(chatId: int64, subscriptionPeriod: int64, subscriptionPrice: int64, ?name: string) = 
+    CreateChatSubscriptionInviteLink.Make(ChatId.Int chatId, subscriptionPeriod, subscriptionPrice, ?name = name)
+  static member Make(chatId: string, subscriptionPeriod: int64, subscriptionPrice: int64, ?name: string) = 
+    CreateChatSubscriptionInviteLink.Make(ChatId.String chatId, subscriptionPeriod, subscriptionPrice, ?name = name)
+  interface IRequestBase<ChatInviteLink> with
+    member _.MethodName = "createChatSubscriptionInviteLink"
+    
+type EditChatSubscriptionInviteLink =
+  {
+    ChatId: ChatId
+    InviteLink: string
+    Name: string option
+  }
+  static member Make(chatId: ChatId, inviteLink: string, ?name: string) = 
+    {
+      ChatId = chatId
+      InviteLink = inviteLink
+      Name = name
+    }
+  static member Make(chatId: int64, inviteLink: string, ?name: string) = 
+    EditChatSubscriptionInviteLink.Make(ChatId.Int chatId, inviteLink, ?name = name)
+  static member Make(chatId: string, inviteLink: string, ?name: string) = 
+    EditChatSubscriptionInviteLink.Make(ChatId.String chatId, inviteLink, ?name = name)
+  interface IRequestBase<ChatInviteLink> with
+    member _.MethodName = "editChatSubscriptionInviteLink"
+    
 type RevokeChatInviteLink =
   {
     ChatId: ChatId
@@ -1237,37 +1281,41 @@ type SetChatDescription =
     
 type PinChatMessage =
   {
+    BusinessConnectionId: string option
     ChatId: ChatId
     MessageId: int64
     DisableNotification: bool option
   }
-  static member Make(chatId: ChatId, messageId: int64, ?disableNotification: bool) = 
+  static member Make(chatId: ChatId, messageId: int64, ?businessConnectionId: string, ?disableNotification: bool) = 
     {
+      BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageId = messageId
       DisableNotification = disableNotification
     }
-  static member Make(chatId: int64, messageId: int64, ?disableNotification: bool) = 
-    PinChatMessage.Make(ChatId.Int chatId, messageId, ?disableNotification = disableNotification)
-  static member Make(chatId: string, messageId: int64, ?disableNotification: bool) = 
-    PinChatMessage.Make(ChatId.String chatId, messageId, ?disableNotification = disableNotification)
+  static member Make(chatId: int64, messageId: int64, ?businessConnectionId: string, ?disableNotification: bool) = 
+    PinChatMessage.Make(ChatId.Int chatId, messageId, ?businessConnectionId = businessConnectionId, ?disableNotification = disableNotification)
+  static member Make(chatId: string, messageId: int64, ?businessConnectionId: string, ?disableNotification: bool) = 
+    PinChatMessage.Make(ChatId.String chatId, messageId, ?businessConnectionId = businessConnectionId, ?disableNotification = disableNotification)
   interface IRequestBase<bool> with
     member _.MethodName = "pinChatMessage"
     
 type UnpinChatMessage =
   {
+    BusinessConnectionId: string option
     ChatId: ChatId
     MessageId: int64 option
   }
-  static member Make(chatId: ChatId, ?messageId: int64) = 
+  static member Make(chatId: ChatId, ?businessConnectionId: string, ?messageId: int64) = 
     {
+      BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageId = messageId
     }
-  static member Make(chatId: int64, ?messageId: int64) = 
-    UnpinChatMessage.Make(ChatId.Int chatId, ?messageId = messageId)
-  static member Make(chatId: string, ?messageId: int64) = 
-    UnpinChatMessage.Make(ChatId.String chatId, ?messageId = messageId)
+  static member Make(chatId: int64, ?businessConnectionId: string, ?messageId: int64) = 
+    UnpinChatMessage.Make(ChatId.Int chatId, ?businessConnectionId = businessConnectionId, ?messageId = messageId)
+  static member Make(chatId: string, ?businessConnectionId: string, ?messageId: int64) = 
+    UnpinChatMessage.Make(ChatId.String chatId, ?businessConnectionId = businessConnectionId, ?messageId = messageId)
   interface IRequestBase<bool> with
     member _.MethodName = "unpinChatMessage"
     

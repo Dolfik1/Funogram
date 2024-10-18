@@ -22,7 +22,7 @@ module Constants =
   let jsonTestObjString = """{"type":"italic","offset":0,"length":100,"url":"http://github.com"}"""
   let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null,"language":null} }"""
 
-  let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; CanJoinGroups = None; CanReadAllGroupMessages = None; SupportsInlineQueries = None; IsPremium = None; AddedToAttachmentMenu = None; CanConnectToBusiness = None }
+  let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; CanJoinGroups = None; CanReadAllGroupMessages = None; SupportsInlineQueries = None; IsPremium = None; AddedToAttachmentMenu = None; CanConnectToBusiness = None; HasMainWebApp = None }
   let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather","language_code":null,"is_bot":false,"can_join_groups":null,"can_read_all_group_messages":null,"supports_inline_queries":null}}"""
 
   let jsonTestEditResult1 = EditMessageResult.Success(true)

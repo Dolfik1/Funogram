@@ -135,6 +135,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "purchased_paid_media",
+            "ConvertedName": "PurchasedPaidMedia",
+            "Description": "A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat",
+            "OriginalFieldType": "PaidMediaPurchased",
+            "ConvertedFieldType": "PaidMediaPurchased",
+            "Optional": true
+          },
+          {
             "OriginalName": "poll",
             "ConvertedName": "Poll",
             "Description": "New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot",
@@ -376,6 +384,14 @@
             "OriginalName": "can_connect_to_business",
             "ConvertedName": "CanConnectToBusiness",
             "Description": "True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "has_main_web_app",
+            "ConvertedName": "HasMainWebApp",
+            "Description": "True, if the bot has a main Web App. Returned only in getMe.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -840,7 +856,7 @@
           {
             "OriginalName": "from",
             "ConvertedName": "From",
-            "Description": "Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.",
+            "Description": "Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats",
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
             "Optional": true
@@ -848,7 +864,7 @@
           {
             "OriginalName": "sender_chat",
             "ConvertedName": "SenderChat",
-            "Description": "Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.",
+            "Description": "Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel\u0027s discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field from contains a fake sender user in non-channel chats.",
             "OriginalFieldType": "Chat",
             "ConvertedFieldType": "Chat",
             "Optional": true
@@ -3990,9 +4006,21 @@
   },
   {
     "Name": "GiveawayCreated",
-    "Description": "This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.",
+    "Description": "This object represents a service message about the creation of a scheduled giveaway.",
     "Kind": {
-      "Case": "Stub"
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "prize_star_count",
+            "ConvertedName": "PrizeStarCount",
+            "Description": "The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
     }
   },
   {
@@ -4059,9 +4087,17 @@
             "Optional": true
           },
           {
+            "OriginalName": "prize_star_count",
+            "ConvertedName": "PrizeStarCount",
+            "Description": "The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "premium_subscription_month_count",
             "ConvertedName": "PremiumSubscriptionMonthCount",
-            "Description": "The number of months the Telegram Premium subscription won from the giveaway will be active for",
+            "Description": "The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -4126,9 +4162,17 @@
             "Optional": true
           },
           {
+            "OriginalName": "prize_star_count",
+            "ConvertedName": "PrizeStarCount",
+            "Description": "The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "premium_subscription_month_count",
             "ConvertedName": "PremiumSubscriptionMonthCount",
-            "Description": "The number of months the Telegram Premium subscription won from the giveaway will be active for",
+            "Description": "The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -4198,6 +4242,14 @@
             "Description": "Message with the giveaway that was completed, if it wasn\u0027t deleted",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_star_giveaway",
+            "ConvertedName": "IsStarGiveaway",
+            "Description": "True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]
@@ -5109,6 +5161,22 @@
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
+          },
+          {
+            "OriginalName": "subscription_period",
+            "ConvertedName": "SubscriptionPeriod",
+            "Description": "The number of seconds the subscription will be active for before the next payment",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "subscription_price",
+            "ConvertedName": "SubscriptionPrice",
+            "Description": "The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
           }
         ]
       ]
@@ -5599,6 +5667,14 @@
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
             "Optional": false
+          },
+          {
+            "OriginalName": "until_date",
+            "ConvertedName": "UntilDate",
+            "Description": "Date when the user\u0027s subscription will expire; Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "DateTime",
+            "Optional": true
           }
         ]
       ]
@@ -6195,6 +6271,10 @@
           {
             "Name": "CustomEmoji",
             "CaseType": "ReactionTypeCustomEmoji"
+          },
+          {
+            "Name": "Paid",
+            "CaseType": "ReactionTypePaid"
           }
         ]
       ]
@@ -6246,6 +6326,25 @@
             "OriginalName": "custom_emoji_id",
             "ConvertedName": "CustomEmojiId",
             "Description": "Custom emoji identifier",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ReactionTypePaid",
+    "Description": "The reaction is paid.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the reaction, always \u201Cpaid\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -6897,7 +6996,7 @@
   },
   {
     "Name": "ChatBoostSourceGiveaway",
-    "Description": "The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.",
+    "Description": "The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and prize_star_count / 500 times for one year for Telegram Star giveaways.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6921,9 +7020,17 @@
           {
             "OriginalName": "user",
             "ConvertedName": "User",
-            "Description": "User that won the prize in the giveaway if any",
+            "Description": "User that won the prize in the giveaway if any; for Telegram Premium giveaways only",
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prize_star_count",
+            "ConvertedName": "PrizeStarCount",
+            "Description": "The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -10515,7 +10622,7 @@
           {
             "OriginalName": "payload",
             "ConvertedName": "Payload",
-            "Description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.",
+            "Description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -11174,6 +11281,33 @@
     }
   },
   {
+    "Name": "PaidMediaPurchased",
+    "Description": "This object contains information about a paid media purchase.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "from",
+            "ConvertedName": "From",
+            "Description": "User who purchased the media",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          },
+          {
+            "OriginalName": "paid_media_payload",
+            "ConvertedName": "PaidMediaPayload",
+            "Description": "Bot-specified paid media payload",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "RevenueWithdrawalState",
     "Description": "This object describes the state of a revenue withdrawal operation. Currently, it can be one of",
     "Kind": {
@@ -11323,6 +11457,22 @@
             "OriginalName": "invoice_payload",
             "ConvertedName": "InvoicePayload",
             "Description": "Bot-specified invoice payload",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "paid_media",
+            "ConvertedName": "PaidMedia",
+            "Description": "Information about the paid media bought by the user",
+            "OriginalFieldType": "Array of PaidMedia",
+            "ConvertedFieldType": "PaidMedia[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "paid_media_payload",
+            "ConvertedName": "PaidMediaPayload",
+            "Description": "Bot-specified paid media payload",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true

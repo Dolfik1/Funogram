@@ -45,6 +45,7 @@ let loadRemapData remapPath config =
 let private returnTypeRegexes =
   [|
     // invite links
+    Regex("Returns the new invite link as a ([A|a]rray of \w+|\w+)\s")
     Regex("Returns the new invite link as ([A|a]rray of \w+|\w+)\s")
     Regex("Returns the edited invite link as a ([A|a]rray of \w+|\w+)\s")
     Regex("Returns the revoked invite link as ([A|a]rray of \w+|\w+)\s")
