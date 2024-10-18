@@ -1457,12 +1457,20 @@
   {
     "OriginalName": "sendPaidMedia",
     "ConvertedName": "SendPaidMedia",
-    "Description": "Use this method to send paid media to channel chats. On success, the sent Message is returned.",
+    "Description": "Use this method to send paid media. On success, the sent Message is returned.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername). If the chat is a channel, all Telegram Star proceeds from this media will be credited to the chat\u0027s balance. Otherwise, they will be credited to the bot\u0027s balance.",
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
@@ -1470,7 +1478,7 @@
       {
         "OriginalName": "star_count",
         "ConvertedName": "StarCount",
-        "Description": "The number of Telegram Stars that must be paid to buy access to the media",
+        "Description": "The number of Telegram Stars that must be paid to buy access to the media; 1-2500",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false
@@ -1482,6 +1490,14 @@
         "OriginalFieldType": "Array of InputPaidMedia",
         "ConvertedFieldType": "InputPaidMedia[]",
         "Optional": false
+      },
+      {
+        "OriginalName": "payload",
+        "ConvertedName": "Payload",
+        "Description": "Bot-defined paid media payload, 0-128 bytes. This will not be displayed to the user, use it for your internal processes.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
       },
       {
         "OriginalName": "caption",
@@ -2297,7 +2313,7 @@
   {
     "OriginalName": "setMessageReaction",
     "ConvertedName": "SetMessageReaction",
-    "Description": "Use this method to change the chosen reactions on a message. Service messages can\u0027t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Returns True on success.",
+    "Description": "Use this method to change the chosen reactions on a message. Service messages can\u0027t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can\u0027t use paid reactions. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -2318,7 +2334,7 @@
       {
         "OriginalName": "reaction",
         "ConvertedName": "Reaction",
-        "Description": "A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators.",
+        "Description": "A JSON-serialized list of reaction types to set on the message. Currently, as non-premium users, bots can set up to one reaction per message. A custom emoji reaction can be used if it is either already present on the message or explicitly allowed by chat administrators. Paid reactions can\u0027t be used by bots.",
         "OriginalFieldType": "Array of ReactionType",
         "ConvertedFieldType": "ReactionType[]",
         "Optional": true
@@ -2893,6 +2909,80 @@
     "ConvertedReturnType": "ChatInviteLink"
   },
   {
+    "OriginalName": "createChatSubscriptionInviteLink",
+    "ConvertedName": "CreateChatSubscriptionInviteLink",
+    "Description": "Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights. The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink. Returns the new invite link as a ChatInviteLink object.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target channel chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Invite link name; 0-32 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "subscription_period",
+        "ConvertedName": "SubscriptionPeriod",
+        "Description": "The number of seconds the subscription will be active for before the next payment. Currently, it must always be 2592000 (30 days).",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "subscription_price",
+        "ConvertedName": "SubscriptionPrice",
+        "Description": "The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "ChatInviteLink",
+    "ConvertedReturnType": "ChatInviteLink"
+  },
+  {
+    "OriginalName": "editChatSubscriptionInviteLink",
+    "ConvertedName": "EditChatSubscriptionInviteLink",
+    "Description": "Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights. Returns the edited invite link as a ChatInviteLink object.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "invite_link",
+        "ConvertedName": "InviteLink",
+        "Description": "The invite link to edit",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "name",
+        "ConvertedName": "Name",
+        "Description": "Invite link name; 0-32 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "ChatInviteLink",
+    "ConvertedReturnType": "ChatInviteLink"
+  },
+  {
     "OriginalName": "revokeChatInviteLink",
     "ConvertedName": "RevokeChatInviteLink",
     "Description": "Use this method to revoke an invite link created by the bot. If the primary link is revoked, a new link is automatically generated. The bot must be an administrator in the chat for this to work and must have the appropriate administrator rights. Returns the revoked invite link as ChatInviteLink object.",
@@ -3065,6 +3155,14 @@
     "Description": "Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the \u0027can_pin_messages\u0027 administrator right in a supergroup or \u0027can_edit_messages\u0027 administrator right in a channel. Returns True on success.",
     "Fields": [
       {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be pinned",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
         "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
@@ -3098,6 +3196,14 @@
     "Description": "Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the \u0027can_pin_messages\u0027 administrator right in a supergroup or \u0027can_edit_messages\u0027 administrator right in a channel. Returns True on success.",
     "Fields": [
       {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be unpinned",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
         "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
@@ -3108,7 +3214,7 @@
       {
         "OriginalName": "message_id",
         "ConvertedName": "MessageId",
-        "Description": "Identifier of a message to unpin. If not specified, the most recent pinned message (by sending date) will be unpinned.",
+        "Description": "Identifier of the message to unpin. Required if business_connection_id is specified. If not specified, the most recent pinned message (by sending date) will be unpinned.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -3321,7 +3427,7 @@
   {
     "OriginalName": "editForumTopic",
     "ConvertedName": "EditForumTopic",
-    "Description": "Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.",
+    "Description": "Use this method to edit name and icon of a topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights, unless it is the creator of the topic. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -3462,7 +3568,7 @@
   {
     "OriginalName": "editGeneralForumTopic",
     "ConvertedName": "EditGeneralForumTopic",
-    "Description": "Use this method to edit the name of the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have can_manage_topics administrator rights. Returns True on success.",
+    "Description": "Use this method to edit the name of the \u0027General\u0027 topic in a forum supergroup chat. The bot must be an administrator in the chat for this to work and must have the can_manage_topics administrator rights. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -4911,7 +5017,7 @@
       {
         "OriginalName": "thumbnail",
         "ConvertedName": "Thumbnail",
-        "Description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animated-sticker-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-sticker-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB. Animated and video sticker set thumbnails can\u0027t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
+        "Description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB. Animated and video sticker set thumbnails can\u0027t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
         "Optional": true
@@ -5092,7 +5198,7 @@
       {
         "OriginalName": "payload",
         "ConvertedName": "Payload",
-        "Description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.",
+        "Description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
@@ -5309,7 +5415,7 @@
       {
         "OriginalName": "payload",
         "ConvertedName": "Payload",
-        "Description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.",
+        "Description": "Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false

@@ -125,6 +125,9 @@ and [<CLIMutable>] Update =
     /// New incoming pre-checkout query. Contains full information about checkout
     [<DataMember(Name = "pre_checkout_query")>]
     PreCheckoutQuery: PreCheckoutQuery option
+    /// A user purchased paid media with a non-empty payload sent by the bot in a non-channel chat
+    [<DataMember(Name = "purchased_paid_media")>]
+    PurchasedPaidMedia: PaidMediaPurchased option
     /// New poll state. Bots receive only updates about manually stopped polls and polls, which are sent by the bot
     [<DataMember(Name = "poll")>]
     Poll: Poll option
@@ -147,7 +150,7 @@ and [<CLIMutable>] Update =
     [<DataMember(Name = "removed_chat_boost")>]
     RemovedChatBoost: ChatBoostRemoved option
   }
-  static member Create(updateId: int64, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?callbackQuery: CallbackQuery, ?chosenInlineResult: ChosenInlineResult, ?chatBoost: ChatBoostUpdated, ?inlineQuery: InlineQuery, ?messageReaction: MessageReactionUpdated, ?deletedBusinessMessages: BusinessMessagesDeleted, ?editedBusinessMessage: Message, ?businessMessage: Message, ?businessConnection: BusinessConnection, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?messageReactionCount: MessageReactionCountUpdated, ?removedChatBoost: ChatBoostRemoved) = 
+  static member Create(updateId: int64, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?purchasedPaidMedia: PaidMediaPurchased, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?callbackQuery: CallbackQuery, ?chosenInlineResult: ChosenInlineResult, ?inlineQuery: InlineQuery, ?messageReactionCount: MessageReactionCountUpdated, ?messageReaction: MessageReactionUpdated, ?deletedBusinessMessages: BusinessMessagesDeleted, ?editedBusinessMessage: Message, ?businessMessage: Message, ?businessConnection: BusinessConnection, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?chatBoost: ChatBoostUpdated, ?removedChatBoost: ChatBoostRemoved) = 
     {
       UpdateId = updateId
       ChatJoinRequest = chatJoinRequest
@@ -155,12 +158,13 @@ and [<CLIMutable>] Update =
       MyChatMember = myChatMember
       PollAnswer = pollAnswer
       Poll = poll
+      PurchasedPaidMedia = purchasedPaidMedia
       PreCheckoutQuery = preCheckoutQuery
       ShippingQuery = shippingQuery
       CallbackQuery = callbackQuery
       ChosenInlineResult = chosenInlineResult
-      ChatBoost = chatBoost
       InlineQuery = inlineQuery
+      MessageReactionCount = messageReactionCount
       MessageReaction = messageReaction
       DeletedBusinessMessages = deletedBusinessMessages
       EditedBusinessMessage = editedBusinessMessage
@@ -170,7 +174,7 @@ and [<CLIMutable>] Update =
       ChannelPost = channelPost
       EditedMessage = editedMessage
       Message = message
-      MessageReactionCount = messageReactionCount
+      ChatBoost = chatBoost
       RemovedChatBoost = removedChatBoost
     }
 
@@ -259,8 +263,11 @@ and [<CLIMutable>] User =
     /// True, if the bot can be connected to a Telegram Business account to receive its messages. Returned only in getMe.
     [<DataMember(Name = "can_connect_to_business")>]
     CanConnectToBusiness: bool option
+    /// True, if the bot has a main Web App. Returned only in getMe.
+    [<DataMember(Name = "has_main_web_app")>]
+    HasMainWebApp: bool option
   }
-  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool, ?canConnectToBusiness: bool) = 
+  static member Create(id: int64, isBot: bool, firstName: string, ?lastName: string, ?username: string, ?languageCode: string, ?isPremium: bool, ?addedToAttachmentMenu: bool, ?canJoinGroups: bool, ?canReadAllGroupMessages: bool, ?supportsInlineQueries: bool, ?canConnectToBusiness: bool, ?hasMainWebApp: bool) = 
     {
       Id = id
       IsBot = isBot
@@ -274,6 +281,7 @@ and [<CLIMutable>] User =
       CanReadAllGroupMessages = canReadAllGroupMessages
       SupportsInlineQueries = supportsInlineQueries
       CanConnectToBusiness = canConnectToBusiness
+      HasMainWebApp = hasMainWebApp
     }
 
 /// This object represents a chat.
@@ -505,10 +513,10 @@ and [<CLIMutable>] Message =
     /// Unique identifier of a message thread to which the message belongs; for supergroups only
     [<DataMember(Name = "message_thread_id")>]
     MessageThreadId: int64 option
-    /// Sender of the message; empty for messages sent to channels. For backward compatibility, the field contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+    /// Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
     [<DataMember(Name = "from")>]
     From: User option
-    /// Sender of the message, sent on behalf of a chat. For example, the channel itself for channel posts, the supergroup itself for messages from anonymous group administrators, the linked channel for messages automatically forwarded to the discussion group. For backward compatibility, the field from contains a fake sender user in non-channel chats, if the message was sent on behalf of a chat.
+    /// Sender of the message when sent on behalf of a chat. For example, the supergroup itself for messages sent by its anonymous administrators or a linked channel for messages automatically forwarded to the channel's discussion group. For backward compatibility, if the message was sent on behalf of a chat, the field from contains a fake sender user in non-channel chats.
     [<DataMember(Name = "sender_chat")>]
     SenderChat: Chat option
     /// If the sender of the message boosted the chat, the number of boosts added by the user
@@ -2199,9 +2207,17 @@ and [<CLIMutable>] VideoChatParticipantsInvited =
       Users = users
     }
 
-/// This object represents a service message about the creation of a scheduled giveaway. Currently holds no information.
-and GiveawayCreated =
-  new() = {}
+/// This object represents a service message about the creation of a scheduled giveaway.
+and [<CLIMutable>] GiveawayCreated =
+  {
+    /// The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+    [<DataMember(Name = "prize_star_count")>]
+    PrizeStarCount: int64 option
+  }
+  static member Create(?prizeStarCount: int64) = 
+    {
+      PrizeStarCount = prizeStarCount
+    }
 
 /// This object represents a message about a scheduled giveaway.
 and [<CLIMutable>] Giveaway =
@@ -2227,11 +2243,14 @@ and [<CLIMutable>] Giveaway =
     /// A list of two-letter ISO 3166-1 alpha-2 country codes indicating the countries from which eligible users for the giveaway must come. If empty, then all users can participate in the giveaway. Users with a phone number that was bought on Fragment can always participate in giveaways.
     [<DataMember(Name = "country_codes")>]
     CountryCodes: string[] option
-    /// The number of months the Telegram Premium subscription won from the giveaway will be active for
+    /// The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+    [<DataMember(Name = "prize_star_count")>]
+    PrizeStarCount: int64 option
+    /// The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
     [<DataMember(Name = "premium_subscription_month_count")>]
     PremiumSubscriptionMonthCount: int64 option
   }
-  static member Create(chats: Chat[], winnersSelectionDate: int64, winnerCount: int64, ?onlyNewMembers: bool, ?hasPublicWinners: bool, ?prizeDescription: string, ?countryCodes: string[], ?premiumSubscriptionMonthCount: int64) = 
+  static member Create(chats: Chat[], winnersSelectionDate: int64, winnerCount: int64, ?onlyNewMembers: bool, ?hasPublicWinners: bool, ?prizeDescription: string, ?countryCodes: string[], ?prizeStarCount: int64, ?premiumSubscriptionMonthCount: int64) = 
     {
       Chats = chats
       WinnersSelectionDate = winnersSelectionDate
@@ -2240,6 +2259,7 @@ and [<CLIMutable>] Giveaway =
       HasPublicWinners = hasPublicWinners
       PrizeDescription = prizeDescription
       CountryCodes = countryCodes
+      PrizeStarCount = prizeStarCount
       PremiumSubscriptionMonthCount = premiumSubscriptionMonthCount
     }
 
@@ -2264,7 +2284,10 @@ and [<CLIMutable>] GiveawayWinners =
     /// The number of other chats the user had to join in order to be eligible for the giveaway
     [<DataMember(Name = "additional_chat_count")>]
     AdditionalChatCount: int64 option
-    /// The number of months the Telegram Premium subscription won from the giveaway will be active for
+    /// The number of Telegram Stars that were split between giveaway winners; for Telegram Star giveaways only
+    [<DataMember(Name = "prize_star_count")>]
+    PrizeStarCount: int64 option
+    /// The number of months the Telegram Premium subscription won from the giveaway will be active for; for Telegram Premium giveaways only
     [<DataMember(Name = "premium_subscription_month_count")>]
     PremiumSubscriptionMonthCount: int64 option
     /// Number of undistributed prizes
@@ -2280,7 +2303,7 @@ and [<CLIMutable>] GiveawayWinners =
     [<DataMember(Name = "prize_description")>]
     PrizeDescription: string option
   }
-  static member Create(chat: Chat, giveawayMessageId: int64, winnersSelectionDate: int64, winnerCount: int64, winners: User[], ?additionalChatCount: int64, ?premiumSubscriptionMonthCount: int64, ?unclaimedPrizeCount: int64, ?onlyNewMembers: bool, ?wasRefunded: bool, ?prizeDescription: string) = 
+  static member Create(chat: Chat, giveawayMessageId: int64, winnersSelectionDate: int64, winnerCount: int64, winners: User[], ?additionalChatCount: int64, ?prizeStarCount: int64, ?premiumSubscriptionMonthCount: int64, ?unclaimedPrizeCount: int64, ?onlyNewMembers: bool, ?wasRefunded: bool, ?prizeDescription: string) = 
     {
       Chat = chat
       GiveawayMessageId = giveawayMessageId
@@ -2288,6 +2311,7 @@ and [<CLIMutable>] GiveawayWinners =
       WinnerCount = winnerCount
       Winners = winners
       AdditionalChatCount = additionalChatCount
+      PrizeStarCount = prizeStarCount
       PremiumSubscriptionMonthCount = premiumSubscriptionMonthCount
       UnclaimedPrizeCount = unclaimedPrizeCount
       OnlyNewMembers = onlyNewMembers
@@ -2307,12 +2331,16 @@ and [<CLIMutable>] GiveawayCompleted =
     /// Message with the giveaway that was completed, if it wasn't deleted
     [<DataMember(Name = "giveaway_message")>]
     GiveawayMessage: Message option
+    /// True, if the giveaway is a Telegram Star giveaway. Otherwise, currently, the giveaway is a Telegram Premium giveaway.
+    [<DataMember(Name = "is_star_giveaway")>]
+    IsStarGiveaway: bool option
   }
-  static member Create(winnerCount: int64, ?unclaimedPrizeCount: int64, ?giveawayMessage: Message) = 
+  static member Create(winnerCount: int64, ?unclaimedPrizeCount: int64, ?giveawayMessage: Message, ?isStarGiveaway: bool) = 
     {
       WinnerCount = winnerCount
       UnclaimedPrizeCount = unclaimedPrizeCount
       GiveawayMessage = giveawayMessage
+      IsStarGiveaway = isStarGiveaway
     }
 
 /// Describes the options used for link preview generation.
@@ -2815,8 +2843,14 @@ and [<CLIMutable>] ChatInviteLink =
     /// Number of pending join requests created using this link
     [<DataMember(Name = "pending_join_request_count")>]
     PendingJoinRequestCount: int64 option
+    /// The number of seconds the subscription will be active for before the next payment
+    [<DataMember(Name = "subscription_period")>]
+    SubscriptionPeriod: int64 option
+    /// The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat using the link
+    [<DataMember(Name = "subscription_price")>]
+    SubscriptionPrice: int64 option
   }
-  static member Create(inviteLink: string, creator: User, createsJoinRequest: bool, isPrimary: bool, isRevoked: bool, ?name: string, ?expireDate: int64, ?memberLimit: int64, ?pendingJoinRequestCount: int64) = 
+  static member Create(inviteLink: string, creator: User, createsJoinRequest: bool, isPrimary: bool, isRevoked: bool, ?name: string, ?expireDate: int64, ?memberLimit: int64, ?pendingJoinRequestCount: int64, ?subscriptionPeriod: int64, ?subscriptionPrice: int64) = 
     {
       InviteLink = inviteLink
       Creator = creator
@@ -2827,6 +2861,8 @@ and [<CLIMutable>] ChatInviteLink =
       ExpireDate = expireDate
       MemberLimit = memberLimit
       PendingJoinRequestCount = pendingJoinRequestCount
+      SubscriptionPeriod = subscriptionPeriod
+      SubscriptionPrice = subscriptionPrice
     }
 
 /// Represents the rights of an administrator in a chat.
@@ -3071,11 +3107,15 @@ and [<CLIMutable>] ChatMemberMember =
     /// Information about the user
     [<DataMember(Name = "user")>]
     User: User
+    /// Date when the user's subscription will expire; Unix time
+    [<DataMember(Name = "until_date")>]
+    UntilDate: DateTime option
   }
-  static member Create(status: string, user: User) = 
+  static member Create(status: string, user: User, ?untilDate: DateTime) = 
     {
       Status = status
       User = user
+      UntilDate = untilDate
     }
 
 /// Represents a chat member that is under certain restrictions in the chat. Supergroups only.
@@ -3398,6 +3438,7 @@ and [<CLIMutable>] ChatLocation =
 and ReactionType =
   | Emoji of ReactionTypeEmoji
   | CustomEmoji of ReactionTypeCustomEmoji
+  | Paid of ReactionTypePaid
 
 /// The reaction is based on an emoji.
 and [<CLIMutable>] ReactionTypeEmoji =
@@ -3429,6 +3470,18 @@ and [<CLIMutable>] ReactionTypeCustomEmoji =
     {
       Type = ``type``
       CustomEmojiId = customEmojiId
+    }
+
+/// The reaction is paid.
+and [<CLIMutable>] ReactionTypePaid =
+  {
+    /// Type of the reaction, always “paid”
+    [<DataMember(Name = "type")>]
+    Type: string
+  }
+  static member Create(``type``: string) = 
+    {
+      Type = ``type``
     }
 
 /// Represents a reaction added to a message along with the number of times it was added.
@@ -3782,7 +3835,7 @@ and [<CLIMutable>] ChatBoostSourceGiftCode =
       User = user
     }
 
-/// The boost was obtained by the creation of a Telegram Premium giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
+/// The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and prize_star_count / 500 times for one year for Telegram Star giveaways.
 and [<CLIMutable>] ChatBoostSourceGiveaway =
   {
     /// Source of the boost, always “giveaway”
@@ -3791,18 +3844,22 @@ and [<CLIMutable>] ChatBoostSourceGiveaway =
     /// Identifier of a message in the chat with the giveaway; the message could have been deleted already. May be 0 if the message isn't sent yet.
     [<DataMember(Name = "giveaway_message_id")>]
     GiveawayMessageId: int64
-    /// User that won the prize in the giveaway if any
+    /// User that won the prize in the giveaway if any; for Telegram Premium giveaways only
     [<DataMember(Name = "user")>]
     User: User option
+    /// The number of Telegram Stars to be split between giveaway winners; for Telegram Star giveaways only
+    [<DataMember(Name = "prize_star_count")>]
+    PrizeStarCount: int64 option
     /// True, if the giveaway was completed, but there was no user to win the prize
     [<DataMember(Name = "is_unclaimed")>]
     IsUnclaimed: bool option
   }
-  static member Create(source: string, giveawayMessageId: int64, ?user: User, ?isUnclaimed: bool) = 
+  static member Create(source: string, giveawayMessageId: int64, ?user: User, ?prizeStarCount: int64, ?isUnclaimed: bool) = 
     {
       Source = source
       GiveawayMessageId = giveawayMessageId
       User = user
+      PrizeStarCount = prizeStarCount
       IsUnclaimed = isUnclaimed
     }
 
@@ -5658,7 +5715,7 @@ and [<CLIMutable>] InputInvoiceMessageContent =
     /// Product description, 1-255 characters
     [<DataMember(Name = "description")>]
     Description: string
-    /// Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use for your internal processes.
+    /// Bot-defined invoice payload, 1-128 bytes. This will not be displayed to the user, use it for your internal processes.
     [<DataMember(Name = "payload")>]
     Payload: string
     /// Payment provider token, obtained via @BotFather. Pass an empty string for payments in Telegram Stars.
@@ -6023,6 +6080,22 @@ and [<CLIMutable>] PreCheckoutQuery =
       OrderInfo = orderInfo
     }
 
+/// This object contains information about a paid media purchase.
+and [<CLIMutable>] PaidMediaPurchased =
+  {
+    /// User who purchased the media
+    [<DataMember(Name = "from")>]
+    From: User
+    /// Bot-specified paid media payload
+    [<DataMember(Name = "paid_media_payload")>]
+    PaidMediaPayload: string
+  }
+  static member Create(from: User, paidMediaPayload: string) = 
+    {
+      From = from
+      PaidMediaPayload = paidMediaPayload
+    }
+
 /// This object describes the state of a revenue withdrawal operation. Currently, it can be one of
 and RevenueWithdrawalState =
   | Pending of RevenueWithdrawalStatePending
@@ -6092,12 +6165,20 @@ and [<CLIMutable>] TransactionPartnerUser =
     /// Bot-specified invoice payload
     [<DataMember(Name = "invoice_payload")>]
     InvoicePayload: string option
+    /// Information about the paid media bought by the user
+    [<DataMember(Name = "paid_media")>]
+    PaidMedia: PaidMedia[] option
+    /// Bot-specified paid media payload
+    [<DataMember(Name = "paid_media_payload")>]
+    PaidMediaPayload: string option
   }
-  static member Create(``type``: string, user: User, ?invoicePayload: string) = 
+  static member Create(``type``: string, user: User, ?invoicePayload: string, ?paidMedia: PaidMedia[], ?paidMediaPayload: string) = 
     {
       Type = ``type``
       User = user
       InvoicePayload = invoicePayload
+      PaidMedia = paidMedia
+      PaidMediaPayload = paidMediaPayload
     }
 
 /// Describes a withdrawal transaction with Fragment.
