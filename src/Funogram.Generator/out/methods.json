@@ -31,7 +31,7 @@
       {
         "OriginalName": "allowed_updates",
         "ConvertedName": "AllowedUpdates",
-        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to the getUpdates, so unwanted updates may be received for a short period of time.",
+        "Description": "A JSON-serialized list of the update types you want your bot to receive. For example, specify [\u0022message\u0022, \u0022edited_channel_post\u0022, \u0022callback_query\u0022] to only receive updates of these types. See Update for a complete list of available update types. Specify an empty list to receive all update types except chat_member, message_reaction, and message_reaction_count (default). If not specified, the previous setting will be used.\n\nPlease note that this parameter doesn\u0027t affect updates created before the call to getUpdates, so unwanted updates may be received for a short period of time.",
         "OriginalFieldType": "Array of String",
         "ConvertedFieldType": "string[]",
         "Optional": true
@@ -43,7 +43,7 @@
   {
     "OriginalName": "setWebhook",
     "ConvertedName": "SetWebhook",
-    "Description": "Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request, we will give up after a reasonable amount of attempts. Returns True on success.",
+    "Description": "Use this method to specify a URL and receive incoming updates via an outgoing webhook. Whenever there is an update for the bot, we will send an HTTPS POST request to the specified URL, containing a JSON-serialized Update. In case of an unsuccessful request (a request with response HTTP status code different from 2XY), we will repeat the request and give up after a reasonable amount of attempts. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "url",
@@ -227,6 +227,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -459,6 +467,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -637,6 +653,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -774,6 +798,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -890,6 +922,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1056,6 +1096,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -1209,6 +1257,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -1322,6 +1378,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -1422,6 +1486,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1548,6 +1620,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1616,6 +1696,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent messages from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1729,6 +1817,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -1871,6 +1967,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -1971,6 +2075,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2161,6 +2273,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -2237,6 +2357,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2383,6 +2511,39 @@
     ],
     "OriginalReturnType": "UserProfilePhotos",
     "ConvertedReturnType": "UserProfilePhotos"
+  },
+  {
+    "OriginalName": "setUserEmojiStatus",
+    "ConvertedName": "SetUserEmojiStatus",
+    "Description": "Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "emoji_status_custom_emoji_id",
+        "ConvertedName": "EmojiStatusCustomEmojiId",
+        "Description": "Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "emoji_status_expiration_date",
+        "ConvertedName": "EmojiStatusExpirationDate",
+        "Description": "Expiration date of the emoji status, if any",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
   },
   {
     "OriginalName": "getFile",
@@ -4224,7 +4385,7 @@
   {
     "OriginalName": "editMessageMedia",
     "ConvertedName": "EditMessageMedia",
-    "Description": "Use this method to edit animation, audio, document, photo, or video messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
+    "Description": "Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -4626,6 +4787,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -5017,7 +5186,7 @@
       {
         "OriginalName": "thumbnail",
         "ConvertedName": "Thumbnail",
-        "Description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB. Animated and video sticker set thumbnails can\u0027t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
+        "Description": "A .WEBP or .PNG image with the thumbnail, must be up to 128 kilobytes in size and have a width and height of exactly 100px, or a .TGS animation with a thumbnail up to 32 kilobytes in size (see https://core.telegram.org/stickers#animation-requirements for animated sticker technical requirements), or a .WEBM video with the thumbnail up to 32 kilobytes in size; see https://core.telegram.org/stickers#video-requirements for video sticker technical requirements. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or upload a new one using multipart/form-data. More information on Sending Files \u00BB. Animated and video sticker set thumbnails can\u0027t be uploaded via HTTP URL. If omitted, then the thumbnail is dropped and the first sticker is used as the thumbnail.",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
         "Optional": true
@@ -5025,7 +5194,7 @@
       {
         "OriginalName": "format",
         "ConvertedName": "Format",
-        "Description": "Format of the thumbnail, must be one of \u201Cstatic\u201D for a .WEBP or .PNG image, \u201Canimated\u201D for a .TGS animation, or \u201Cvideo\u201D for a WEBM video",
+        "Description": "Format of the thumbnail, must be one of \u201Cstatic\u201D for a .WEBP or .PNG image, \u201Canimated\u201D for a .TGS animation, or \u201Cvideo\u201D for a .WEBM video",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": false
@@ -5070,6 +5239,155 @@
         "Description": "Sticker set name",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getAvailableGifts",
+    "ConvertedName": "GetAvailableGifts",
+    "Description": "Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object.",
+    "Fields": [],
+    "OriginalReturnType": "Gifts",
+    "ConvertedReturnType": "Gifts"
+  },
+  {
+    "OriginalName": "sendGift",
+    "ConvertedName": "SendGift",
+    "Description": "Sends a gift to the given user. The gift can\u0027t be converted to Telegram Stars by the user. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user that will receive the gift",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "gift_id",
+        "ConvertedName": "GiftId",
+        "Description": "Identifier of the gift",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "pay_for_upgrade",
+        "ConvertedName": "PayForUpgrade",
+        "Description": "Pass True to pay for the gift upgrade from the bot\u0027s balance, thereby making the upgrade free for the receiver",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text",
+        "ConvertedName": "Text",
+        "Description": "Text that will be shown along with the gift; 0-255 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text_parse_mode",
+        "ConvertedName": "TextParseMode",
+        "Description": "Mode for parsing entities in the text. See formatting options for more details. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text_entities",
+        "ConvertedName": "TextEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "verifyUser",
+    "ConvertedName": "VerifyUser",
+    "Description": "Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "custom_description",
+        "ConvertedName": "CustomDescription",
+        "Description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn\u0027t allowed to provide a custom verification description.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "verifyChat",
+    "ConvertedName": "VerifyChat",
+    "Description": "Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "custom_description",
+        "ConvertedName": "CustomDescription",
+        "Description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn\u0027t allowed to provide a custom verification description.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "removeUserVerification",
+    "ConvertedName": "RemoveUserVerification",
+    "Description": "Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "removeChatVerification",
+    "ConvertedName": "RemoveChatVerification",
+    "Description": "Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
         "Optional": false
       }
     ],
@@ -5157,6 +5475,63 @@
     ],
     "OriginalReturnType": "SentWebAppMessage",
     "ConvertedReturnType": "SentWebAppMessage"
+  },
+  {
+    "OriginalName": "savePreparedInlineMessage",
+    "ConvertedName": "SavePreparedInlineMessage",
+    "Description": "Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user that can use the prepared message",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "result",
+        "ConvertedName": "Result",
+        "Description": "A JSON-serialized object describing the message to be sent",
+        "OriginalFieldType": "InlineQueryResult",
+        "ConvertedFieldType": "InlineQueryResult",
+        "Optional": false
+      },
+      {
+        "OriginalName": "allow_user_chats",
+        "ConvertedName": "AllowUserChats",
+        "Description": "Pass True if the message can be sent to private chats with users",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_bot_chats",
+        "ConvertedName": "AllowBotChats",
+        "Description": "Pass True if the message can be sent to private chats with bots",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_group_chats",
+        "ConvertedName": "AllowGroupChats",
+        "Description": "Pass True if the message can be sent to group and supergroup chats",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_channel_chats",
+        "ConvertedName": "AllowChannelChats",
+        "Description": "Pass True if the message can be sent to channel chats",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "PreparedInlineMessage",
+    "ConvertedReturnType": "PreparedInlineMessage"
   },
   {
     "OriginalName": "sendInvoice",
@@ -5364,6 +5739,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_effect_id",
         "ConvertedName": "MessageEffectId",
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
@@ -5396,6 +5779,14 @@
     "ConvertedName": "CreateInvoiceLink",
     "Description": "Use this method to create a link for an invoice. Returns the created invoice link as String on success.",
     "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the link will be created. For payments in Telegram Stars only.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
       {
         "OriginalName": "title",
         "ConvertedName": "Title",
@@ -5443,6 +5834,14 @@
         "OriginalFieldType": "Array of LabeledPrice",
         "ConvertedFieldType": "LabeledPrice[]",
         "Optional": false
+      },
+      {
+        "OriginalName": "subscription_period",
+        "ConvertedName": "SubscriptionPeriod",
+        "Description": "The number of seconds the subscription will be active for before the next payment. The currency must be set to \u201CXTR\u201D (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 2500 Telegram Stars.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "max_tip_amount",
@@ -5592,7 +5991,7 @@
       {
         "OriginalName": "error_message",
         "ConvertedName": "ErrorMessage",
-        "Description": "Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. \u0022Sorry, delivery to your desired address is unavailable\u0027). Telegram will display this message to the user.",
+        "Description": "Required if ok is False. Error message in human readable form that explains why it is impossible to complete the order (e.g. \u201CSorry, delivery to your desired address is unavailable\u201D). Telegram will display this message to the user.",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": true
@@ -5685,6 +6084,39 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "editUserStarSubscription",
+    "ConvertedName": "EditUserStarSubscription",
+    "Description": "Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Identifier of the user whose subscription will be edited",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "telegram_payment_charge_id",
+        "ConvertedName": "TelegramPaymentChargeId",
+        "Description": "Telegram payment identifier for the subscription",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "is_canceled",
+        "ConvertedName": "IsCanceled",
+        "Description": "Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "setPassportDataErrors",
     "ConvertedName": "SetPassportDataErrors",
     "Description": "Informs a user that some of the Telegram Passport elements they provided contains errors. The user will not be able to re-submit their Passport to you until the errors are fixed (the contents of the field for which you returned the error must change). Returns True on success.",
@@ -5758,6 +6190,14 @@
         "OriginalName": "protect_content",
         "ConvertedName": "ProtectContent",
         "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "allow_paid_broadcast",
+        "ConvertedName": "AllowPaidBroadcast",
+        "Description": "Pass True to allow up to 1000 messages per second, ignoring broadcasting limits for a fee of 0.1 Telegram Stars per message. The relevant Stars will be withdrawn from the bot\u0027s balance",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
