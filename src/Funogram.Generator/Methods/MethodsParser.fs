@@ -44,6 +44,8 @@ let loadRemapData remapPath config =
 
 let private returnTypeRegexes =
   [|
+    // Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object
+    
     // invite links
     Regex("Returns the new invite link as a ([A|a]rray of \w+|\w+)\s")
     Regex("Returns the new invite link as ([A|a]rray of \w+|\w+)\s")
@@ -59,10 +61,10 @@ let private returnTypeRegexes =
 
     Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
 
+    Regex("[R|r]eturns a ([A|a]rray of \w+|\w+)\s")
     Regex("[R|r]eturns the uploaded (\w+)\s")
     Regex("[R|r]eturns the ([A|a]rray of \w+|\w+)\s")
     Regex("[R|r]eturns an ([A|a]rray of \w+|\w+)\s")
-    Regex("[R|r]eturns a ([A|a]rray of \w+|\w+)\s")
     Regex("[R|r]eturns ([A|a]rray of \w+|\w+)\s")
 
     

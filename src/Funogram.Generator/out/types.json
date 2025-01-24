@@ -840,7 +840,7 @@
           {
             "OriginalName": "message_id",
             "ConvertedName": "MessageId",
-            "Description": "Unique message identifier inside this chat",
+            "Description": "Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -1531,7 +1531,7 @@
           {
             "OriginalName": "message_id",
             "ConvertedName": "MessageId",
-            "Description": "Unique message identifier",
+            "Description": "Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -1604,7 +1604,7 @@
           {
             "OriginalName": "type",
             "ConvertedName": "Type",
-            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag), \u201Ccashtag\u201D ($USD), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Cblockquote\u201D (block quotation), \u201Cexpandable_blockquote\u201D (collapsed-by-default block quotation), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames), \u201Ccustom_emoji\u201D (for inline custom emoji stickers)",
+            "Description": "Type of the entity. Currently, can be \u201Cmention\u201D (@username), \u201Chashtag\u201D (#hashtag or #hashtag@chatusername), \u201Ccashtag\u201D ($USD or $USD@chatusername), \u201Cbot_command\u201D (/start@jobs_bot), \u201Curl\u201D (https://telegram.org), \u201Cemail\u201D (do-not-reply@telegram.org), \u201Cphone_number\u201D (\u002B1-212-555-0123), \u201Cbold\u201D (bold text), \u201Citalic\u201D (italic text), \u201Cunderline\u201D (underlined text), \u201Cstrikethrough\u201D (strikethrough text), \u201Cspoiler\u201D (spoiler message), \u201Cblockquote\u201D (block quotation), \u201Cexpandable_blockquote\u201D (collapsed-by-default block quotation), \u201Ccode\u201D (monowidth string), \u201Cpre\u201D (monowidth block), \u201Ctext_link\u201D (for clickable text URLs), \u201Ctext_mention\u201D (for users without usernames), \u201Ccustom_emoji\u201D (for inline custom emoji stickers)",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -3583,7 +3583,7 @@
   },
   {
     "Name": "BackgroundTypePattern",
-    "Description": "The background is a PNG or TGV (gzipped subset of SVG with MIME type \u201Capplication/x-tgwallpattern\u201D) pattern to be combined with the background fill chosen by the user.",
+    "Description": "The background is a .PNG or .TGV (gzipped subset of SVG with MIME type \u201Capplication/x-tgwallpattern\u201D) pattern to be combined with the background fill chosen by the user.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -4825,6 +4825,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "copy_text",
+            "ConvertedName": "CopyText",
+            "Description": "Description of the button that copies the specified text to the clipboard.",
+            "OriginalFieldType": "CopyTextButton",
+            "ConvertedFieldType": "CopyTextButton",
+            "Optional": true
+          },
+          {
             "OriginalName": "callback_game",
             "ConvertedName": "CallbackGame",
             "Description": "Description of the game that will be launched when the user presses the button.\n\nNOTE: This type of button must always be the first button in the first row.",
@@ -4933,6 +4941,25 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "CopyTextButton",
+    "Description": "This object represents an inline keyboard button that copies specified text to the clipboard.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "The text to be copied to the clipboard; 1-256 characters",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
           }
         ]
       ]
@@ -8115,7 +8142,7 @@
           {
             "OriginalName": "format",
             "ConvertedName": "Format",
-            "Description": "Format of the added sticker, must be one of \u201Cstatic\u201D for a .WEBP or .PNG image, \u201Canimated\u201D for a .TGS animation, \u201Cvideo\u201D for a WEBM video",
+            "Description": "Format of the added sticker, must be one of \u201Cstatic\u201D for a .WEBP or .PNG image, \u201Canimated\u201D for a .TGS animation, \u201Cvideo\u201D for a .WEBM video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -8143,6 +8170,84 @@
             "OriginalFieldType": "Array of String",
             "ConvertedFieldType": "string[]",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "Gift",
+    "Description": "This object represents a gift that can be sent by the bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the gift",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "The sticker that represents the gift",
+            "OriginalFieldType": "Sticker",
+            "ConvertedFieldType": "Sticker",
+            "Optional": false
+          },
+          {
+            "OriginalName": "star_count",
+            "ConvertedName": "StarCount",
+            "Description": "The number of Telegram Stars that must be paid to send the sticker",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "upgrade_star_count",
+            "ConvertedName": "UpgradeStarCount",
+            "Description": "The number of Telegram Stars that must be paid to upgrade the gift to a unique one",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "total_count",
+            "ConvertedName": "TotalCount",
+            "Description": "The total number of the gifts of this type that can be sent; for limited gifts only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "remaining_count",
+            "ConvertedName": "RemainingCount",
+            "Description": "The number of remaining gifts of this type that can be sent; for limited gifts only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "Gifts",
+    "Description": "This object represent a list of gifts.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "gifts",
+            "ConvertedName": "Gifts",
+            "Description": "The list of gifts",
+            "OriginalFieldType": "Array of Gift",
+            "ConvertedFieldType": "Gift[]",
+            "Optional": false
           }
         ]
       ]
@@ -8389,14 +8494,6 @@
             "Optional": true
           },
           {
-            "OriginalName": "hide_url",
-            "ConvertedName": "HideUrl",
-            "Description": "Pass True if you don\u0027t want the URL to be shown in the message",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": true
-          },
-          {
             "OriginalName": "description",
             "ConvertedName": "Description",
             "Description": "Short description of the result",
@@ -8581,7 +8678,7 @@
           {
             "OriginalName": "gif_url",
             "ConvertedName": "GifUrl",
-            "Description": "A valid URL for the GIF file. File size must not exceed 1MB",
+            "Description": "A valid URL for the GIF file",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -8712,7 +8809,7 @@
           {
             "OriginalName": "mpeg4_url",
             "ConvertedName": "Mpeg4Url",
-            "Description": "A valid URL for the MPEG4 file. File size must not exceed 1MB",
+            "Description": "A valid URL for the MPEG4 file",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -10820,7 +10917,7 @@
   },
   {
     "Name": "SentWebAppMessage",
-    "Description": "Describes an inline message sent by a Web App on behalf of a user.\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.",
+    "Description": "Describes an inline message sent by a Web App on behalf of a user.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -10832,6 +10929,33 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "PreparedInlineMessage",
+    "Description": "Describes an inline message to be sent by a user of a Mini App.\nYour bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the prepared message",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "expiration_date",
+            "ConvertedName": "ExpirationDate",
+            "Description": "Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
           }
         ]
       ]
@@ -11054,7 +11178,7 @@
   },
   {
     "Name": "SuccessfulPayment",
-    "Description": "This object contains basic information about a successful payment.",
+    "Description": "This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram\u0027s control.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -11082,6 +11206,30 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "subscription_expiration_date",
+            "ConvertedName": "SubscriptionExpirationDate",
+            "Description": "Expiration date of the subscription, in Unix time; for recurring payments only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_recurring",
+            "ConvertedName": "IsRecurring",
+            "Description": "True, if the payment is a recurring payment for a subscription",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_first_recurring",
+            "ConvertedName": "IsFirstRecurring",
+            "Description": "True, if the payment is the first payment for a subscription",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           },
           {
             "OriginalName": "shipping_option_id",
@@ -11404,6 +11552,57 @@
     }
   },
   {
+    "Name": "AffiliateInfo",
+    "Description": "Contains information about the affiliate that received a commission via this transaction.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "affiliate_user",
+            "ConvertedName": "AffiliateUser",
+            "Description": "The bot or the user that received an affiliate commission if it was received by a bot or a user",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "affiliate_chat",
+            "ConvertedName": "AffiliateChat",
+            "Description": "The chat that received an affiliate commission if it was received by a chat",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
+            "OriginalName": "commission_per_mille",
+            "ConvertedName": "CommissionPerMille",
+            "Description": "The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "amount",
+            "ConvertedName": "Amount",
+            "Description": "Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "nanostar_amount",
+            "ConvertedName": "NanostarAmount",
+            "Description": "The number of 1/1000000000 shares of Telegram Stars received by the affiliate; from -999999999 to 999999999; can be negative for refunds",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "TransactionPartner",
     "Description": "This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of",
     "Kind": {
@@ -11415,12 +11614,20 @@
             "CaseType": "TransactionPartnerUser"
           },
           {
+            "Name": "AffiliateProgram",
+            "CaseType": "TransactionPartnerAffiliateProgram"
+          },
+          {
             "Name": "Fragment",
             "CaseType": "TransactionPartnerFragment"
           },
           {
             "Name": "TelegramAds",
             "CaseType": "TransactionPartnerTelegramAds"
+          },
+          {
+            "Name": "TelegramApi",
+            "CaseType": "TransactionPartnerTelegramApi"
           },
           {
             "Name": "Other",
@@ -11454,11 +11661,27 @@
             "Optional": false
           },
           {
+            "OriginalName": "affiliate",
+            "ConvertedName": "Affiliate",
+            "Description": "Information about the affiliate that received a commission via this transaction",
+            "OriginalFieldType": "AffiliateInfo",
+            "ConvertedFieldType": "AffiliateInfo",
+            "Optional": true
+          },
+          {
             "OriginalName": "invoice_payload",
             "ConvertedName": "InvoicePayload",
             "Description": "Bot-specified invoice payload",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "subscription_period",
+            "ConvertedName": "SubscriptionPeriod",
+            "Description": "The duration of the paid subscription",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -11476,6 +11699,49 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
+          },
+          {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "The gift sent to the user by the bot",
+            "OriginalFieldType": "Gift",
+            "ConvertedFieldType": "Gift",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartnerAffiliateProgram",
+    "Description": "Describes the affiliate program that issued the affiliate commission received via this transaction.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Caffiliate_program\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sponsor_user",
+            "ConvertedName": "SponsorUser",
+            "Description": "Information about the bot that sponsored the affiliate program",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "commission_per_mille",
+            "ConvertedName": "CommissionPerMille",
+            "Description": "The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
           }
         ]
       ]
@@ -11528,6 +11794,33 @@
     }
   },
   {
+    "Name": "TransactionPartnerTelegramApi",
+    "Description": "Describes a transaction with payment for paid broadcasting.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Ctelegram_api\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "request_count",
+            "ConvertedName": "RequestCount",
+            "Description": "The number of successful requests that exceeded regular limits and were therefore billed",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "TransactionPartnerOther",
     "Description": "Describes a transaction with an unknown source or recipient.",
     "Kind": {
@@ -11548,7 +11841,7 @@
   },
   {
     "Name": "StarTransaction",
-    "Description": "Describes a Telegram Star transaction.",
+    "Description": "Describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot\u0027s balance. This is outside of Telegram\u0027s control.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -11556,7 +11849,7 @@
           {
             "OriginalName": "id",
             "ConvertedName": "Id",
-            "Description": "Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.",
+            "Description": "Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -11564,10 +11857,18 @@
           {
             "OriginalName": "amount",
             "ConvertedName": "Amount",
-            "Description": "Number of Telegram Stars transferred by the transaction",
+            "Description": "Integer amount of Telegram Stars transferred by the transaction",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
+          },
+          {
+            "OriginalName": "nanostar_amount",
+            "ConvertedName": "NanostarAmount",
+            "Description": "The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
           },
           {
             "OriginalName": "date",

@@ -507,7 +507,7 @@ and [<CLIMutable>] ChatFullInfo =
 /// This object represents a message.
 and [<CLIMutable>] Message =
   {
-    /// Unique message identifier inside this chat
+    /// Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
     [<DataMember(Name = "message_id")>]
     MessageId: int64
     /// Unique identifier of a message thread to which the message belongs; for supergroups only
@@ -855,7 +855,7 @@ and [<CLIMutable>] Message =
 /// This object represents a unique message identifier.
 and [<CLIMutable>] MessageId =
   {
-    /// Unique message identifier
+    /// Unique message identifier. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent
     [<DataMember(Name = "message_id")>]
     MessageId: int64
   }
@@ -892,7 +892,7 @@ and MaybeInaccessibleMessage =
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 and [<CLIMutable>] MessageEntity =
   {
-    /// Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag), “cashtag” ($USD), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
+    /// Type of the entity. Currently, can be “mention” (@username), “hashtag” (#hashtag or #hashtag@chatusername), “cashtag” ($USD or $USD@chatusername), “bot_command” (/start@jobs_bot), “url” (https://telegram.org), “email” (do-not-reply@telegram.org), “phone_number” (+1-212-555-0123), “bold” (bold text), “italic” (italic text), “underline” (underlined text), “strikethrough” (strikethrough text), “spoiler” (spoiler message), “blockquote” (block quotation), “expandable_blockquote” (collapsed-by-default block quotation), “code” (monowidth string), “pre” (monowidth block), “text_link” (for clickable text URLs), “text_mention” (for users without usernames), “custom_emoji” (for inline custom emoji stickers)
     [<DataMember(Name = "type")>]
     Type: string
     /// Offset in UTF-16 code units to the start of the entity
@@ -1951,7 +1951,7 @@ and [<CLIMutable>] BackgroundTypeWallpaper =
       IsMoving = isMoving
     }
 
-/// The background is a PNG or TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
+/// The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
 and [<CLIMutable>] BackgroundTypePattern =
   {
     /// Type of the background, always “pattern”
@@ -2653,6 +2653,9 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
     [<DataMember(Name = "switch_inline_query_chosen_chat")>]
     SwitchInlineQueryChosenChat: SwitchInlineQueryChosenChat option
+    /// Description of the button that copies the specified text to the clipboard.
+    [<DataMember(Name = "copy_text")>]
+    CopyText: CopyTextButton option
     /// Description of the game that will be launched when the user presses the button.
     /// 
     /// NOTE: This type of button must always be the first button in the first row.
@@ -2664,7 +2667,7 @@ and [<CLIMutable>] InlineKeyboardButton =
     [<DataMember(Name = "pay")>]
     Pay: bool option
   }
-  static member Create(text: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?callbackGame: CallbackGame, ?pay: bool) = 
+  static member Create(text: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?copyText: CopyTextButton, ?callbackGame: CallbackGame, ?pay: bool) = 
     {
       Text = text
       Url = url
@@ -2674,6 +2677,7 @@ and [<CLIMutable>] InlineKeyboardButton =
       SwitchInlineQuery = switchInlineQuery
       SwitchInlineQueryCurrentChat = switchInlineQueryCurrentChat
       SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
+      CopyText = copyText
       CallbackGame = callbackGame
       Pay = pay
     }
@@ -2731,6 +2735,18 @@ and [<CLIMutable>] SwitchInlineQueryChosenChat =
       AllowBotChats = allowBotChats
       AllowGroupChats = allowGroupChats
       AllowChannelChats = allowChannelChats
+    }
+
+/// This object represents an inline keyboard button that copies specified text to the clipboard.
+and [<CLIMutable>] CopyTextButton =
+  {
+    /// The text to be copied to the clipboard; 1-256 characters
+    [<DataMember(Name = "text")>]
+    Text: string
+  }
+  static member Create(text: string) = 
+    {
+      Text = text
     }
 
 /// This object represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
@@ -4422,7 +4438,7 @@ and [<CLIMutable>] InputSticker =
     /// The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
     [<DataMember(Name = "sticker")>]
     Sticker: InputFile
-    /// Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a WEBM video
+    /// Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a .WEBM video
     [<DataMember(Name = "format")>]
     Format: string
     /// List of 1-20 emoji associated with the sticker
@@ -4442,6 +4458,50 @@ and [<CLIMutable>] InputSticker =
       EmojiList = emojiList
       MaskPosition = maskPosition
       Keywords = keywords
+    }
+
+/// This object represents a gift that can be sent by the bot.
+and [<CLIMutable>] Gift =
+  {
+    /// Unique identifier of the gift
+    [<DataMember(Name = "id")>]
+    Id: string
+    /// The sticker that represents the gift
+    [<DataMember(Name = "sticker")>]
+    Sticker: Sticker
+    /// The number of Telegram Stars that must be paid to send the sticker
+    [<DataMember(Name = "star_count")>]
+    StarCount: int64
+    /// The number of Telegram Stars that must be paid to upgrade the gift to a unique one
+    [<DataMember(Name = "upgrade_star_count")>]
+    UpgradeStarCount: int64 option
+    /// The total number of the gifts of this type that can be sent; for limited gifts only
+    [<DataMember(Name = "total_count")>]
+    TotalCount: int64 option
+    /// The number of remaining gifts of this type that can be sent; for limited gifts only
+    [<DataMember(Name = "remaining_count")>]
+    RemainingCount: int64 option
+  }
+  static member Create(id: string, sticker: Sticker, starCount: int64, ?upgradeStarCount: int64, ?totalCount: int64, ?remainingCount: int64) = 
+    {
+      Id = id
+      Sticker = sticker
+      StarCount = starCount
+      UpgradeStarCount = upgradeStarCount
+      TotalCount = totalCount
+      RemainingCount = remainingCount
+    }
+
+/// This object represent a list of gifts.
+and [<CLIMutable>] Gifts =
+  {
+    /// The list of gifts
+    [<DataMember(Name = "gifts")>]
+    Gifts: Gift[]
+  }
+  static member Create(gifts: Gift[]) = 
+    {
+      Gifts = gifts
     }
 
 /// This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
@@ -4543,9 +4603,6 @@ and [<CLIMutable>] InlineQueryResultArticle =
     /// URL of the result
     [<DataMember(Name = "url")>]
     Url: string option
-    /// Pass True if you don't want the URL to be shown in the message
-    [<DataMember(Name = "hide_url")>]
-    HideUrl: bool option
     /// Short description of the result
     [<DataMember(Name = "description")>]
     Description: string option
@@ -4559,7 +4616,7 @@ and [<CLIMutable>] InlineQueryResultArticle =
     [<DataMember(Name = "thumbnail_height")>]
     ThumbnailHeight: int64 option
   }
-  static member Create(``type``: string, id: string, title: string, inputMessageContent: InputMessageContent, ?replyMarkup: InlineKeyboardMarkup, ?url: string, ?hideUrl: bool, ?description: string, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
+  static member Create(``type``: string, id: string, title: string, inputMessageContent: InputMessageContent, ?replyMarkup: InlineKeyboardMarkup, ?url: string, ?description: string, ?thumbnailUrl: string, ?thumbnailWidth: int64, ?thumbnailHeight: int64) = 
     {
       Type = ``type``
       Id = id
@@ -4567,7 +4624,6 @@ and [<CLIMutable>] InlineQueryResultArticle =
       InputMessageContent = inputMessageContent
       ReplyMarkup = replyMarkup
       Url = url
-      HideUrl = hideUrl
       Description = description
       ThumbnailUrl = thumbnailUrl
       ThumbnailWidth = thumbnailWidth
@@ -4647,7 +4703,7 @@ and [<CLIMutable>] InlineQueryResultGif =
     /// Unique identifier for this result, 1-64 bytes
     [<DataMember(Name = "id")>]
     Id: string
-    /// A valid URL for the GIF file. File size must not exceed 1MB
+    /// A valid URL for the GIF file
     [<DataMember(Name = "gif_url")>]
     GifUrl: string
     /// Width of the GIF
@@ -4715,7 +4771,7 @@ and [<CLIMutable>] InlineQueryResultMpeg4Gif =
     /// Unique identifier for this result, 1-64 bytes
     [<DataMember(Name = "id")>]
     Id: string
-    /// A valid URL for the MPEG4 file. File size must not exceed 1MB
+    /// A valid URL for the MPEG4 file
     [<DataMember(Name = "mpeg4_url")>]
     Mpeg4Url: string
     /// Video width
@@ -5824,7 +5880,6 @@ and [<CLIMutable>] ChosenInlineResult =
     }
 
 /// Describes an inline message sent by a Web App on behalf of a user.
-/// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.
 and [<CLIMutable>] SentWebAppMessage =
   {
     /// Identifier of the sent inline message. Available only if there is an inline keyboard attached to the message.
@@ -5834,6 +5889,23 @@ and [<CLIMutable>] SentWebAppMessage =
   static member Create(?inlineMessageId: string) = 
     {
       InlineMessageId = inlineMessageId
+    }
+
+/// Describes an inline message to be sent by a user of a Mini App.
+/// Your bot can accept payments from Telegram users. Please see the introduction to payments for more details on the process and how to set up payments for your bot.
+and [<CLIMutable>] PreparedInlineMessage =
+  {
+    /// Unique identifier of the prepared message
+    [<DataMember(Name = "id")>]
+    Id: string
+    /// Expiration date of the prepared message, in Unix time. Expired prepared messages can no longer be used
+    [<DataMember(Name = "expiration_date")>]
+    ExpirationDate: int64
+  }
+  static member Create(id: string, expirationDate: int64) = 
+    {
+      Id = id
+      ExpirationDate = expirationDate
     }
 
 /// This object represents a portion of the price for goods or services.
@@ -5956,7 +6028,7 @@ and [<CLIMutable>] ShippingOption =
       Prices = prices
     }
 
-/// This object contains basic information about a successful payment.
+/// This object contains basic information about a successful payment. Note that if the buyer initiates a chargeback with the relevant payment provider following this transaction, the funds may be debited from your balance. This is outside of Telegram's control.
 and [<CLIMutable>] SuccessfulPayment =
   {
     /// Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars
@@ -5968,6 +6040,15 @@ and [<CLIMutable>] SuccessfulPayment =
     /// Bot-specified invoice payload
     [<DataMember(Name = "invoice_payload")>]
     InvoicePayload: string
+    /// Expiration date of the subscription, in Unix time; for recurring payments only
+    [<DataMember(Name = "subscription_expiration_date")>]
+    SubscriptionExpirationDate: int64 option
+    /// True, if the payment is a recurring payment for a subscription
+    [<DataMember(Name = "is_recurring")>]
+    IsRecurring: bool option
+    /// True, if the payment is the first payment for a subscription
+    [<DataMember(Name = "is_first_recurring")>]
+    IsFirstRecurring: bool option
     /// Identifier of the shipping option chosen by the user
     [<DataMember(Name = "shipping_option_id")>]
     ShippingOptionId: string option
@@ -5981,13 +6062,16 @@ and [<CLIMutable>] SuccessfulPayment =
     [<DataMember(Name = "provider_payment_charge_id")>]
     ProviderPaymentChargeId: string
   }
-  static member Create(currency: string, totalAmount: int64, invoicePayload: string, telegramPaymentChargeId: string, providerPaymentChargeId: string, ?shippingOptionId: string, ?orderInfo: OrderInfo) = 
+  static member Create(currency: string, totalAmount: int64, invoicePayload: string, telegramPaymentChargeId: string, providerPaymentChargeId: string, ?subscriptionExpirationDate: int64, ?isRecurring: bool, ?isFirstRecurring: bool, ?shippingOptionId: string, ?orderInfo: OrderInfo) = 
     {
       Currency = currency
       TotalAmount = totalAmount
       InvoicePayload = invoicePayload
       TelegramPaymentChargeId = telegramPaymentChargeId
       ProviderPaymentChargeId = providerPaymentChargeId
+      SubscriptionExpirationDate = subscriptionExpirationDate
+      IsRecurring = isRecurring
+      IsFirstRecurring = isFirstRecurring
       ShippingOptionId = shippingOptionId
       OrderInfo = orderInfo
     }
@@ -6146,11 +6230,41 @@ and [<CLIMutable>] RevenueWithdrawalStateFailed =
       Type = ``type``
     }
 
+/// Contains information about the affiliate that received a commission via this transaction.
+and [<CLIMutable>] AffiliateInfo =
+  {
+    /// The bot or the user that received an affiliate commission if it was received by a bot or a user
+    [<DataMember(Name = "affiliate_user")>]
+    AffiliateUser: User option
+    /// The chat that received an affiliate commission if it was received by a chat
+    [<DataMember(Name = "affiliate_chat")>]
+    AffiliateChat: Chat option
+    /// The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the bot from referred users
+    [<DataMember(Name = "commission_per_mille")>]
+    CommissionPerMille: int64
+    /// Integer amount of Telegram Stars received by the affiliate from the transaction, rounded to 0; can be negative for refunds
+    [<DataMember(Name = "amount")>]
+    Amount: int64
+    /// The number of 1/1000000000 shares of Telegram Stars received by the affiliate; from -999999999 to 999999999; can be negative for refunds
+    [<DataMember(Name = "nanostar_amount")>]
+    NanostarAmount: int64 option
+  }
+  static member Create(commissionPerMille: int64, amount: int64, ?affiliateUser: User, ?affiliateChat: Chat, ?nanostarAmount: int64) = 
+    {
+      CommissionPerMille = commissionPerMille
+      Amount = amount
+      AffiliateUser = affiliateUser
+      AffiliateChat = affiliateChat
+      NanostarAmount = nanostarAmount
+    }
+
 /// This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
 and TransactionPartner =
   | User of TransactionPartnerUser
+  | AffiliateProgram of TransactionPartnerAffiliateProgram
   | Fragment of TransactionPartnerFragment
   | TelegramAds of TransactionPartnerTelegramAds
+  | TelegramApi of TransactionPartnerTelegramApi
   | Other of TransactionPartnerOther
 
 /// Describes a transaction with a user.
@@ -6162,23 +6276,55 @@ and [<CLIMutable>] TransactionPartnerUser =
     /// Information about the user
     [<DataMember(Name = "user")>]
     User: User
+    /// Information about the affiliate that received a commission via this transaction
+    [<DataMember(Name = "affiliate")>]
+    Affiliate: AffiliateInfo option
     /// Bot-specified invoice payload
     [<DataMember(Name = "invoice_payload")>]
     InvoicePayload: string option
+    /// The duration of the paid subscription
+    [<DataMember(Name = "subscription_period")>]
+    SubscriptionPeriod: int64 option
     /// Information about the paid media bought by the user
     [<DataMember(Name = "paid_media")>]
     PaidMedia: PaidMedia[] option
     /// Bot-specified paid media payload
     [<DataMember(Name = "paid_media_payload")>]
     PaidMediaPayload: string option
+    /// The gift sent to the user by the bot
+    [<DataMember(Name = "gift")>]
+    Gift: Gift option
   }
-  static member Create(``type``: string, user: User, ?invoicePayload: string, ?paidMedia: PaidMedia[], ?paidMediaPayload: string) = 
+  static member Create(``type``: string, user: User, ?affiliate: AffiliateInfo, ?invoicePayload: string, ?subscriptionPeriod: int64, ?paidMedia: PaidMedia[], ?paidMediaPayload: string, ?gift: Gift) = 
     {
       Type = ``type``
       User = user
+      Affiliate = affiliate
       InvoicePayload = invoicePayload
+      SubscriptionPeriod = subscriptionPeriod
       PaidMedia = paidMedia
       PaidMediaPayload = paidMediaPayload
+      Gift = gift
+    }
+
+/// Describes the affiliate program that issued the affiliate commission received via this transaction.
+and [<CLIMutable>] TransactionPartnerAffiliateProgram =
+  {
+    /// Type of the transaction partner, always “affiliate_program”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Information about the bot that sponsored the affiliate program
+    [<DataMember(Name = "sponsor_user")>]
+    SponsorUser: User option
+    /// The number of Telegram Stars received by the bot for each 1000 Telegram Stars received by the affiliate program sponsor from referred users
+    [<DataMember(Name = "commission_per_mille")>]
+    CommissionPerMille: int64
+  }
+  static member Create(``type``: string, commissionPerMille: int64, ?sponsorUser: User) = 
+    {
+      Type = ``type``
+      CommissionPerMille = commissionPerMille
+      SponsorUser = sponsorUser
     }
 
 /// Describes a withdrawal transaction with Fragment.
@@ -6209,6 +6355,22 @@ and [<CLIMutable>] TransactionPartnerTelegramAds =
       Type = ``type``
     }
 
+/// Describes a transaction with payment for paid broadcasting.
+and [<CLIMutable>] TransactionPartnerTelegramApi =
+  {
+    /// Type of the transaction partner, always “telegram_api”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// The number of successful requests that exceeded regular limits and were therefore billed
+    [<DataMember(Name = "request_count")>]
+    RequestCount: int64
+  }
+  static member Create(``type``: string, requestCount: int64) = 
+    {
+      Type = ``type``
+      RequestCount = requestCount
+    }
+
 /// Describes a transaction with an unknown source or recipient.
 and [<CLIMutable>] TransactionPartnerOther =
   {
@@ -6221,15 +6383,18 @@ and [<CLIMutable>] TransactionPartnerOther =
       Type = ``type``
     }
 
-/// Describes a Telegram Star transaction.
+/// Describes a Telegram Star transaction. Note that if the buyer initiates a chargeback with the payment provider from whom they acquired Stars (e.g., Apple, Google) following this transaction, the refunded Stars will be deducted from the bot's balance. This is outside of Telegram's control.
 and [<CLIMutable>] StarTransaction =
   {
-    /// Unique identifier of the transaction. Coincides with the identifer of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
+    /// Unique identifier of the transaction. Coincides with the identifier of the original transaction for refund transactions. Coincides with SuccessfulPayment.telegram_payment_charge_id for successful incoming payments from users.
     [<DataMember(Name = "id")>]
     Id: string
-    /// Number of Telegram Stars transferred by the transaction
+    /// Integer amount of Telegram Stars transferred by the transaction
     [<DataMember(Name = "amount")>]
     Amount: int64
+    /// The number of 1/1000000000 shares of Telegram Stars transferred by the transaction; from 0 to 999999999
+    [<DataMember(Name = "nanostar_amount")>]
+    NanostarAmount: int64 option
     /// Date the transaction was created in Unix time
     [<DataMember(Name = "date")>]
     Date: DateTime
@@ -6240,11 +6405,12 @@ and [<CLIMutable>] StarTransaction =
     [<DataMember(Name = "receiver")>]
     Receiver: TransactionPartner option
   }
-  static member Create(id: string, amount: int64, date: DateTime, ?source: TransactionPartner, ?receiver: TransactionPartner) = 
+  static member Create(id: string, amount: int64, date: DateTime, ?nanostarAmount: int64, ?source: TransactionPartner, ?receiver: TransactionPartner) = 
     {
       Id = id
       Amount = amount
       Date = date
+      NanostarAmount = nanostarAmount
       Source = source
       Receiver = receiver
     }
