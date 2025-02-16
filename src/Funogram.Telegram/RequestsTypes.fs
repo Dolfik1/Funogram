@@ -120,23 +120,25 @@ type ForwardMessage =
     ChatId: ChatId
     MessageThreadId: int64 option
     FromChatId: ChatId
+    VideoStartTimestamp: int64 option
     DisableNotification: bool option
     ProtectContent: bool option
     MessageId: int64
   }
-  static member Make(chatId: ChatId, fromChatId: ChatId, messageId: int64, ?messageThreadId: int64, ?disableNotification: bool, ?protectContent: bool) = 
+  static member Make(chatId: ChatId, fromChatId: ChatId, messageId: int64, ?messageThreadId: int64, ?videoStartTimestamp: int64, ?disableNotification: bool, ?protectContent: bool) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
       FromChatId = fromChatId
+      VideoStartTimestamp = videoStartTimestamp
       DisableNotification = disableNotification
       ProtectContent = protectContent
       MessageId = messageId
     }
-  static member Make(chatId: int64, fromChatId: int64, messageId: int64, ?messageThreadId: int64, ?disableNotification: bool, ?protectContent: bool) = 
-    ForwardMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId, ?messageThreadId = messageThreadId, ?disableNotification = disableNotification, ?protectContent = protectContent)
-  static member Make(chatId: string, fromChatId: string, messageId: int64, ?messageThreadId: int64, ?disableNotification: bool, ?protectContent: bool) = 
-    ForwardMessage.Make(ChatId.String chatId, ChatId.String fromChatId, messageId, ?messageThreadId = messageThreadId, ?disableNotification = disableNotification, ?protectContent = protectContent)
+  static member Make(chatId: int64, fromChatId: int64, messageId: int64, ?messageThreadId: int64, ?videoStartTimestamp: int64, ?disableNotification: bool, ?protectContent: bool) = 
+    ForwardMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId, ?messageThreadId = messageThreadId, ?videoStartTimestamp = videoStartTimestamp, ?disableNotification = disableNotification, ?protectContent = protectContent)
+  static member Make(chatId: string, fromChatId: string, messageId: int64, ?messageThreadId: int64, ?videoStartTimestamp: int64, ?disableNotification: bool, ?protectContent: bool) = 
+    ForwardMessage.Make(ChatId.String chatId, ChatId.String fromChatId, messageId, ?messageThreadId = messageThreadId, ?videoStartTimestamp = videoStartTimestamp, ?disableNotification = disableNotification, ?protectContent = protectContent)
   interface IRequestBase<Message> with
     member _.MethodName = "forwardMessage"
     
@@ -171,6 +173,7 @@ type CopyMessage =
     MessageThreadId: int64 option
     FromChatId: ChatId
     MessageId: int64
+    VideoStartTimestamp: int64 option
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
@@ -181,12 +184,13 @@ type CopyMessage =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, fromChatId: ChatId, messageId: int64, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, fromChatId: ChatId, messageId: int64, ?messageThreadId: int64, ?videoStartTimestamp: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
       FromChatId = fromChatId
       MessageId = messageId
+      VideoStartTimestamp = videoStartTimestamp
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -197,10 +201,10 @@ type CopyMessage =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, fromChatId: int64, messageId: int64, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    CopyMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId, ?messageThreadId = messageThreadId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, fromChatId: string, messageId: int64, ?messageThreadId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    CopyMessage.Make(ChatId.String chatId, ChatId.String fromChatId, messageId, ?messageThreadId = messageThreadId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, fromChatId: int64, messageId: int64, ?messageThreadId: int64, ?videoStartTimestamp: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    CopyMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId, ?messageThreadId = messageThreadId, ?videoStartTimestamp = videoStartTimestamp, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, fromChatId: string, messageId: int64, ?messageThreadId: int64, ?videoStartTimestamp: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    CopyMessage.Make(ChatId.String chatId, ChatId.String fromChatId, messageId, ?messageThreadId = messageThreadId, ?videoStartTimestamp = videoStartTimestamp, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<MessageId> with
     member _.MethodName = "copyMessage"
     
@@ -374,6 +378,8 @@ type SendVideo =
     Width: int64 option
     Height: int64 option
     Thumbnail: InputFile option
+    Cover: InputFile option
+    StartTimestamp: int64 option
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
@@ -387,7 +393,7 @@ type SendVideo =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, video: InputFile, ?businessConnectionId: string, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, video: InputFile, ?businessConnectionId: string, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?replyParameters: ReplyParameters, ?startTimestamp: int64, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?parseMode: ParseMode, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
@@ -397,6 +403,8 @@ type SendVideo =
       Width = width
       Height = height
       Thumbnail = thumbnail
+      Cover = cover
+      StartTimestamp = startTimestamp
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -410,10 +418,10 @@ type SendVideo =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, video: InputFile, ?businessConnectionId: string, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
-    SendVideo.Make(ChatId.Int chatId, video, ?businessConnectionId = businessConnectionId, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, video: InputFile, ?businessConnectionId: string, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
-    SendVideo.Make(ChatId.String chatId, video, ?businessConnectionId = businessConnectionId, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, video: InputFile, ?businessConnectionId: string, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?replyParameters: ReplyParameters, ?startTimestamp: int64, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?parseMode: ParseMode, ?replyMarkup: Markup) = 
+    SendVideo.Make(ChatId.Int chatId, video, ?businessConnectionId = businessConnectionId, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?caption = caption, ?replyParameters = replyParameters, ?startTimestamp = startTimestamp, ?cover = cover, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?parseMode = parseMode, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, video: InputFile, ?businessConnectionId: string, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?replyParameters: ReplyParameters, ?startTimestamp: int64, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?messageThreadId: int64, ?parseMode: ParseMode, ?replyMarkup: Markup) = 
+    SendVideo.Make(ChatId.String chatId, video, ?businessConnectionId = businessConnectionId, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?caption = caption, ?replyParameters = replyParameters, ?startTimestamp = startTimestamp, ?cover = cover, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?messageThreadId = messageThreadId, ?parseMode = parseMode, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVideo"
     
@@ -2353,16 +2361,18 @@ type GetAvailableGifts() =
     
 type SendGift =
   {
-    UserId: int64
+    UserId: int64 option
+    ChatId: ChatId option
     GiftId: string
     PayForUpgrade: bool option
     Text: string option
     TextParseMode: string option
     TextEntities: MessageEntity[] option
   }
-  static member Make(userId: int64, giftId: string, ?payForUpgrade: bool, ?text: string, ?textParseMode: string, ?textEntities: MessageEntity[]) = 
+  static member Make(giftId: string, ?userId: int64, ?chatId: ChatId, ?payForUpgrade: bool, ?text: string, ?textParseMode: string, ?textEntities: MessageEntity[]) = 
     {
       UserId = userId
+      ChatId = chatId
       GiftId = giftId
       PayForUpgrade = payForUpgrade
       Text = text

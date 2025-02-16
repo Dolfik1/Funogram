@@ -416,6 +416,9 @@ and [<CLIMutable>] ChatFullInfo =
     /// Default chat member permissions, for groups and supergroups
     [<DataMember(Name = "permissions")>]
     Permissions: ChatPermissions option
+    /// True, if gifts can be sent to the chat
+    [<DataMember(Name = "can_send_gift")>]
+    CanSendGift: bool option
     /// True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
     [<DataMember(Name = "can_send_paid_media")>]
     CanSendPaidMedia: bool option
@@ -456,22 +459,22 @@ and [<CLIMutable>] ChatFullInfo =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: string, accentColorId: int64, maxReactionCount: int64, ?joinToSendMessages: bool, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?canSendPaidMedia: bool, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?unrestrictBoostCount: int64, ?hasPrivateForwards: bool, ?emojiStatusExpirationDate: int64, ?linkedChatId: int64, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?businessIntro: BusinessIntro, ?businessLocation: BusinessLocation, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?availableReactions: ReactionType[], ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?bio: string, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: string, accentColorId: int64, maxReactionCount: int64, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?canSendGift: bool, ?canSendPaidMedia: bool, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?joinToSendMessages: bool, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?unrestrictBoostCount: int64, ?hasRestrictedVoiceAndVideoMessages: bool, ?bio: string, ?linkedChatId: int64, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?hasPrivateForwards: bool, ?businessIntro: BusinessIntro, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?availableReactions: ReactionType[], ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?businessLocation: BusinessLocation, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
       AccentColorId = accentColorId
       MaxReactionCount = maxReactionCount
-      JoinToSendMessages = joinToSendMessages
       JoinByRequest = joinByRequest
       Description = description
       InviteLink = inviteLink
       PinnedMessage = pinnedMessage
       Permissions = permissions
+      CanSendGift = canSendGift
       CanSendPaidMedia = canSendPaidMedia
       SlowModeDelay = slowModeDelay
       MessageAutoDeleteTime = messageAutoDeleteTime
-      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
+      JoinToSendMessages = joinToSendMessages
       HasAggressiveAntiSpamEnabled = hasAggressiveAntiSpamEnabled
       HasHiddenMembers = hasHiddenMembers
       HasProtectedContent = hasProtectedContent
@@ -480,8 +483,8 @@ and [<CLIMutable>] ChatFullInfo =
       CanSetStickerSet = canSetStickerSet
       CustomEmojiStickerSetName = customEmojiStickerSetName
       UnrestrictBoostCount = unrestrictBoostCount
-      HasPrivateForwards = hasPrivateForwards
-      EmojiStatusExpirationDate = emojiStatusExpirationDate
+      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
+      Bio = bio
       LinkedChatId = linkedChatId
       Title = title
       Username = username
@@ -491,8 +494,8 @@ and [<CLIMutable>] ChatFullInfo =
       Photo = photo
       ActiveUsernames = activeUsernames
       Birthdate = birthdate
+      HasPrivateForwards = hasPrivateForwards
       BusinessIntro = businessIntro
-      BusinessLocation = businessLocation
       BusinessOpeningHours = businessOpeningHours
       PersonalChat = personalChat
       AvailableReactions = availableReactions
@@ -500,7 +503,8 @@ and [<CLIMutable>] ChatFullInfo =
       ProfileAccentColorId = profileAccentColorId
       ProfileBackgroundCustomEmojiId = profileBackgroundCustomEmojiId
       EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
-      Bio = bio
+      EmojiStatusExpirationDate = emojiStatusExpirationDate
+      BusinessLocation = businessLocation
       Location = location
     }
 
@@ -1373,6 +1377,12 @@ and [<CLIMutable>] Video =
     /// Video thumbnail
     [<DataMember(Name = "thumbnail")>]
     Thumbnail: PhotoSize option
+    /// Available sizes of the cover of the video in the message
+    [<DataMember(Name = "cover")>]
+    Cover: PhotoSize[] option
+    /// Timestamp in seconds from which the video will play in the message
+    [<DataMember(Name = "start_timestamp")>]
+    StartTimestamp: int64 option
     /// Original filename as defined by the sender
     [<DataMember(Name = "file_name")>]
     FileName: string option
@@ -1383,7 +1393,7 @@ and [<CLIMutable>] Video =
     [<DataMember(Name = "file_size")>]
     FileSize: int64 option
   }
-  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
+  static member Create(fileId: string, fileUniqueId: string, width: int64, height: int64, duration: int64, ?thumbnail: PhotoSize, ?cover: PhotoSize[], ?startTimestamp: int64, ?fileName: string, ?mimeType: string, ?fileSize: int64) = 
     {
       FileId = fileId
       FileUniqueId = fileUniqueId
@@ -1391,6 +1401,8 @@ and [<CLIMutable>] Video =
       Height = height
       Duration = duration
       Thumbnail = thumbnail
+      Cover = cover
+      StartTimestamp = startTimestamp
       FileName = fileName
       MimeType = mimeType
       FileSize = fileSize
@@ -4078,7 +4090,13 @@ and [<CLIMutable>] InputMediaVideo =
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumbnail")>]
-    Thumbnail: InputFile option
+    Thumbnail: string option
+    /// Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+    [<DataMember(Name = "cover")>]
+    Cover: string option
+    /// Start timestamp for the video in the message
+    [<DataMember(Name = "start_timestamp")>]
+    StartTimestamp: int64 option
     /// Caption of the video to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -4107,11 +4125,13 @@ and [<CLIMutable>] InputMediaVideo =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: string, ?cover: string, ?startTimestamp: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool, ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
       Thumbnail = thumbnail
+      Cover = cover
+      StartTimestamp = startTimestamp
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
@@ -4134,7 +4154,7 @@ and [<CLIMutable>] InputMediaAnimation =
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumbnail")>]
-    Thumbnail: InputFile option
+    Thumbnail: string option
     /// Caption of the animation to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -4160,7 +4180,7 @@ and [<CLIMutable>] InputMediaAnimation =
     [<DataMember(Name = "has_spoiler")>]
     HasSpoiler: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?width: int64, ?height: int64, ?duration: int64, ?hasSpoiler: bool) = 
     {
       Type = ``type``
       Media = media
@@ -4186,7 +4206,7 @@ and [<CLIMutable>] InputMediaAudio =
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumbnail")>]
-    Thumbnail: InputFile option
+    Thumbnail: string option
     /// Caption of the audio to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -4206,7 +4226,7 @@ and [<CLIMutable>] InputMediaAudio =
     [<DataMember(Name = "title")>]
     Title: string option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?duration: int64, ?performer: string, ?title: string) = 
     {
       Type = ``type``
       Media = media
@@ -4230,7 +4250,7 @@ and [<CLIMutable>] InputMediaDocument =
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumbnail")>]
-    Thumbnail: InputFile option
+    Thumbnail: string option
     /// Caption of the document to be sent, 0-1024 characters after entities parsing
     [<DataMember(Name = "caption")>]
     Caption: string option
@@ -4244,7 +4264,7 @@ and [<CLIMutable>] InputMediaDocument =
     [<DataMember(Name = "disable_content_type_detection")>]
     DisableContentTypeDetection: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: string, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?disableContentTypeDetection: bool) = 
     {
       Type = ``type``
       Media = media
@@ -4287,7 +4307,13 @@ and [<CLIMutable>] InputPaidMediaVideo =
     Media: InputFile
     /// Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail's width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can't be reused and can be only uploaded as a new file, so you can pass “attach://<file_attach_name>” if the thumbnail was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
     [<DataMember(Name = "thumbnail")>]
-    Thumbnail: InputFile option
+    Thumbnail: string option
+    /// Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. More information on Sending Files »
+    [<DataMember(Name = "cover")>]
+    Cover: string option
+    /// Start timestamp for the video in the message
+    [<DataMember(Name = "start_timestamp")>]
+    StartTimestamp: int64 option
     /// Video width
     [<DataMember(Name = "width")>]
     Width: int64 option
@@ -4301,11 +4327,13 @@ and [<CLIMutable>] InputPaidMediaVideo =
     [<DataMember(Name = "supports_streaming")>]
     SupportsStreaming: bool option
   }
-  static member Create(``type``: string, media: InputFile, ?thumbnail: InputFile, ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool) = 
+  static member Create(``type``: string, media: InputFile, ?thumbnail: string, ?cover: string, ?startTimestamp: int64, ?width: int64, ?height: int64, ?duration: int64, ?supportsStreaming: bool) = 
     {
       Type = ``type``
       Media = media
       Thumbnail = thumbnail
+      Cover = cover
+      StartTimestamp = startTimestamp
       Width = width
       Height = height
       Duration = duration
@@ -6261,6 +6289,7 @@ and [<CLIMutable>] AffiliateInfo =
 /// This object describes the source of a transaction, or its recipient for outgoing transactions. Currently, it can be one of
 and TransactionPartner =
   | User of TransactionPartnerUser
+  | Chat of TransactionPartnerChat
   | AffiliateProgram of TransactionPartnerAffiliateProgram
   | Fragment of TransactionPartnerFragment
   | TelegramAds of TransactionPartnerTelegramAds
@@ -6304,6 +6333,26 @@ and [<CLIMutable>] TransactionPartnerUser =
       SubscriptionPeriod = subscriptionPeriod
       PaidMedia = paidMedia
       PaidMediaPayload = paidMediaPayload
+      Gift = gift
+    }
+
+/// Describes a transaction with a chat.
+and [<CLIMutable>] TransactionPartnerChat =
+  {
+    /// Type of the transaction partner, always “chat”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Information about the chat
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// The gift sent to the chat by the bot
+    [<DataMember(Name = "gift")>]
+    Gift: Gift option
+  }
+  static member Create(``type``: string, chat: Chat, ?gift: Gift) = 
+    {
+      Type = ``type``
+      Chat = chat
       Gift = gift
     }
 
