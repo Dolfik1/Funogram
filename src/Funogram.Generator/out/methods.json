@@ -297,6 +297,14 @@
         "Optional": false
       },
       {
+        "OriginalName": "video_start_timestamp",
+        "ConvertedName": "VideoStartTimestamp",
+        "Description": "New start timestamp for the forwarded video in the message",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "disable_notification",
         "ConvertedName": "DisableNotification",
         "Description": "Sends the message silently. Users will receive a notification with no sound.",
@@ -417,6 +425,14 @@
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false
+      },
+      {
+        "OriginalName": "video_start_timestamp",
+        "ConvertedName": "VideoStartTimestamp",
+        "Description": "New start timestamp for the copied video in the message",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "caption",
@@ -1029,6 +1045,22 @@
         "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
         "OriginalFieldType": "InputFile or String",
         "ConvertedFieldType": "InputFile",
+        "Optional": true
+      },
+      {
+        "OriginalName": "cover",
+        "ConvertedName": "Cover",
+        "Description": "Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
+        "OriginalFieldType": "InputFile or String",
+        "ConvertedFieldType": "InputFile",
+        "Optional": true
+      },
+      {
+        "OriginalName": "start_timestamp",
+        "ConvertedName": "StartTimestamp",
+        "Description": "Start timestamp for the video in the message",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
         "Optional": true
       },
       {
@@ -2441,7 +2473,7 @@
   {
     "OriginalName": "setMessageReaction",
     "ConvertedName": "SetMessageReaction",
-    "Description": "Use this method to change the chosen reactions on a message. Service messages can\u0027t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can\u0027t use paid reactions. Returns True on success.",
+    "Description": "Use this method to change the chosen reactions on a message. Service messages of some types can\u0027t be reacted to. Automatically forwarded messages from a channel to its discussion group have the same available reactions as messages in the channel. Bots can\u0027t use paid reactions. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -5248,7 +5280,7 @@
   {
     "OriginalName": "getAvailableGifts",
     "ConvertedName": "GetAvailableGifts",
-    "Description": "Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object.",
+    "Description": "Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.",
     "Fields": [],
     "OriginalReturnType": "Gifts",
     "ConvertedReturnType": "Gifts"
@@ -5256,15 +5288,23 @@
   {
     "OriginalName": "sendGift",
     "ConvertedName": "SendGift",
-    "Description": "Sends a gift to the given user. The gift can\u0027t be converted to Telegram Stars by the user. Returns True on success.",
+    "Description": "Sends a gift to the given user or channel chat. The gift can\u0027t be converted to Telegram Stars by the receiver. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "user_id",
         "ConvertedName": "UserId",
-        "Description": "Unique identifier of the target user that will receive the gift",
+        "Description": "Required if chat_id is not specified. Unique identifier of the target user who will receive the gift.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
-        "Optional": false
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
       },
       {
         "OriginalName": "gift_id",
@@ -5285,7 +5325,7 @@
       {
         "OriginalName": "text",
         "ConvertedName": "Text",
-        "Description": "Text that will be shown along with the gift; 0-255 characters",
+        "Description": "Text that will be shown along with the gift; 0-128 characters",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
         "Optional": true

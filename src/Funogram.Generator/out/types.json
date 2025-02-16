@@ -723,6 +723,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_send_gift",
+            "ConvertedName": "CanSendGift",
+            "Description": "True, if gifts can be sent to the chat",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "can_send_paid_media",
             "ConvertedName": "CanSendPaidMedia",
             "Description": "True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.",
@@ -2521,6 +2529,22 @@
             "Description": "Video thumbnail",
             "OriginalFieldType": "PhotoSize",
             "ConvertedFieldType": "PhotoSize",
+            "Optional": true
+          },
+          {
+            "OriginalName": "cover",
+            "ConvertedName": "Cover",
+            "Description": "Available sizes of the cover of the video in the message",
+            "OriginalFieldType": "Array of PhotoSize",
+            "ConvertedFieldType": "PhotoSize[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "start_timestamp",
+            "ConvertedName": "StartTimestamp",
+            "Description": "Timestamp in seconds from which the video will play in the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -7450,8 +7474,24 @@
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
-            "OriginalFieldType": "InputFile or String",
-            "ConvertedFieldType": "InputFile",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "cover",
+            "ConvertedName": "Cover",
+            "Description": "Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "start_timestamp",
+            "ConvertedName": "StartTimestamp",
+            "Description": "Start timestamp for the video in the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -7557,8 +7597,8 @@
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
-            "OriginalFieldType": "InputFile or String",
-            "ConvertedFieldType": "InputFile",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           },
           {
@@ -7656,8 +7696,8 @@
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
-            "OriginalFieldType": "InputFile or String",
-            "ConvertedFieldType": "InputFile",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           },
           {
@@ -7739,8 +7779,8 @@
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
-            "OriginalFieldType": "InputFile or String",
-            "ConvertedFieldType": "InputFile",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           },
           {
@@ -7859,8 +7899,24 @@
             "OriginalName": "thumbnail",
             "ConvertedName": "Thumbnail",
             "Description": "Thumbnail of the file sent; can be ignored if thumbnail generation for the file is supported server-side. The thumbnail should be in JPEG format and less than 200 kB in size. A thumbnail\u0027s width and height should not exceed 320. Ignored if the file is not uploaded using multipart/form-data. Thumbnails can\u0027t be reused and can be only uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the thumbnail was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
-            "OriginalFieldType": "InputFile or String",
-            "ConvertedFieldType": "InputFile",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "cover",
+            "ConvertedName": "Cover",
+            "Description": "Cover for the video in the message. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "start_timestamp",
+            "ConvertedName": "StartTimestamp",
+            "Description": "Start timestamp for the video in the message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -11614,6 +11670,10 @@
             "CaseType": "TransactionPartnerUser"
           },
           {
+            "Name": "Chat",
+            "CaseType": "TransactionPartnerChat"
+          },
+          {
             "Name": "AffiliateProgram",
             "CaseType": "TransactionPartnerAffiliateProgram"
           },
@@ -11704,6 +11764,41 @@
             "OriginalName": "gift",
             "ConvertedName": "Gift",
             "Description": "The gift sent to the user by the bot",
+            "OriginalFieldType": "Gift",
+            "ConvertedFieldType": "Gift",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "TransactionPartnerChat",
+    "Description": "Describes a transaction with a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the transaction partner, always \u201Cchat\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Information about the chat",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "The gift sent to the chat by the bot",
             "OriginalFieldType": "Gift",
             "ConvertedFieldType": "Gift",
             "Optional": true
