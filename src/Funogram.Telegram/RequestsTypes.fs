@@ -2112,6 +2112,384 @@ type DeleteMessages =
   interface IRequestBase<bool> with
     member _.MethodName = "deleteMessages"
     
+type GetAvailableGifts() =
+  static member Make() = GetAvailableGifts()
+  interface IRequestBase<Gifts> with
+    member _.MethodName = "getAvailableGifts"
+    
+type SendGift =
+  {
+    UserId: int64 option
+    ChatId: ChatId option
+    GiftId: string
+    PayForUpgrade: bool option
+    Text: string option
+    TextParseMode: string option
+    TextEntities: MessageEntity[] option
+  }
+  static member Make(giftId: string, ?userId: int64, ?chatId: ChatId, ?payForUpgrade: bool, ?text: string, ?textParseMode: string, ?textEntities: MessageEntity[]) = 
+    {
+      UserId = userId
+      ChatId = chatId
+      GiftId = giftId
+      PayForUpgrade = payForUpgrade
+      Text = text
+      TextParseMode = textParseMode
+      TextEntities = textEntities
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "sendGift"
+    
+type GiftPremiumSubscription =
+  {
+    UserId: int64
+    MonthCount: int64
+    StarCount: int64
+    Text: string option
+    TextParseMode: string option
+    TextEntities: MessageEntity[] option
+  }
+  static member Make(userId: int64, monthCount: int64, starCount: int64, ?text: string, ?textParseMode: string, ?textEntities: MessageEntity[]) = 
+    {
+      UserId = userId
+      MonthCount = monthCount
+      StarCount = starCount
+      Text = text
+      TextParseMode = textParseMode
+      TextEntities = textEntities
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "giftPremiumSubscription"
+    
+type VerifyUser =
+  {
+    UserId: int64
+    CustomDescription: string option
+  }
+  static member Make(userId: int64, ?customDescription: string) = 
+    {
+      UserId = userId
+      CustomDescription = customDescription
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "verifyUser"
+    
+type VerifyChat =
+  {
+    ChatId: ChatId
+    CustomDescription: string option
+  }
+  static member Make(chatId: ChatId, ?customDescription: string) = 
+    {
+      ChatId = chatId
+      CustomDescription = customDescription
+    }
+  static member Make(chatId: int64, ?customDescription: string) = 
+    VerifyChat.Make(ChatId.Int chatId, ?customDescription = customDescription)
+  static member Make(chatId: string, ?customDescription: string) = 
+    VerifyChat.Make(ChatId.String chatId, ?customDescription = customDescription)
+  interface IRequestBase<bool> with
+    member _.MethodName = "verifyChat"
+    
+type RemoveUserVerification =
+  {
+    UserId: int64
+  }
+  static member Make(userId: int64) = 
+    {
+      UserId = userId
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "removeUserVerification"
+    
+type RemoveChatVerification =
+  {
+    ChatId: ChatId
+  }
+  static member Make(chatId: ChatId) = 
+    {
+      ChatId = chatId
+    }
+  static member Make(chatId: int64) = 
+    RemoveChatVerification.Make(ChatId.Int chatId)
+  static member Make(chatId: string) = 
+    RemoveChatVerification.Make(ChatId.String chatId)
+  interface IRequestBase<bool> with
+    member _.MethodName = "removeChatVerification"
+    
+type ReadBusinessMessage =
+  {
+    BusinessConnectionId: string
+    ChatId: int64
+    MessageId: int64
+  }
+  static member Make(businessConnectionId: string, chatId: int64, messageId: int64) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      ChatId = chatId
+      MessageId = messageId
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "readBusinessMessage"
+    
+type DeleteBusinessMessages =
+  {
+    BusinessConnectionId: string
+    MessageIds: int64[]
+  }
+  static member Make(businessConnectionId: string, messageIds: int64[]) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      MessageIds = messageIds
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "deleteBusinessMessages"
+    
+type SetBusinessAccountName =
+  {
+    BusinessConnectionId: string
+    FirstName: string
+    LastName: string option
+  }
+  static member Make(businessConnectionId: string, firstName: string, ?lastName: string) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      FirstName = firstName
+      LastName = lastName
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setBusinessAccountName"
+    
+type SetBusinessAccountUsername =
+  {
+    BusinessConnectionId: string
+    Username: string option
+  }
+  static member Make(businessConnectionId: string, ?username: string) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      Username = username
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setBusinessAccountUsername"
+    
+type SetBusinessAccountBio =
+  {
+    BusinessConnectionId: string
+    Bio: string option
+  }
+  static member Make(businessConnectionId: string, ?bio: string) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      Bio = bio
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setBusinessAccountBio"
+    
+type SetBusinessAccountProfilePhoto =
+  {
+    BusinessConnectionId: string
+    Photo: InputProfilePhoto
+    IsPublic: bool option
+  }
+  static member Make(businessConnectionId: string, photo: InputProfilePhoto, ?isPublic: bool) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      Photo = photo
+      IsPublic = isPublic
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setBusinessAccountProfilePhoto"
+    
+type RemoveBusinessAccountProfilePhoto =
+  {
+    BusinessConnectionId: string
+    IsPublic: bool option
+  }
+  static member Make(businessConnectionId: string, ?isPublic: bool) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      IsPublic = isPublic
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "removeBusinessAccountProfilePhoto"
+    
+type SetBusinessAccountGiftSettings =
+  {
+    BusinessConnectionId: string
+    ShowGiftButton: bool
+    AcceptedGiftTypes: AcceptedGiftTypes
+  }
+  static member Make(businessConnectionId: string, showGiftButton: bool, acceptedGiftTypes: AcceptedGiftTypes) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      ShowGiftButton = showGiftButton
+      AcceptedGiftTypes = acceptedGiftTypes
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "setBusinessAccountGiftSettings"
+    
+type GetBusinessAccountStarBalance =
+  {
+    BusinessConnectionId: string
+  }
+  static member Make(businessConnectionId: string) = 
+    {
+      BusinessConnectionId = businessConnectionId
+    }
+  interface IRequestBase<StarAmount> with
+    member _.MethodName = "getBusinessAccountStarBalance"
+    
+type TransferBusinessAccountStars =
+  {
+    BusinessConnectionId: string
+    StarCount: int64
+  }
+  static member Make(businessConnectionId: string, starCount: int64) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      StarCount = starCount
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "transferBusinessAccountStars"
+    
+type GetBusinessAccountGifts =
+  {
+    BusinessConnectionId: string
+    ExcludeUnsaved: bool option
+    ExcludeSaved: bool option
+    ExcludeUnlimited: bool option
+    ExcludeLimited: bool option
+    ExcludeUnique: bool option
+    SortByPrice: bool option
+    Offset: string option
+    Limit: int64 option
+  }
+  static member Make(businessConnectionId: string, ?excludeUnsaved: bool, ?excludeSaved: bool, ?excludeUnlimited: bool, ?excludeLimited: bool, ?excludeUnique: bool, ?sortByPrice: bool, ?offset: string, ?limit: int64) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      ExcludeUnsaved = excludeUnsaved
+      ExcludeSaved = excludeSaved
+      ExcludeUnlimited = excludeUnlimited
+      ExcludeLimited = excludeLimited
+      ExcludeUnique = excludeUnique
+      SortByPrice = sortByPrice
+      Offset = offset
+      Limit = limit
+    }
+  interface IRequestBase<OwnedGifts> with
+    member _.MethodName = "getBusinessAccountGifts"
+    
+type ConvertGiftToStars =
+  {
+    BusinessConnectionId: string
+    OwnedGiftId: string
+  }
+  static member Make(businessConnectionId: string, ownedGiftId: string) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      OwnedGiftId = ownedGiftId
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "convertGiftToStars"
+    
+type UpgradeGift =
+  {
+    BusinessConnectionId: string
+    OwnedGiftId: string
+    KeepOriginalDetails: bool option
+    StarCount: int64 option
+  }
+  static member Make(businessConnectionId: string, ownedGiftId: string, ?keepOriginalDetails: bool, ?starCount: int64) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      OwnedGiftId = ownedGiftId
+      KeepOriginalDetails = keepOriginalDetails
+      StarCount = starCount
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "upgradeGift"
+    
+type TransferGift =
+  {
+    BusinessConnectionId: string
+    OwnedGiftId: string
+    NewOwnerChatId: int64
+    StarCount: int64 option
+  }
+  static member Make(businessConnectionId: string, ownedGiftId: string, newOwnerChatId: int64, ?starCount: int64) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      OwnedGiftId = ownedGiftId
+      NewOwnerChatId = newOwnerChatId
+      StarCount = starCount
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "transferGift"
+    
+type PostStory =
+  {
+    BusinessConnectionId: string
+    Content: InputStoryContent
+    ActivePeriod: int64
+    Caption: string option
+    ParseMode: ParseMode option
+    CaptionEntities: MessageEntity[] option
+    Areas: StoryArea[] option
+    PostToChatPage: bool option
+    ProtectContent: bool option
+  }
+  static member Make(businessConnectionId: string, content: InputStoryContent, activePeriod: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?areas: StoryArea[], ?postToChatPage: bool, ?protectContent: bool) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      Content = content
+      ActivePeriod = activePeriod
+      Caption = caption
+      ParseMode = parseMode
+      CaptionEntities = captionEntities
+      Areas = areas
+      PostToChatPage = postToChatPage
+      ProtectContent = protectContent
+    }
+  interface IRequestBase<Story> with
+    member _.MethodName = "postStory"
+    
+type EditStory =
+  {
+    BusinessConnectionId: string
+    StoryId: int64
+    Content: InputStoryContent
+    Caption: string option
+    ParseMode: ParseMode option
+    CaptionEntities: MessageEntity[] option
+    Areas: StoryArea[] option
+  }
+  static member Make(businessConnectionId: string, storyId: int64, content: InputStoryContent, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?areas: StoryArea[]) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      StoryId = storyId
+      Content = content
+      Caption = caption
+      ParseMode = parseMode
+      CaptionEntities = captionEntities
+      Areas = areas
+    }
+  interface IRequestBase<Story> with
+    member _.MethodName = "editStory"
+    
+type DeleteStory =
+  {
+    BusinessConnectionId: string
+    StoryId: int64
+  }
+  static member Make(businessConnectionId: string, storyId: int64) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      StoryId = storyId
+    }
+  interface IRequestBase<bool> with
+    member _.MethodName = "deleteStory"
+    
 type SendSticker =
   {
     BusinessConnectionId: string option
@@ -2353,90 +2731,6 @@ type DeleteStickerSet =
     }
   interface IRequestBase<bool> with
     member _.MethodName = "deleteStickerSet"
-    
-type GetAvailableGifts() =
-  static member Make() = GetAvailableGifts()
-  interface IRequestBase<Gifts> with
-    member _.MethodName = "getAvailableGifts"
-    
-type SendGift =
-  {
-    UserId: int64 option
-    ChatId: ChatId option
-    GiftId: string
-    PayForUpgrade: bool option
-    Text: string option
-    TextParseMode: string option
-    TextEntities: MessageEntity[] option
-  }
-  static member Make(giftId: string, ?userId: int64, ?chatId: ChatId, ?payForUpgrade: bool, ?text: string, ?textParseMode: string, ?textEntities: MessageEntity[]) = 
-    {
-      UserId = userId
-      ChatId = chatId
-      GiftId = giftId
-      PayForUpgrade = payForUpgrade
-      Text = text
-      TextParseMode = textParseMode
-      TextEntities = textEntities
-    }
-  interface IRequestBase<bool> with
-    member _.MethodName = "sendGift"
-    
-type VerifyUser =
-  {
-    UserId: int64
-    CustomDescription: string option
-  }
-  static member Make(userId: int64, ?customDescription: string) = 
-    {
-      UserId = userId
-      CustomDescription = customDescription
-    }
-  interface IRequestBase<bool> with
-    member _.MethodName = "verifyUser"
-    
-type VerifyChat =
-  {
-    ChatId: ChatId
-    CustomDescription: string option
-  }
-  static member Make(chatId: ChatId, ?customDescription: string) = 
-    {
-      ChatId = chatId
-      CustomDescription = customDescription
-    }
-  static member Make(chatId: int64, ?customDescription: string) = 
-    VerifyChat.Make(ChatId.Int chatId, ?customDescription = customDescription)
-  static member Make(chatId: string, ?customDescription: string) = 
-    VerifyChat.Make(ChatId.String chatId, ?customDescription = customDescription)
-  interface IRequestBase<bool> with
-    member _.MethodName = "verifyChat"
-    
-type RemoveUserVerification =
-  {
-    UserId: int64
-  }
-  static member Make(userId: int64) = 
-    {
-      UserId = userId
-    }
-  interface IRequestBase<bool> with
-    member _.MethodName = "removeUserVerification"
-    
-type RemoveChatVerification =
-  {
-    ChatId: ChatId
-  }
-  static member Make(chatId: ChatId) = 
-    {
-      ChatId = chatId
-    }
-  static member Make(chatId: int64) = 
-    RemoveChatVerification.Make(ChatId.Int chatId)
-  static member Make(chatId: string) = 
-    RemoveChatVerification.Make(ChatId.String chatId)
-  interface IRequestBase<bool> with
-    member _.MethodName = "removeChatVerification"
     
 type AnswerInlineQuery =
   {

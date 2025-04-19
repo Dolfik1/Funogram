@@ -723,12 +723,12 @@
             "Optional": true
           },
           {
-            "OriginalName": "can_send_gift",
-            "ConvertedName": "CanSendGift",
-            "Description": "True, if gifts can be sent to the chat",
-            "OriginalFieldType": "True",
-            "ConvertedFieldType": "bool",
-            "Optional": true
+            "OriginalName": "accepted_gift_types",
+            "ConvertedName": "AcceptedGiftTypes",
+            "Description": "Information about types of gifts that are accepted by the chat or by the corresponding user for private chats",
+            "OriginalFieldType": "AcceptedGiftTypes",
+            "ConvertedFieldType": "AcceptedGiftTypes",
+            "Optional": false
           },
           {
             "OriginalName": "can_send_paid_media",
@@ -1019,6 +1019,14 @@
             "Description": "Signature of the post author for messages in channels, or the custom title of an anonymous group administrator",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "paid_star_count",
+            "ConvertedName": "PaidStarCount",
+            "Description": "The number of Telegram Stars that were paid by the sender of the message to send it",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           },
           {
@@ -1350,6 +1358,22 @@
             "Optional": true
           },
           {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "Service message: a regular gift was sent or received",
+            "OriginalFieldType": "GiftInfo",
+            "ConvertedFieldType": "GiftInfo",
+            "Optional": true
+          },
+          {
+            "OriginalName": "unique_gift",
+            "ConvertedName": "UniqueGift",
+            "Description": "Service message: a unique gift was sent or received",
+            "OriginalFieldType": "UniqueGiftInfo",
+            "ConvertedFieldType": "UniqueGiftInfo",
+            "Optional": true
+          },
+          {
             "OriginalName": "connected_website",
             "ConvertedName": "ConnectedWebsite",
             "Description": "The domain name of the website on which the user has logged in. More about Telegram Login \u00BB",
@@ -1475,6 +1499,14 @@
             "Description": "Service message: a giveaway without public winners was completed",
             "OriginalFieldType": "GiveawayCompleted",
             "ConvertedFieldType": "GiveawayCompleted",
+            "Optional": true
+          },
+          {
+            "OriginalName": "paid_message_price_changed",
+            "ConvertedName": "PaidMessagePriceChanged",
+            "Description": "Service message: the price for paid messages has changed in the chat",
+            "OriginalFieldType": "PaidMessagePriceChanged",
+            "ConvertedFieldType": "PaidMessagePriceChanged",
             "Optional": true
           },
           {
@@ -4029,6 +4061,25 @@
     }
   },
   {
+    "Name": "PaidMessagePriceChanged",
+    "Description": "Describes a service message about a change in the price of paid messages within a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "paid_message_star_count",
+            "ConvertedName": "PaidMessageStarCount",
+            "Description": "The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "GiveawayCreated",
     "Description": "This object represents a service message about the creation of a scheduled giveaway.",
     "Kind": {
@@ -6282,6 +6333,349 @@
     }
   },
   {
+    "Name": "StoryAreaPosition",
+    "Description": "Describes the position of a clickable area within a story.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "x_percentage",
+            "ConvertedName": "XPercentage",
+            "Description": "The abscissa of the area\u0027s center, as a percentage of the media width",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "y_percentage",
+            "ConvertedName": "YPercentage",
+            "Description": "The ordinate of the area\u0027s center, as a percentage of the media height",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "width_percentage",
+            "ConvertedName": "WidthPercentage",
+            "Description": "The width of the area\u0027s rectangle, as a percentage of the media width",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "height_percentage",
+            "ConvertedName": "HeightPercentage",
+            "Description": "The height of the area\u0027s rectangle, as a percentage of the media height",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "rotation_angle",
+            "ConvertedName": "RotationAngle",
+            "Description": "The clockwise rotation angle of the rectangle, in degrees; 0-360",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "corner_radius_percentage",
+            "ConvertedName": "CornerRadiusPercentage",
+            "Description": "The radius of the rectangle corner rounding, as a percentage of the media width",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "LocationAddress",
+    "Description": "Describes the physical address of a location.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "country_code",
+            "ConvertedName": "CountryCode",
+            "Description": "The two-letter ISO 3166-1 alpha-2 country code of the country where the location is located",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "state",
+            "ConvertedName": "State",
+            "Description": "State of the location",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "city",
+            "ConvertedName": "City",
+            "Description": "City of the location",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "street",
+            "ConvertedName": "Street",
+            "Description": "Street address of the location",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryAreaType",
+    "Description": "Describes the type of a clickable area on a story. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Location",
+            "CaseType": "StoryAreaTypeLocation"
+          },
+          {
+            "Name": "SuggestedReaction",
+            "CaseType": "StoryAreaTypeSuggestedReaction"
+          },
+          {
+            "Name": "Link",
+            "CaseType": "StoryAreaTypeLink"
+          },
+          {
+            "Name": "Weather",
+            "CaseType": "StoryAreaTypeWeather"
+          },
+          {
+            "Name": "UniqueGift",
+            "CaseType": "StoryAreaTypeUniqueGift"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryAreaTypeLocation",
+    "Description": "Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the area, always \u201Clocation\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "latitude",
+            "ConvertedName": "Latitude",
+            "Description": "Location latitude in degrees",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "longitude",
+            "ConvertedName": "Longitude",
+            "Description": "Location longitude in degrees",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "address",
+            "ConvertedName": "Address",
+            "Description": "Address of the location",
+            "OriginalFieldType": "LocationAddress",
+            "ConvertedFieldType": "LocationAddress",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryAreaTypeSuggestedReaction",
+    "Description": "Describes a story area pointing to a suggested reaction. Currently, a story can have up to 5 suggested reaction areas.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the area, always \u201Csuggested_reaction\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "reaction_type",
+            "ConvertedName": "ReactionType",
+            "Description": "Type of the reaction",
+            "OriginalFieldType": "ReactionType",
+            "ConvertedFieldType": "ReactionType",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_dark",
+            "ConvertedName": "IsDark",
+            "Description": "Pass True if the reaction area has a dark background",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_flipped",
+            "ConvertedName": "IsFlipped",
+            "Description": "Pass True if reaction area corner is flipped",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryAreaTypeLink",
+    "Description": "Describes a story area pointing to an HTTP or tg:// link. Currently, a story can have up to 3 link areas.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the area, always \u201Clink\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "url",
+            "ConvertedName": "Url",
+            "Description": "HTTP or tg:// URL to be opened when the area is clicked",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryAreaTypeWeather",
+    "Description": "Describes a story area containing weather information. Currently, a story can have up to 3 weather areas.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the area, always \u201Cweather\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "temperature",
+            "ConvertedName": "Temperature",
+            "Description": "Temperature, in degree Celsius",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": false
+          },
+          {
+            "OriginalName": "emoji",
+            "ConvertedName": "Emoji",
+            "Description": "Emoji representing the weather",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "background_color",
+            "ConvertedName": "BackgroundColor",
+            "Description": "A color of the area background in the ARGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryAreaTypeUniqueGift",
+    "Description": "Describes a story area pointing to a unique gift. Currently, a story can have at most 1 unique gift area.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the area, always \u201Cunique_gift\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Unique name of the gift",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StoryArea",
+    "Description": "Describes a clickable area on a story media.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "position",
+            "ConvertedName": "Position",
+            "Description": "Position of the area",
+            "OriginalFieldType": "StoryAreaPosition",
+            "ConvertedFieldType": "StoryAreaPosition",
+            "Optional": false
+          },
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the area",
+            "OriginalFieldType": "StoryAreaType",
+            "ConvertedFieldType": "StoryAreaType",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ChatLocation",
     "Description": "Represents a location to which a chat is connected.",
     "Kind": {
@@ -6578,6 +6972,723 @@
             "Description": "Unique identifier of the custom emoji shown as the topic icon",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "Gift",
+    "Description": "This object represents a gift that can be sent by the bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the gift",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "The sticker that represents the gift",
+            "OriginalFieldType": "Sticker",
+            "ConvertedFieldType": "Sticker",
+            "Optional": false
+          },
+          {
+            "OriginalName": "star_count",
+            "ConvertedName": "StarCount",
+            "Description": "The number of Telegram Stars that must be paid to send the sticker",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "upgrade_star_count",
+            "ConvertedName": "UpgradeStarCount",
+            "Description": "The number of Telegram Stars that must be paid to upgrade the gift to a unique one",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "total_count",
+            "ConvertedName": "TotalCount",
+            "Description": "The total number of the gifts of this type that can be sent; for limited gifts only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "remaining_count",
+            "ConvertedName": "RemainingCount",
+            "Description": "The number of remaining gifts of this type that can be sent; for limited gifts only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "Gifts",
+    "Description": "This object represent a list of gifts.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "gifts",
+            "ConvertedName": "Gifts",
+            "Description": "The list of gifts",
+            "OriginalFieldType": "Array of Gift",
+            "ConvertedFieldType": "Gift[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UniqueGiftModel",
+    "Description": "This object describes the model of a unique gift.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the model",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "The sticker that represents the unique gift",
+            "OriginalFieldType": "Sticker",
+            "ConvertedFieldType": "Sticker",
+            "Optional": false
+          },
+          {
+            "OriginalName": "rarity_per_mille",
+            "ConvertedName": "RarityPerMille",
+            "Description": "The number of unique gifts that receive this model for every 1000 gifts upgraded",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UniqueGiftSymbol",
+    "Description": "This object describes the symbol shown on the pattern of a unique gift.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the symbol",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "sticker",
+            "ConvertedName": "Sticker",
+            "Description": "The sticker that represents the unique gift",
+            "OriginalFieldType": "Sticker",
+            "ConvertedFieldType": "Sticker",
+            "Optional": false
+          },
+          {
+            "OriginalName": "rarity_per_mille",
+            "ConvertedName": "RarityPerMille",
+            "Description": "The number of unique gifts that receive this model for every 1000 gifts upgraded",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UniqueGiftBackdropColors",
+    "Description": "This object describes the colors of the backdrop of a unique gift.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "center_color",
+            "ConvertedName": "CenterColor",
+            "Description": "The color in the center of the backdrop in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "edge_color",
+            "ConvertedName": "EdgeColor",
+            "Description": "The color on the edges of the backdrop in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "symbol_color",
+            "ConvertedName": "SymbolColor",
+            "Description": "The color to be applied to the symbol in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text_color",
+            "ConvertedName": "TextColor",
+            "Description": "The color for the text on the backdrop in RGB format",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UniqueGiftBackdrop",
+    "Description": "This object describes the backdrop of a unique gift.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the backdrop",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "colors",
+            "ConvertedName": "Colors",
+            "Description": "Colors of the backdrop",
+            "OriginalFieldType": "UniqueGiftBackdropColors",
+            "ConvertedFieldType": "UniqueGiftBackdropColors",
+            "Optional": false
+          },
+          {
+            "OriginalName": "rarity_per_mille",
+            "ConvertedName": "RarityPerMille",
+            "Description": "The number of unique gifts that receive this backdrop for every 1000 gifts upgraded",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UniqueGift",
+    "Description": "This object describes a unique gift that was upgraded from a regular gift.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "base_name",
+            "ConvertedName": "BaseName",
+            "Description": "Human-readable name of the regular gift from which this unique gift was upgraded",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "number",
+            "ConvertedName": "Number",
+            "Description": "Unique number of the upgraded gift among gifts upgraded from the same regular gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "model",
+            "ConvertedName": "Model",
+            "Description": "Model of the gift",
+            "OriginalFieldType": "UniqueGiftModel",
+            "ConvertedFieldType": "UniqueGiftModel",
+            "Optional": false
+          },
+          {
+            "OriginalName": "symbol",
+            "ConvertedName": "Symbol",
+            "Description": "Symbol of the gift",
+            "OriginalFieldType": "UniqueGiftSymbol",
+            "ConvertedFieldType": "UniqueGiftSymbol",
+            "Optional": false
+          },
+          {
+            "OriginalName": "backdrop",
+            "ConvertedName": "Backdrop",
+            "Description": "Backdrop of the gift",
+            "OriginalFieldType": "UniqueGiftBackdrop",
+            "ConvertedFieldType": "UniqueGiftBackdrop",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "GiftInfo",
+    "Description": "Describes a service message about a regular gift that was sent or received.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "Information about the gift",
+            "OriginalFieldType": "Gift",
+            "ConvertedFieldType": "Gift",
+            "Optional": false
+          },
+          {
+            "OriginalName": "owned_gift_id",
+            "ConvertedName": "OwnedGiftId",
+            "Description": "Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "convert_star_count",
+            "ConvertedName": "ConvertStarCount",
+            "Description": "Number of Telegram Stars that can be claimed by the receiver by converting the gift; omitted if conversion to Telegram Stars is impossible",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prepaid_upgrade_star_count",
+            "ConvertedName": "PrepaidUpgradeStarCount",
+            "Description": "Number of Telegram Stars that were prepaid by the sender for the ability to upgrade the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_be_upgraded",
+            "ConvertedName": "CanBeUpgraded",
+            "Description": "True, if the gift can be upgraded to a unique gift",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the message that was added to the gift",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "entities",
+            "ConvertedName": "Entities",
+            "Description": "Special entities that appear in the text",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_private",
+            "ConvertedName": "IsPrivate",
+            "Description": "True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "UniqueGiftInfo",
+    "Description": "Describes a service message about a unique gift that was sent or received.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "Information about the gift",
+            "OriginalFieldType": "UniqueGift",
+            "ConvertedFieldType": "UniqueGift",
+            "Optional": false
+          },
+          {
+            "OriginalName": "origin",
+            "ConvertedName": "Origin",
+            "Description": "Origin of the gift. Currently, either \u201Cupgrade\u201D or \u201Ctransfer\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "owned_gift_id",
+            "ConvertedName": "OwnedGiftId",
+            "Description": "Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "transfer_star_count",
+            "ConvertedName": "TransferStarCount",
+            "Description": "Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "OwnedGift",
+    "Description": "This object describes a gift received and owned by a user or a chat. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Regular",
+            "CaseType": "OwnedGiftRegular"
+          },
+          {
+            "Name": "Unique",
+            "CaseType": "OwnedGiftUnique"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "OwnedGiftRegular",
+    "Description": "Describes a regular gift owned by a user or a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the gift, always \u201Cregular\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "Information about the regular gift",
+            "OriginalFieldType": "Gift",
+            "ConvertedFieldType": "Gift",
+            "Optional": false
+          },
+          {
+            "OriginalName": "owned_gift_id",
+            "ConvertedName": "OwnedGiftId",
+            "Description": "Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "sender_user",
+            "ConvertedName": "SenderUser",
+            "Description": "Sender of the gift if it is a known user",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "send_date",
+            "ConvertedName": "SendDate",
+            "Description": "Date the gift was sent in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the message that was added to the gift",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "entities",
+            "ConvertedName": "Entities",
+            "Description": "Special entities that appear in the text",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_private",
+            "ConvertedName": "IsPrivate",
+            "Description": "True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_saved",
+            "ConvertedName": "IsSaved",
+            "Description": "True, if the gift is displayed on the account\u0027s profile page; for gifts received on behalf of business accounts only",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_be_upgraded",
+            "ConvertedName": "CanBeUpgraded",
+            "Description": "True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "was_refunded",
+            "ConvertedName": "WasRefunded",
+            "Description": "True, if the gift was refunded and isn\u0027t available anymore",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "convert_star_count",
+            "ConvertedName": "ConvertStarCount",
+            "Description": "Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "prepaid_upgrade_star_count",
+            "ConvertedName": "PrepaidUpgradeStarCount",
+            "Description": "Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "OwnedGiftUnique",
+    "Description": "Describes a unique gift received and owned by a user or a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the gift, always \u201Cunique\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "gift",
+            "ConvertedName": "Gift",
+            "Description": "Information about the unique gift",
+            "OriginalFieldType": "UniqueGift",
+            "ConvertedFieldType": "UniqueGift",
+            "Optional": false
+          },
+          {
+            "OriginalName": "owned_gift_id",
+            "ConvertedName": "OwnedGiftId",
+            "Description": "Unique identifier of the received gift for the bot; for gifts received on behalf of business accounts only",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "sender_user",
+            "ConvertedName": "SenderUser",
+            "Description": "Sender of the gift if it is a known user",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "send_date",
+            "ConvertedName": "SendDate",
+            "Description": "Date the gift was sent in Unix time",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_saved",
+            "ConvertedName": "IsSaved",
+            "Description": "True, if the gift is displayed on the account\u0027s profile page; for gifts received on behalf of business accounts only",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_be_transferred",
+            "ConvertedName": "CanBeTransferred",
+            "Description": "True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "transfer_star_count",
+            "ConvertedName": "TransferStarCount",
+            "Description": "Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "OwnedGifts",
+    "Description": "Contains the list of gifts received and owned by a user or a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "total_count",
+            "ConvertedName": "TotalCount",
+            "Description": "The total number of gifts owned by the user or the chat",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "gifts",
+            "ConvertedName": "Gifts",
+            "Description": "The list of gifts",
+            "OriginalFieldType": "Array of OwnedGift",
+            "ConvertedFieldType": "OwnedGift[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "next_offset",
+            "ConvertedName": "NextOffset",
+            "Description": "Offset for the next request. If empty, then there are no more results",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "AcceptedGiftTypes",
+    "Description": "This object describes the types of gifts that can be gifted to a user or a chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "unlimited_gifts",
+            "ConvertedName": "UnlimitedGifts",
+            "Description": "True, if unlimited regular gifts are accepted",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "limited_gifts",
+            "ConvertedName": "LimitedGifts",
+            "Description": "True, if limited regular gifts are accepted",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "unique_gifts",
+            "ConvertedName": "UniqueGifts",
+            "Description": "True, if unique gifts or gifts that can be upgraded to unique for free are accepted",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "premium_subscription",
+            "ConvertedName": "PremiumSubscription",
+            "Description": "True, if a Telegram Premium subscription is accepted",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "StarAmount",
+    "Description": "Describes an amount of Telegram Stars.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "amount",
+            "ConvertedName": "Amount",
+            "Description": "Integer amount of Telegram Stars, rounded to 0; can be negative",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "nanostar_amount",
+            "ConvertedName": "NanostarAmount",
+            "Description": "The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999; can be negative if and only if amount is non-positive",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           }
         ]
@@ -7229,6 +8340,129 @@
     }
   },
   {
+    "Name": "BusinessBotRights",
+    "Description": "Represents the rights of a business bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "can_reply",
+            "ConvertedName": "CanReply",
+            "Description": "True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_read_messages",
+            "ConvertedName": "CanReadMessages",
+            "Description": "True, if the bot can mark incoming private messages as read",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_delete_outgoing_messages",
+            "ConvertedName": "CanDeleteOutgoingMessages",
+            "Description": "True, if the bot can delete messages sent by the bot",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_delete_all_messages",
+            "ConvertedName": "CanDeleteAllMessages",
+            "Description": "True, if the bot can delete all private messages in managed chats",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_name",
+            "ConvertedName": "CanEditName",
+            "Description": "True, if the bot can edit the first and last name of the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_bio",
+            "ConvertedName": "CanEditBio",
+            "Description": "True, if the bot can edit the bio of the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_profile_photo",
+            "ConvertedName": "CanEditProfilePhoto",
+            "Description": "True, if the bot can edit the profile photo of the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_edit_username",
+            "ConvertedName": "CanEditUsername",
+            "Description": "True, if the bot can edit the username of the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_change_gift_settings",
+            "ConvertedName": "CanChangeGiftSettings",
+            "Description": "True, if the bot can change the privacy settings pertaining to gifts for the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_view_gifts_and_stars",
+            "ConvertedName": "CanViewGiftsAndStars",
+            "Description": "True, if the bot can view gifts and the amount of Telegram Stars owned by the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_convert_gifts_to_stars",
+            "ConvertedName": "CanConvertGiftsToStars",
+            "Description": "True, if the bot can convert regular gifts owned by the business account to Telegram Stars",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_transfer_and_upgrade_gifts",
+            "ConvertedName": "CanTransferAndUpgradeGifts",
+            "Description": "True, if the bot can transfer and upgrade gifts owned by the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_transfer_stars",
+            "ConvertedName": "CanTransferStars",
+            "Description": "True, if the bot can transfer Telegram Stars received by the business account to its own account, or use them to upgrade and transfer gifts",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_stories",
+            "ConvertedName": "CanManageStories",
+            "Description": "True, if the bot can post, edit and delete stories on behalf of the business account",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "BusinessConnection",
     "Description": "Describes the connection of the bot with a business account.",
     "Kind": {
@@ -7268,12 +8502,12 @@
             "Optional": false
           },
           {
-            "OriginalName": "can_reply",
-            "ConvertedName": "CanReply",
-            "Description": "True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours",
-            "OriginalFieldType": "Boolean",
-            "ConvertedFieldType": "bool",
-            "Optional": false
+            "OriginalName": "rights",
+            "ConvertedName": "Rights",
+            "Description": "Rights of the business bot",
+            "OriginalFieldType": "BusinessBotRights",
+            "ConvertedFieldType": "BusinessBotRights",
+            "Optional": true
           },
           {
             "OriginalName": "is_enabled",
@@ -7956,6 +9190,184 @@
     }
   },
   {
+    "Name": "InputProfilePhoto",
+    "Description": "This object describes a profile photo to set. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Static",
+            "CaseType": "InputProfilePhotoStatic"
+          },
+          {
+            "Name": "Animated",
+            "CaseType": "InputProfilePhotoAnimated"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputProfilePhotoStatic",
+    "Description": "A static profile photo in the .JPG format.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the profile photo, must be static",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "photo",
+            "ConvertedName": "Photo",
+            "Description": "The static profile photo. Profile photos can\u0027t be reused and can only be uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the photo was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputProfilePhotoAnimated",
+    "Description": "An animated profile photo in the MPEG4 format.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the profile photo, must be animated",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "animation",
+            "ConvertedName": "Animation",
+            "Description": "The animated profile photo. Profile photos can\u0027t be reused and can only be uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the photo was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "main_frame_timestamp",
+            "ConvertedName": "MainFrameTimestamp",
+            "Description": "Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0.",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputStoryContent",
+    "Description": "This object describes the content of a story to post. Currently, it can be one of",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Photo",
+            "CaseType": "InputStoryContentPhoto"
+          },
+          {
+            "Name": "Video",
+            "CaseType": "InputStoryContentVideo"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputStoryContentPhoto",
+    "Description": "Describes a photo to post as a story.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the content, must be photo",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "photo",
+            "ConvertedName": "Photo",
+            "Description": "The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can\u0027t be reused and can only be uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the photo was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputStoryContentVideo",
+    "Description": "Describes a video to post as a story.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the content, must be video",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "video",
+            "ConvertedName": "Video",
+            "Description": "The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can\u0027t be reused and can only be uploaded as a new file, so you can pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D if the video was uploaded using multipart/form-data under \u003Cfile_attach_name\u003E. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "duration",
+            "ConvertedName": "Duration",
+            "Description": "Precise duration of the video in seconds; 0-60",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": true
+          },
+          {
+            "OriginalName": "cover_frame_timestamp",
+            "ConvertedName": "CoverFrameTimestamp",
+            "Description": "Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.",
+            "OriginalFieldType": "Float",
+            "ConvertedFieldType": "float",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_animation",
+            "ConvertedName": "IsAnimation",
+            "Description": "Pass True if the video has no sound",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "Sticker",
     "Description": "This object represents a sticker.",
     "Kind": {
@@ -8190,9 +9602,9 @@
           {
             "OriginalName": "sticker",
             "ConvertedName": "Sticker",
-            "Description": "The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. Animated and video stickers can\u0027t be uploaded via HTTP URL. More information on Sending Files \u00BB",
-            "OriginalFieldType": "InputFile or String",
-            "ConvertedFieldType": "InputFile",
+            "Description": "The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or pass \u201Cattach://\u003Cfile_attach_name\u003E\u201D to upload a new file using multipart/form-data under \u003Cfile_attach_name\u003E name. Animated and video stickers can\u0027t be uploaded via HTTP URL. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": false
           },
           {
@@ -8226,84 +9638,6 @@
             "OriginalFieldType": "Array of String",
             "ConvertedFieldType": "string[]",
             "Optional": true
-          }
-        ]
-      ]
-    }
-  },
-  {
-    "Name": "Gift",
-    "Description": "This object represents a gift that can be sent by the bot.",
-    "Kind": {
-      "Case": "Fields",
-      "Fields": [
-        [
-          {
-            "OriginalName": "id",
-            "ConvertedName": "Id",
-            "Description": "Unique identifier of the gift",
-            "OriginalFieldType": "String",
-            "ConvertedFieldType": "string",
-            "Optional": false
-          },
-          {
-            "OriginalName": "sticker",
-            "ConvertedName": "Sticker",
-            "Description": "The sticker that represents the gift",
-            "OriginalFieldType": "Sticker",
-            "ConvertedFieldType": "Sticker",
-            "Optional": false
-          },
-          {
-            "OriginalName": "star_count",
-            "ConvertedName": "StarCount",
-            "Description": "The number of Telegram Stars that must be paid to send the sticker",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
-            "Optional": false
-          },
-          {
-            "OriginalName": "upgrade_star_count",
-            "ConvertedName": "UpgradeStarCount",
-            "Description": "The number of Telegram Stars that must be paid to upgrade the gift to a unique one",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
-            "Optional": true
-          },
-          {
-            "OriginalName": "total_count",
-            "ConvertedName": "TotalCount",
-            "Description": "The total number of the gifts of this type that can be sent; for limited gifts only",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
-            "Optional": true
-          },
-          {
-            "OriginalName": "remaining_count",
-            "ConvertedName": "RemainingCount",
-            "Description": "The number of remaining gifts of this type that can be sent; for limited gifts only",
-            "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "int64",
-            "Optional": true
-          }
-        ]
-      ]
-    }
-  },
-  {
-    "Name": "Gifts",
-    "Description": "This object represent a list of gifts.",
-    "Kind": {
-      "Case": "Fields",
-      "Fields": [
-        [
-          {
-            "OriginalName": "gifts",
-            "ConvertedName": "Gifts",
-            "Description": "The list of gifts",
-            "OriginalFieldType": "Array of Gift",
-            "ConvertedFieldType": "Gift[]",
-            "Optional": false
           }
         ]
       ]
@@ -11713,6 +13047,14 @@
             "Optional": false
           },
           {
+            "OriginalName": "transaction_type",
+            "ConvertedName": "TransactionType",
+            "Description": "Type of the transaction, currently one of \u201Cinvoice_payment\u201D for payments via invoices, \u201Cpaid_media_payment\u201D for payments for paid media, \u201Cgift_purchase\u201D for gifts sent by the bot, \u201Cpremium_purchase\u201D for Telegram Premium subscriptions gifted by the bot, \u201Cbusiness_account_transfer\u201D for direct transfers from managed business accounts",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
             "OriginalName": "user",
             "ConvertedName": "User",
             "Description": "Information about the user",
@@ -11723,7 +13065,7 @@
           {
             "OriginalName": "affiliate",
             "ConvertedName": "Affiliate",
-            "Description": "Information about the affiliate that received a commission via this transaction",
+            "Description": "Information about the affiliate that received a commission via this transaction. Can be available only for \u201Cinvoice_payment\u201D and \u201Cpaid_media_payment\u201D transactions.",
             "OriginalFieldType": "AffiliateInfo",
             "ConvertedFieldType": "AffiliateInfo",
             "Optional": true
@@ -11731,7 +13073,7 @@
           {
             "OriginalName": "invoice_payload",
             "ConvertedName": "InvoicePayload",
-            "Description": "Bot-specified invoice payload",
+            "Description": "Bot-specified invoice payload. Can be available only for \u201Cinvoice_payment\u201D transactions.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -11739,7 +13081,7 @@
           {
             "OriginalName": "subscription_period",
             "ConvertedName": "SubscriptionPeriod",
-            "Description": "The duration of the paid subscription",
+            "Description": "The duration of the paid subscription. Can be available only for \u201Cinvoice_payment\u201D transactions.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -11747,7 +13089,7 @@
           {
             "OriginalName": "paid_media",
             "ConvertedName": "PaidMedia",
-            "Description": "Information about the paid media bought by the user",
+            "Description": "Information about the paid media bought by the user; for \u201Cpaid_media_payment\u201D transactions only",
             "OriginalFieldType": "Array of PaidMedia",
             "ConvertedFieldType": "PaidMedia[]",
             "Optional": true
@@ -11755,7 +13097,7 @@
           {
             "OriginalName": "paid_media_payload",
             "ConvertedName": "PaidMediaPayload",
-            "Description": "Bot-specified paid media payload",
+            "Description": "Bot-specified paid media payload. Can be available only for \u201Cpaid_media_payment\u201D transactions.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -11763,9 +13105,17 @@
           {
             "OriginalName": "gift",
             "ConvertedName": "Gift",
-            "Description": "The gift sent to the user by the bot",
+            "Description": "The gift sent to the user by the bot; for \u201Cgift_purchase\u201D transactions only",
             "OriginalFieldType": "Gift",
             "ConvertedFieldType": "Gift",
+            "Optional": true
+          },
+          {
+            "OriginalName": "premium_subscription_duration",
+            "ConvertedName": "PremiumSubscriptionDuration",
+            "Description": "Number of months the gifted Telegram Premium subscription will be active for; for \u201Cpremium_purchase\u201D transactions only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
             "Optional": true
           }
         ]
