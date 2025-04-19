@@ -416,9 +416,9 @@ and [<CLIMutable>] ChatFullInfo =
     /// Default chat member permissions, for groups and supergroups
     [<DataMember(Name = "permissions")>]
     Permissions: ChatPermissions option
-    /// True, if gifts can be sent to the chat
-    [<DataMember(Name = "can_send_gift")>]
-    CanSendGift: bool option
+    /// Information about types of gifts that are accepted by the chat or by the corresponding user for private chats
+    [<DataMember(Name = "accepted_gift_types")>]
+    AcceptedGiftTypes: AcceptedGiftTypes
     /// True, if paid media messages can be sent or forwarded to the channel chat. The field is available only for channel chats.
     [<DataMember(Name = "can_send_paid_media")>]
     CanSendPaidMedia: bool option
@@ -459,18 +459,18 @@ and [<CLIMutable>] ChatFullInfo =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: string, accentColorId: int64, maxReactionCount: int64, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?canSendGift: bool, ?canSendPaidMedia: bool, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?joinToSendMessages: bool, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?unrestrictBoostCount: int64, ?hasRestrictedVoiceAndVideoMessages: bool, ?bio: string, ?linkedChatId: int64, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?hasPrivateForwards: bool, ?businessIntro: BusinessIntro, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?availableReactions: ReactionType[], ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?businessLocation: BusinessLocation, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: string, accentColorId: int64, maxReactionCount: int64, acceptedGiftTypes: AcceptedGiftTypes, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?canSendPaidMedia: bool, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?joinToSendMessages: bool, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?unrestrictBoostCount: int64, ?hasRestrictedVoiceAndVideoMessages: bool, ?bio: string, ?linkedChatId: int64, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?hasPrivateForwards: bool, ?businessIntro: BusinessIntro, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?availableReactions: ReactionType[], ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?businessLocation: BusinessLocation, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
       AccentColorId = accentColorId
       MaxReactionCount = maxReactionCount
+      AcceptedGiftTypes = acceptedGiftTypes
       JoinByRequest = joinByRequest
       Description = description
       InviteLink = inviteLink
       PinnedMessage = pinnedMessage
       Permissions = permissions
-      CanSendGift = canSendGift
       CanSendPaidMedia = canSendPaidMedia
       SlowModeDelay = slowModeDelay
       MessageAutoDeleteTime = messageAutoDeleteTime
@@ -577,6 +577,9 @@ and [<CLIMutable>] Message =
     /// Signature of the post author for messages in channels, or the custom title of an anonymous group administrator
     [<DataMember(Name = "author_signature")>]
     AuthorSignature: string option
+    /// The number of Telegram Stars that were paid by the sender of the message to send it
+    [<DataMember(Name = "paid_star_count")>]
+    PaidStarCount: int64 option
     /// For text messages, the actual UTF-8 text of the message
     [<DataMember(Name = "text")>]
     Text: string option
@@ -700,6 +703,12 @@ and [<CLIMutable>] Message =
     /// Service message: a chat was shared with the bot
     [<DataMember(Name = "chat_shared")>]
     ChatShared: ChatShared option
+    /// Service message: a regular gift was sent or received
+    [<DataMember(Name = "gift")>]
+    Gift: GiftInfo option
+    /// Service message: a unique gift was sent or received
+    [<DataMember(Name = "unique_gift")>]
+    UniqueGift: UniqueGiftInfo option
     /// The domain name of the website on which the user has logged in. More about Telegram Login »
     [<DataMember(Name = "connected_website")>]
     ConnectedWebsite: string option
@@ -748,6 +757,9 @@ and [<CLIMutable>] Message =
     /// Service message: a giveaway without public winners was completed
     [<DataMember(Name = "giveaway_completed")>]
     GiveawayCompleted: GiveawayCompleted option
+    /// Service message: the price for paid messages has changed in the chat
+    [<DataMember(Name = "paid_message_price_changed")>]
+    PaidMessagePriceChanged: PaidMessagePriceChanged option
     /// Service message: video chat scheduled
     [<DataMember(Name = "video_chat_scheduled")>]
     VideoChatScheduled: VideoChatScheduled option
@@ -767,11 +779,13 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?supergroupChatCreated: bool, ?chatShared: ChatShared, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?location: Location, ?channelChatCreated: bool, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?chatBackgroundSet: ChatBackground, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?venue: Venue, ?poll: Poll, ?game: Game, ?dice: Dice, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?mediaGroupId: string, ?webAppData: WebAppData, ?authorSignature: string, ?entities: MessageEntity[], ?contact: Contact, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?effectId: string, ?linkPreviewOptions: LinkPreviewOptions, ?text: string, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?uniqueGift: UniqueGiftInfo, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?location: Location, ?giveawayCreated: GiveawayCreated, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?chatBackgroundSet: ChatBackground, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?venue: Venue, ?poll: Poll, ?game: Game, ?mediaGroupId: string, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?authorSignature: string, ?replyToMessage: Message, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?isAutomaticForward: bool, ?webAppData: WebAppData, ?paidStarCount: int64, ?entities: MessageEntity[], ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?text: string, ?video: Video, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?effectId: string, ?linkPreviewOptions: LinkPreviewOptions, ?story: Story, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
+      Gift = gift
+      ChatShared = chatShared
       UsersShared = usersShared
       RefundedPayment = refundedPayment
       SuccessfulPayment = successfulPayment
@@ -780,16 +794,15 @@ and [<CLIMutable>] Message =
       MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
       MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
+      ChannelChatCreated = channelChatCreated
       SupergroupChatCreated = supergroupChatCreated
-      ChatShared = chatShared
       GroupChatCreated = groupChatCreated
       DeleteChatPhoto = deleteChatPhoto
       NewChatPhoto = newChatPhoto
       NewChatTitle = newChatTitle
       LeftChatMember = leftChatMember
       NewChatMembers = newChatMembers
-      Location = location
-      ChannelChatCreated = channelChatCreated
+      UniqueGift = uniqueGift
       ConnectedWebsite = connectedWebsite
       WriteAccessAllowed = writeAccessAllowed
       PassportData = passportData
@@ -797,11 +810,12 @@ and [<CLIMutable>] Message =
       VideoChatEnded = videoChatEnded
       VideoChatStarted = videoChatStarted
       VideoChatScheduled = videoChatScheduled
+      PaidMessagePriceChanged = paidMessagePriceChanged
       GiveawayCompleted = giveawayCompleted
       GiveawayWinners = giveawayWinners
       Giveaway = giveaway
+      Location = location
       GiveawayCreated = giveawayCreated
-      GeneralForumTopicUnhidden = generalForumTopicUnhidden
       GeneralForumTopicHidden = generalForumTopicHidden
       ForumTopicReopened = forumTopicReopened
       ForumTopicClosed = forumTopicClosed
@@ -810,10 +824,11 @@ and [<CLIMutable>] Message =
       ChatBackgroundSet = chatBackgroundSet
       BoostAdded = boostAdded
       ProximityAlertTriggered = proximityAlertTriggered
+      GeneralForumTopicUnhidden = generalForumTopicUnhidden
       Venue = venue
       Poll = poll
       Game = game
-      Dice = dice
+      MediaGroupId = mediaGroupId
       IsFromOffline = isFromOffline
       HasProtectedContent = hasProtectedContent
       EditDate = editDate
@@ -821,8 +836,8 @@ and [<CLIMutable>] Message =
       ReplyToStory = replyToStory
       Quote = quote
       ExternalReply = externalReply
+      AuthorSignature = authorSignature
       ReplyToMessage = replyToMessage
-      IsAutomaticForward = isAutomaticForward
       IsTopicMessage = isTopicMessage
       ForwardOrigin = forwardOrigin
       BusinessConnectionId = businessConnectionId
@@ -831,10 +846,11 @@ and [<CLIMutable>] Message =
       SenderChat = senderChat
       From = from
       MessageThreadId = messageThreadId
-      MediaGroupId = mediaGroupId
+      IsAutomaticForward = isAutomaticForward
       WebAppData = webAppData
-      AuthorSignature = authorSignature
+      PaidStarCount = paidStarCount
       Entities = entities
+      Dice = dice
       Contact = contact
       HasMediaSpoiler = hasMediaSpoiler
       ShowCaptionAboveMedia = showCaptionAboveMedia
@@ -842,8 +858,8 @@ and [<CLIMutable>] Message =
       Caption = caption
       Voice = voice
       VideoNote = videoNote
+      Text = text
       Video = video
-      Story = story
       Sticker = sticker
       Photo = photo
       PaidMedia = paidMedia
@@ -852,7 +868,7 @@ and [<CLIMutable>] Message =
       Animation = animation
       EffectId = effectId
       LinkPreviewOptions = linkPreviewOptions
-      Text = text
+      Story = story
       ReplyMarkup = replyMarkup
     }
 
@@ -2219,6 +2235,18 @@ and [<CLIMutable>] VideoChatParticipantsInvited =
       Users = users
     }
 
+/// Describes a service message about a change in the price of paid messages within a chat.
+and [<CLIMutable>] PaidMessagePriceChanged =
+  {
+    /// The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message
+    [<DataMember(Name = "paid_message_star_count")>]
+    PaidMessageStarCount: int64
+  }
+  static member Create(paidMessageStarCount: int64) = 
+    {
+      PaidMessageStarCount = paidMessageStarCount
+    }
+
 /// This object represents a service message about the creation of a scheduled giveaway.
 and [<CLIMutable>] GiveawayCreated =
   {
@@ -3446,6 +3474,190 @@ and [<CLIMutable>] BusinessOpeningHours =
       OpeningHours = openingHours
     }
 
+/// Describes the position of a clickable area within a story.
+and [<CLIMutable>] StoryAreaPosition =
+  {
+    /// The abscissa of the area's center, as a percentage of the media width
+    [<DataMember(Name = "x_percentage")>]
+    XPercentage: float
+    /// The ordinate of the area's center, as a percentage of the media height
+    [<DataMember(Name = "y_percentage")>]
+    YPercentage: float
+    /// The width of the area's rectangle, as a percentage of the media width
+    [<DataMember(Name = "width_percentage")>]
+    WidthPercentage: float
+    /// The height of the area's rectangle, as a percentage of the media height
+    [<DataMember(Name = "height_percentage")>]
+    HeightPercentage: float
+    /// The clockwise rotation angle of the rectangle, in degrees; 0-360
+    [<DataMember(Name = "rotation_angle")>]
+    RotationAngle: float
+    /// The radius of the rectangle corner rounding, as a percentage of the media width
+    [<DataMember(Name = "corner_radius_percentage")>]
+    CornerRadiusPercentage: float
+  }
+  static member Create(xPercentage: float, yPercentage: float, widthPercentage: float, heightPercentage: float, rotationAngle: float, cornerRadiusPercentage: float) = 
+    {
+      XPercentage = xPercentage
+      YPercentage = yPercentage
+      WidthPercentage = widthPercentage
+      HeightPercentage = heightPercentage
+      RotationAngle = rotationAngle
+      CornerRadiusPercentage = cornerRadiusPercentage
+    }
+
+/// Describes the physical address of a location.
+and [<CLIMutable>] LocationAddress =
+  {
+    /// The two-letter ISO 3166-1 alpha-2 country code of the country where the location is located
+    [<DataMember(Name = "country_code")>]
+    CountryCode: string
+    /// State of the location
+    [<DataMember(Name = "state")>]
+    State: string option
+    /// City of the location
+    [<DataMember(Name = "city")>]
+    City: string option
+    /// Street address of the location
+    [<DataMember(Name = "street")>]
+    Street: string option
+  }
+  static member Create(countryCode: string, ?state: string, ?city: string, ?street: string) = 
+    {
+      CountryCode = countryCode
+      State = state
+      City = city
+      Street = street
+    }
+
+/// Describes the type of a clickable area on a story. Currently, it can be one of
+and StoryAreaType =
+  | Location of StoryAreaTypeLocation
+  | SuggestedReaction of StoryAreaTypeSuggestedReaction
+  | Link of StoryAreaTypeLink
+  | Weather of StoryAreaTypeWeather
+  | UniqueGift of StoryAreaTypeUniqueGift
+
+/// Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.
+and [<CLIMutable>] StoryAreaTypeLocation =
+  {
+    /// Type of the area, always “location”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Location latitude in degrees
+    [<DataMember(Name = "latitude")>]
+    Latitude: float
+    /// Location longitude in degrees
+    [<DataMember(Name = "longitude")>]
+    Longitude: float
+    /// Address of the location
+    [<DataMember(Name = "address")>]
+    Address: LocationAddress option
+  }
+  static member Create(``type``: string, latitude: float, longitude: float, ?address: LocationAddress) = 
+    {
+      Type = ``type``
+      Latitude = latitude
+      Longitude = longitude
+      Address = address
+    }
+
+/// Describes a story area pointing to a suggested reaction. Currently, a story can have up to 5 suggested reaction areas.
+and [<CLIMutable>] StoryAreaTypeSuggestedReaction =
+  {
+    /// Type of the area, always “suggested_reaction”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Type of the reaction
+    [<DataMember(Name = "reaction_type")>]
+    ReactionType: ReactionType
+    /// Pass True if the reaction area has a dark background
+    [<DataMember(Name = "is_dark")>]
+    IsDark: bool option
+    /// Pass True if reaction area corner is flipped
+    [<DataMember(Name = "is_flipped")>]
+    IsFlipped: bool option
+  }
+  static member Create(``type``: string, reactionType: ReactionType, ?isDark: bool, ?isFlipped: bool) = 
+    {
+      Type = ``type``
+      ReactionType = reactionType
+      IsDark = isDark
+      IsFlipped = isFlipped
+    }
+
+/// Describes a story area pointing to an HTTP or tg:// link. Currently, a story can have up to 3 link areas.
+and [<CLIMutable>] StoryAreaTypeLink =
+  {
+    /// Type of the area, always “link”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// HTTP or tg:// URL to be opened when the area is clicked
+    [<DataMember(Name = "url")>]
+    Url: string
+  }
+  static member Create(``type``: string, url: string) = 
+    {
+      Type = ``type``
+      Url = url
+    }
+
+/// Describes a story area containing weather information. Currently, a story can have up to 3 weather areas.
+and [<CLIMutable>] StoryAreaTypeWeather =
+  {
+    /// Type of the area, always “weather”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Temperature, in degree Celsius
+    [<DataMember(Name = "temperature")>]
+    Temperature: float
+    /// Emoji representing the weather
+    [<DataMember(Name = "emoji")>]
+    Emoji: string
+    /// A color of the area background in the ARGB format
+    [<DataMember(Name = "background_color")>]
+    BackgroundColor: int64
+  }
+  static member Create(``type``: string, temperature: float, emoji: string, backgroundColor: int64) = 
+    {
+      Type = ``type``
+      Temperature = temperature
+      Emoji = emoji
+      BackgroundColor = backgroundColor
+    }
+
+/// Describes a story area pointing to a unique gift. Currently, a story can have at most 1 unique gift area.
+and [<CLIMutable>] StoryAreaTypeUniqueGift =
+  {
+    /// Type of the area, always “unique_gift”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Unique name of the gift
+    [<DataMember(Name = "name")>]
+    Name: string
+  }
+  static member Create(``type``: string, name: string) = 
+    {
+      Type = ``type``
+      Name = name
+    }
+
+/// Describes a clickable area on a story media.
+and [<CLIMutable>] StoryArea =
+  {
+    /// Position of the area
+    [<DataMember(Name = "position")>]
+    Position: StoryAreaPosition
+    /// Type of the area
+    [<DataMember(Name = "type")>]
+    Type: StoryAreaType
+  }
+  static member Create(position: StoryAreaPosition, ``type``: StoryAreaType) = 
+    {
+      Position = position
+      Type = ``type``
+    }
+
 /// Represents a location to which a chat is connected.
 and [<CLIMutable>] ChatLocation =
   {
@@ -3610,6 +3822,395 @@ and [<CLIMutable>] ForumTopic =
       Name = name
       IconColor = iconColor
       IconCustomEmojiId = iconCustomEmojiId
+    }
+
+/// This object represents a gift that can be sent by the bot.
+and [<CLIMutable>] Gift =
+  {
+    /// Unique identifier of the gift
+    [<DataMember(Name = "id")>]
+    Id: string
+    /// The sticker that represents the gift
+    [<DataMember(Name = "sticker")>]
+    Sticker: Sticker
+    /// The number of Telegram Stars that must be paid to send the sticker
+    [<DataMember(Name = "star_count")>]
+    StarCount: int64
+    /// The number of Telegram Stars that must be paid to upgrade the gift to a unique one
+    [<DataMember(Name = "upgrade_star_count")>]
+    UpgradeStarCount: int64 option
+    /// The total number of the gifts of this type that can be sent; for limited gifts only
+    [<DataMember(Name = "total_count")>]
+    TotalCount: int64 option
+    /// The number of remaining gifts of this type that can be sent; for limited gifts only
+    [<DataMember(Name = "remaining_count")>]
+    RemainingCount: int64 option
+  }
+  static member Create(id: string, sticker: Sticker, starCount: int64, ?upgradeStarCount: int64, ?totalCount: int64, ?remainingCount: int64) = 
+    {
+      Id = id
+      Sticker = sticker
+      StarCount = starCount
+      UpgradeStarCount = upgradeStarCount
+      TotalCount = totalCount
+      RemainingCount = remainingCount
+    }
+
+/// This object represent a list of gifts.
+and [<CLIMutable>] Gifts =
+  {
+    /// The list of gifts
+    [<DataMember(Name = "gifts")>]
+    Gifts: Gift[]
+  }
+  static member Create(gifts: Gift[]) = 
+    {
+      Gifts = gifts
+    }
+
+/// This object describes the model of a unique gift.
+and [<CLIMutable>] UniqueGiftModel =
+  {
+    /// Name of the model
+    [<DataMember(Name = "name")>]
+    Name: string
+    /// The sticker that represents the unique gift
+    [<DataMember(Name = "sticker")>]
+    Sticker: Sticker
+    /// The number of unique gifts that receive this model for every 1000 gifts upgraded
+    [<DataMember(Name = "rarity_per_mille")>]
+    RarityPerMille: int64
+  }
+  static member Create(name: string, sticker: Sticker, rarityPerMille: int64) = 
+    {
+      Name = name
+      Sticker = sticker
+      RarityPerMille = rarityPerMille
+    }
+
+/// This object describes the symbol shown on the pattern of a unique gift.
+and [<CLIMutable>] UniqueGiftSymbol =
+  {
+    /// Name of the symbol
+    [<DataMember(Name = "name")>]
+    Name: string
+    /// The sticker that represents the unique gift
+    [<DataMember(Name = "sticker")>]
+    Sticker: Sticker
+    /// The number of unique gifts that receive this model for every 1000 gifts upgraded
+    [<DataMember(Name = "rarity_per_mille")>]
+    RarityPerMille: int64
+  }
+  static member Create(name: string, sticker: Sticker, rarityPerMille: int64) = 
+    {
+      Name = name
+      Sticker = sticker
+      RarityPerMille = rarityPerMille
+    }
+
+/// This object describes the colors of the backdrop of a unique gift.
+and [<CLIMutable>] UniqueGiftBackdropColors =
+  {
+    /// The color in the center of the backdrop in RGB format
+    [<DataMember(Name = "center_color")>]
+    CenterColor: int64
+    /// The color on the edges of the backdrop in RGB format
+    [<DataMember(Name = "edge_color")>]
+    EdgeColor: int64
+    /// The color to be applied to the symbol in RGB format
+    [<DataMember(Name = "symbol_color")>]
+    SymbolColor: int64
+    /// The color for the text on the backdrop in RGB format
+    [<DataMember(Name = "text_color")>]
+    TextColor: int64
+  }
+  static member Create(centerColor: int64, edgeColor: int64, symbolColor: int64, textColor: int64) = 
+    {
+      CenterColor = centerColor
+      EdgeColor = edgeColor
+      SymbolColor = symbolColor
+      TextColor = textColor
+    }
+
+/// This object describes the backdrop of a unique gift.
+and [<CLIMutable>] UniqueGiftBackdrop =
+  {
+    /// Name of the backdrop
+    [<DataMember(Name = "name")>]
+    Name: string
+    /// Colors of the backdrop
+    [<DataMember(Name = "colors")>]
+    Colors: UniqueGiftBackdropColors
+    /// The number of unique gifts that receive this backdrop for every 1000 gifts upgraded
+    [<DataMember(Name = "rarity_per_mille")>]
+    RarityPerMille: int64
+  }
+  static member Create(name: string, colors: UniqueGiftBackdropColors, rarityPerMille: int64) = 
+    {
+      Name = name
+      Colors = colors
+      RarityPerMille = rarityPerMille
+    }
+
+/// This object describes a unique gift that was upgraded from a regular gift.
+and [<CLIMutable>] UniqueGift =
+  {
+    /// Human-readable name of the regular gift from which this unique gift was upgraded
+    [<DataMember(Name = "base_name")>]
+    BaseName: string
+    /// Unique name of the gift. This name can be used in https://t.me/nft/... links and story areas
+    [<DataMember(Name = "name")>]
+    Name: string
+    /// Unique number of the upgraded gift among gifts upgraded from the same regular gift
+    [<DataMember(Name = "number")>]
+    Number: int64
+    /// Model of the gift
+    [<DataMember(Name = "model")>]
+    Model: UniqueGiftModel
+    /// Symbol of the gift
+    [<DataMember(Name = "symbol")>]
+    Symbol: UniqueGiftSymbol
+    /// Backdrop of the gift
+    [<DataMember(Name = "backdrop")>]
+    Backdrop: UniqueGiftBackdrop
+  }
+  static member Create(baseName: string, name: string, number: int64, model: UniqueGiftModel, symbol: UniqueGiftSymbol, backdrop: UniqueGiftBackdrop) = 
+    {
+      BaseName = baseName
+      Name = name
+      Number = number
+      Model = model
+      Symbol = symbol
+      Backdrop = backdrop
+    }
+
+/// Describes a service message about a regular gift that was sent or received.
+and [<CLIMutable>] GiftInfo =
+  {
+    /// Information about the gift
+    [<DataMember(Name = "gift")>]
+    Gift: Gift
+    /// Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
+    [<DataMember(Name = "owned_gift_id")>]
+    OwnedGiftId: string option
+    /// Number of Telegram Stars that can be claimed by the receiver by converting the gift; omitted if conversion to Telegram Stars is impossible
+    [<DataMember(Name = "convert_star_count")>]
+    ConvertStarCount: int64 option
+    /// Number of Telegram Stars that were prepaid by the sender for the ability to upgrade the gift
+    [<DataMember(Name = "prepaid_upgrade_star_count")>]
+    PrepaidUpgradeStarCount: int64 option
+    /// True, if the gift can be upgraded to a unique gift
+    [<DataMember(Name = "can_be_upgraded")>]
+    CanBeUpgraded: bool option
+    /// Text of the message that was added to the gift
+    [<DataMember(Name = "text")>]
+    Text: string option
+    /// Special entities that appear in the text
+    [<DataMember(Name = "entities")>]
+    Entities: MessageEntity[] option
+    /// True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+    [<DataMember(Name = "is_private")>]
+    IsPrivate: bool option
+  }
+  static member Create(gift: Gift, ?ownedGiftId: string, ?convertStarCount: int64, ?prepaidUpgradeStarCount: int64, ?canBeUpgraded: bool, ?text: string, ?entities: MessageEntity[], ?isPrivate: bool) = 
+    {
+      Gift = gift
+      OwnedGiftId = ownedGiftId
+      ConvertStarCount = convertStarCount
+      PrepaidUpgradeStarCount = prepaidUpgradeStarCount
+      CanBeUpgraded = canBeUpgraded
+      Text = text
+      Entities = entities
+      IsPrivate = isPrivate
+    }
+
+/// Describes a service message about a unique gift that was sent or received.
+and [<CLIMutable>] UniqueGiftInfo =
+  {
+    /// Information about the gift
+    [<DataMember(Name = "gift")>]
+    Gift: UniqueGift
+    /// Origin of the gift. Currently, either “upgrade” or “transfer”
+    [<DataMember(Name = "origin")>]
+    Origin: string
+    /// Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
+    [<DataMember(Name = "owned_gift_id")>]
+    OwnedGiftId: string option
+    /// Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
+    [<DataMember(Name = "transfer_star_count")>]
+    TransferStarCount: int64 option
+  }
+  static member Create(gift: UniqueGift, origin: string, ?ownedGiftId: string, ?transferStarCount: int64) = 
+    {
+      Gift = gift
+      Origin = origin
+      OwnedGiftId = ownedGiftId
+      TransferStarCount = transferStarCount
+    }
+
+/// This object describes a gift received and owned by a user or a chat. Currently, it can be one of
+and OwnedGift =
+  | Regular of OwnedGiftRegular
+  | Unique of OwnedGiftUnique
+
+/// Describes a regular gift owned by a user or a chat.
+and [<CLIMutable>] OwnedGiftRegular =
+  {
+    /// Type of the gift, always “regular”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Information about the regular gift
+    [<DataMember(Name = "gift")>]
+    Gift: Gift
+    /// Unique identifier of the gift for the bot; for gifts received on behalf of business accounts only
+    [<DataMember(Name = "owned_gift_id")>]
+    OwnedGiftId: string option
+    /// Sender of the gift if it is a known user
+    [<DataMember(Name = "sender_user")>]
+    SenderUser: User option
+    /// Date the gift was sent in Unix time
+    [<DataMember(Name = "send_date")>]
+    SendDate: int64
+    /// Text of the message that was added to the gift
+    [<DataMember(Name = "text")>]
+    Text: string option
+    /// Special entities that appear in the text
+    [<DataMember(Name = "entities")>]
+    Entities: MessageEntity[] option
+    /// True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+    [<DataMember(Name = "is_private")>]
+    IsPrivate: bool option
+    /// True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
+    [<DataMember(Name = "is_saved")>]
+    IsSaved: bool option
+    /// True, if the gift can be upgraded to a unique gift; for gifts received on behalf of business accounts only
+    [<DataMember(Name = "can_be_upgraded")>]
+    CanBeUpgraded: bool option
+    /// True, if the gift was refunded and isn't available anymore
+    [<DataMember(Name = "was_refunded")>]
+    WasRefunded: bool option
+    /// Number of Telegram Stars that can be claimed by the receiver instead of the gift; omitted if the gift cannot be converted to Telegram Stars
+    [<DataMember(Name = "convert_star_count")>]
+    ConvertStarCount: int64 option
+    /// Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift
+    [<DataMember(Name = "prepaid_upgrade_star_count")>]
+    PrepaidUpgradeStarCount: int64 option
+  }
+  static member Create(``type``: string, gift: Gift, sendDate: int64, ?ownedGiftId: string, ?senderUser: User, ?text: string, ?entities: MessageEntity[], ?isPrivate: bool, ?isSaved: bool, ?canBeUpgraded: bool, ?wasRefunded: bool, ?convertStarCount: int64, ?prepaidUpgradeStarCount: int64) = 
+    {
+      Type = ``type``
+      Gift = gift
+      SendDate = sendDate
+      OwnedGiftId = ownedGiftId
+      SenderUser = senderUser
+      Text = text
+      Entities = entities
+      IsPrivate = isPrivate
+      IsSaved = isSaved
+      CanBeUpgraded = canBeUpgraded
+      WasRefunded = wasRefunded
+      ConvertStarCount = convertStarCount
+      PrepaidUpgradeStarCount = prepaidUpgradeStarCount
+    }
+
+/// Describes a unique gift received and owned by a user or a chat.
+and [<CLIMutable>] OwnedGiftUnique =
+  {
+    /// Type of the gift, always “unique”
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// Information about the unique gift
+    [<DataMember(Name = "gift")>]
+    Gift: UniqueGift
+    /// Unique identifier of the received gift for the bot; for gifts received on behalf of business accounts only
+    [<DataMember(Name = "owned_gift_id")>]
+    OwnedGiftId: string option
+    /// Sender of the gift if it is a known user
+    [<DataMember(Name = "sender_user")>]
+    SenderUser: User option
+    /// Date the gift was sent in Unix time
+    [<DataMember(Name = "send_date")>]
+    SendDate: int64
+    /// True, if the gift is displayed on the account's profile page; for gifts received on behalf of business accounts only
+    [<DataMember(Name = "is_saved")>]
+    IsSaved: bool option
+    /// True, if the gift can be transferred to another owner; for gifts received on behalf of business accounts only
+    [<DataMember(Name = "can_be_transferred")>]
+    CanBeTransferred: bool option
+    /// Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
+    [<DataMember(Name = "transfer_star_count")>]
+    TransferStarCount: int64 option
+  }
+  static member Create(``type``: string, gift: UniqueGift, sendDate: int64, ?ownedGiftId: string, ?senderUser: User, ?isSaved: bool, ?canBeTransferred: bool, ?transferStarCount: int64) = 
+    {
+      Type = ``type``
+      Gift = gift
+      SendDate = sendDate
+      OwnedGiftId = ownedGiftId
+      SenderUser = senderUser
+      IsSaved = isSaved
+      CanBeTransferred = canBeTransferred
+      TransferStarCount = transferStarCount
+    }
+
+/// Contains the list of gifts received and owned by a user or a chat.
+and [<CLIMutable>] OwnedGifts =
+  {
+    /// The total number of gifts owned by the user or the chat
+    [<DataMember(Name = "total_count")>]
+    TotalCount: int64
+    /// The list of gifts
+    [<DataMember(Name = "gifts")>]
+    Gifts: OwnedGift[]
+    /// Offset for the next request. If empty, then there are no more results
+    [<DataMember(Name = "next_offset")>]
+    NextOffset: string option
+  }
+  static member Create(totalCount: int64, gifts: OwnedGift[], ?nextOffset: string) = 
+    {
+      TotalCount = totalCount
+      Gifts = gifts
+      NextOffset = nextOffset
+    }
+
+/// This object describes the types of gifts that can be gifted to a user or a chat.
+and [<CLIMutable>] AcceptedGiftTypes =
+  {
+    /// True, if unlimited regular gifts are accepted
+    [<DataMember(Name = "unlimited_gifts")>]
+    UnlimitedGifts: bool
+    /// True, if limited regular gifts are accepted
+    [<DataMember(Name = "limited_gifts")>]
+    LimitedGifts: bool
+    /// True, if unique gifts or gifts that can be upgraded to unique for free are accepted
+    [<DataMember(Name = "unique_gifts")>]
+    UniqueGifts: bool
+    /// True, if a Telegram Premium subscription is accepted
+    [<DataMember(Name = "premium_subscription")>]
+    PremiumSubscription: bool
+  }
+  static member Create(unlimitedGifts: bool, limitedGifts: bool, uniqueGifts: bool, premiumSubscription: bool) = 
+    {
+      UnlimitedGifts = unlimitedGifts
+      LimitedGifts = limitedGifts
+      UniqueGifts = uniqueGifts
+      PremiumSubscription = premiumSubscription
+    }
+
+/// Describes an amount of Telegram Stars.
+and [<CLIMutable>] StarAmount =
+  {
+    /// Integer amount of Telegram Stars, rounded to 0; can be negative
+    [<DataMember(Name = "amount")>]
+    Amount: int64
+    /// The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999; can be negative if and only if amount is non-positive
+    [<DataMember(Name = "nanostar_amount")>]
+    NanostarAmount: int64 option
+  }
+  static member Create(amount: int64, ?nanostarAmount: int64) = 
+    {
+      Amount = amount
+      NanostarAmount = nanostarAmount
     }
 
 /// This object represents a bot command.
@@ -3967,6 +4568,70 @@ and [<CLIMutable>] UserChatBoosts =
       Boosts = boosts
     }
 
+/// Represents the rights of a business bot.
+and [<CLIMutable>] BusinessBotRights =
+  {
+    /// True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours
+    [<DataMember(Name = "can_reply")>]
+    CanReply: bool option
+    /// True, if the bot can mark incoming private messages as read
+    [<DataMember(Name = "can_read_messages")>]
+    CanReadMessages: bool option
+    /// True, if the bot can delete messages sent by the bot
+    [<DataMember(Name = "can_delete_outgoing_messages")>]
+    CanDeleteOutgoingMessages: bool option
+    /// True, if the bot can delete all private messages in managed chats
+    [<DataMember(Name = "can_delete_all_messages")>]
+    CanDeleteAllMessages: bool option
+    /// True, if the bot can edit the first and last name of the business account
+    [<DataMember(Name = "can_edit_name")>]
+    CanEditName: bool option
+    /// True, if the bot can edit the bio of the business account
+    [<DataMember(Name = "can_edit_bio")>]
+    CanEditBio: bool option
+    /// True, if the bot can edit the profile photo of the business account
+    [<DataMember(Name = "can_edit_profile_photo")>]
+    CanEditProfilePhoto: bool option
+    /// True, if the bot can edit the username of the business account
+    [<DataMember(Name = "can_edit_username")>]
+    CanEditUsername: bool option
+    /// True, if the bot can change the privacy settings pertaining to gifts for the business account
+    [<DataMember(Name = "can_change_gift_settings")>]
+    CanChangeGiftSettings: bool option
+    /// True, if the bot can view gifts and the amount of Telegram Stars owned by the business account
+    [<DataMember(Name = "can_view_gifts_and_stars")>]
+    CanViewGiftsAndStars: bool option
+    /// True, if the bot can convert regular gifts owned by the business account to Telegram Stars
+    [<DataMember(Name = "can_convert_gifts_to_stars")>]
+    CanConvertGiftsToStars: bool option
+    /// True, if the bot can transfer and upgrade gifts owned by the business account
+    [<DataMember(Name = "can_transfer_and_upgrade_gifts")>]
+    CanTransferAndUpgradeGifts: bool option
+    /// True, if the bot can transfer Telegram Stars received by the business account to its own account, or use them to upgrade and transfer gifts
+    [<DataMember(Name = "can_transfer_stars")>]
+    CanTransferStars: bool option
+    /// True, if the bot can post, edit and delete stories on behalf of the business account
+    [<DataMember(Name = "can_manage_stories")>]
+    CanManageStories: bool option
+  }
+  static member Create(?canReply: bool, ?canReadMessages: bool, ?canDeleteOutgoingMessages: bool, ?canDeleteAllMessages: bool, ?canEditName: bool, ?canEditBio: bool, ?canEditProfilePhoto: bool, ?canEditUsername: bool, ?canChangeGiftSettings: bool, ?canViewGiftsAndStars: bool, ?canConvertGiftsToStars: bool, ?canTransferAndUpgradeGifts: bool, ?canTransferStars: bool, ?canManageStories: bool) = 
+    {
+      CanReply = canReply
+      CanReadMessages = canReadMessages
+      CanDeleteOutgoingMessages = canDeleteOutgoingMessages
+      CanDeleteAllMessages = canDeleteAllMessages
+      CanEditName = canEditName
+      CanEditBio = canEditBio
+      CanEditProfilePhoto = canEditProfilePhoto
+      CanEditUsername = canEditUsername
+      CanChangeGiftSettings = canChangeGiftSettings
+      CanViewGiftsAndStars = canViewGiftsAndStars
+      CanConvertGiftsToStars = canConvertGiftsToStars
+      CanTransferAndUpgradeGifts = canTransferAndUpgradeGifts
+      CanTransferStars = canTransferStars
+      CanManageStories = canManageStories
+    }
+
 /// Describes the connection of the bot with a business account.
 and [<CLIMutable>] BusinessConnection =
   {
@@ -3982,21 +4647,21 @@ and [<CLIMutable>] BusinessConnection =
     /// Date the connection was established in Unix time
     [<DataMember(Name = "date")>]
     Date: DateTime
-    /// True, if the bot can act on behalf of the business account in chats that were active in the last 24 hours
-    [<DataMember(Name = "can_reply")>]
-    CanReply: bool
+    /// Rights of the business bot
+    [<DataMember(Name = "rights")>]
+    Rights: BusinessBotRights option
     /// True, if the connection is active
     [<DataMember(Name = "is_enabled")>]
     IsEnabled: bool
   }
-  static member Create(id: string, user: User, userChatId: int64, date: DateTime, canReply: bool, isEnabled: bool) = 
+  static member Create(id: string, user: User, userChatId: int64, date: DateTime, isEnabled: bool, ?rights: BusinessBotRights) = 
     {
       Id = id
       User = user
       UserChatId = userChatId
       Date = date
-      CanReply = canReply
       IsEnabled = isEnabled
+      Rights = rights
     }
 
 /// This object is received when messages are deleted from a connected business account.
@@ -4340,6 +5005,96 @@ and [<CLIMutable>] InputPaidMediaVideo =
       SupportsStreaming = supportsStreaming
     }
 
+/// This object describes a profile photo to set. Currently, it can be one of
+and InputProfilePhoto =
+  | Static of InputProfilePhotoStatic
+  | Animated of InputProfilePhotoAnimated
+
+/// A static profile photo in the .JPG format.
+and [<CLIMutable>] InputProfilePhotoStatic =
+  {
+    /// Type of the profile photo, must be static
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// The static profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+    [<DataMember(Name = "photo")>]
+    Photo: string
+  }
+  static member Create(``type``: string, photo: string) = 
+    {
+      Type = ``type``
+      Photo = photo
+    }
+
+/// An animated profile photo in the MPEG4 format.
+and [<CLIMutable>] InputProfilePhotoAnimated =
+  {
+    /// Type of the profile photo, must be animated
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// The animated profile photo. Profile photos can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+    [<DataMember(Name = "animation")>]
+    Animation: string
+    /// Timestamp in seconds of the frame that will be used as the static profile photo. Defaults to 0.0.
+    [<DataMember(Name = "main_frame_timestamp")>]
+    MainFrameTimestamp: float option
+  }
+  static member Create(``type``: string, animation: string, ?mainFrameTimestamp: float) = 
+    {
+      Type = ``type``
+      Animation = animation
+      MainFrameTimestamp = mainFrameTimestamp
+    }
+
+/// This object describes the content of a story to post. Currently, it can be one of
+and InputStoryContent =
+  | Photo of InputStoryContentPhoto
+  | Video of InputStoryContentVideo
+
+/// Describes a photo to post as a story.
+and [<CLIMutable>] InputStoryContentPhoto =
+  {
+    /// Type of the content, must be photo
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// The photo to post as a story. The photo must be of the size 1080x1920 and must not exceed 10 MB. The photo can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the photo was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+    [<DataMember(Name = "photo")>]
+    Photo: string
+  }
+  static member Create(``type``: string, photo: string) = 
+    {
+      Type = ``type``
+      Photo = photo
+    }
+
+/// Describes a video to post as a story.
+and [<CLIMutable>] InputStoryContentVideo =
+  {
+    /// Type of the content, must be video
+    [<DataMember(Name = "type")>]
+    Type: string
+    /// The video to post as a story. The video must be of the size 720x1280, streamable, encoded with H.265 codec, with key frames added each second in the MPEG4 format, and must not exceed 30 MB. The video can't be reused and can only be uploaded as a new file, so you can pass “attach://<file_attach_name>” if the video was uploaded using multipart/form-data under <file_attach_name>. More information on Sending Files »
+    [<DataMember(Name = "video")>]
+    Video: string
+    /// Precise duration of the video in seconds; 0-60
+    [<DataMember(Name = "duration")>]
+    Duration: float option
+    /// Timestamp in seconds of the frame that will be used as the static cover for the story. Defaults to 0.0.
+    [<DataMember(Name = "cover_frame_timestamp")>]
+    CoverFrameTimestamp: float option
+    /// Pass True if the video has no sound
+    [<DataMember(Name = "is_animation")>]
+    IsAnimation: bool option
+  }
+  static member Create(``type``: string, video: string, ?duration: float, ?coverFrameTimestamp: float, ?isAnimation: bool) = 
+    {
+      Type = ``type``
+      Video = video
+      Duration = duration
+      CoverFrameTimestamp = coverFrameTimestamp
+      IsAnimation = isAnimation
+    }
+
 /// This object represents a sticker.
 and [<CLIMutable>] Sticker =
   {
@@ -4463,9 +5218,9 @@ and [<CLIMutable>] MaskPosition =
 /// This object describes a sticker to be added to a sticker set.
 and [<CLIMutable>] InputSticker =
   {
-    /// The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, upload a new one using multipart/form-data, or pass “attach://<file_attach_name>” to upload a new one using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
+    /// The added sticker. Pass a file_id as a String to send a file that already exists on the Telegram servers, pass an HTTP URL as a String for Telegram to get a file from the Internet, or pass “attach://<file_attach_name>” to upload a new file using multipart/form-data under <file_attach_name> name. Animated and video stickers can't be uploaded via HTTP URL. More information on Sending Files »
     [<DataMember(Name = "sticker")>]
-    Sticker: InputFile
+    Sticker: string
     /// Format of the added sticker, must be one of “static” for a .WEBP or .PNG image, “animated” for a .TGS animation, “video” for a .WEBM video
     [<DataMember(Name = "format")>]
     Format: string
@@ -4479,57 +5234,13 @@ and [<CLIMutable>] InputSticker =
     [<DataMember(Name = "keywords")>]
     Keywords: string[] option
   }
-  static member Create(sticker: InputFile, format: string, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) = 
+  static member Create(sticker: string, format: string, emojiList: string[], ?maskPosition: MaskPosition, ?keywords: string[]) = 
     {
       Sticker = sticker
       Format = format
       EmojiList = emojiList
       MaskPosition = maskPosition
       Keywords = keywords
-    }
-
-/// This object represents a gift that can be sent by the bot.
-and [<CLIMutable>] Gift =
-  {
-    /// Unique identifier of the gift
-    [<DataMember(Name = "id")>]
-    Id: string
-    /// The sticker that represents the gift
-    [<DataMember(Name = "sticker")>]
-    Sticker: Sticker
-    /// The number of Telegram Stars that must be paid to send the sticker
-    [<DataMember(Name = "star_count")>]
-    StarCount: int64
-    /// The number of Telegram Stars that must be paid to upgrade the gift to a unique one
-    [<DataMember(Name = "upgrade_star_count")>]
-    UpgradeStarCount: int64 option
-    /// The total number of the gifts of this type that can be sent; for limited gifts only
-    [<DataMember(Name = "total_count")>]
-    TotalCount: int64 option
-    /// The number of remaining gifts of this type that can be sent; for limited gifts only
-    [<DataMember(Name = "remaining_count")>]
-    RemainingCount: int64 option
-  }
-  static member Create(id: string, sticker: Sticker, starCount: int64, ?upgradeStarCount: int64, ?totalCount: int64, ?remainingCount: int64) = 
-    {
-      Id = id
-      Sticker = sticker
-      StarCount = starCount
-      UpgradeStarCount = upgradeStarCount
-      TotalCount = totalCount
-      RemainingCount = remainingCount
-    }
-
-/// This object represent a list of gifts.
-and [<CLIMutable>] Gifts =
-  {
-    /// The list of gifts
-    [<DataMember(Name = "gifts")>]
-    Gifts: Gift[]
-  }
-  static member Create(gifts: Gift[]) = 
-    {
-      Gifts = gifts
     }
 
 /// This object represents an incoming inline query. When the user sends an empty query, your bot could return some default or trending results.
@@ -6302,31 +7013,38 @@ and [<CLIMutable>] TransactionPartnerUser =
     /// Type of the transaction partner, always “user”
     [<DataMember(Name = "type")>]
     Type: string
+    /// Type of the transaction, currently one of “invoice_payment” for payments via invoices, “paid_media_payment” for payments for paid media, “gift_purchase” for gifts sent by the bot, “premium_purchase” for Telegram Premium subscriptions gifted by the bot, “business_account_transfer” for direct transfers from managed business accounts
+    [<DataMember(Name = "transaction_type")>]
+    TransactionType: string
     /// Information about the user
     [<DataMember(Name = "user")>]
     User: User
-    /// Information about the affiliate that received a commission via this transaction
+    /// Information about the affiliate that received a commission via this transaction. Can be available only for “invoice_payment” and “paid_media_payment” transactions.
     [<DataMember(Name = "affiliate")>]
     Affiliate: AffiliateInfo option
-    /// Bot-specified invoice payload
+    /// Bot-specified invoice payload. Can be available only for “invoice_payment” transactions.
     [<DataMember(Name = "invoice_payload")>]
     InvoicePayload: string option
-    /// The duration of the paid subscription
+    /// The duration of the paid subscription. Can be available only for “invoice_payment” transactions.
     [<DataMember(Name = "subscription_period")>]
     SubscriptionPeriod: int64 option
-    /// Information about the paid media bought by the user
+    /// Information about the paid media bought by the user; for “paid_media_payment” transactions only
     [<DataMember(Name = "paid_media")>]
     PaidMedia: PaidMedia[] option
-    /// Bot-specified paid media payload
+    /// Bot-specified paid media payload. Can be available only for “paid_media_payment” transactions.
     [<DataMember(Name = "paid_media_payload")>]
     PaidMediaPayload: string option
-    /// The gift sent to the user by the bot
+    /// The gift sent to the user by the bot; for “gift_purchase” transactions only
     [<DataMember(Name = "gift")>]
     Gift: Gift option
+    /// Number of months the gifted Telegram Premium subscription will be active for; for “premium_purchase” transactions only
+    [<DataMember(Name = "premium_subscription_duration")>]
+    PremiumSubscriptionDuration: int64 option
   }
-  static member Create(``type``: string, user: User, ?affiliate: AffiliateInfo, ?invoicePayload: string, ?subscriptionPeriod: int64, ?paidMedia: PaidMedia[], ?paidMediaPayload: string, ?gift: Gift) = 
+  static member Create(``type``: string, transactionType: string, user: User, ?affiliate: AffiliateInfo, ?invoicePayload: string, ?subscriptionPeriod: int64, ?paidMedia: PaidMedia[], ?paidMediaPayload: string, ?gift: Gift, ?premiumSubscriptionDuration: int64) = 
     {
       Type = ``type``
+      TransactionType = transactionType
       User = user
       Affiliate = affiliate
       InvoicePayload = invoicePayload
@@ -6334,6 +7052,7 @@ and [<CLIMutable>] TransactionPartnerUser =
       PaidMedia = paidMedia
       PaidMediaPayload = paidMediaPayload
       Gift = gift
+      PremiumSubscriptionDuration = premiumSubscriptionDuration
     }
 
 /// Describes a transaction with a chat.

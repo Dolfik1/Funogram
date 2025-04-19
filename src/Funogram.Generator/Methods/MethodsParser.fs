@@ -43,33 +43,40 @@ let loadRemapData remapPath config =
     config
 
 let private returnTypeRegexes =
-  [|
-    // Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object
-    
-    // invite links
-    Regex("Returns the new invite link as a ([A|a]rray of \w+|\w+)\s")
-    Regex("Returns the new invite link as ([A|a]rray of \w+|\w+)\s")
-    Regex("Returns the edited invite link as a ([A|a]rray of \w+|\w+)\s")
-    Regex("Returns the revoked invite link as ([A|a]rray of \w+|\w+)\s")
-    Regex("Returns the created invoice link as ([A|a]rray of \w+|\w+)\s.")
+  let rxs =
+    [|
+      // Returns the list of gifts that can be sent by the bot to users. Requires no parameters. Returns a Gifts object
+      
+      // invite links
+      Regex("Returns the new invite link as a ([A|a]rray of \w+|\w+)\s")
+      Regex("Returns the new invite link as ([A|a]rray of \w+|\w+)\s")
+      Regex("Returns the edited invite link as a ([A|a]rray of \w+|\w+)\s")
+      Regex("Returns the revoked invite link as ([A|a]rray of \w+|\w+)\s")
+      Regex("Returns the created invoice link as ([A|a]rray of \w+|\w+)\s.")
 
-    Regex("On success, a ([A|a]rray of \w+|\w+)\s")
-    Regex("On success, an ([A|a]rray of \w+|\w+)\s")
-    Regex("An ([A|a]rray of \w+|\w+) objects is returned")
-    Regex("[R|r]eturns basic information about the bot in form of a ([A|a]rray of \w+|\w+)")
-    Regex("[R|r]eturns information about the created topic as a ([A|a]rray of \w+|\w+)")
+      Regex("On success, a ([A|a]rray of \w+|\w+)\s")
+      Regex("On success, an ([A|a]rray of \w+|\w+)\s")
+      Regex("An ([A|a]rray of \w+|\w+) objects is returned")
+      Regex("[R|r]eturns basic information about the bot in form of a ([A|a]rray of \w+|\w+)")
+      Regex("[R|r]eturns information about the created topic as a ([A|a]rray of \w+|\w+)")
 
-    Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
+      Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
 
-    Regex("[R|r]eturns a ([A|a]rray of \w+|\w+)\s")
-    Regex("[R|r]eturns the uploaded (\w+)\s")
-    Regex("[R|r]eturns the ([A|a]rray of \w+|\w+)\s")
-    Regex("[R|r]eturns an ([A|a]rray of \w+|\w+)\s")
-    Regex("[R|r]eturns ([A|a]rray of \w+|\w+)\s")
+      Regex("[R|r]eturns a ([A|a]rray of \w+|\w+)\s")
+      Regex("[R|r]eturns the uploaded (\w+)\s")
+      Regex("[R|r]eturns the ([A|a]rray of \w+|\w+)\s")
+      Regex("[R|r]eturns an ([A|a]rray of \w+|\w+)\s")
+      Regex("[R|r]eturns ([A|a]rray of \w+|\w+)\s")
 
-    
-    Regex("\s([A|a]rray of \w+|\w+)\sis returned")
-  |]
+      
+      Regex("\s([A|a]rray of \w+|\w+)\sis returned")
+    |]
+  
+  // Sometimes they have the following format in documentation:
+  // Returns the list of gifts blablabla. Returns a Gifts object.
+  // so, let's pass first "Returns" if any
+  let prefixedRxs = rxs |> Array.map(fun r -> Regex($"Returns the .+\. {r}"))  
+  Array.append prefixedRxs rxs
 
 let private parseReturnType (str: string) =
   let m =

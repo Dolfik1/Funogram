@@ -1582,7 +1582,7 @@
       {
         "OriginalName": "star_count",
         "ConvertedName": "StarCount",
-        "Description": "The number of Telegram Stars that must be paid to buy access to the media; 1-2500",
+        "Description": "The number of Telegram Stars that must be paid to buy access to the media; 1-10000",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false
@@ -3133,7 +3133,7 @@
       {
         "OriginalName": "subscription_price",
         "ConvertedName": "SubscriptionPrice",
-        "Description": "The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-2500",
+        "Description": "The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false
@@ -4758,6 +4758,853 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "getAvailableGifts",
+    "ConvertedName": "GetAvailableGifts",
+    "Description": "Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.",
+    "Fields": [],
+    "OriginalReturnType": "Gifts",
+    "ConvertedReturnType": "Gifts"
+  },
+  {
+    "OriginalName": "sendGift",
+    "ConvertedName": "SendGift",
+    "Description": "Sends a gift to the given user or channel chat. The gift can\u0027t be converted to Telegram Stars by the receiver. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Required if chat_id is not specified. Unique identifier of the target user who will receive the gift.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "gift_id",
+        "ConvertedName": "GiftId",
+        "Description": "Identifier of the gift",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "pay_for_upgrade",
+        "ConvertedName": "PayForUpgrade",
+        "Description": "Pass True to pay for the gift upgrade from the bot\u0027s balance, thereby making the upgrade free for the receiver",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text",
+        "ConvertedName": "Text",
+        "Description": "Text that will be shown along with the gift; 0-128 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text_parse_mode",
+        "ConvertedName": "TextParseMode",
+        "Description": "Mode for parsing entities in the text. See formatting options for more details. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text_entities",
+        "ConvertedName": "TextEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "giftPremiumSubscription",
+    "ConvertedName": "GiftPremiumSubscription",
+    "Description": "Gifts a Telegram Premium subscription to the given user. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user who will receive a Telegram Premium subscription",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "month_count",
+        "ConvertedName": "MonthCount",
+        "Description": "Number of months the Telegram Premium subscription will be active for the user; must be one of 3, 6, or 12",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "star_count",
+        "ConvertedName": "StarCount",
+        "Description": "Number of Telegram Stars to pay for the Telegram Premium subscription; must be 1000 for 3 months, 1500 for 6 months, and 2500 for 12 months",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "text",
+        "ConvertedName": "Text",
+        "Description": "Text that will be shown along with the service message about the subscription; 0-128 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text_parse_mode",
+        "ConvertedName": "TextParseMode",
+        "Description": "Mode for parsing entities in the text. See formatting options for more details. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text_entities",
+        "ConvertedName": "TextEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "verifyUser",
+    "ConvertedName": "VerifyUser",
+    "Description": "Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "custom_description",
+        "ConvertedName": "CustomDescription",
+        "Description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn\u0027t allowed to provide a custom verification description.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "verifyChat",
+    "ConvertedName": "VerifyChat",
+    "Description": "Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "custom_description",
+        "ConvertedName": "CustomDescription",
+        "Description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn\u0027t allowed to provide a custom verification description.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "removeUserVerification",
+    "ConvertedName": "RemoveUserVerification",
+    "Description": "Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "user_id",
+        "ConvertedName": "UserId",
+        "Description": "Unique identifier of the target user",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "removeChatVerification",
+    "ConvertedName": "RemoveChatVerification",
+    "Description": "Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "readBusinessMessage",
+    "ConvertedName": "ReadBusinessMessage",
+    "Description": "Marks incoming message as read on behalf of a business account. Requires the can_read_messages business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which to read the message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier of the chat in which the message was received. The chat must have been active in the last 24 hours.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Unique identifier of the message to mark as read",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "deleteBusinessMessages",
+    "ConvertedName": "DeleteBusinessMessages",
+    "Description": "Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which to delete the messages",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "A JSON-serialized list of 1-100 identifiers of messages to delete. All messages must be from the same chat. See deleteMessage for limitations on which messages can be deleted",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setBusinessAccountName",
+    "ConvertedName": "SetBusinessAccountName",
+    "Description": "Changes the first and last name of a managed business account. Requires the can_change_name business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "first_name",
+        "ConvertedName": "FirstName",
+        "Description": "The new value of the first name for the business account; 1-64 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "last_name",
+        "ConvertedName": "LastName",
+        "Description": "The new value of the last name for the business account; 0-64 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setBusinessAccountUsername",
+    "ConvertedName": "SetBusinessAccountUsername",
+    "Description": "Changes the username of a managed business account. Requires the can_change_username business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "username",
+        "ConvertedName": "Username",
+        "Description": "The new value of the username for the business account; 0-32 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setBusinessAccountBio",
+    "ConvertedName": "SetBusinessAccountBio",
+    "Description": "Changes the bio of a managed business account. Requires the can_change_bio business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "bio",
+        "ConvertedName": "Bio",
+        "Description": "The new value of the bio for the business account; 0-140 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setBusinessAccountProfilePhoto",
+    "ConvertedName": "SetBusinessAccountProfilePhoto",
+    "Description": "Changes the profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "photo",
+        "ConvertedName": "Photo",
+        "Description": "The new profile photo to set",
+        "OriginalFieldType": "InputProfilePhoto",
+        "ConvertedFieldType": "InputProfilePhoto",
+        "Optional": false
+      },
+      {
+        "OriginalName": "is_public",
+        "ConvertedName": "IsPublic",
+        "Description": "Pass True to set the public photo, which will be visible even if the main photo is hidden by the business account\u0027s privacy settings. An account can have only one public photo.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "removeBusinessAccountProfilePhoto",
+    "ConvertedName": "RemoveBusinessAccountProfilePhoto",
+    "Description": "Removes the current profile photo of a managed business account. Requires the can_edit_profile_photo business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "is_public",
+        "ConvertedName": "IsPublic",
+        "Description": "Pass True to remove the public photo, which is visible even if the main photo is hidden by the business account\u0027s privacy settings. After the main photo is removed, the previous profile photo (if present) becomes the main photo.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "setBusinessAccountGiftSettings",
+    "ConvertedName": "SetBusinessAccountGiftSettings",
+    "Description": "Changes the privacy settings pertaining to incoming gifts in a managed business account. Requires the can_change_gift_settings business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "show_gift_button",
+        "ConvertedName": "ShowGiftButton",
+        "Description": "Pass True, if a button for sending a gift to the user or by the business account must always be shown in the input field",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": false
+      },
+      {
+        "OriginalName": "accepted_gift_types",
+        "ConvertedName": "AcceptedGiftTypes",
+        "Description": "Types of gifts accepted by the business account",
+        "OriginalFieldType": "AcceptedGiftTypes",
+        "ConvertedFieldType": "AcceptedGiftTypes",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getBusinessAccountStarBalance",
+    "ConvertedName": "GetBusinessAccountStarBalance",
+    "Description": "Returns the amount of Telegram Stars owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns StarAmount on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "StarAmount",
+    "ConvertedReturnType": "StarAmount"
+  },
+  {
+    "OriginalName": "transferBusinessAccountStars",
+    "ConvertedName": "TransferBusinessAccountStars",
+    "Description": "Transfers Telegram Stars from the business account balance to the bot\u0027s balance. Requires the can_transfer_stars business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "star_count",
+        "ConvertedName": "StarCount",
+        "Description": "Number of Telegram Stars to transfer; 1-10000",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getBusinessAccountGifts",
+    "ConvertedName": "GetBusinessAccountGifts",
+    "Description": "Returns the gifts received and owned by a managed business account. Requires the can_view_gifts_and_stars business bot right. Returns OwnedGifts on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "exclude_unsaved",
+        "ConvertedName": "ExcludeUnsaved",
+        "Description": "Pass True to exclude gifts that aren\u0027t saved to the account\u0027s profile page",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "exclude_saved",
+        "ConvertedName": "ExcludeSaved",
+        "Description": "Pass True to exclude gifts that are saved to the account\u0027s profile page",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "exclude_unlimited",
+        "ConvertedName": "ExcludeUnlimited",
+        "Description": "Pass True to exclude gifts that can be purchased an unlimited number of times",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "exclude_limited",
+        "ConvertedName": "ExcludeLimited",
+        "Description": "Pass True to exclude gifts that can be purchased a limited number of times",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "exclude_unique",
+        "ConvertedName": "ExcludeUnique",
+        "Description": "Pass True to exclude unique gifts",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "sort_by_price",
+        "ConvertedName": "SortByPrice",
+        "Description": "Pass True to sort results by gift price instead of send date. Sorting is applied before pagination.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "offset",
+        "ConvertedName": "Offset",
+        "Description": "Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of results",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "limit",
+        "ConvertedName": "Limit",
+        "Description": "The maximum number of gifts to be returned; 1-100. Defaults to 100",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "OwnedGifts",
+    "ConvertedReturnType": "OwnedGifts"
+  },
+  {
+    "OriginalName": "convertGiftToStars",
+    "ConvertedName": "ConvertGiftToStars",
+    "Description": "Converts a given regular gift to Telegram Stars. Requires the can_convert_gifts_to_stars business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "owned_gift_id",
+        "ConvertedName": "OwnedGiftId",
+        "Description": "Unique identifier of the regular gift that should be converted to Telegram Stars",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "upgradeGift",
+    "ConvertedName": "UpgradeGift",
+    "Description": "Upgrades a given regular gift to a unique gift. Requires the can_transfer_and_upgrade_gifts business bot right. Additionally requires the can_transfer_stars business bot right if the upgrade is paid. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "owned_gift_id",
+        "ConvertedName": "OwnedGiftId",
+        "Description": "Unique identifier of the regular gift that should be upgraded to a unique one",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "keep_original_details",
+        "ConvertedName": "KeepOriginalDetails",
+        "Description": "Pass True to keep the original gift text, sender and receiver in the upgraded gift",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "star_count",
+        "ConvertedName": "StarCount",
+        "Description": "The amount of Telegram Stars that will be paid for the upgrade from the business account balance. If gift.prepaid_upgrade_star_count \u003E 0, then pass 0, otherwise, the can_transfer_stars business bot right is required and gift.upgrade_star_count must be passed.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "transferGift",
+    "ConvertedName": "TransferGift",
+    "Description": "Transfers an owned unique gift to another user. Requires the can_transfer_and_upgrade_gifts business bot right. Requires can_transfer_stars business bot right if the transfer is paid. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "owned_gift_id",
+        "ConvertedName": "OwnedGiftId",
+        "Description": "Unique identifier of the regular gift that should be transferred",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "new_owner_chat_id",
+        "ConvertedName": "NewOwnerChatId",
+        "Description": "Unique identifier of the chat which will own the gift. The chat must be active in the last 24 hours.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "star_count",
+        "ConvertedName": "StarCount",
+        "Description": "The amount of Telegram Stars that will be paid for the transfer from the business account balance. If positive, then the can_transfer_stars business bot right is required.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "postStory",
+    "ConvertedName": "PostStory",
+    "Description": "Posts a story on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "content",
+        "ConvertedName": "Content",
+        "Description": "Content of the story",
+        "OriginalFieldType": "InputStoryContent",
+        "ConvertedFieldType": "InputStoryContent",
+        "Optional": false
+      },
+      {
+        "OriginalName": "active_period",
+        "ConvertedName": "ActivePeriod",
+        "Description": "Period after which the story is moved to the archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "caption",
+        "ConvertedName": "Caption",
+        "Description": "Caption of the story, 0-2048 characters after entities parsing",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "parse_mode",
+        "ConvertedName": "ParseMode",
+        "Description": "Mode for parsing entities in the story caption. See formatting options for more details.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "ParseMode",
+        "Optional": true
+      },
+      {
+        "OriginalName": "caption_entities",
+        "ConvertedName": "CaptionEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "areas",
+        "ConvertedName": "Areas",
+        "Description": "A JSON-serialized list of clickable areas to be shown on the story",
+        "OriginalFieldType": "Array of StoryArea",
+        "ConvertedFieldType": "StoryArea[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "post_to_chat_page",
+        "ConvertedName": "PostToChatPage",
+        "Description": "Pass True to keep the story accessible after it expires",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Pass True if the content of the story must be protected from forwarding and screenshotting",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Story",
+    "ConvertedReturnType": "Story"
+  },
+  {
+    "OriginalName": "editStory",
+    "ConvertedName": "EditStory",
+    "Description": "Edits a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns Story on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "story_id",
+        "ConvertedName": "StoryId",
+        "Description": "Unique identifier of the story to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "content",
+        "ConvertedName": "Content",
+        "Description": "Content of the story",
+        "OriginalFieldType": "InputStoryContent",
+        "ConvertedFieldType": "InputStoryContent",
+        "Optional": false
+      },
+      {
+        "OriginalName": "caption",
+        "ConvertedName": "Caption",
+        "Description": "Caption of the story, 0-2048 characters after entities parsing",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "parse_mode",
+        "ConvertedName": "ParseMode",
+        "Description": "Mode for parsing entities in the story caption. See formatting options for more details.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "ParseMode",
+        "Optional": true
+      },
+      {
+        "OriginalName": "caption_entities",
+        "ConvertedName": "CaptionEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "areas",
+        "ConvertedName": "Areas",
+        "Description": "A JSON-serialized list of clickable areas to be shown on the story",
+        "OriginalFieldType": "Array of StoryArea",
+        "ConvertedFieldType": "StoryArea[]",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Story",
+    "ConvertedReturnType": "Story"
+  },
+  {
+    "OriginalName": "deleteStory",
+    "ConvertedName": "DeleteStory",
+    "Description": "Deletes a story previously posted by the bot on behalf of a managed business account. Requires the can_manage_stories business bot right. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "story_id",
+        "ConvertedName": "StoryId",
+        "Description": "Unique identifier of the story to delete",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "sendSticker",
     "ConvertedName": "SendSticker",
     "Description": "Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.",
@@ -5278,163 +6125,6 @@
     "ConvertedReturnType": "bool"
   },
   {
-    "OriginalName": "getAvailableGifts",
-    "ConvertedName": "GetAvailableGifts",
-    "Description": "Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.",
-    "Fields": [],
-    "OriginalReturnType": "Gifts",
-    "ConvertedReturnType": "Gifts"
-  },
-  {
-    "OriginalName": "sendGift",
-    "ConvertedName": "SendGift",
-    "Description": "Sends a gift to the given user or channel chat. The gift can\u0027t be converted to Telegram Stars by the receiver. Returns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "user_id",
-        "ConvertedName": "UserId",
-        "Description": "Required if chat_id is not specified. Unique identifier of the target user who will receive the gift.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "gift_id",
-        "ConvertedName": "GiftId",
-        "Description": "Identifier of the gift",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": false
-      },
-      {
-        "OriginalName": "pay_for_upgrade",
-        "ConvertedName": "PayForUpgrade",
-        "Description": "Pass True to pay for the gift upgrade from the bot\u0027s balance, thereby making the upgrade free for the receiver",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "text",
-        "ConvertedName": "Text",
-        "Description": "Text that will be shown along with the gift; 0-128 characters",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "text_parse_mode",
-        "ConvertedName": "TextParseMode",
-        "Description": "Mode for parsing entities in the text. See formatting options for more details. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "text_entities",
-        "ConvertedName": "TextEntities",
-        "Description": "A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than \u201Cbold\u201D, \u201Citalic\u201D, \u201Cunderline\u201D, \u201Cstrikethrough\u201D, \u201Cspoiler\u201D, and \u201Ccustom_emoji\u201D are ignored.",
-        "OriginalFieldType": "Array of MessageEntity",
-        "ConvertedFieldType": "MessageEntity[]",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
-    "OriginalName": "verifyUser",
-    "ConvertedName": "VerifyUser",
-    "Description": "Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "user_id",
-        "ConvertedName": "UserId",
-        "Description": "Unique identifier of the target user",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": false
-      },
-      {
-        "OriginalName": "custom_description",
-        "ConvertedName": "CustomDescription",
-        "Description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn\u0027t allowed to provide a custom verification description.",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
-    "OriginalName": "verifyChat",
-    "ConvertedName": "VerifyChat",
-    "Description": "Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": false
-      },
-      {
-        "OriginalName": "custom_description",
-        "ConvertedName": "CustomDescription",
-        "Description": "Custom description for the verification; 0-70 characters. Must be empty if the organization isn\u0027t allowed to provide a custom verification description.",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
-    "OriginalName": "removeUserVerification",
-    "ConvertedName": "RemoveUserVerification",
-    "Description": "Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "user_id",
-        "ConvertedName": "UserId",
-        "Description": "Unique identifier of the target user",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": false
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
-    "OriginalName": "removeChatVerification",
-    "ConvertedName": "RemoveChatVerification",
-    "Description": "Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": false
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
     "OriginalName": "answerInlineQuery",
     "ConvertedName": "AnswerInlineQuery",
     "Description": "Use this method to send answers to an inline query. On success, True is returned.\nNo more than 50 results per query are allowed.",
@@ -5878,7 +6568,7 @@
       {
         "OriginalName": "subscription_period",
         "ConvertedName": "SubscriptionPeriod",
-        "Description": "The number of seconds the subscription will be active for before the next payment. The currency must be set to \u201CXTR\u201D (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 2500 Telegram Stars.",
+        "Description": "The number of seconds the subscription will be active for before the next payment. The currency must be set to \u201CXTR\u201D (Telegram Stars) if the parameter is used. Currently, it must always be 2592000 (30 days) if specified. Any number of subscriptions can be active for a given bot at the same time, including multiple concurrent subscriptions from the same user. Subscription price must no exceed 10000 Telegram Stars.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
