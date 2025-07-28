@@ -634,6 +634,9 @@ and [<CLIMutable>] Message =
     /// True, if the message media is covered by a spoiler animation
     [<DataMember(Name = "has_media_spoiler")>]
     HasMediaSpoiler: bool option
+    /// Message is a checklist
+    [<DataMember(Name = "checklist")>]
+    Checklist: Checklist option
     /// Message is a shared contact, information about the contact
     [<DataMember(Name = "contact")>]
     Contact: Contact option
@@ -727,6 +730,15 @@ and [<CLIMutable>] Message =
     /// Service message: chat background set
     [<DataMember(Name = "chat_background_set")>]
     ChatBackgroundSet: ChatBackground option
+    /// Service message: some tasks in a checklist were marked as done or not done
+    [<DataMember(Name = "checklist_tasks_done")>]
+    ChecklistTasksDone: ChecklistTasksDone option
+    /// Service message: tasks were added to a checklist
+    [<DataMember(Name = "checklist_tasks_added")>]
+    ChecklistTasksAdded: ChecklistTasksAdded option
+    /// Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
+    [<DataMember(Name = "direct_message_price_changed")>]
+    DirectMessagePriceChanged: DirectMessagePriceChanged option
     /// Service message: forum topic created
     [<DataMember(Name = "forum_topic_created")>]
     ForumTopicCreated: ForumTopicCreated option
@@ -779,11 +791,13 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?newChatMembers: User[], ?uniqueGift: UniqueGiftInfo, ?connectedWebsite: string, ?writeAccessAllowed: WriteAccessAllowed, ?passportData: PassportData, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?location: Location, ?giveawayCreated: GiveawayCreated, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?chatBackgroundSet: ChatBackground, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?venue: Venue, ?poll: Poll, ?game: Game, ?mediaGroupId: string, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?authorSignature: string, ?replyToMessage: Message, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?isAutomaticForward: bool, ?webAppData: WebAppData, ?paidStarCount: int64, ?entities: MessageEntity[], ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?text: string, ?video: Video, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?effectId: string, ?linkPreviewOptions: LinkPreviewOptions, ?story: Story, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?connectedWebsite: string, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateToChatId: int64, ?writeAccessAllowed: WriteAccessAllowed, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?migrateFromChatId: int64, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?boostAdded: ChatBoostAdded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?checklistTasksAdded: ChecklistTasksAdded, ?checklistTasksDone: ChecklistTasksDone, ?chatBackgroundSet: ChatBackground, ?newChatMembers: User[], ?location: Location, ?venue: Venue, ?poll: Poll, ?authorSignature: string, ?mediaGroupId: string, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?paidStarCount: int64, ?webAppData: WebAppData, ?text: string, ?linkPreviewOptions: LinkPreviewOptions, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?effectId: string, ?entities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
+      ConnectedWebsite = connectedWebsite
+      UniqueGift = uniqueGift
       Gift = gift
       ChatShared = chatShared
       UsersShared = usersShared
@@ -791,8 +805,8 @@ and [<CLIMutable>] Message =
       SuccessfulPayment = successfulPayment
       Invoice = invoice
       PinnedMessage = pinnedMessage
-      MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
+      WriteAccessAllowed = writeAccessAllowed
       MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       ChannelChatCreated = channelChatCreated
       SupergroupChatCreated = supergroupChatCreated
@@ -801,11 +815,10 @@ and [<CLIMutable>] Message =
       NewChatPhoto = newChatPhoto
       NewChatTitle = newChatTitle
       LeftChatMember = leftChatMember
-      NewChatMembers = newChatMembers
-      UniqueGift = uniqueGift
-      ConnectedWebsite = connectedWebsite
-      WriteAccessAllowed = writeAccessAllowed
+      MigrateFromChatId = migrateFromChatId
       PassportData = passportData
+      ProximityAlertTriggered = proximityAlertTriggered
+      BoostAdded = boostAdded
       VideoChatParticipantsInvited = videoChatParticipantsInvited
       VideoChatEnded = videoChatEnded
       VideoChatStarted = videoChatStarted
@@ -814,20 +827,22 @@ and [<CLIMutable>] Message =
       GiveawayCompleted = giveawayCompleted
       GiveawayWinners = giveawayWinners
       Giveaway = giveaway
-      Location = location
       GiveawayCreated = giveawayCreated
+      GeneralForumTopicUnhidden = generalForumTopicUnhidden
       GeneralForumTopicHidden = generalForumTopicHidden
       ForumTopicReopened = forumTopicReopened
       ForumTopicClosed = forumTopicClosed
       ForumTopicEdited = forumTopicEdited
       ForumTopicCreated = forumTopicCreated
+      DirectMessagePriceChanged = directMessagePriceChanged
+      ChecklistTasksAdded = checklistTasksAdded
+      ChecklistTasksDone = checklistTasksDone
       ChatBackgroundSet = chatBackgroundSet
-      BoostAdded = boostAdded
-      ProximityAlertTriggered = proximityAlertTriggered
-      GeneralForumTopicUnhidden = generalForumTopicUnhidden
+      NewChatMembers = newChatMembers
+      Location = location
       Venue = venue
       Poll = poll
-      Game = game
+      AuthorSignature = authorSignature
       MediaGroupId = mediaGroupId
       IsFromOffline = isFromOffline
       HasProtectedContent = hasProtectedContent
@@ -836,8 +851,8 @@ and [<CLIMutable>] Message =
       ReplyToStory = replyToStory
       Quote = quote
       ExternalReply = externalReply
-      AuthorSignature = authorSignature
       ReplyToMessage = replyToMessage
+      IsAutomaticForward = isAutomaticForward
       IsTopicMessage = isTopicMessage
       ForwardOrigin = forwardOrigin
       BusinessConnectionId = businessConnectionId
@@ -846,20 +861,22 @@ and [<CLIMutable>] Message =
       SenderChat = senderChat
       From = from
       MessageThreadId = messageThreadId
-      IsAutomaticForward = isAutomaticForward
-      WebAppData = webAppData
       PaidStarCount = paidStarCount
-      Entities = entities
+      WebAppData = webAppData
+      Text = text
+      LinkPreviewOptions = linkPreviewOptions
+      Game = game
       Dice = dice
       Contact = contact
+      Checklist = checklist
       HasMediaSpoiler = hasMediaSpoiler
       ShowCaptionAboveMedia = showCaptionAboveMedia
       CaptionEntities = captionEntities
       Caption = caption
       Voice = voice
       VideoNote = videoNote
-      Text = text
       Video = video
+      Story = story
       Sticker = sticker
       Photo = photo
       PaidMedia = paidMedia
@@ -867,8 +884,7 @@ and [<CLIMutable>] Message =
       Audio = audio
       Animation = animation
       EffectId = effectId
-      LinkPreviewOptions = linkPreviewOptions
-      Story = story
+      Entities = entities
       ReplyMarkup = replyMarkup
     }
 
@@ -1017,6 +1033,9 @@ and [<CLIMutable>] ExternalReplyInfo =
     /// True, if the message media is covered by a spoiler animation
     [<DataMember(Name = "has_media_spoiler")>]
     HasMediaSpoiler: bool option
+    /// Message is a checklist
+    [<DataMember(Name = "checklist")>]
+    Checklist: Checklist option
     /// Message is a shared contact, information about the contact
     [<DataMember(Name = "contact")>]
     Contact: Contact option
@@ -1045,7 +1064,7 @@ and [<CLIMutable>] ExternalReplyInfo =
     [<DataMember(Name = "venue")>]
     Venue: Venue option
   }
-  static member Create(origin: MessageOrigin, ?location: Location, ?invoice: Invoice, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?game: Game, ?dice: Dice, ?contact: Contact, ?hasMediaSpoiler: bool, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?linkPreviewOptions: LinkPreviewOptions, ?messageId: int64, ?chat: Chat, ?poll: Poll, ?venue: Venue) = 
+  static member Create(origin: MessageOrigin, ?location: Location, ?invoice: Invoice, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?voice: Voice, ?poll: Poll, ?videoNote: VideoNote, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?linkPreviewOptions: LinkPreviewOptions, ?messageId: int64, ?chat: Chat, ?video: Video, ?venue: Venue) = 
     {
       Origin = origin
       Location = location
@@ -1055,10 +1074,11 @@ and [<CLIMutable>] ExternalReplyInfo =
       Game = game
       Dice = dice
       Contact = contact
+      Checklist = checklist
       HasMediaSpoiler = hasMediaSpoiler
       Voice = voice
+      Poll = poll
       VideoNote = videoNote
-      Video = video
       Story = story
       Sticker = sticker
       Photo = photo
@@ -1069,7 +1089,7 @@ and [<CLIMutable>] ExternalReplyInfo =
       LinkPreviewOptions = linkPreviewOptions
       MessageId = messageId
       Chat = chat
-      Poll = poll
+      Video = video
       Venue = venue
     }
 
@@ -1734,6 +1754,154 @@ and [<CLIMutable>] Poll =
       CloseDate = closeDate
     }
 
+/// Describes a task in a checklist.
+and [<CLIMutable>] ChecklistTask =
+  {
+    /// Unique identifier of the task
+    [<DataMember(Name = "id")>]
+    Id: int64
+    /// Text of the task
+    [<DataMember(Name = "text")>]
+    Text: string
+    /// Special entities that appear in the task text
+    [<DataMember(Name = "text_entities")>]
+    TextEntities: MessageEntity[] option
+    /// User that completed the task; omitted if the task wasn't completed
+    [<DataMember(Name = "completed_by_user")>]
+    CompletedByUser: User option
+    /// Point in time (Unix timestamp) when the task was completed; 0 if the task wasn't completed
+    [<DataMember(Name = "completion_date")>]
+    CompletionDate: int64 option
+  }
+  static member Create(id: int64, text: string, ?textEntities: MessageEntity[], ?completedByUser: User, ?completionDate: int64) = 
+    {
+      Id = id
+      Text = text
+      TextEntities = textEntities
+      CompletedByUser = completedByUser
+      CompletionDate = completionDate
+    }
+
+/// Describes a checklist.
+and [<CLIMutable>] Checklist =
+  {
+    /// Title of the checklist
+    [<DataMember(Name = "title")>]
+    Title: string
+    /// Special entities that appear in the checklist title
+    [<DataMember(Name = "title_entities")>]
+    TitleEntities: MessageEntity[] option
+    /// List of tasks in the checklist
+    [<DataMember(Name = "tasks")>]
+    Tasks: ChecklistTask[]
+    /// True, if users other than the creator of the list can add tasks to the list
+    [<DataMember(Name = "others_can_add_tasks")>]
+    OthersCanAddTasks: bool option
+    /// True, if users other than the creator of the list can mark tasks as done or not done
+    [<DataMember(Name = "others_can_mark_tasks_as_done")>]
+    OthersCanMarkTasksAsDone: bool option
+  }
+  static member Create(title: string, tasks: ChecklistTask[], ?titleEntities: MessageEntity[], ?othersCanAddTasks: bool, ?othersCanMarkTasksAsDone: bool) = 
+    {
+      Title = title
+      Tasks = tasks
+      TitleEntities = titleEntities
+      OthersCanAddTasks = othersCanAddTasks
+      OthersCanMarkTasksAsDone = othersCanMarkTasksAsDone
+    }
+
+/// Describes a task to add to a checklist.
+and [<CLIMutable>] InputChecklistTask =
+  {
+    /// Unique identifier of the task; must be positive and unique among all task identifiers currently present in the checklist
+    [<DataMember(Name = "id")>]
+    Id: int64
+    /// Text of the task; 1-100 characters after entities parsing
+    [<DataMember(Name = "text")>]
+    Text: string
+    /// Mode for parsing entities in the text. See formatting options for more details.
+    [<DataMember(Name = "parse_mode")>]
+    ParseMode: ParseMode option
+    /// List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+    [<DataMember(Name = "text_entities")>]
+    TextEntities: MessageEntity[] option
+  }
+  static member Create(id: int64, text: string, ?parseMode: ParseMode, ?textEntities: MessageEntity[]) = 
+    {
+      Id = id
+      Text = text
+      ParseMode = parseMode
+      TextEntities = textEntities
+    }
+
+/// Describes a checklist to create.
+and [<CLIMutable>] InputChecklist =
+  {
+    /// Title of the checklist; 1-255 characters after entities parsing
+    [<DataMember(Name = "title")>]
+    Title: string
+    /// Mode for parsing entities in the title. See formatting options for more details.
+    [<DataMember(Name = "parse_mode")>]
+    ParseMode: ParseMode option
+    /// List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.
+    [<DataMember(Name = "title_entities")>]
+    TitleEntities: MessageEntity[] option
+    /// List of 1-30 tasks in the checklist
+    [<DataMember(Name = "tasks")>]
+    Tasks: InputChecklistTask[]
+    /// Pass True if other users can add tasks to the checklist
+    [<DataMember(Name = "others_can_add_tasks")>]
+    OthersCanAddTasks: bool option
+    /// Pass True if other users can mark tasks as done or not done in the checklist
+    [<DataMember(Name = "others_can_mark_tasks_as_done")>]
+    OthersCanMarkTasksAsDone: bool option
+  }
+  static member Create(title: string, tasks: InputChecklistTask[], ?parseMode: ParseMode, ?titleEntities: MessageEntity[], ?othersCanAddTasks: bool, ?othersCanMarkTasksAsDone: bool) = 
+    {
+      Title = title
+      Tasks = tasks
+      ParseMode = parseMode
+      TitleEntities = titleEntities
+      OthersCanAddTasks = othersCanAddTasks
+      OthersCanMarkTasksAsDone = othersCanMarkTasksAsDone
+    }
+
+/// Describes a service message about checklist tasks marked as done or not done.
+and [<CLIMutable>] ChecklistTasksDone =
+  {
+    /// Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "checklist_message")>]
+    ChecklistMessage: Message option
+    /// Identifiers of the tasks that were marked as done
+    [<DataMember(Name = "marked_as_done_task_ids")>]
+    MarkedAsDoneTaskIds: int64[] option
+    /// Identifiers of the tasks that were marked as not done
+    [<DataMember(Name = "marked_as_not_done_task_ids")>]
+    MarkedAsNotDoneTaskIds: int64[] option
+  }
+  static member Create(?checklistMessage: Message, ?markedAsDoneTaskIds: int64[], ?markedAsNotDoneTaskIds: int64[]) = 
+    {
+      ChecklistMessage = checklistMessage
+      MarkedAsDoneTaskIds = markedAsDoneTaskIds
+      MarkedAsNotDoneTaskIds = markedAsNotDoneTaskIds
+    }
+
+/// Describes a service message about tasks added to a checklist.
+and [<CLIMutable>] ChecklistTasksAdded =
+  {
+    /// Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "checklist_message")>]
+    ChecklistMessage: Message option
+    /// List of tasks added to the checklist
+    [<DataMember(Name = "tasks")>]
+    Tasks: ChecklistTask[]
+  }
+  static member Create(tasks: ChecklistTask[], ?checklistMessage: Message) = 
+    {
+      Tasks = tasks
+      ChecklistMessage = checklistMessage
+    }
+
 /// This object represents a point on the map.
 and [<CLIMutable>] Location =
   {
@@ -2245,6 +2413,22 @@ and [<CLIMutable>] PaidMessagePriceChanged =
   static member Create(paidMessageStarCount: int64) = 
     {
       PaidMessageStarCount = paidMessageStarCount
+    }
+
+/// Describes a service message about a change in the price of direct messages sent to a channel chat.
+and [<CLIMutable>] DirectMessagePriceChanged =
+  {
+    /// True, if direct messages are enabled for the channel chat; false otherwise
+    [<DataMember(Name = "are_direct_messages_enabled")>]
+    AreDirectMessagesEnabled: bool
+    /// The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Does not apply to users who have been exempted by administrators. Defaults to 0.
+    [<DataMember(Name = "direct_message_star_count")>]
+    DirectMessageStarCount: int64 option
+  }
+  static member Create(areDirectMessagesEnabled: bool, ?directMessageStarCount: int64) = 
+    {
+      AreDirectMessagesEnabled = areDirectMessagesEnabled
+      DirectMessageStarCount = directMessageStarCount
     }
 
 /// This object represents a service message about the creation of a scheduled giveaway.
@@ -2927,7 +3111,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user's presence in the chat is hidden
     [<DataMember(Name = "is_anonymous")>]
     IsAnonymous: bool
-    /// True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+    /// True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
     [<DataMember(Name = "can_manage_chat")>]
     CanManageChat: bool
     /// True, if the administrator can delete messages of other users
@@ -2957,7 +3141,7 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the administrator can delete stories posted by other users
     [<DataMember(Name = "can_delete_stories")>]
     CanDeleteStories: bool
-    /// True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+    /// True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
     /// True, if the administrator can edit messages of other users and can pin messages; for channels only
@@ -3081,7 +3265,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user's presence in the chat is hidden
     [<DataMember(Name = "is_anonymous")>]
     IsAnonymous: bool
-    /// True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.
+    /// True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.
     [<DataMember(Name = "can_manage_chat")>]
     CanManageChat: bool
     /// True, if the administrator can delete messages of other users
@@ -3111,7 +3295,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the administrator can delete stories posted by other users
     [<DataMember(Name = "can_delete_stories")>]
     CanDeleteStories: bool
-    /// True, if the administrator can post messages in the channel, or access channel statistics; for channels only
+    /// True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only
     [<DataMember(Name = "can_post_messages")>]
     CanPostMessages: bool option
     /// True, if the administrator can edit messages of other users and can pin messages; for channels only
@@ -3207,7 +3391,7 @@ and [<CLIMutable>] ChatMemberRestricted =
     /// True, if the user is allowed to send voice notes
     [<DataMember(Name = "can_send_voice_notes")>]
     CanSendVoiceNotes: bool
-    /// True, if the user is allowed to send polls
+    /// True, if the user is allowed to send polls and checklists
     [<DataMember(Name = "can_send_polls")>]
     CanSendPolls: bool
     /// True, if the user is allowed to send animations, games, stickers and use inline bots
@@ -3346,7 +3530,7 @@ and [<CLIMutable>] ChatPermissions =
     /// True, if the user is allowed to send voice notes
     [<DataMember(Name = "can_send_voice_notes")>]
     CanSendVoiceNotes: bool option
-    /// True, if the user is allowed to send polls
+    /// True, if the user is allowed to send polls and checklists
     [<DataMember(Name = "can_send_polls")>]
     CanSendPolls: bool option
     /// True, if the user is allowed to send animations, games, stickers and use inline bots
@@ -4030,22 +4214,30 @@ and [<CLIMutable>] UniqueGiftInfo =
     /// Information about the gift
     [<DataMember(Name = "gift")>]
     Gift: UniqueGift
-    /// Origin of the gift. Currently, either “upgrade” or “transfer”
+    /// Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, or “resale” for gifts bought from other users
     [<DataMember(Name = "origin")>]
     Origin: string
+    /// For gifts bought from other users, the price paid for the gift
+    [<DataMember(Name = "last_resale_star_count")>]
+    LastResaleStarCount: int64 option
     /// Unique identifier of the received gift for the bot; only present for gifts received on behalf of business accounts
     [<DataMember(Name = "owned_gift_id")>]
     OwnedGiftId: string option
     /// Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
     [<DataMember(Name = "transfer_star_count")>]
     TransferStarCount: int64 option
+    /// Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+    [<DataMember(Name = "next_transfer_date")>]
+    NextTransferDate: int64 option
   }
-  static member Create(gift: UniqueGift, origin: string, ?ownedGiftId: string, ?transferStarCount: int64) = 
+  static member Create(gift: UniqueGift, origin: string, ?lastResaleStarCount: int64, ?ownedGiftId: string, ?transferStarCount: int64, ?nextTransferDate: int64) = 
     {
       Gift = gift
       Origin = origin
+      LastResaleStarCount = lastResaleStarCount
       OwnedGiftId = ownedGiftId
       TransferStarCount = transferStarCount
+      NextTransferDate = nextTransferDate
     }
 
 /// This object describes a gift received and owned by a user or a chat. Currently, it can be one of
@@ -4140,8 +4332,11 @@ and [<CLIMutable>] OwnedGiftUnique =
     /// Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift
     [<DataMember(Name = "transfer_star_count")>]
     TransferStarCount: int64 option
+    /// Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now
+    [<DataMember(Name = "next_transfer_date")>]
+    NextTransferDate: int64 option
   }
-  static member Create(``type``: string, gift: UniqueGift, sendDate: int64, ?ownedGiftId: string, ?senderUser: User, ?isSaved: bool, ?canBeTransferred: bool, ?transferStarCount: int64) = 
+  static member Create(``type``: string, gift: UniqueGift, sendDate: int64, ?ownedGiftId: string, ?senderUser: User, ?isSaved: bool, ?canBeTransferred: bool, ?transferStarCount: int64, ?nextTransferDate: int64) = 
     {
       Type = ``type``
       Gift = gift
@@ -4151,6 +4346,7 @@ and [<CLIMutable>] OwnedGiftUnique =
       IsSaved = isSaved
       CanBeTransferred = canBeTransferred
       TransferStarCount = transferStarCount
+      NextTransferDate = nextTransferDate
     }
 
 /// Contains the list of gifts received and owned by a user or a chat.
@@ -4578,8 +4774,8 @@ and [<CLIMutable>] BusinessBotRights =
     [<DataMember(Name = "can_read_messages")>]
     CanReadMessages: bool option
     /// True, if the bot can delete messages sent by the bot
-    [<DataMember(Name = "can_delete_outgoing_messages")>]
-    CanDeleteOutgoingMessages: bool option
+    [<DataMember(Name = "can_delete_sent_messages")>]
+    CanDeleteSentMessages: bool option
     /// True, if the bot can delete all private messages in managed chats
     [<DataMember(Name = "can_delete_all_messages")>]
     CanDeleteAllMessages: bool option
@@ -4614,11 +4810,11 @@ and [<CLIMutable>] BusinessBotRights =
     [<DataMember(Name = "can_manage_stories")>]
     CanManageStories: bool option
   }
-  static member Create(?canReply: bool, ?canReadMessages: bool, ?canDeleteOutgoingMessages: bool, ?canDeleteAllMessages: bool, ?canEditName: bool, ?canEditBio: bool, ?canEditProfilePhoto: bool, ?canEditUsername: bool, ?canChangeGiftSettings: bool, ?canViewGiftsAndStars: bool, ?canConvertGiftsToStars: bool, ?canTransferAndUpgradeGifts: bool, ?canTransferStars: bool, ?canManageStories: bool) = 
+  static member Create(?canReply: bool, ?canReadMessages: bool, ?canDeleteSentMessages: bool, ?canDeleteAllMessages: bool, ?canEditName: bool, ?canEditBio: bool, ?canEditProfilePhoto: bool, ?canEditUsername: bool, ?canChangeGiftSettings: bool, ?canViewGiftsAndStars: bool, ?canConvertGiftsToStars: bool, ?canTransferAndUpgradeGifts: bool, ?canTransferStars: bool, ?canManageStories: bool) = 
     {
       CanReply = canReply
       CanReadMessages = canReadMessages
-      CanDeleteOutgoingMessages = canDeleteOutgoingMessages
+      CanDeleteSentMessages = canDeleteSentMessages
       CanDeleteAllMessages = canDeleteAllMessages
       CanEditName = canEditName
       CanEditBio = canEditBio

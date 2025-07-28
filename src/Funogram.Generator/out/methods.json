@@ -1682,7 +1682,7 @@
   {
     "OriginalName": "sendMediaGroup",
     "ConvertedName": "SendMediaGroup",
-    "Description": "Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Messages that were sent is returned.",
+    "Description": "Use this method to send a group of photos, videos, documents or audios as an album. Documents and audio files can be only grouped in an album with messages of the same type. On success, an array of Message objects that were sent is returned.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -1757,7 +1757,7 @@
         "Optional": true
       }
     ],
-    "OriginalReturnType": "array of Messages",
+    "OriginalReturnType": "array of Message",
     "ConvertedReturnType": "Message[]"
   },
   {
@@ -2203,7 +2203,7 @@
       {
         "OriginalName": "options",
         "ConvertedName": "Options",
-        "Description": "A JSON-serialized list of 2-10 answer options",
+        "Description": "A JSON-serialized list of 2-12 answer options",
         "OriginalFieldType": "Array of InputPollOption",
         "ConvertedFieldType": "InputPollOption[]",
         "Optional": false
@@ -2334,6 +2334,79 @@
         "Description": "Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user",
         "OriginalFieldType": "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply",
         "ConvertedFieldType": "Markup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message",
+    "ConvertedReturnType": "Message"
+  },
+  {
+    "OriginalName": "sendChecklist",
+    "ConvertedName": "SendChecklist",
+    "Description": "Use this method to send a checklist on behalf of a connected business account. On success, the sent Message is returned.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "checklist",
+        "ConvertedName": "Checklist",
+        "Description": "A JSON-serialized object for the checklist to send",
+        "OriginalFieldType": "InputChecklist",
+        "ConvertedFieldType": "InputChecklist",
+        "Optional": false
+      },
+      {
+        "OriginalName": "disable_notification",
+        "ConvertedName": "DisableNotification",
+        "Description": "Sends the message silently. Users will receive a notification with no sound.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "protect_content",
+        "ConvertedName": "ProtectContent",
+        "Description": "Protects the contents of the sent message from forwarding and saving",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_effect_id",
+        "ConvertedName": "MessageEffectId",
+        "Description": "Unique identifier of the message effect to be added to the message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_parameters",
+        "ConvertedName": "ReplyParameters",
+        "Description": "A JSON-serialized object for description of the message to reply to",
+        "OriginalFieldType": "ReplyParameters",
+        "ConvertedFieldType": "ReplyParameters",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for an inline keyboard",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
         "Optional": true
       }
     ],
@@ -2749,7 +2822,7 @@
       {
         "OriginalName": "can_manage_chat",
         "ConvertedName": "CanManageChat",
-        "Description": "Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
+        "Description": "Pass True if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -2829,7 +2902,7 @@
       {
         "OriginalName": "can_post_messages",
         "ConvertedName": "CanPostMessages",
-        "Description": "Pass True if the administrator can post messages in the channel, or access channel statistics; for channels only",
+        "Description": "Pass True if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4618,6 +4691,55 @@
     "ConvertedReturnType": "EditMessageResult"
   },
   {
+    "OriginalName": "editMessageChecklist",
+    "ConvertedName": "EditMessageChecklist",
+    "Description": "Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Unique identifier for the target message",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "checklist",
+        "ConvertedName": "Checklist",
+        "Description": "A JSON-serialized object for the new checklist",
+        "OriginalFieldType": "InputChecklist",
+        "ConvertedFieldType": "InputChecklist",
+        "Optional": false
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for the new inline keyboard for the message",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message",
+    "ConvertedReturnType": "Message"
+  },
+  {
     "OriginalName": "editMessageReplyMarkup",
     "ConvertedName": "EditMessageReplyMarkup",
     "Description": "Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
@@ -5007,7 +5129,7 @@
   {
     "OriginalName": "deleteBusinessMessages",
     "ConvertedName": "DeleteBusinessMessages",
-    "Description": "Delete messages on behalf of a business account. Requires the can_delete_outgoing_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.",
+    "Description": "Delete messages on behalf of a business account. Requires the can_delete_sent_messages business bot right to delete messages sent by the bot itself, or the can_delete_all_messages business bot right to delete any message. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -6762,6 +6884,14 @@
     ],
     "OriginalReturnType": "True",
     "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "getMyStarBalance",
+    "ConvertedName": "GetMyStarBalance",
+    "Description": "A method to get the current Telegram Stars balance of the bot. Requires no parameters. On success, returns a StarAmount object.",
+    "Fields": [],
+    "OriginalReturnType": "StarAmount",
+    "ConvertedReturnType": "StarAmount"
   },
   {
     "OriginalName": "getStarTransactions",
