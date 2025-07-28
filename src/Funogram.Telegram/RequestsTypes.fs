@@ -816,6 +816,31 @@ type SendPoll =
   interface IRequestBase<Message> with
     member _.MethodName = "sendPoll"
     
+type SendChecklist =
+  {
+    BusinessConnectionId: string
+    ChatId: int64
+    Checklist: InputChecklist
+    DisableNotification: bool option
+    ProtectContent: bool option
+    MessageEffectId: string option
+    ReplyParameters: ReplyParameters option
+    ReplyMarkup: InlineKeyboardMarkup option
+  }
+  static member Make(businessConnectionId: string, chatId: int64, checklist: InputChecklist, ?disableNotification: bool, ?protectContent: bool, ?messageEffectId: string, ?replyParameters: ReplyParameters, ?replyMarkup: InlineKeyboardMarkup) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      ChatId = chatId
+      Checklist = checklist
+      DisableNotification = disableNotification
+      ProtectContent = protectContent
+      MessageEffectId = messageEffectId
+      ReplyParameters = replyParameters
+      ReplyMarkup = replyMarkup
+    }
+  interface IRequestBase<Message> with
+    member _.MethodName = "sendChecklist"
+    
 type SendDice =
   {
     BusinessConnectionId: string option
@@ -2038,6 +2063,25 @@ type StopMessageLiveLocation =
   interface IRequestBase<EditMessageResult> with
     member _.MethodName = "stopMessageLiveLocation"
     
+type EditMessageChecklist =
+  {
+    BusinessConnectionId: string
+    ChatId: int64
+    MessageId: int64
+    Checklist: InputChecklist
+    ReplyMarkup: InlineKeyboardMarkup option
+  }
+  static member Make(businessConnectionId: string, chatId: int64, messageId: int64, checklist: InputChecklist, ?replyMarkup: InlineKeyboardMarkup) = 
+    {
+      BusinessConnectionId = businessConnectionId
+      ChatId = chatId
+      MessageId = messageId
+      Checklist = checklist
+      ReplyMarkup = replyMarkup
+    }
+  interface IRequestBase<Message> with
+    member _.MethodName = "editMessageChecklist"
+    
 type EditMessageReplyMarkup =
   {
     BusinessConnectionId: string option
@@ -2942,6 +2986,11 @@ type AnswerPreCheckoutQuery =
     }
   interface IRequestBase<bool> with
     member _.MethodName = "answerPreCheckoutQuery"
+    
+type GetMyStarBalance() =
+  static member Make() = GetMyStarBalance()
+  interface IRequestBase<StarAmount> with
+    member _.MethodName = "getMyStarBalance"
     
 type GetStarTransactions =
   {

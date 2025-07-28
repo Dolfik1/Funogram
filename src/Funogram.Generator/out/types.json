@@ -1174,6 +1174,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "checklist",
+            "ConvertedName": "Checklist",
+            "Description": "Message is a checklist",
+            "OriginalFieldType": "Checklist",
+            "ConvertedFieldType": "Checklist",
+            "Optional": true
+          },
+          {
             "OriginalName": "contact",
             "ConvertedName": "Contact",
             "Description": "Message is a shared contact, information about the contact",
@@ -1419,6 +1427,30 @@
             "Description": "Service message: chat background set",
             "OriginalFieldType": "ChatBackground",
             "ConvertedFieldType": "ChatBackground",
+            "Optional": true
+          },
+          {
+            "OriginalName": "checklist_tasks_done",
+            "ConvertedName": "ChecklistTasksDone",
+            "Description": "Service message: some tasks in a checklist were marked as done or not done",
+            "OriginalFieldType": "ChecklistTasksDone",
+            "ConvertedFieldType": "ChecklistTasksDone",
+            "Optional": true
+          },
+          {
+            "OriginalName": "checklist_tasks_added",
+            "ConvertedName": "ChecklistTasksAdded",
+            "Description": "Service message: tasks were added to a checklist",
+            "OriginalFieldType": "ChecklistTasksAdded",
+            "ConvertedFieldType": "ChecklistTasksAdded",
+            "Optional": true
+          },
+          {
+            "OriginalName": "direct_message_price_changed",
+            "ConvertedName": "DirectMessagePriceChanged",
+            "Description": "Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed",
+            "OriginalFieldType": "DirectMessagePriceChanged",
+            "ConvertedFieldType": "DirectMessagePriceChanged",
             "Optional": true
           },
           {
@@ -1869,6 +1901,14 @@
             "Description": "True, if the message media is covered by a spoiler animation",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "checklist",
+            "ConvertedName": "Checklist",
+            "Description": "Message is a checklist",
+            "OriginalFieldType": "Checklist",
+            "ConvertedFieldType": "Checklist",
             "Optional": true
           },
           {
@@ -3179,6 +3219,272 @@
     }
   },
   {
+    "Name": "ChecklistTask",
+    "Description": "Describes a task in a checklist.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the task",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the task",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text_entities",
+            "ConvertedName": "TextEntities",
+            "Description": "Special entities that appear in the task text",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "completed_by_user",
+            "ConvertedName": "CompletedByUser",
+            "Description": "User that completed the task; omitted if the task wasn\u0027t completed",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "completion_date",
+            "ConvertedName": "CompletionDate",
+            "Description": "Point in time (Unix timestamp) when the task was completed; 0 if the task wasn\u0027t completed",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "Checklist",
+    "Description": "Describes a checklist.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "title",
+            "ConvertedName": "Title",
+            "Description": "Title of the checklist",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "title_entities",
+            "ConvertedName": "TitleEntities",
+            "Description": "Special entities that appear in the checklist title",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "tasks",
+            "ConvertedName": "Tasks",
+            "Description": "List of tasks in the checklist",
+            "OriginalFieldType": "Array of ChecklistTask",
+            "ConvertedFieldType": "ChecklistTask[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "others_can_add_tasks",
+            "ConvertedName": "OthersCanAddTasks",
+            "Description": "True, if users other than the creator of the list can add tasks to the list",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "others_can_mark_tasks_as_done",
+            "ConvertedName": "OthersCanMarkTasksAsDone",
+            "Description": "True, if users other than the creator of the list can mark tasks as done or not done",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputChecklistTask",
+    "Description": "Describes a task to add to a checklist.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the task; must be positive and unique among all task identifiers currently present in the checklist",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the task; 1-100 characters after entities parsing",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "parse_mode",
+            "ConvertedName": "ParseMode",
+            "Description": "Mode for parsing entities in the text. See formatting options for more details.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "ParseMode",
+            "Optional": true
+          },
+          {
+            "OriginalName": "text_entities",
+            "ConvertedName": "TextEntities",
+            "Description": "List of special entities that appear in the text, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputChecklist",
+    "Description": "Describes a checklist to create.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "title",
+            "ConvertedName": "Title",
+            "Description": "Title of the checklist; 1-255 characters after entities parsing",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "parse_mode",
+            "ConvertedName": "ParseMode",
+            "Description": "Mode for parsing entities in the title. See formatting options for more details.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "ParseMode",
+            "Optional": true
+          },
+          {
+            "OriginalName": "title_entities",
+            "ConvertedName": "TitleEntities",
+            "Description": "List of special entities that appear in the title, which can be specified instead of parse_mode. Currently, only bold, italic, underline, strikethrough, spoiler, and custom_emoji entities are allowed.",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "tasks",
+            "ConvertedName": "Tasks",
+            "Description": "List of 1-30 tasks in the checklist",
+            "OriginalFieldType": "Array of InputChecklistTask",
+            "ConvertedFieldType": "InputChecklistTask[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "others_can_add_tasks",
+            "ConvertedName": "OthersCanAddTasks",
+            "Description": "Pass True if other users can add tasks to the checklist",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "others_can_mark_tasks_as_done",
+            "ConvertedName": "OthersCanMarkTasksAsDone",
+            "Description": "Pass True if other users can mark tasks as done or not done in the checklist",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChecklistTasksDone",
+    "Description": "Describes a service message about checklist tasks marked as done or not done.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "checklist_message",
+            "ConvertedName": "ChecklistMessage",
+            "Description": "Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "marked_as_done_task_ids",
+            "ConvertedName": "MarkedAsDoneTaskIds",
+            "Description": "Identifiers of the tasks that were marked as done",
+            "OriginalFieldType": "Array of Integer",
+            "ConvertedFieldType": "int64[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "marked_as_not_done_task_ids",
+            "ConvertedName": "MarkedAsNotDoneTaskIds",
+            "Description": "Identifiers of the tasks that were marked as not done",
+            "OriginalFieldType": "Array of Integer",
+            "ConvertedFieldType": "int64[]",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChecklistTasksAdded",
+    "Description": "Describes a service message about tasks added to a checklist.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "checklist_message",
+            "ConvertedName": "ChecklistMessage",
+            "Description": "Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "tasks",
+            "ConvertedName": "Tasks",
+            "Description": "List of tasks added to the checklist",
+            "OriginalFieldType": "Array of ChecklistTask",
+            "ConvertedFieldType": "ChecklistTask[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "Location",
     "Description": "This object represents a point on the map.",
     "Kind": {
@@ -4074,6 +4380,33 @@
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "DirectMessagePriceChanged",
+    "Description": "Describes a service message about a change in the price of direct messages sent to a channel chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "are_direct_messages_enabled",
+            "ConvertedName": "AreDirectMessagesEnabled",
+            "Description": "True, if direct messages are enabled for the channel chat; false otherwise",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
+          },
+          {
+            "OriginalName": "direct_message_star_count",
+            "ConvertedName": "DirectMessageStarCount",
+            "Description": "The new number of Telegram Stars that must be paid by users for each direct message sent to the channel. Does not apply to users who have been exempted by administrators. Defaults to 0.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
           }
         ]
       ]
@@ -5302,7 +5635,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
+            "Description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -5382,7 +5715,7 @@
           {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
-            "Description": "True, if the administrator can post messages in the channel, or access channel statistics; for channels only",
+            "Description": "True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -5618,7 +5951,7 @@
           {
             "OriginalName": "can_manage_chat",
             "ConvertedName": "CanManageChat",
-            "Description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages and ignore slow mode. Implied by any other administrator privilege.",
+            "Description": "True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members, report spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied by any other administrator privilege.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -5698,7 +6031,7 @@
           {
             "OriginalName": "can_post_messages",
             "ConvertedName": "CanPostMessages",
-            "Description": "True, if the administrator can post messages in the channel, or access channel statistics; for channels only",
+            "Description": "True, if the administrator can post messages in the channel, approve suggested posts, or access channel statistics; for channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -5872,7 +6205,7 @@
           {
             "OriginalName": "can_send_polls",
             "ConvertedName": "CanSendPolls",
-            "Description": "True, if the user is allowed to send polls",
+            "Description": "True, if the user is allowed to send polls and checklists",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -6124,7 +6457,7 @@
           {
             "OriginalName": "can_send_polls",
             "ConvertedName": "CanSendPolls",
-            "Description": "True, if the user is allowed to send polls",
+            "Description": "True, if the user is allowed to send polls and checklists",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -7356,10 +7689,18 @@
           {
             "OriginalName": "origin",
             "ConvertedName": "Origin",
-            "Description": "Origin of the gift. Currently, either \u201Cupgrade\u201D or \u201Ctransfer\u201D",
+            "Description": "Origin of the gift. Currently, either \u201Cupgrade\u201D for gifts upgraded from regular gifts, \u201Ctransfer\u201D for gifts transferred from other users or channels, or \u201Cresale\u201D for gifts bought from other users",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "last_resale_star_count",
+            "ConvertedName": "LastResaleStarCount",
+            "Description": "For gifts bought from other users, the price paid for the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
           },
           {
             "OriginalName": "owned_gift_id",
@@ -7373,6 +7714,14 @@
             "OriginalName": "transfer_star_count",
             "ConvertedName": "TransferStarCount",
             "Description": "Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "next_transfer_date",
+            "ConvertedName": "NextTransferDate",
+            "Description": "Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -7582,6 +7931,14 @@
             "OriginalName": "transfer_star_count",
             "ConvertedName": "TransferStarCount",
             "Description": "Number of Telegram Stars that must be paid to transfer the gift; omitted if the bot cannot transfer the gift",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "next_transfer_date",
+            "ConvertedName": "NextTransferDate",
+            "Description": "Point in time (Unix timestamp) when the gift can be transferred. If it is in the past, then the gift can be transferred now",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -8363,8 +8720,8 @@
             "Optional": true
           },
           {
-            "OriginalName": "can_delete_outgoing_messages",
-            "ConvertedName": "CanDeleteOutgoingMessages",
+            "OriginalName": "can_delete_sent_messages",
+            "ConvertedName": "CanDeleteSentMessages",
             "Description": "True, if the bot can delete messages sent by the bot",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",

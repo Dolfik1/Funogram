@@ -25,6 +25,7 @@ let typeMap =
     "Float number", "float"
     "InlineKeyboardMarkup or ReplyKeyboardMarkup or ReplyKeyboardRemove or ForceReply", "Markup"
     "array of Messages", "Message[]"
+    "array of Message", "Message[]"
     "array of MessageId", "MessageId[]"
     "InputMediaAudio, InputMediaDocument, InputMediaPhoto and InputMediaVideo", "InputMedia"
     "Message or True", "EditMessageResult"
