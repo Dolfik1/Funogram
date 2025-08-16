@@ -462,6 +462,14 @@
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "is_direct_messages",
+            "ConvertedName": "IsDirectMessages",
+            "Description": "True, if the chat is the direct messages chat of a channel",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -526,6 +534,14 @@
             "OriginalName": "is_forum",
             "ConvertedName": "IsForum",
             "Description": "True, if the supergroup chat is a forum (has topics enabled)",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_direct_messages",
+            "ConvertedName": "IsDirectMessages",
+            "Description": "True, if the chat is the direct messages chat of a channel",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -598,6 +614,14 @@
             "OriginalName": "personal_chat",
             "ConvertedName": "PersonalChat",
             "Description": "For private chats, the personal channel of the user",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
+          },
+          {
+            "OriginalName": "parent_chat",
+            "ConvertedName": "ParentChat",
+            "Description": "Information about the corresponding channel chat; for direct messages chats only",
             "OriginalFieldType": "Chat",
             "ConvertedFieldType": "Chat",
             "Optional": true
@@ -862,6 +886,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "direct_messages_topic",
+            "ConvertedName": "DirectMessagesTopic",
+            "Description": "Information about the direct messages chat topic that contains the message",
+            "OriginalFieldType": "DirectMessagesTopic",
+            "ConvertedFieldType": "DirectMessagesTopic",
+            "Optional": true
+          },
+          {
             "OriginalName": "from",
             "ConvertedName": "From",
             "Description": "Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats",
@@ -974,6 +1006,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "reply_to_checklist_task_id",
+            "ConvertedName": "ReplyToChecklistTaskId",
+            "Description": "Identifier of the specific checklist task that is being replied to",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "via_bot",
             "ConvertedName": "ViaBot",
             "Description": "Bot through which the message was sent",
@@ -1001,6 +1041,14 @@
             "OriginalName": "is_from_offline",
             "ConvertedName": "IsFromOffline",
             "Description": "True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_paid_post",
+            "ConvertedName": "IsPaidPost",
+            "Description": "True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can\u0027t be edited.",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -1051,6 +1099,14 @@
             "Description": "Options used for link preview generation for the message, if it is a text message and link preview options were changed",
             "OriginalFieldType": "LinkPreviewOptions",
             "ConvertedFieldType": "LinkPreviewOptions",
+            "Optional": true
+          },
+          {
+            "OriginalName": "suggested_post_info",
+            "ConvertedName": "SuggestedPostInfo",
+            "Description": "Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can\u0027t be edited.",
+            "OriginalFieldType": "SuggestedPostInfo",
+            "ConvertedFieldType": "SuggestedPostInfo",
             "Optional": true
           },
           {
@@ -1542,6 +1598,46 @@
             "Optional": true
           },
           {
+            "OriginalName": "suggested_post_approved",
+            "ConvertedName": "SuggestedPostApproved",
+            "Description": "Service message: a suggested post was approved",
+            "OriginalFieldType": "SuggestedPostApproved",
+            "ConvertedFieldType": "SuggestedPostApproved",
+            "Optional": true
+          },
+          {
+            "OriginalName": "suggested_post_approval_failed",
+            "ConvertedName": "SuggestedPostApprovalFailed",
+            "Description": "Service message: approval of a suggested post has failed",
+            "OriginalFieldType": "SuggestedPostApprovalFailed",
+            "ConvertedFieldType": "SuggestedPostApprovalFailed",
+            "Optional": true
+          },
+          {
+            "OriginalName": "suggested_post_declined",
+            "ConvertedName": "SuggestedPostDeclined",
+            "Description": "Service message: a suggested post was declined",
+            "OriginalFieldType": "SuggestedPostDeclined",
+            "ConvertedFieldType": "SuggestedPostDeclined",
+            "Optional": true
+          },
+          {
+            "OriginalName": "suggested_post_paid",
+            "ConvertedName": "SuggestedPostPaid",
+            "Description": "Service message: payment for a suggested post was received",
+            "OriginalFieldType": "SuggestedPostPaid",
+            "ConvertedFieldType": "SuggestedPostPaid",
+            "Optional": true
+          },
+          {
+            "OriginalName": "suggested_post_refunded",
+            "ConvertedName": "SuggestedPostRefunded",
+            "Description": "Service message: payment for a suggested post was refunded",
+            "OriginalFieldType": "SuggestedPostRefunded",
+            "ConvertedFieldType": "SuggestedPostRefunded",
+            "Optional": true
+          },
+          {
             "OriginalName": "video_chat_scheduled",
             "ConvertedName": "VideoChatScheduled",
             "Description": "Service message: video chat scheduled",
@@ -2005,7 +2101,7 @@
           {
             "OriginalName": "chat_id",
             "ConvertedName": "ChatId",
-            "Description": "If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.",
+            "Description": "If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account and messages from channel direct messages chats.",
             "OriginalFieldType": "Integer or String",
             "ConvertedFieldType": "ChatId",
             "Optional": true
@@ -2046,6 +2142,14 @@
             "OriginalName": "quote_position",
             "ConvertedName": "QuotePosition",
             "Description": "Position of the quote in the original message in UTF-16 code units",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "checklist_task_id",
+            "ConvertedName": "ChecklistTaskId",
+            "Description": "Identifier of the specific checklist task to be replied to",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -4413,6 +4517,165 @@
     }
   },
   {
+    "Name": "SuggestedPostApproved",
+    "Description": "Describes a service message about the approval of a suggested post.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "suggested_post_message",
+            "ConvertedName": "SuggestedPostMessage",
+            "Description": "Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "price",
+            "ConvertedName": "Price",
+            "Description": "Amount paid for the post",
+            "OriginalFieldType": "SuggestedPostPrice",
+            "ConvertedFieldType": "SuggestedPostPrice",
+            "Optional": true
+          },
+          {
+            "OriginalName": "send_date",
+            "ConvertedName": "SendDate",
+            "Description": "Date when the post will be published",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostApprovalFailed",
+    "Description": "Describes a service message about the failed approval of a suggested post. Currently, only caused by insufficient user funds at the time of approval.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "suggested_post_message",
+            "ConvertedName": "SuggestedPostMessage",
+            "Description": "Message containing the suggested post whose approval has failed. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "price",
+            "ConvertedName": "Price",
+            "Description": "Expected price of the post",
+            "OriginalFieldType": "SuggestedPostPrice",
+            "ConvertedFieldType": "SuggestedPostPrice",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostDeclined",
+    "Description": "Describes a service message about the rejection of a suggested post.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "suggested_post_message",
+            "ConvertedName": "SuggestedPostMessage",
+            "Description": "Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "comment",
+            "ConvertedName": "Comment",
+            "Description": "Comment with which the post was declined",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostPaid",
+    "Description": "Describes a service message about a successful payment for a suggested post.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "suggested_post_message",
+            "ConvertedName": "SuggestedPostMessage",
+            "Description": "Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "currency",
+            "ConvertedName": "Currency",
+            "Description": "Currency in which the payment was made. Currently, one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for toncoins",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "amount",
+            "ConvertedName": "Amount",
+            "Description": "The amount of the currency that was received by the channel in nanotoncoins; for payments in toncoins only",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "star_amount",
+            "ConvertedName": "StarAmount",
+            "Description": "The amount of Telegram Stars that was received by the channel; for payments in Telegram Stars only",
+            "OriginalFieldType": "StarAmount",
+            "ConvertedFieldType": "StarAmount",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostRefunded",
+    "Description": "Describes a service message about a payment refund for a suggested post.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "suggested_post_message",
+            "ConvertedName": "SuggestedPostMessage",
+            "Description": "Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "reason",
+            "ConvertedName": "Reason",
+            "Description": "Reason for the refund. Currently, one of \u201Cpost_deleted\u201D if the post was deleted within 24 hours of being posted or removed from scheduled messages without being posted, or \u201Cpayment_refunded\u201D if the payer refunded their payment.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "GiveawayCreated",
     "Description": "This object represents a service message about the creation of a scheduled giveaway.",
     "Kind": {
@@ -4709,6 +4972,122 @@
             "Description": "True, if the link preview must be shown above the message text; otherwise, the link preview will be shown below the message text",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostPrice",
+    "Description": "Desribes price of a suggested post.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "currency",
+            "ConvertedName": "Currency",
+            "Description": "Currency in which the post will be paid. Currently, must be one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for toncoins",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "amount",
+            "ConvertedName": "Amount",
+            "Description": "The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostInfo",
+    "Description": "Contains information about a suggested post.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "state",
+            "ConvertedName": "State",
+            "Description": "State of the suggested post. Currently, it can be one of \u201Cpending\u201D, \u201Capproved\u201D, \u201Cdeclined\u201D.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "price",
+            "ConvertedName": "Price",
+            "Description": "Proposed price of the post. If the field is omitted, then the post is unpaid.",
+            "OriginalFieldType": "SuggestedPostPrice",
+            "ConvertedFieldType": "SuggestedPostPrice",
+            "Optional": true
+          },
+          {
+            "OriginalName": "send_date",
+            "ConvertedName": "SendDate",
+            "Description": "Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user or administrator who approves it.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "SuggestedPostParameters",
+    "Description": "Contains parameters of a post that is being suggested by the bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "price",
+            "ConvertedName": "Price",
+            "Description": "Proposed price for the post. If the field is omitted, then the post is unpaid.",
+            "OriginalFieldType": "SuggestedPostPrice",
+            "ConvertedFieldType": "SuggestedPostPrice",
+            "Optional": true
+          },
+          {
+            "OriginalName": "send_date",
+            "ConvertedName": "SendDate",
+            "Description": "Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "DirectMessagesTopic",
+    "Description": "Describes a topic of a direct messages chat.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "topic_id",
+            "ConvertedName": "TopicId",
+            "Description": "Unique identifier of the topic",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "Information about the user that created the topic. Currently, it is always present",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
             "Optional": true
           }
         ]
@@ -5211,7 +5590,7 @@
           {
             "OriginalName": "switch_inline_query",
             "ConvertedName": "SwitchInlineQuery",
-            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -5219,7 +5598,7 @@
           {
             "OriginalName": "switch_inline_query_current_chat",
             "ConvertedName": "SwitchInlineQueryCurrentChat",
-            "Description": "If set, pressing the button will insert the bot\u0027s username and the specified inline query in the current chat\u0027s input field. May be empty, in which case only the bot\u0027s username will be inserted.\n\nThis offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.",
+            "Description": "If set, pressing the button will insert the bot\u0027s username and the specified inline query in the current chat\u0027s input field. May be empty, in which case only the bot\u0027s username will be inserted.\n\nThis offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a Telegram Business account.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -5227,7 +5606,7 @@
           {
             "OriginalName": "switch_inline_query_chosen_chat",
             "ConvertedName": "SwitchInlineQueryChosenChat",
-            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.",
             "OriginalFieldType": "SwitchInlineQueryChosenChat",
             "ConvertedFieldType": "SwitchInlineQueryChosenChat",
             "Optional": true
@@ -5745,6 +6124,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "can_manage_direct_messages",
+            "ConvertedName": "CanManageDirectMessages",
+            "Description": "True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "can_manage_voice_chats",
             "ConvertedName": "CanManageVoiceChats",
             "Description": "DEPRECATED: use can_manage_video_chats instead",
@@ -6056,6 +6443,14 @@
             "OriginalName": "can_manage_topics",
             "ConvertedName": "CanManageTopics",
             "Description": "True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "can_manage_direct_messages",
+            "ConvertedName": "CanManageDirectMessages",
+            "Description": "True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -7365,6 +7760,14 @@
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
+          },
+          {
+            "OriginalName": "publisher_chat",
+            "ConvertedName": "PublisherChat",
+            "Description": "Information about the chat that published the gift",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
           }
         ]
       ]
@@ -7591,6 +7994,14 @@
             "OriginalFieldType": "UniqueGiftBackdrop",
             "ConvertedFieldType": "UniqueGiftBackdrop",
             "Optional": false
+          },
+          {
+            "OriginalName": "publisher_chat",
+            "ConvertedName": "PublisherChat",
+            "Description": "Information about the chat that published the gift",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": true
           }
         ]
       ]
@@ -8212,7 +8623,7 @@
           {
             "OriginalName": "chat_id",
             "ConvertedName": "ChatId",
-            "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+            "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren\u0027t supported.",
             "OriginalFieldType": "Integer or String",
             "ConvertedFieldType": "ChatId",
             "Optional": false
@@ -8239,7 +8650,7 @@
           {
             "OriginalName": "chat_id",
             "ConvertedName": "ChatId",
-            "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+            "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren\u0027t supported.",
             "OriginalFieldType": "Integer or String",
             "ConvertedFieldType": "ChatId",
             "Optional": false
@@ -8266,7 +8677,7 @@
           {
             "OriginalName": "chat_id",
             "ConvertedName": "ChatId",
-            "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)",
+            "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren\u0027t supported.",
             "OriginalFieldType": "Integer or String",
             "ConvertedFieldType": "ChatId",
             "Optional": false

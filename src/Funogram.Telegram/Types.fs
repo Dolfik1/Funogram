@@ -308,8 +308,11 @@ and [<CLIMutable>] Chat =
     /// True, if the supergroup chat is a forum (has topics enabled)
     [<DataMember(Name = "is_forum")>]
     IsForum: bool option
+    /// True, if the chat is the direct messages chat of a channel
+    [<DataMember(Name = "is_direct_messages")>]
+    IsDirectMessages: bool option
   }
-  static member Create(id: int64, ``type``: ChatType, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool) = 
+  static member Create(id: int64, ``type``: ChatType, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?isDirectMessages: bool) = 
     {
       Id = id
       Type = ``type``
@@ -318,6 +321,7 @@ and [<CLIMutable>] Chat =
       FirstName = firstName
       LastName = lastName
       IsForum = isForum
+      IsDirectMessages = isDirectMessages
     }
 
 /// This object contains full information about a chat.
@@ -344,6 +348,9 @@ and [<CLIMutable>] ChatFullInfo =
     /// True, if the supergroup chat is a forum (has topics enabled)
     [<DataMember(Name = "is_forum")>]
     IsForum: bool option
+    /// True, if the chat is the direct messages chat of a channel
+    [<DataMember(Name = "is_direct_messages")>]
+    IsDirectMessages: bool option
     /// Identifier of the accent color for the chat name and backgrounds of the chat photo, reply header, and link preview. See accent colors for more details.
     [<DataMember(Name = "accent_color_id")>]
     AccentColorId: int64
@@ -371,6 +378,9 @@ and [<CLIMutable>] ChatFullInfo =
     /// For private chats, the personal channel of the user
     [<DataMember(Name = "personal_chat")>]
     PersonalChat: Chat option
+    /// Information about the corresponding channel chat; for direct messages chats only
+    [<DataMember(Name = "parent_chat")>]
+    ParentChat: Chat option
     /// List of available reactions allowed in the chat. If omitted, then all emoji reactions are allowed.
     [<DataMember(Name = "available_reactions")>]
     AvailableReactions: ReactionType[] option
@@ -459,13 +469,14 @@ and [<CLIMutable>] ChatFullInfo =
     [<DataMember(Name = "location")>]
     Location: ChatLocation option
   }
-  static member Create(id: int64, ``type``: string, accentColorId: int64, maxReactionCount: int64, acceptedGiftTypes: AcceptedGiftTypes, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?canSendPaidMedia: bool, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?joinToSendMessages: bool, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?unrestrictBoostCount: int64, ?hasRestrictedVoiceAndVideoMessages: bool, ?bio: string, ?linkedChatId: int64, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?hasPrivateForwards: bool, ?businessIntro: BusinessIntro, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?availableReactions: ReactionType[], ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?emojiStatusExpirationDate: int64, ?businessLocation: BusinessLocation, ?location: ChatLocation) = 
+  static member Create(id: int64, ``type``: string, accentColorId: int64, maxReactionCount: int64, acceptedGiftTypes: AcceptedGiftTypes, ?joinToSendMessages: bool, ?joinByRequest: bool, ?description: string, ?inviteLink: string, ?pinnedMessage: Message, ?permissions: ChatPermissions, ?canSendPaidMedia: bool, ?slowModeDelay: int64, ?messageAutoDeleteTime: int64, ?hasRestrictedVoiceAndVideoMessages: bool, ?hasAggressiveAntiSpamEnabled: bool, ?hasHiddenMembers: bool, ?hasProtectedContent: bool, ?hasVisibleHistory: bool, ?stickerSetName: string, ?canSetStickerSet: bool, ?customEmojiStickerSetName: string, ?unrestrictBoostCount: int64, ?hasPrivateForwards: bool, ?emojiStatusExpirationDate: int64, ?linkedChatId: int64, ?title: string, ?username: string, ?firstName: string, ?lastName: string, ?isForum: bool, ?isDirectMessages: bool, ?photo: ChatPhoto, ?activeUsernames: string[], ?birthdate: Birthdate, ?businessIntro: BusinessIntro, ?businessLocation: BusinessLocation, ?businessOpeningHours: BusinessOpeningHours, ?personalChat: Chat, ?parentChat: Chat, ?availableReactions: ReactionType[], ?backgroundCustomEmojiId: string, ?profileAccentColorId: int64, ?profileBackgroundCustomEmojiId: string, ?emojiStatusCustomEmojiId: string, ?bio: string, ?location: ChatLocation) = 
     {
       Id = id
       Type = ``type``
       AccentColorId = accentColorId
       MaxReactionCount = maxReactionCount
       AcceptedGiftTypes = acceptedGiftTypes
+      JoinToSendMessages = joinToSendMessages
       JoinByRequest = joinByRequest
       Description = description
       InviteLink = inviteLink
@@ -474,7 +485,7 @@ and [<CLIMutable>] ChatFullInfo =
       CanSendPaidMedia = canSendPaidMedia
       SlowModeDelay = slowModeDelay
       MessageAutoDeleteTime = messageAutoDeleteTime
-      JoinToSendMessages = joinToSendMessages
+      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
       HasAggressiveAntiSpamEnabled = hasAggressiveAntiSpamEnabled
       HasHiddenMembers = hasHiddenMembers
       HasProtectedContent = hasProtectedContent
@@ -483,28 +494,29 @@ and [<CLIMutable>] ChatFullInfo =
       CanSetStickerSet = canSetStickerSet
       CustomEmojiStickerSetName = customEmojiStickerSetName
       UnrestrictBoostCount = unrestrictBoostCount
-      HasRestrictedVoiceAndVideoMessages = hasRestrictedVoiceAndVideoMessages
-      Bio = bio
+      HasPrivateForwards = hasPrivateForwards
+      EmojiStatusExpirationDate = emojiStatusExpirationDate
       LinkedChatId = linkedChatId
       Title = title
       Username = username
       FirstName = firstName
       LastName = lastName
       IsForum = isForum
+      IsDirectMessages = isDirectMessages
       Photo = photo
       ActiveUsernames = activeUsernames
       Birthdate = birthdate
-      HasPrivateForwards = hasPrivateForwards
       BusinessIntro = businessIntro
+      BusinessLocation = businessLocation
       BusinessOpeningHours = businessOpeningHours
       PersonalChat = personalChat
+      ParentChat = parentChat
       AvailableReactions = availableReactions
       BackgroundCustomEmojiId = backgroundCustomEmojiId
       ProfileAccentColorId = profileAccentColorId
       ProfileBackgroundCustomEmojiId = profileBackgroundCustomEmojiId
       EmojiStatusCustomEmojiId = emojiStatusCustomEmojiId
-      EmojiStatusExpirationDate = emojiStatusExpirationDate
-      BusinessLocation = businessLocation
+      Bio = bio
       Location = location
     }
 
@@ -517,6 +529,9 @@ and [<CLIMutable>] Message =
     /// Unique identifier of a message thread to which the message belongs; for supergroups only
     [<DataMember(Name = "message_thread_id")>]
     MessageThreadId: int64 option
+    /// Information about the direct messages chat topic that contains the message
+    [<DataMember(Name = "direct_messages_topic")>]
+    DirectMessagesTopic: DirectMessagesTopic option
     /// Sender of the message; may be empty for messages sent to channels. For backward compatibility, if the message was sent on behalf of a chat, the field contains a fake sender user in non-channel chats
     [<DataMember(Name = "from")>]
     From: User option
@@ -559,6 +574,9 @@ and [<CLIMutable>] Message =
     /// For replies to a story, the original story
     [<DataMember(Name = "reply_to_story")>]
     ReplyToStory: Story option
+    /// Identifier of the specific checklist task that is being replied to
+    [<DataMember(Name = "reply_to_checklist_task_id")>]
+    ReplyToChecklistTaskId: int64 option
     /// Bot through which the message was sent
     [<DataMember(Name = "via_bot")>]
     ViaBot: User option
@@ -571,6 +589,9 @@ and [<CLIMutable>] Message =
     /// True, if the message was sent by an implicit action, for example, as an away or a greeting business message, or as a scheduled message
     [<DataMember(Name = "is_from_offline")>]
     IsFromOffline: bool option
+    /// True, if the message is a paid post. Note that such posts must not be deleted for 24 hours to receive the payment and can't be edited.
+    [<DataMember(Name = "is_paid_post")>]
+    IsPaidPost: bool option
     /// The unique identifier of a media message group this message belongs to
     [<DataMember(Name = "media_group_id")>]
     MediaGroupId: string option
@@ -589,6 +610,9 @@ and [<CLIMutable>] Message =
     /// Options used for link preview generation for the message, if it is a text message and link preview options were changed
     [<DataMember(Name = "link_preview_options")>]
     LinkPreviewOptions: LinkPreviewOptions option
+    /// Information about suggested post parameters if the message is a suggested post in a channel direct messages chat. If the message is an approved or declined suggested post, then it can't be edited.
+    [<DataMember(Name = "suggested_post_info")>]
+    SuggestedPostInfo: SuggestedPostInfo option
     /// Unique identifier of the message effect added to the message
     [<DataMember(Name = "effect_id")>]
     EffectId: string option
@@ -772,6 +796,21 @@ and [<CLIMutable>] Message =
     /// Service message: the price for paid messages has changed in the chat
     [<DataMember(Name = "paid_message_price_changed")>]
     PaidMessagePriceChanged: PaidMessagePriceChanged option
+    /// Service message: a suggested post was approved
+    [<DataMember(Name = "suggested_post_approved")>]
+    SuggestedPostApproved: SuggestedPostApproved option
+    /// Service message: approval of a suggested post has failed
+    [<DataMember(Name = "suggested_post_approval_failed")>]
+    SuggestedPostApprovalFailed: SuggestedPostApprovalFailed option
+    /// Service message: a suggested post was declined
+    [<DataMember(Name = "suggested_post_declined")>]
+    SuggestedPostDeclined: SuggestedPostDeclined option
+    /// Service message: payment for a suggested post was received
+    [<DataMember(Name = "suggested_post_paid")>]
+    SuggestedPostPaid: SuggestedPostPaid option
+    /// Service message: payment for a suggested post was refunded
+    [<DataMember(Name = "suggested_post_refunded")>]
+    SuggestedPostRefunded: SuggestedPostRefunded option
     /// Service message: video chat scheduled
     [<DataMember(Name = "video_chat_scheduled")>]
     VideoChatScheduled: VideoChatScheduled option
@@ -791,11 +830,14 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?connectedWebsite: string, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?pinnedMessage: MaybeInaccessibleMessage, ?migrateToChatId: int64, ?writeAccessAllowed: WriteAccessAllowed, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?leftChatMember: User, ?migrateFromChatId: int64, ?passportData: PassportData, ?proximityAlertTriggered: ProximityAlertTriggered, ?boostAdded: ChatBoostAdded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?checklistTasksAdded: ChecklistTasksAdded, ?checklistTasksDone: ChecklistTasksDone, ?chatBackgroundSet: ChatBackground, ?newChatMembers: User[], ?location: Location, ?venue: Venue, ?poll: Poll, ?authorSignature: string, ?mediaGroupId: string, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?messageThreadId: int64, ?paidStarCount: int64, ?webAppData: WebAppData, ?text: string, ?linkPreviewOptions: LinkPreviewOptions, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?effectId: string, ?entities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?pinnedMessage: MaybeInaccessibleMessage, ?boostAdded: ChatBoostAdded, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?invoice: Invoice, ?chatBackgroundSet: ChatBackground, ?checklistTasksDone: ChecklistTasksDone, ?checklistTasksAdded: ChecklistTasksAdded, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?suggestedPostRefunded: SuggestedPostRefunded, ?suggestedPostPaid: SuggestedPostPaid, ?suggestedPostDeclined: SuggestedPostDeclined, ?suggestedPostApprovalFailed: SuggestedPostApprovalFailed, ?suggestedPostApproved: SuggestedPostApproved, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?giveawayCompleted: GiveawayCompleted, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?leftChatMember: User, ?newChatMembers: User[], ?venue: Venue, ?webAppData: WebAppData, ?mediaGroupId: string, ?isPaidPost: bool, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?viaBot: User, ?replyToChecklistTaskId: int64, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?directMessagesTopic: DirectMessagesTopic, ?messageThreadId: int64, ?authorSignature: string, ?paidStarCount: int64, ?text: string, ?entities: MessageEntity[], ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?location: Location, ?videoNote: VideoNote, ?story: Story, ?sticker: Sticker, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?document: Document, ?audio: Audio, ?animation: Animation, ?effectId: string, ?suggestedPostInfo: SuggestedPostInfo, ?linkPreviewOptions: LinkPreviewOptions, ?video: Video, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
+      ProximityAlertTriggered = proximityAlertTriggered
+      PassportData = passportData
+      WriteAccessAllowed = writeAccessAllowed
       ConnectedWebsite = connectedWebsite
       UniqueGift = uniqueGift
       Gift = gift
@@ -803,10 +845,10 @@ and [<CLIMutable>] Message =
       UsersShared = usersShared
       RefundedPayment = refundedPayment
       SuccessfulPayment = successfulPayment
-      Invoice = invoice
       PinnedMessage = pinnedMessage
+      BoostAdded = boostAdded
+      MigrateFromChatId = migrateFromChatId
       MigrateToChatId = migrateToChatId
-      WriteAccessAllowed = writeAccessAllowed
       MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       ChannelChatCreated = channelChatCreated
       SupergroupChatCreated = supergroupChatCreated
@@ -814,15 +856,19 @@ and [<CLIMutable>] Message =
       DeleteChatPhoto = deleteChatPhoto
       NewChatPhoto = newChatPhoto
       NewChatTitle = newChatTitle
-      LeftChatMember = leftChatMember
-      MigrateFromChatId = migrateFromChatId
-      PassportData = passportData
-      ProximityAlertTriggered = proximityAlertTriggered
-      BoostAdded = boostAdded
+      Invoice = invoice
+      ChatBackgroundSet = chatBackgroundSet
+      ChecklistTasksDone = checklistTasksDone
+      ChecklistTasksAdded = checklistTasksAdded
       VideoChatParticipantsInvited = videoChatParticipantsInvited
       VideoChatEnded = videoChatEnded
       VideoChatStarted = videoChatStarted
       VideoChatScheduled = videoChatScheduled
+      SuggestedPostRefunded = suggestedPostRefunded
+      SuggestedPostPaid = suggestedPostPaid
+      SuggestedPostDeclined = suggestedPostDeclined
+      SuggestedPostApprovalFailed = suggestedPostApprovalFailed
+      SuggestedPostApproved = suggestedPostApproved
       PaidMessagePriceChanged = paidMessagePriceChanged
       GiveawayCompleted = giveawayCompleted
       GiveawayWinners = giveawayWinners
@@ -835,19 +881,17 @@ and [<CLIMutable>] Message =
       ForumTopicEdited = forumTopicEdited
       ForumTopicCreated = forumTopicCreated
       DirectMessagePriceChanged = directMessagePriceChanged
-      ChecklistTasksAdded = checklistTasksAdded
-      ChecklistTasksDone = checklistTasksDone
-      ChatBackgroundSet = chatBackgroundSet
+      LeftChatMember = leftChatMember
       NewChatMembers = newChatMembers
-      Location = location
       Venue = venue
-      Poll = poll
-      AuthorSignature = authorSignature
+      WebAppData = webAppData
       MediaGroupId = mediaGroupId
+      IsPaidPost = isPaidPost
       IsFromOffline = isFromOffline
       HasProtectedContent = hasProtectedContent
       EditDate = editDate
       ViaBot = viaBot
+      ReplyToChecklistTaskId = replyToChecklistTaskId
       ReplyToStory = replyToStory
       Quote = quote
       ExternalReply = externalReply
@@ -860,11 +904,13 @@ and [<CLIMutable>] Message =
       SenderBoostCount = senderBoostCount
       SenderChat = senderChat
       From = from
+      DirectMessagesTopic = directMessagesTopic
       MessageThreadId = messageThreadId
+      AuthorSignature = authorSignature
       PaidStarCount = paidStarCount
-      WebAppData = webAppData
       Text = text
-      LinkPreviewOptions = linkPreviewOptions
+      Entities = entities
+      Poll = poll
       Game = game
       Dice = dice
       Contact = contact
@@ -874,8 +920,8 @@ and [<CLIMutable>] Message =
       CaptionEntities = captionEntities
       Caption = caption
       Voice = voice
+      Location = location
       VideoNote = videoNote
-      Video = video
       Story = story
       Sticker = sticker
       Photo = photo
@@ -884,7 +930,9 @@ and [<CLIMutable>] Message =
       Audio = audio
       Animation = animation
       EffectId = effectId
-      Entities = entities
+      SuggestedPostInfo = suggestedPostInfo
+      LinkPreviewOptions = linkPreviewOptions
+      Video = video
       ReplyMarkup = replyMarkup
     }
 
@@ -1099,7 +1147,7 @@ and [<CLIMutable>] ReplyParameters =
     /// Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified
     [<DataMember(Name = "message_id")>]
     MessageId: int64
-    /// If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account.
+    /// If the message to be replied to is from a different chat, unique identifier for the chat or username of the channel (in the format @channelusername). Not supported for messages sent on behalf of a business account and messages from channel direct messages chats.
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId option
     /// Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.
@@ -1117,8 +1165,11 @@ and [<CLIMutable>] ReplyParameters =
     /// Position of the quote in the original message in UTF-16 code units
     [<DataMember(Name = "quote_position")>]
     QuotePosition: int64 option
+    /// Identifier of the specific checklist task to be replied to
+    [<DataMember(Name = "checklist_task_id")>]
+    ChecklistTaskId: int64 option
   }
-  static member Create(messageId: int64, ?chatId: ChatId, ?allowSendingWithoutReply: bool, ?quote: string, ?quoteParseMode: string, ?quoteEntities: MessageEntity[], ?quotePosition: int64) = 
+  static member Create(messageId: int64, ?chatId: ChatId, ?allowSendingWithoutReply: bool, ?quote: string, ?quoteParseMode: string, ?quoteEntities: MessageEntity[], ?quotePosition: int64, ?checklistTaskId: int64) = 
     {
       MessageId = messageId
       ChatId = chatId
@@ -1127,6 +1178,7 @@ and [<CLIMutable>] ReplyParameters =
       QuoteParseMode = quoteParseMode
       QuoteEntities = quoteEntities
       QuotePosition = quotePosition
+      ChecklistTaskId = checklistTaskId
     }
 
 /// This object describes the origin of a message. It can be one of
@@ -2431,6 +2483,98 @@ and [<CLIMutable>] DirectMessagePriceChanged =
       DirectMessageStarCount = directMessageStarCount
     }
 
+/// Describes a service message about the approval of a suggested post.
+and [<CLIMutable>] SuggestedPostApproved =
+  {
+    /// Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "suggested_post_message")>]
+    SuggestedPostMessage: Message option
+    /// Amount paid for the post
+    [<DataMember(Name = "price")>]
+    Price: SuggestedPostPrice option
+    /// Date when the post will be published
+    [<DataMember(Name = "send_date")>]
+    SendDate: int64
+  }
+  static member Create(sendDate: int64, ?price: SuggestedPostPrice, ?suggestedPostMessage: Message) = 
+    {
+      SendDate = sendDate
+      Price = price
+      SuggestedPostMessage = suggestedPostMessage
+    }
+
+/// Describes a service message about the failed approval of a suggested post. Currently, only caused by insufficient user funds at the time of approval.
+and [<CLIMutable>] SuggestedPostApprovalFailed =
+  {
+    /// Message containing the suggested post whose approval has failed. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "suggested_post_message")>]
+    SuggestedPostMessage: Message option
+    /// Expected price of the post
+    [<DataMember(Name = "price")>]
+    Price: SuggestedPostPrice
+  }
+  static member Create(price: SuggestedPostPrice, ?suggestedPostMessage: Message) = 
+    {
+      Price = price
+      SuggestedPostMessage = suggestedPostMessage
+    }
+
+/// Describes a service message about the rejection of a suggested post.
+and [<CLIMutable>] SuggestedPostDeclined =
+  {
+    /// Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "suggested_post_message")>]
+    SuggestedPostMessage: Message option
+    /// Comment with which the post was declined
+    [<DataMember(Name = "comment")>]
+    Comment: string option
+  }
+  static member Create(?suggestedPostMessage: Message, ?comment: string) = 
+    {
+      SuggestedPostMessage = suggestedPostMessage
+      Comment = comment
+    }
+
+/// Describes a service message about a successful payment for a suggested post.
+and [<CLIMutable>] SuggestedPostPaid =
+  {
+    /// Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "suggested_post_message")>]
+    SuggestedPostMessage: Message option
+    /// Currency in which the payment was made. Currently, one of “XTR” for Telegram Stars or “TON” for toncoins
+    [<DataMember(Name = "currency")>]
+    Currency: string
+    /// The amount of the currency that was received by the channel in nanotoncoins; for payments in toncoins only
+    [<DataMember(Name = "amount")>]
+    Amount: int64 option
+    /// The amount of Telegram Stars that was received by the channel; for payments in Telegram Stars only
+    [<DataMember(Name = "star_amount")>]
+    StarAmount: StarAmount option
+  }
+  static member Create(currency: string, ?suggestedPostMessage: Message, ?amount: int64, ?starAmount: StarAmount) = 
+    {
+      Currency = currency
+      SuggestedPostMessage = suggestedPostMessage
+      Amount = amount
+      StarAmount = starAmount
+    }
+
+/// Describes a service message about a payment refund for a suggested post.
+and [<CLIMutable>] SuggestedPostRefunded =
+  {
+    /// Message containing the suggested post. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.
+    [<DataMember(Name = "suggested_post_message")>]
+    SuggestedPostMessage: Message option
+    /// Reason for the refund. Currently, one of “post_deleted” if the post was deleted within 24 hours of being posted or removed from scheduled messages without being posted, or “payment_refunded” if the payer refunded their payment.
+    [<DataMember(Name = "reason")>]
+    Reason: string
+  }
+  static member Create(reason: string, ?suggestedPostMessage: Message) = 
+    {
+      Reason = reason
+      SuggestedPostMessage = suggestedPostMessage
+    }
+
 /// This object represents a service message about the creation of a scheduled giveaway.
 and [<CLIMutable>] GiveawayCreated =
   {
@@ -2593,6 +2737,74 @@ and [<CLIMutable>] LinkPreviewOptions =
       PreferSmallMedia = preferSmallMedia
       PreferLargeMedia = preferLargeMedia
       ShowAboveText = showAboveText
+    }
+
+/// Desribes price of a suggested post.
+and [<CLIMutable>] SuggestedPostPrice =
+  {
+    /// Currency in which the post will be paid. Currently, must be one of “XTR” for Telegram Stars or “TON” for toncoins
+    [<DataMember(Name = "currency")>]
+    Currency: string
+    /// The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.
+    [<DataMember(Name = "amount")>]
+    Amount: int64
+  }
+  static member Create(currency: string, amount: int64) = 
+    {
+      Currency = currency
+      Amount = amount
+    }
+
+/// Contains information about a suggested post.
+and [<CLIMutable>] SuggestedPostInfo =
+  {
+    /// State of the suggested post. Currently, it can be one of “pending”, “approved”, “declined”.
+    [<DataMember(Name = "state")>]
+    State: string
+    /// Proposed price of the post. If the field is omitted, then the post is unpaid.
+    [<DataMember(Name = "price")>]
+    Price: SuggestedPostPrice option
+    /// Proposed send date of the post. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user or administrator who approves it.
+    [<DataMember(Name = "send_date")>]
+    SendDate: int64 option
+  }
+  static member Create(state: string, ?price: SuggestedPostPrice, ?sendDate: int64) = 
+    {
+      State = state
+      Price = price
+      SendDate = sendDate
+    }
+
+/// Contains parameters of a post that is being suggested by the bot.
+and [<CLIMutable>] SuggestedPostParameters =
+  {
+    /// Proposed price for the post. If the field is omitted, then the post is unpaid.
+    [<DataMember(Name = "price")>]
+    Price: SuggestedPostPrice option
+    /// Proposed send date of the post. If specified, then the date must be between 300 second and 2678400 seconds (30 days) in the future. If the field is omitted, then the post can be published at any time within 30 days at the sole discretion of the user who approves it.
+    [<DataMember(Name = "send_date")>]
+    SendDate: int64 option
+  }
+  static member Create(?price: SuggestedPostPrice, ?sendDate: int64) = 
+    {
+      Price = price
+      SendDate = sendDate
+    }
+
+/// Describes a topic of a direct messages chat.
+and [<CLIMutable>] DirectMessagesTopic =
+  {
+    /// Unique identifier of the topic
+    [<DataMember(Name = "topic_id")>]
+    TopicId: int64
+    /// Information about the user that created the topic. Currently, it is always present
+    [<DataMember(Name = "user")>]
+    User: User option
+  }
+  static member Create(topicId: int64, ?user: User) = 
+    {
+      TopicId = topicId
+      User = user
     }
 
 /// This object represent a user's profile pictures.
@@ -2866,15 +3078,15 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
     [<DataMember(Name = "login_url")>]
     LoginUrl: LoginUrl option
-    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent on behalf of a Telegram Business account.
+    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
     [<DataMember(Name = "switch_inline_query")>]
     SwitchInlineQuery: string option
     /// If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted.
     /// 
-    /// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent on behalf of a Telegram Business account.
+    /// This offers a quick way for the user to open your bot in inline mode in the same chat - good for selecting something from multiple options. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
     [<DataMember(Name = "switch_inline_query_current_chat")>]
     SwitchInlineQueryCurrentChat: string option
-    /// If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent on behalf of a Telegram Business account.
+    /// If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a Telegram Business account.
     [<DataMember(Name = "switch_inline_query_chosen_chat")>]
     SwitchInlineQueryChosenChat: SwitchInlineQueryChosenChat option
     /// Description of the button that copies the specified text to the clipboard.
@@ -3153,23 +3365,27 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
+    /// True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
+    [<DataMember(Name = "can_manage_direct_messages")>]
+    CanManageDirectMessages: bool option
     /// DEPRECATED: use can_manage_video_chats instead
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canManageChat: bool, canDeleteMessages: bool, canManageVideoChats: bool, canRestrictMembers: bool, canPromoteMembers: bool, canChangeInfo: bool, canInviteUsers: bool, canPostStories: bool, canEditStories: bool, canDeleteStories: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(isAnonymous: bool, canDeleteStories: bool, canEditStories: bool, canInviteUsers: bool, canChangeInfo: bool, canPostStories: bool, canRestrictMembers: bool, canManageVideoChats: bool, canDeleteMessages: bool, canManageChat: bool, canPromoteMembers: bool, ?canManageDirectMessages: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
     {
       IsAnonymous = isAnonymous
-      CanManageChat = canManageChat
-      CanDeleteMessages = canDeleteMessages
-      CanManageVideoChats = canManageVideoChats
-      CanRestrictMembers = canRestrictMembers
-      CanPromoteMembers = canPromoteMembers
-      CanChangeInfo = canChangeInfo
-      CanInviteUsers = canInviteUsers
-      CanPostStories = canPostStories
-      CanEditStories = canEditStories
       CanDeleteStories = canDeleteStories
+      CanEditStories = canEditStories
+      CanInviteUsers = canInviteUsers
+      CanChangeInfo = canChangeInfo
+      CanPostStories = canPostStories
+      CanRestrictMembers = canRestrictMembers
+      CanManageVideoChats = canManageVideoChats
+      CanDeleteMessages = canDeleteMessages
+      CanManageChat = canManageChat
+      CanPromoteMembers = canPromoteMembers
+      CanManageDirectMessages = canManageDirectMessages
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
@@ -3307,6 +3523,9 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only
     [<DataMember(Name = "can_manage_topics")>]
     CanManageTopics: bool option
+    /// True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
+    [<DataMember(Name = "can_manage_direct_messages")>]
+    CanManageDirectMessages: bool option
     /// Custom title for this user
     [<DataMember(Name = "custom_title")>]
     CustomTitle: string option
@@ -3314,16 +3533,16 @@ and [<CLIMutable>] ChatMemberAdministrator =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(status: string, canDeleteStories: bool, canEditStories: bool, canPostStories: bool, canInviteUsers: bool, canPromoteMembers: bool, canRestrictMembers: bool, canChangeInfo: bool, canDeleteMessages: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canManageVideoChats: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageVoiceChats: bool) = 
+  static member Create(status: string, canDeleteStories: bool, canEditStories: bool, canPostStories: bool, canChangeInfo: bool, canPromoteMembers: bool, canRestrictMembers: bool, canInviteUsers: bool, canDeleteMessages: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canManageVideoChats: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageDirectMessages: bool, ?canManageVoiceChats: bool) = 
     {
       Status = status
       CanDeleteStories = canDeleteStories
       CanEditStories = canEditStories
       CanPostStories = canPostStories
-      CanInviteUsers = canInviteUsers
+      CanChangeInfo = canChangeInfo
       CanPromoteMembers = canPromoteMembers
       CanRestrictMembers = canRestrictMembers
-      CanChangeInfo = canChangeInfo
+      CanInviteUsers = canInviteUsers
       CanDeleteMessages = canDeleteMessages
       CanManageChat = canManageChat
       IsAnonymous = isAnonymous
@@ -3335,6 +3554,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
       CanManageTopics = canManageTopics
+      CanManageDirectMessages = canManageDirectMessages
       CanManageVoiceChats = canManageVoiceChats
     }
 
@@ -4029,8 +4249,11 @@ and [<CLIMutable>] Gift =
     /// The number of remaining gifts of this type that can be sent; for limited gifts only
     [<DataMember(Name = "remaining_count")>]
     RemainingCount: int64 option
+    /// Information about the chat that published the gift
+    [<DataMember(Name = "publisher_chat")>]
+    PublisherChat: Chat option
   }
-  static member Create(id: string, sticker: Sticker, starCount: int64, ?upgradeStarCount: int64, ?totalCount: int64, ?remainingCount: int64) = 
+  static member Create(id: string, sticker: Sticker, starCount: int64, ?upgradeStarCount: int64, ?totalCount: int64, ?remainingCount: int64, ?publisherChat: Chat) = 
     {
       Id = id
       Sticker = sticker
@@ -4038,6 +4261,7 @@ and [<CLIMutable>] Gift =
       UpgradeStarCount = upgradeStarCount
       TotalCount = totalCount
       RemainingCount = remainingCount
+      PublisherChat = publisherChat
     }
 
 /// This object represent a list of gifts.
@@ -4157,8 +4381,11 @@ and [<CLIMutable>] UniqueGift =
     /// Backdrop of the gift
     [<DataMember(Name = "backdrop")>]
     Backdrop: UniqueGiftBackdrop
+    /// Information about the chat that published the gift
+    [<DataMember(Name = "publisher_chat")>]
+    PublisherChat: Chat option
   }
-  static member Create(baseName: string, name: string, number: int64, model: UniqueGiftModel, symbol: UniqueGiftSymbol, backdrop: UniqueGiftBackdrop) = 
+  static member Create(baseName: string, name: string, number: int64, model: UniqueGiftModel, symbol: UniqueGiftSymbol, backdrop: UniqueGiftBackdrop, ?publisherChat: Chat) = 
     {
       BaseName = baseName
       Name = name
@@ -4166,6 +4393,7 @@ and [<CLIMutable>] UniqueGift =
       Model = model
       Symbol = symbol
       Backdrop = backdrop
+      PublisherChat = publisherChat
     }
 
 /// Describes a service message about a regular gift that was sent or received.
@@ -4489,7 +4717,7 @@ and [<CLIMutable>] BotCommandScopeChat =
     /// Scope type, must be chat
     [<DataMember(Name = "type")>]
     Type: string
-    /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+    /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported.
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId
   }
@@ -4505,7 +4733,7 @@ and [<CLIMutable>] BotCommandScopeChatAdministrators =
     /// Scope type, must be chat_administrators
     [<DataMember(Name = "type")>]
     Type: string
-    /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+    /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported.
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId
   }
@@ -4521,7 +4749,7 @@ and [<CLIMutable>] BotCommandScopeChatMember =
     /// Scope type, must be chat_member
     [<DataMember(Name = "type")>]
     Type: string
-    /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername)
+    /// Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel direct messages chats and channel chats aren't supported.
     [<DataMember(Name = "chat_id")>]
     ChatId: ChatId
     /// Unique identifier of the target user
