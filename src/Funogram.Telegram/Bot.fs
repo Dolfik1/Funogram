@@ -106,8 +106,8 @@ let private runBot config me updateArrived updatesArrived =
   | None ->
     let rec loopAsync offset =
       async {
-        if Async.DefaultCancellationToken.IsCancellationRequested then
-          return ()
+        let! ct = Async.CancellationToken
+        if ct.IsCancellationRequested then return ()
         try
           let! updatesResult =
             Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout, ?allowedUpdates = (config.AllowedUpdates |> Option.map Seq.toArray))

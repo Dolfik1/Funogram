@@ -468,6 +468,7 @@ module Api =
   
   let makeRequestAsync<'a> config (request: IBotRequest) =
     async {
+      let! ct = Async.CancellationToken
       let client = config.Client
       let url = getUrl config request.MethodName
       let serialize =
@@ -487,8 +488,8 @@ module Api =
       let mutable statusCode = -1
       try
         let! result =
-          if hasData then client.PostAsync(url, content, cancellationToken = Async.DefaultCancellationToken) |> Async.AwaitTask
-          else client.GetAsync(url, cancellationToken = Async.DefaultCancellationToken) |> Async.AwaitTask
+          if hasData then client.PostAsync(url, content, cancellationToken = ct) |> Async.AwaitTask
+          else client.GetAsync(url, cancellationToken = ct) |> Async.AwaitTask
         
         statusCode <- result.StatusCode |> int
         
@@ -505,6 +506,7 @@ module Api =
 
   let makeJsonBodyRequestAsync<'a, 'b when 'a :> IRequestBase<'b>> config (request: 'a) =
     async {
+      let! ct = Async.CancellationToken
       let client = config.Client
       let url = getUrl config request.MethodName
       
@@ -517,7 +519,7 @@ module Api =
       try
         use content = new ByteArrayContent(bytes)
         content.Headers.ContentType <- MediaTypeHeaderValue.Parse("application/json")
-        let! result = client.PostAsync(url, content, cancellationToken = Async.DefaultCancellationToken) |> Async.AwaitTask
+        let! result = client.PostAsync(url, content, cancellationToken = ct) |> Async.AwaitTask
         statusCode <- result.StatusCode |> int
         
         use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask

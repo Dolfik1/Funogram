@@ -19,24 +19,27 @@ type ConsoleLogger(color: ConsoleColor) =
   
 [<EntryPoint>]
 let main _ =
+  let cts = new CancellationTokenSource()
   Console.CancelKeyPress.Add(fun x ->
     x.Cancel <- true
-    Async.CancelDefaultToken()
+    cts.Cancel()
   )
   
   AppDomain.CurrentDomain.ProcessExit.Add(fun _ ->
-    Async.CancelDefaultToken()
+    cts.Cancel()
   )
   
   try
-    async {
-      let config = Config.defaultConfig |> Config.withReadTokenFromFile
-      let config =
-        { config with
-            RequestLogger = Some (ConsoleLogger(ConsoleColor.Green)) }
-      let! _ = Api.deleteWebhookBase () |> api config
-      return! startBot config Commands.Base.updateArrived None
-    } |> Async.RunSynchronously
+    Async.RunSynchronously(
+      async {
+        let config = Config.defaultConfig |> Config.withReadTokenFromFile
+        let config =
+          { config with
+              RequestLogger = Some (ConsoleLogger(ConsoleColor.Green)) }
+        let! _ = Api.deleteWebhookBase () |> api config
+        return! startBot config Commands.Base.updateArrived None
+      }, cancellationToken = cts.Token
+    )
   with
   | :? OperationCanceledException ->
     printfn "Graceful shutdown completed!"
