@@ -470,7 +470,6 @@ module Api =
     async {
       let client = config.Client
       let url = getUrl config request.MethodName
-      
       let serialize =
         multipartSerializers.GetOrAdd(
           request.GetType(),
@@ -488,8 +487,8 @@ module Api =
       let mutable statusCode = -1
       try
         let! result =
-          if hasData then client.PostAsync(url, content) |> Async.AwaitTask
-          else client.GetAsync(url) |> Async.AwaitTask
+          if hasData then client.PostAsync(url, content, cancellationToken = Async.DefaultCancellationToken) |> Async.AwaitTask
+          else client.GetAsync(url, cancellationToken = Async.DefaultCancellationToken) |> Async.AwaitTask
         
         statusCode <- result.StatusCode |> int
         
@@ -518,7 +517,7 @@ module Api =
       try
         use content = new ByteArrayContent(bytes)
         content.Headers.ContentType <- MediaTypeHeaderValue.Parse("application/json")
-        let! result = client.PostAsync(url, content) |> Async.AwaitTask
+        let! result = client.PostAsync(url, content, cancellationToken = Async.DefaultCancellationToken) |> Async.AwaitTask
         statusCode <- result.StatusCode |> int
         
         use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
