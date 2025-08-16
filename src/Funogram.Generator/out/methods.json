@@ -184,6 +184,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "text",
         "ConvertedName": "Text",
         "Description": "Text of the message to be sent, 1-4096 characters after entities parsing",
@@ -248,6 +256,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -289,6 +305,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be forwarded; required if the message is forwarded to a direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "from_chat_id",
         "ConvertedName": "FromChatId",
         "Description": "Unique identifier for the chat where the original message was sent (or channel username in the format @channelusername)",
@@ -321,6 +345,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "message_id",
         "ConvertedName": "MessageId",
         "Description": "Message identifier in the chat specified in from_chat_id",
@@ -349,6 +381,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the messages will be forwarded; required if the messages are forwarded to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -406,6 +446,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -491,6 +539,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -527,6 +583,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -600,6 +664,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -685,6 +757,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -729,6 +809,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -830,6 +918,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -874,6 +970,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -959,6 +1063,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1003,6 +1115,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1144,6 +1264,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1188,6 +1316,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1305,6 +1441,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1349,6 +1493,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1426,6 +1578,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1470,6 +1630,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1539,6 +1707,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1578,6 +1754,22 @@
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
+      },
+      {
+        "OriginalName": "message_thread_id",
+        "ConvertedName": "MessageThreadId",
+        "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
       },
       {
         "OriginalName": "star_count",
@@ -1660,6 +1852,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1704,6 +1904,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the messages will be sent; required if the messages are sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -1790,6 +1998,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "latitude",
         "ConvertedName": "Latitude",
         "Description": "Latitude of the location",
@@ -1870,6 +2086,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -1914,6 +2138,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2015,6 +2247,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -2059,6 +2299,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -2128,6 +2376,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -2163,7 +2419,7 @@
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername). Polls can\u0027t be sent to channel direct messages chats.",
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
@@ -2443,6 +2699,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "emoji",
         "ConvertedName": "Emoji",
         "Description": "Emoji on which the dice throw animation is based. Currently, must be one of \u201C\u201D, \u201C\u201D, \u201C\u201D, \u201C\u201D, \u201C\u201D, or \u201C\u201D. Dice can have values 1-6 for \u201C\u201D, \u201C\u201D and \u201C\u201D, values 1-5 for \u201C\u201D and \u201C\u201D, and values 1-64 for \u201C\u201D. Defaults to \u201C\u201D",
@@ -2483,6 +2747,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "reply_parameters",
         "ConvertedName": "ReplyParameters",
         "Description": "Description of the message to reply to",
@@ -2518,7 +2790,7 @@
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "Description": "Unique identifier for the target chat or username of the target supergroup (in the format @supergroupusername). Channel chats and channel direct messages chats aren\u0027t supported.",
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
@@ -2927,6 +3199,14 @@
         "OriginalName": "can_manage_topics",
         "ConvertedName": "CanManageTopics",
         "Description": "Pass True if the user is allowed to create, rename, close, and reopen forum topics; for supergroups only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_manage_direct_messages",
+        "ConvertedName": "CanManageDirectMessages",
+        "Description": "Pass True if the administrator can manage direct messages within the channel and decline suggested posts; for channels only",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -3418,7 +3698,7 @@
   {
     "OriginalName": "pinChatMessage",
     "ConvertedName": "PinChatMessage",
-    "Description": "Use this method to add a message to the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the \u0027can_pin_messages\u0027 administrator right in a supergroup or \u0027can_edit_messages\u0027 administrator right in a channel. Returns True on success.",
+    "Description": "Use this method to add a message to the list of pinned messages in a chat. In private chats and channel direct messages chats, all non-service messages can be pinned. Conversely, the bot must be an administrator with the \u0027can_pin_messages\u0027 right or the \u0027can_edit_messages\u0027 right to pin messages in groups and channels respectively. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -3459,7 +3739,7 @@
   {
     "OriginalName": "unpinChatMessage",
     "ConvertedName": "UnpinChatMessage",
-    "Description": "Use this method to remove a message from the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the \u0027can_pin_messages\u0027 administrator right in a supergroup or \u0027can_edit_messages\u0027 administrator right in a channel. Returns True on success.",
+    "Description": "Use this method to remove a message from the list of pinned messages in a chat. In private chats and channel direct messages chats, all messages can be unpinned. Conversely, the bot must be an administrator with the \u0027can_pin_messages\u0027 right or the \u0027can_edit_messages\u0027 right to unpin messages in groups and channels respectively. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -3492,7 +3772,7 @@
   {
     "OriginalName": "unpinAllChatMessages",
     "ConvertedName": "UnpinAllChatMessages",
-    "Description": "Use this method to clear the list of pinned messages in a chat. If the chat is not a private chat, the bot must be an administrator in the chat for this to work and must have the \u0027can_pin_messages\u0027 administrator right in a supergroup or \u0027can_edit_messages\u0027 administrator right in a channel. Returns True on success.",
+    "Description": "Use this method to clear the list of pinned messages in a chat. In private chats and channel direct messages chats, no additional rights are required to unpin all pinned messages. Conversely, the bot must be an administrator with the \u0027can_pin_messages\u0027 right or the \u0027can_edit_messages\u0027 right to unpin all pinned messages in groups and channels respectively. Returns True on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -3514,7 +3794,7 @@
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername)",
+        "Description": "Unique identifier for the target chat or username of the target supergroup or channel (in the format @channelusername). Channel direct messages chats aren\u0027t supported; leave the corresponding channel instead.",
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
@@ -4326,560 +4606,6 @@
     "ConvertedReturnType": "ChatAdministratorRights"
   },
   {
-    "OriginalName": "editMessageText",
-    "ConvertedName": "EditMessageText",
-    "Description": "Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "text",
-        "ConvertedName": "Text",
-        "Description": "New text of the message, 1-4096 characters after entities parsing",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": false
-      },
-      {
-        "OriginalName": "parse_mode",
-        "ConvertedName": "ParseMode",
-        "Description": "Mode for parsing entities in the message text. See formatting options for more details.",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "ParseMode",
-        "Optional": true
-      },
-      {
-        "OriginalName": "entities",
-        "ConvertedName": "Entities",
-        "Description": "A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode",
-        "OriginalFieldType": "Array of MessageEntity",
-        "ConvertedFieldType": "MessageEntity[]",
-        "Optional": true
-      },
-      {
-        "OriginalName": "link_preview_options",
-        "ConvertedName": "LinkPreviewOptions",
-        "Description": "Link preview generation options for the message",
-        "OriginalFieldType": "LinkPreviewOptions",
-        "ConvertedFieldType": "LinkPreviewOptions",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for an inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "editMessageCaption",
-    "ConvertedName": "EditMessageCaption",
-    "Description": "Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "caption",
-        "ConvertedName": "Caption",
-        "Description": "New caption of the message, 0-1024 characters after entities parsing",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "parse_mode",
-        "ConvertedName": "ParseMode",
-        "Description": "Mode for parsing entities in the message caption. See formatting options for more details.",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "ParseMode",
-        "Optional": true
-      },
-      {
-        "OriginalName": "caption_entities",
-        "ConvertedName": "CaptionEntities",
-        "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
-        "OriginalFieldType": "Array of MessageEntity",
-        "ConvertedFieldType": "MessageEntity[]",
-        "Optional": true
-      },
-      {
-        "OriginalName": "show_caption_above_media",
-        "ConvertedName": "ShowCaptionAboveMedia",
-        "Description": "Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.",
-        "OriginalFieldType": "Boolean",
-        "ConvertedFieldType": "bool",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for an inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "editMessageMedia",
-    "ConvertedName": "EditMessageMedia",
-    "Description": "Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "media",
-        "ConvertedName": "Media",
-        "Description": "A JSON-serialized object for a new media content of the message",
-        "OriginalFieldType": "InputMedia",
-        "ConvertedFieldType": "InputMedia",
-        "Optional": false
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for a new inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "editMessageLiveLocation",
-    "ConvertedName": "EditMessageLiveLocation",
-    "Description": "Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "latitude",
-        "ConvertedName": "Latitude",
-        "Description": "Latitude of new location",
-        "OriginalFieldType": "Float",
-        "ConvertedFieldType": "float",
-        "Optional": false
-      },
-      {
-        "OriginalName": "longitude",
-        "ConvertedName": "Longitude",
-        "Description": "Longitude of new location",
-        "OriginalFieldType": "Float",
-        "ConvertedFieldType": "float",
-        "Optional": false
-      },
-      {
-        "OriginalName": "live_period",
-        "ConvertedName": "LivePeriod",
-        "Description": "New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "horizontal_accuracy",
-        "ConvertedName": "HorizontalAccuracy",
-        "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
-        "OriginalFieldType": "Float",
-        "ConvertedFieldType": "float",
-        "Optional": true
-      },
-      {
-        "OriginalName": "heading",
-        "ConvertedName": "Heading",
-        "Description": "Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "proximity_alert_radius",
-        "ConvertedName": "ProximityAlertRadius",
-        "Description": "The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for a new inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "stopMessageLiveLocation",
-    "ConvertedName": "StopMessageLiveLocation",
-    "Description": "Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message with live location to stop",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for a new inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "editMessageChecklist",
-    "ConvertedName": "EditMessageChecklist",
-    "Description": "Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": false
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": false
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Unique identifier for the target message",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": false
-      },
-      {
-        "OriginalName": "checklist",
-        "ConvertedName": "Checklist",
-        "Description": "A JSON-serialized object for the new checklist",
-        "OriginalFieldType": "InputChecklist",
-        "ConvertedFieldType": "InputChecklist",
-        "Optional": false
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for the new inline keyboard for the message",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message",
-    "ConvertedReturnType": "Message"
-  },
-  {
-    "OriginalName": "editMessageReplyMarkup",
-    "ConvertedName": "EditMessageReplyMarkup",
-    "Description": "Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": true
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "inline_message_id",
-        "ConvertedName": "InlineMessageId",
-        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for an inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Message or True",
-    "ConvertedReturnType": "EditMessageResult"
-  },
-  {
-    "OriginalName": "stopPoll",
-    "ConvertedName": "StopPoll",
-    "Description": "Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.",
-    "Fields": [
-      {
-        "OriginalName": "business_connection_id",
-        "ConvertedName": "BusinessConnectionId",
-        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
-        "Optional": true
-      },
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": false
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Identifier of the original message with the poll",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": false
-      },
-      {
-        "OriginalName": "reply_markup",
-        "ConvertedName": "ReplyMarkup",
-        "Description": "A JSON-serialized object for a new message inline keyboard.",
-        "OriginalFieldType": "InlineKeyboardMarkup",
-        "ConvertedFieldType": "InlineKeyboardMarkup",
-        "Optional": true
-      }
-    ],
-    "OriginalReturnType": "Poll",
-    "ConvertedReturnType": "Poll"
-  },
-  {
-    "OriginalName": "deleteMessage",
-    "ConvertedName": "DeleteMessage",
-    "Description": "Use this method to delete a message, including service messages, with the following limitations:\n- A message can only be deleted if it was sent less than 48 hours ago.\n- Service messages about a supergroup, channel, or forum topic creation can\u0027t be deleted.\n- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.\n- Bots can delete outgoing messages in private chats, groups, and supergroups.\n- Bots can delete incoming messages in private chats.\n- Bots granted can_post_messages permissions can delete outgoing messages in channels.\n- If the bot is an administrator of a group, it can delete any message there.\n- If the bot has can_delete_messages permission in a supergroup or a channel, it can delete any message there.\nReturns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": false
-      },
-      {
-        "OriginalName": "message_id",
-        "ConvertedName": "MessageId",
-        "Description": "Identifier of the message to delete",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": false
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
-    "OriginalName": "deleteMessages",
-    "ConvertedName": "DeleteMessages",
-    "Description": "Use this method to delete multiple messages simultaneously. If some of the specified messages can\u0027t be found, they are skipped. Returns True on success.",
-    "Fields": [
-      {
-        "OriginalName": "chat_id",
-        "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
-        "OriginalFieldType": "Integer or String",
-        "ConvertedFieldType": "ChatId",
-        "Optional": false
-      },
-      {
-        "OriginalName": "message_ids",
-        "ConvertedName": "MessageIds",
-        "Description": "A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted",
-        "OriginalFieldType": "Array of Integer",
-        "ConvertedFieldType": "int64[]",
-        "Optional": false
-      }
-    ],
-    "OriginalReturnType": "True",
-    "ConvertedReturnType": "bool"
-  },
-  {
     "OriginalName": "getAvailableGifts",
     "ConvertedName": "GetAvailableGifts",
     "Description": "Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.",
@@ -5042,7 +4768,7 @@
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can\u0027t be verified.",
         "OriginalFieldType": "Integer or String",
         "ConvertedFieldType": "ChatId",
         "Optional": false
@@ -5727,6 +5453,626 @@
     "ConvertedReturnType": "bool"
   },
   {
+    "OriginalName": "editMessageText",
+    "ConvertedName": "EditMessageText",
+    "Description": "Use this method to edit text and game messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "text",
+        "ConvertedName": "Text",
+        "Description": "New text of the message, 1-4096 characters after entities parsing",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "parse_mode",
+        "ConvertedName": "ParseMode",
+        "Description": "Mode for parsing entities in the message text. See formatting options for more details.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "ParseMode",
+        "Optional": true
+      },
+      {
+        "OriginalName": "entities",
+        "ConvertedName": "Entities",
+        "Description": "A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "link_preview_options",
+        "ConvertedName": "LinkPreviewOptions",
+        "Description": "Link preview generation options for the message",
+        "OriginalFieldType": "LinkPreviewOptions",
+        "ConvertedFieldType": "LinkPreviewOptions",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for an inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "editMessageCaption",
+    "ConvertedName": "EditMessageCaption",
+    "Description": "Use this method to edit captions of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "caption",
+        "ConvertedName": "Caption",
+        "Description": "New caption of the message, 0-1024 characters after entities parsing",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "parse_mode",
+        "ConvertedName": "ParseMode",
+        "Description": "Mode for parsing entities in the message caption. See formatting options for more details.",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "ParseMode",
+        "Optional": true
+      },
+      {
+        "OriginalName": "caption_entities",
+        "ConvertedName": "CaptionEntities",
+        "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
+        "OriginalFieldType": "Array of MessageEntity",
+        "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True, if the caption must be shown above the message media. Supported only for animation, photo and video messages.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for an inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "editMessageMedia",
+    "ConvertedName": "EditMessageMedia",
+    "Description": "Use this method to edit animation, audio, document, photo, or video messages, or to add media to text messages. If a message is part of a message album, then it can be edited only to an audio for audio albums, only to a document for document albums and to a photo or a video otherwise. When an inline message is edited, a new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "media",
+        "ConvertedName": "Media",
+        "Description": "A JSON-serialized object for a new media content of the message",
+        "OriginalFieldType": "InputMedia",
+        "ConvertedFieldType": "InputMedia",
+        "Optional": false
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for a new inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "editMessageLiveLocation",
+    "ConvertedName": "EditMessageLiveLocation",
+    "Description": "Use this method to edit live location messages. A location can be edited until its live_period expires or editing is explicitly disabled by a call to stopMessageLiveLocation. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "latitude",
+        "ConvertedName": "Latitude",
+        "Description": "Latitude of new location",
+        "OriginalFieldType": "Float",
+        "ConvertedFieldType": "float",
+        "Optional": false
+      },
+      {
+        "OriginalName": "longitude",
+        "ConvertedName": "Longitude",
+        "Description": "Longitude of new location",
+        "OriginalFieldType": "Float",
+        "ConvertedFieldType": "float",
+        "Optional": false
+      },
+      {
+        "OriginalName": "live_period",
+        "ConvertedName": "LivePeriod",
+        "Description": "New period in seconds during which the location can be updated, starting from the message send date. If 0x7FFFFFFF is specified, then the location can be updated forever. Otherwise, the new value must not exceed the current live_period by more than a day, and the live location expiration date must remain within the next 90 days. If not specified, then live_period remains unchanged",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "horizontal_accuracy",
+        "ConvertedName": "HorizontalAccuracy",
+        "Description": "The radius of uncertainty for the location, measured in meters; 0-1500",
+        "OriginalFieldType": "Float",
+        "ConvertedFieldType": "float",
+        "Optional": true
+      },
+      {
+        "OriginalName": "heading",
+        "ConvertedName": "Heading",
+        "Description": "Direction in which the user is moving, in degrees. Must be between 1 and 360 if specified.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "proximity_alert_radius",
+        "ConvertedName": "ProximityAlertRadius",
+        "Description": "The maximum distance for proximity alerts about approaching another chat member, in meters. Must be between 1 and 100000 if specified.",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for a new inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "stopMessageLiveLocation",
+    "ConvertedName": "StopMessageLiveLocation",
+    "Description": "Use this method to stop updating a live location message before live_period expires. On success, if the message is not an inline message, the edited Message is returned, otherwise True is returned.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message with live location to stop",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for a new inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "editMessageChecklist",
+    "ConvertedName": "EditMessageChecklist",
+    "Description": "Use this method to edit a checklist on behalf of a connected business account. On success, the edited Message is returned.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message will be sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": false
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Unique identifier for the target message",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "checklist",
+        "ConvertedName": "Checklist",
+        "Description": "A JSON-serialized object for the new checklist",
+        "OriginalFieldType": "InputChecklist",
+        "ConvertedFieldType": "InputChecklist",
+        "Optional": false
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for the new inline keyboard for the message",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message",
+    "ConvertedReturnType": "Message"
+  },
+  {
+    "OriginalName": "editMessageReplyMarkup",
+    "ConvertedName": "EditMessageReplyMarkup",
+    "Description": "Use this method to edit only the reply markup of messages. On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned. Note that business messages that were not sent by the bot and do not contain an inline keyboard can only be edited within 48 hours from the time they were sent.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Required if inline_message_id is not specified. Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": true
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Required if inline_message_id is not specified. Identifier of the message to edit",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "inline_message_id",
+        "ConvertedName": "InlineMessageId",
+        "Description": "Required if chat_id and message_id are not specified. Identifier of the inline message",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for an inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Message or True",
+    "ConvertedReturnType": "EditMessageResult"
+  },
+  {
+    "OriginalName": "stopPoll",
+    "ConvertedName": "StopPoll",
+    "Description": "Use this method to stop a poll which was sent by the bot. On success, the stopped Poll is returned.",
+    "Fields": [
+      {
+        "OriginalName": "business_connection_id",
+        "ConvertedName": "BusinessConnectionId",
+        "Description": "Unique identifier of the business connection on behalf of which the message to be edited was sent",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Identifier of the original message with the poll",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "reply_markup",
+        "ConvertedName": "ReplyMarkup",
+        "Description": "A JSON-serialized object for a new message inline keyboard.",
+        "OriginalFieldType": "InlineKeyboardMarkup",
+        "ConvertedFieldType": "InlineKeyboardMarkup",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "Poll",
+    "ConvertedReturnType": "Poll"
+  },
+  {
+    "OriginalName": "approveSuggestedPost",
+    "ConvertedName": "ApproveSuggestedPost",
+    "Description": "Use this method to approve a suggested post in a direct messages chat. The bot must have the \u0027can_post_messages\u0027 administrator right in the corresponding channel chat. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Identifier of a suggested post message to approve",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "send_date",
+        "ConvertedName": "SendDate",
+        "Description": "Point in time (Unix timestamp) when the post is expected to be published; omit if the date has already been specified when the suggested post was created. If specified, then the date must be not more than 2678400 seconds (30 days) in the future",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "declineSuggestedPost",
+    "ConvertedName": "DeclineSuggestedPost",
+    "Description": "Use this method to decline a suggested post in a direct messages chat. The bot must have the \u0027can_manage_direct_messages\u0027 administrator right in the corresponding channel chat. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Identifier of a suggested post message to decline",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      },
+      {
+        "OriginalName": "comment",
+        "ConvertedName": "Comment",
+        "Description": "Comment for the creator of the suggested post; 0-128 characters",
+        "OriginalFieldType": "String",
+        "ConvertedFieldType": "string",
+        "Optional": true
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "deleteMessage",
+    "ConvertedName": "DeleteMessage",
+    "Description": "Use this method to delete a message, including service messages, with the following limitations:\n- A message can only be deleted if it was sent less than 48 hours ago.\n- Service messages about a supergroup, channel, or forum topic creation can\u0027t be deleted.\n- A dice message in a private chat can only be deleted if it was sent more than 24 hours ago.\n- Bots can delete outgoing messages in private chats, groups, and supergroups.\n- Bots can delete incoming messages in private chats.\n- Bots granted can_post_messages permissions can delete outgoing messages in channels.\n- If the bot is an administrator of a group, it can delete any message there.\n- If the bot has can_delete_messages administrator right in a supergroup or a channel, it can delete any message there.\n- If the bot has can_manage_direct_messages administrator right in a channel, it can delete any message in the corresponding direct messages chat.\nReturns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_id",
+        "ConvertedName": "MessageId",
+        "Description": "Identifier of the message to delete",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
+    "OriginalName": "deleteMessages",
+    "ConvertedName": "DeleteMessages",
+    "Description": "Use this method to delete multiple messages simultaneously. If some of the specified messages can\u0027t be found, they are skipped. Returns True on success.",
+    "Fields": [
+      {
+        "OriginalName": "chat_id",
+        "ConvertedName": "ChatId",
+        "Description": "Unique identifier for the target chat or username of the target channel (in the format @channelusername)",
+        "OriginalFieldType": "Integer or String",
+        "ConvertedFieldType": "ChatId",
+        "Optional": false
+      },
+      {
+        "OriginalName": "message_ids",
+        "ConvertedName": "MessageIds",
+        "Description": "A JSON-serialized list of 1-100 identifiers of messages to delete. See deleteMessage for limitations on which messages can be deleted",
+        "OriginalFieldType": "Array of Integer",
+        "ConvertedFieldType": "int64[]",
+        "Optional": false
+      }
+    ],
+    "OriginalReturnType": "True",
+    "ConvertedReturnType": "bool"
+  },
+  {
     "OriginalName": "sendSticker",
     "ConvertedName": "SendSticker",
     "Description": "Use this method to send static .WEBP, animated .TGS, or video .WEBM stickers. On success, the sent Message is returned.",
@@ -5751,6 +6097,14 @@
         "OriginalName": "message_thread_id",
         "ConvertedName": "MessageThreadId",
         "Description": "Unique identifier for the target message thread (topic) of the forum; for forum supergroups only",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -5801,6 +6155,14 @@
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
         "Optional": true
       },
       {
@@ -6407,6 +6769,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "direct_messages_topic_id",
+        "ConvertedName": "DirectMessagesTopicId",
+        "Description": "Identifier of the direct messages topic to which the message will be sent; required if the message is sent to a direct messages chat",
+        "OriginalFieldType": "Integer",
+        "ConvertedFieldType": "int64",
+        "Optional": true
+      },
+      {
         "OriginalName": "title",
         "ConvertedName": "Title",
         "Description": "Product name, 1-32 characters",
@@ -6604,6 +6974,14 @@
         "Description": "Unique identifier of the message effect to be added to the message; for private chats only",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
+        "Optional": true
+      },
+      {
+        "OriginalName": "suggested_post_parameters",
+        "ConvertedName": "SuggestedPostParameters",
+        "Description": "A JSON-serialized object containing the parameters of the suggested post to send; for direct messages chats only. If the message is sent as a reply to another suggested post, then that suggested post is automatically declined.",
+        "OriginalFieldType": "SuggestedPostParameters",
+        "ConvertedFieldType": "SuggestedPostParameters",
         "Optional": true
       },
       {
@@ -7017,7 +7395,7 @@
       {
         "OriginalName": "chat_id",
         "ConvertedName": "ChatId",
-        "Description": "Unique identifier for the target chat",
+        "Description": "Unique identifier for the target chat. Games can\u0027t be sent to channel direct messages chats and channel chats.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false

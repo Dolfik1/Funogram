@@ -69,6 +69,8 @@ module Constants =
       DisableNotification = None
       ProtectContent = None
       VideoStartTimestamp = None
+      DirectMessagesTopicId = None
+      SuggestedPostParameters = None
     }: Req.ForwardMessage) :> IBotRequest
   let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
   
