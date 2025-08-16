@@ -1,7 +1,6 @@
 ﻿module Funogram.TestBot.Program
 
 open System
-open System.Threading
 open Funogram.TestBot
 open Funogram.Api
 open Funogram.Telegram
@@ -19,25 +18,12 @@ type ConsoleLogger(color: ConsoleColor) =
   
 [<EntryPoint>]
 let main _ =
-  Console.CancelKeyPress.Add(fun x ->
-    x.Cancel <- true
-    Async.CancelDefaultToken()
-  )
-  
-  AppDomain.CurrentDomain.ProcessExit.Add(fun _ ->
-    Async.CancelDefaultToken()
-  )
-  
-  try
-    async {
-      let config = Config.defaultConfig |> Config.withReadTokenFromFile
-      let config =
-        { config with
-            RequestLogger = Some (ConsoleLogger(ConsoleColor.Green)) }
-      let! _ = Api.deleteWebhookBase () |> api config
-      return! startBot config Commands.Base.updateArrived None
-    } |> Async.RunSynchronously
-  with
-  | :? OperationCanceledException ->
-    printfn "Graceful shutdown completed!"
+  async {
+    let config = Config.defaultConfig |> Config.withReadTokenFromFile
+    let config =
+      { config with
+          RequestLogger = Some (ConsoleLogger(ConsoleColor.Green)) }
+    let! _ = Api.deleteWebhookBase () |> api config
+    return! startBot config Commands.Base.updateArrived None
+  } |> Async.RunSynchronously
   0

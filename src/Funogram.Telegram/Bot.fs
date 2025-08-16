@@ -106,8 +106,6 @@ let private runBot config me updateArrived updatesArrived =
   | None ->
     let rec loopAsync offset =
       async {
-        if Async.DefaultCancellationToken.IsCancellationRequested then
-          return ()
         try
           let! updatesResult =
             Req.GetUpdates.Make(offset, ?limit = config.Limit, ?timeout = config.Timeout, ?allowedUpdates = (config.AllowedUpdates |> Option.map Seq.toArray))
@@ -115,7 +113,7 @@ let private runBot config me updateArrived updatesArrived =
 
           match updatesResult with
           | Ok updates when updates |> Seq.isEmpty |> not ->
-            let offset = updates |> Seq.map (_.UpdateId) |> Seq.max |> fun x -> x + 1L
+            let offset = updates |> Seq.map (fun f -> f.UpdateId) |> Seq.max |> fun x -> x + 1L
             processUpdates updates
             return! loopAsync offset // send new offset
           | Error e ->
