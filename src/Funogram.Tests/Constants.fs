@@ -18,11 +18,11 @@ module Constants =
                             )
                           )
 
-  let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None; Language = None; CustomEmojiId = None }
+  let jsonTestObj = { Type = "italic"; Offset = 0L; Length = 100L; Url = Some("http://github.com"); User = None; Language = None; CustomEmojiId = None; UnixTime = None; DateTimeFormat = None }
   let jsonTestObjString = """{"type":"italic","offset":0,"length":100,"url":"http://github.com"}"""
   let jsonTestObjResultString = """{"ok":true,"result":{"type":"italic","offset":0,"length":100,"url":"http://github.com","user":null,"language":null} }"""
 
-  let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; CanJoinGroups = None; CanReadAllGroupMessages = None; SupportsInlineQueries = None; IsPremium = None; AddedToAttachmentMenu = None; CanConnectToBusiness = None; HasMainWebApp = None }
+  let jsonTestObjUser = { Id = 123456L; FirstName = "BotFather"; LastName = None; Username = (Some "BotFather"); LanguageCode = None; IsBot = false; CanJoinGroups = None; CanReadAllGroupMessages = None; SupportsInlineQueries = None; IsPremium = None; AddedToAttachmentMenu = None; CanConnectToBusiness = None; HasMainWebApp = None; SupportsGuestQueries = None; HasTopicsEnabled = None; AllowsUsersToCreateTopics = None; CanManageBots = None; SupportsJoinRequestQueries = None }
   let jsonTestObjUserResultString = """{"ok":true,"result":{"id":123456,"first_name":"BotFather","username":"BotFather","language_code":null,"is_bot":false,"can_join_groups":null,"can_read_all_group_messages":null,"supports_inline_queries":null}}"""
 
   let jsonTestEditResult1 = EditMessageResult.Success(true)
@@ -71,12 +71,13 @@ module Constants =
       VideoStartTimestamp = None
       DirectMessagesTopicId = None
       SuggestedPostParameters = None
+      MessageEffectId = None
     }: Req.ForwardMessage) :> IBotRequest
   let jsonForwardMessageReq = """{"chat_id":"Dolfik","from_chat_id":10,"message_id":10}"""
   
   let sendMessageReq = Req.SendMessage.Make(ChatId.String "Dolfik", "Hello, world", parseMode = ParseMode.MarkdownV2) :> IBotRequest
   let jsonSendMessageReq = """{"chat_id":"Dolfik","text":"Hello, world","parse_mode":"MarkdownV2"}"""
   
-  let jsonTestObjChatMember = ChatMemberMember.Create("member", User.Create(600000000L, false, "firstName", "lastName", "userName", "ru"))
+  let jsonTestObjChatMember = ChatMemberMember.Create("member", User.Create(600000000L, false, firstName ="firstName", lastName = "lastName", username = "userName", languageCode = "ru"))
   let jsonTestObjChatMemberResultString = """{"ok":true,"result":{"status":"member","user":{"id":600000000,"is_bot":false,"first_name":"firstName","last_name":"lastName","username":"userName","language_code":"ru"}}}"""
    

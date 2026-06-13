@@ -47,11 +47,7 @@ let private splitCaseNameAndType (typeName: string) (nameAndType: string) =
     | "InputMessageContent" -> "Input"
     | _ -> typeName
 
-  match typeName, nameAndType with
-  | "MaybeInaccessibleMessage", "Message" -> "Message"
-  | "MaybeInaccessibleMessage", "InaccessibleMessage" -> "InaccessibleMessage"
-  | _ ->
-    try nameAndType.Substring(typeName.Length) with | _ -> "ERROR!"
+  try nameAndType.Substring(typeName.Length) with | _ -> $"ERROR({typeName}, {nameAndType})!"
 
 let private isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
   let name = Helpers.innerText typeNodeInfo.TypeName
@@ -141,7 +137,21 @@ let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
 
             { tp with Kind = ApiTypeKind.Fields fields }
             
-          | ApiTypeKind.Cases cases, ApiTypeKind.Cases remapCases -> tp
+          | ApiTypeKind.Cases cases, ApiTypeKind.Cases remapCases ->
+            let cases =
+              cases
+              |> Array.map (fun case ->
+                remapCases
+                |> Array.fold (fun case remapCase ->
+                  let matched = not (String.IsNullOrEmpty remapCase.CaseType) && Helpers.compareWildcard remapCase.CaseType case.CaseType
+                  if matched then
+                    { case with
+                        Name = remapCase.Name |> Option.ofObj |> Option.defaultValue case.Name }
+                  else
+                    case
+                ) case
+              )
+            { tp with Kind = ApiTypeKind.Cases cases }
           | _ -> tp
         else
           tp

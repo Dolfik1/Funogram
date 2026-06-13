@@ -17,6 +17,7 @@ let defaultText = """⭐️Available test commands:
   /send_message9 - Test multiple media as bytes
   /send_message10 - MarkdownV2 test
   /send_message11 - MarkdownV2 test (json body)
+  /send_message12 - Markdown rich text
     
   /send_action - Test action
 
@@ -50,6 +51,7 @@ let updateArrived (ctx: UpdateContext) =
       cmd "/send_message9" (fun _ -> Files.testUploadAndSendPhotoGroupAsBytes |> wrap)
       cmd "/send_message10" (fun _ -> TextMessages.testMarkdownV2 false |> wrap)
       cmd "/send_message11" (fun _ -> TextMessages.testMarkdownV2 true |> wrap)
+      cmd "/send_message12" (fun _ -> TextMessages.testRichText |> wrap)
 
       cmd "/forward_message" (fun _ -> TextMessages.testForwardMessage ctx |> wrap)
 

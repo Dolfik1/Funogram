@@ -63,6 +63,7 @@ let private returnTypeRegexes =
       Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
 
       Regex("[R|r]eturns a ([A|a]rray of \w+|\w+)\s")
+      Regex("[R|r]eturns the .+ as (?:an? )?([A|a]rray of \w+|\w+)")
       Regex("[R|r]eturns the uploaded (\w+)\s")
       Regex("[R|r]eturns the ([A|a]rray of \w+|\w+)\s")
       Regex("[R|r]eturns an ([A|a]rray of \w+|\w+)\s")

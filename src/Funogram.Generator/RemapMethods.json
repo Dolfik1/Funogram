@@ -16,5 +16,11 @@
         "ConvertedFieldType": "ParseMode"
       }
     ]
+  },
+  {
+    "OriginalName": "sendMediaGroup",
+    "Fields": [
+      { "OriginalName": "media", "ConvertedFieldType": "InputMedia[]" }
+    ]
   }
 ]
