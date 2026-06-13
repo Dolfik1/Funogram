@@ -1,5 +1,6 @@
 module Funogram.Tests.Json
 
+open Funogram.Telegram.Types
 open Funogram.Types
 open Xunit
 open Extensions
@@ -122,3 +123,8 @@ let ``JSON serializing send message request`` () =
   Constants.sendMessageReq
   |> toJsonBotRequestString
   |> shouldEqual Constants.jsonSendMessageReq
+  
+[<Fact>]
+let ``JSON deserializing message request with RichText`` () =
+  let _: Result<Message, ApiResponseError> = Constants.jsonMessageWithRichTextResultString |> parseJson
+  ()
