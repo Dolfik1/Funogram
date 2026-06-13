@@ -24,9 +24,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Argu" Version="6.1.1" />
-      <PackageReference Include="FSharp.Data" Version="4.2.8" />
-      <PackageReference Include="FSharp.SystemTextJson" Version="0.19.13" />
+      <PackageReference Include="Argu" Version="6.2.5" />
+      <PackageReference Include="FSharp.Data" Version="8.1.14" />
+      <PackageReference Include="FSharp.SystemTextJson" Version="1.4.36" />
+      <PackageReference Update="FSharp.Core" Version="10.1.301" />
     </ItemGroup>
 
 </Project>
