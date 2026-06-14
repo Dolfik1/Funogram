@@ -128,3 +128,9 @@ let ``JSON serializing send message request`` () =
 let ``JSON deserializing message request with RichText`` () =
   let _: Result<Message, ApiResponseError> = Constants.jsonMessageWithRichTextResultString |> parseJson
   ()
+
+[<Fact>]
+let ``JSON deserializing RichText`` () =
+  let json = """{"ok":true,"result":{"type":"bot_command","text":"example","bot_command":"/test"}}"""
+  let _: Result<RichTextBotCommand, ApiResponseError> = json |> parseJson
+  ()

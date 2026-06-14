@@ -36,7 +36,7 @@ let loadRemapData remapPath config =
       { config with RemapMethods = result }
     with
     | e ->
-      printfn "ERR: Could not deserialize file! %A" e
+      printfn "ERR: Can't deserialize methods file! %A" e
       config
   else
     printfn "WARN: Remap file not found at path %s" remapPath

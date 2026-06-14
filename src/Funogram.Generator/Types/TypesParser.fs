@@ -35,7 +35,7 @@ let loadRemapData remapPath config =
       { config with RemapTypes = result }
     with
     | e ->
-      printfn "ERR: Could not deserialize file! %A" e
+      printfn "ERR: Can't deserialize file! %A" e
       config
   else
     printfn "WARN: Remap file not found at path %s" remapPath
@@ -268,12 +268,14 @@ let mergeCustomFields (customFieldsPath: string) (types: ApiType[]) =
           match tp.Kind, typeWithCustomFields.Kind with
           | ApiTypeKind.Fields fields, ApiTypeKind.Fields extraFields ->
             let mergedFields = Array.append fields extraFields
-            let mergedFieldsDistinct = mergedFields |> Array.distinctBy (_.ConvertedName)
+            let mergedFieldsDistinct = mergedFields |> Array.distinctBy _.ConvertedName
             
             if mergedFields.Length <> mergedFieldsDistinct.Length then
               failwith $"Custom fields must be unique (type {tp.Name}).\nTelegram API fields:\n%A{fields}\nCustom fields:\n%A{extraFields}"
             
             yield { tp with Kind = ApiTypeKind.Fields mergedFields }
+          | ApiTypeKind.Cases cases, ApiTypeKind.Cases extraCases ->
+            yield { tp with Kind = ApiTypeKind.Cases (Array.append cases extraCases) }
           | ApiTypeKind.Stub, kind ->
             yield { tp with Kind = kind }
           | _ ->

@@ -6666,6 +6666,8 @@ and RichText =
   | AnchorLink of RichTextAnchorLink
   | Reference of RichTextReference
   | ReferenceLink of RichTextReferenceLink
+  | Plain of string
+  | ArrayOf of RichText array
 
 /// A bold text.
 and [<CLIMutable>] RichTextBold =
