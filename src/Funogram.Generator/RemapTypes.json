@@ -148,5 +148,64 @@
         ]
       ]
     }
+  },
+  {
+    "Name": "MaybeInaccessibleMessage",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          { "CaseType": "Message", "Name": "Message" },
+          { "CaseType": "InaccessibleMessage", "Name": "InaccessibleMessage" }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputPollMedia",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          { "CaseType": "InputMediaAnimation", "Name": "Animation" },
+          { "CaseType": "InputMediaAudio", "Name": "Audio" },
+          { "CaseType": "InputMediaDocument", "Name": "Document" },
+          { "CaseType": "InputMediaLivePhoto", "Name": "LivePhoto" },
+          { "CaseType": "InputMediaLocation", "Name": "Location" },
+          { "CaseType": "InputMediaPhoto", "Name": "Photo" },
+          { "CaseType": "InputMediaVenue", "Name": "Venue" },
+          { "CaseType": "InputMediaVideo", "Name": "Video" }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputPollOptionMedia",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          { "CaseType": "InputMediaAnimation", "Name": "Animation" },
+          { "CaseType": "InputMediaLink", "Name": "Link" },
+          { "CaseType": "InputMediaLivePhoto", "Name": "LivePhoto" },
+          { "CaseType": "InputMediaLocation", "Name": "Location" },
+          { "CaseType": "InputMediaPhoto", "Name": "Photo" },
+          { "CaseType": "InputMediaSticker", "Name": "Sticker" },
+          { "CaseType": "InputMediaVenue", "Name": "Venue" },
+          { "CaseType": "InputMediaVideo", "Name": "Video" }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RichText",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          { "CaseType": "RichTextDateTime", "Name": "DateTimeText" }
+        ]
+      ]
+    }
   }
 ]

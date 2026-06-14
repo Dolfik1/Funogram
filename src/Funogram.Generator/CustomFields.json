@@ -34,5 +34,23 @@
         ]
       ]
     }
+  },
+  {
+    "Name": "RichText",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Plain",
+            "CaseType": "string"
+          },
+          {
+            "Name": "ArrayOf",
+            "CaseType": "RichText array"
+          }
+        ]
+      ]
+    }
   }
 ]

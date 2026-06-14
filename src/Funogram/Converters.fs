@@ -73,6 +73,26 @@ module internal Converters =
             }
       }
 
+  [<RequireQualifiedAccess>]
+  type private CaseDescriptor =
+    | Nullary of name: string
+    | Scalar  of clrType: Type
+    | Array
+    | Object  of props: Set<string>
+
+  [<RequireQualifiedAccess>]
+  type private JsonShape =
+    | String of value: string
+    | Scalar of candidateTypes: Type list
+    | Array
+    | Object of props: string list
+
+  let private fsharpListTypeDef = typedefof<_ list>
+
+  let private isArrayLike (t: Type) =
+    t.IsArray
+    || (t.IsGenericType && t.GetGenericTypeDefinition() = fsharpListTypeDef)
+
   type DiscriminatedUnionConverter<'a>() =
     inherit JsonConverter<'a>()
     
@@ -81,21 +101,23 @@ module internal Converters =
       match shape with
       | Shape.FSharpUnion (:? ShapeFSharpUnion<'a> as union) -> union
       | _ -> failwith "Unsupported type"
-    
-    let enumUnion = union.UnionCases |> Seq.forall (fun x -> x.Fields.Length = 0)
 
     let cases =
       union.UnionCases
       |> Seq.map (fun c ->
         if c.Fields.Length = 0 then
-          (Set.ofList [caseName c.CaseInfo], None)
+          CaseDescriptor.Nullary (caseName c.CaseInfo)
         else
           let tp = c.Fields[0].Member.Type
-          if tp.IsPrimitive then (Set.empty, Some tp)
-          else (tp.GetProperties()
-                |> Seq.map(fun x -> x.Name |> toSnakeCase)
-                |> Set.ofSeq,
-                None))
+          if tp.IsPrimitive || tp = typeof<string> then
+            CaseDescriptor.Scalar tp
+          elif isArrayLike tp then
+            CaseDescriptor.Array
+          else
+            tp.GetProperties()
+            |> Seq.map (fun x -> x.Name |> toSnakeCase)
+            |> Set.ofSeq
+            |> CaseDescriptor.Object)
       |> Seq.toArray
     
     let serializers =
@@ -111,77 +133,81 @@ module internal Converters =
     override x.Write(writer, value, options) =
       let serialize = serializers[union.GetTag value] // all union cases
       serialize writer value options
-    
-    member x.ReadCasesOnly(reader: byref<Utf8JsonReader>) =
-      let mutable types: Type list = []
-      let caseNames = List<string>()
 
-      let reader = reader // copy reader
-      let mutable loop = true
-      let mutable first = true
-      
-      if reader.TokenType = JsonTokenType.StartObject then
-        reader.Read() |> ignore
-      
-      while loop do
-        let token = reader.TokenType
-        if first && not enumUnion then
-          loop <- false
-          types <-
-            match token with
-            | JsonTokenType.True | JsonTokenType.False -> [typeof<bool>]
-            | JsonTokenType.String -> [typeof<string>]
-            | JsonTokenType.Number -> [typeof<int>;typeof<int64>;typeof<float32>;typeof<float>]
-            | _ ->
-              types
-          
-          if types.Length > 0 then
-            loop <- false
-
-          first <- false
-
-        if enumUnion then
-          caseNames.Add(reader.GetString())
-          reader.Read() |> ignore
-          loop <- false
-        else
-          match token with
+    member private _.ReadShape(reader: byref<Utf8JsonReader>) : JsonShape =
+      let reader = reader
+      match reader.TokenType with
+      | JsonTokenType.String ->
+        JsonShape.String (reader.GetString())
+      | JsonTokenType.True
+      | JsonTokenType.False ->
+        JsonShape.Scalar [ typeof<bool> ]
+      | JsonTokenType.Number ->
+        JsonShape.Scalar [ typeof<int>; typeof<int64>; typeof<float32>; typeof<float> ]
+      | JsonTokenType.StartArray ->
+        JsonShape.Array
+      | JsonTokenType.StartObject ->
+        let props = List<string>()
+        let mutable loop = reader.Read()
+        while loop do
+          match reader.TokenType with
           | JsonTokenType.PropertyName ->
-            caseNames.Add(reader.GetString())
+            props.Add(reader.GetString())
+            loop <- reader.Read()
           | JsonTokenType.StartObject
           | JsonTokenType.StartArray ->
             reader.Skip()
-          | _ -> ()
-
-          loop <- reader.Read()
-
-      caseNames, types
+            loop <- reader.Read()
+          | JsonTokenType.EndObject ->
+            loop <- false
+          | _ ->
+            loop <- reader.Read()
+        JsonShape.Object (List.ofSeq props)
+      | _ ->
+        JsonShape.Object []
     
     override x.Read(reader, _, options) =
-      let jsonCaseNames, jsonCaseTypes = x.ReadCasesOnly(&reader)
+      let resolveObject (props: string list) =
+        let exact =
+          cases
+          |> Array.tryFindIndex (function
+             | CaseDescriptor.Object known -> props |> List.forall known.Contains
+             | _ -> false)
+        match exact with
+        | Some _ -> exact
+        | None ->
+          let scored =
+            cases
+            |> Array.mapi (fun i c ->
+              match c with
+              | CaseDescriptor.Object known ->
+                i, props |> List.sumBy (fun n -> if known.Contains n then 1 else 0)
+              | _ -> i, -1)
+          let i, best = scored |> Array.maxBy snd
+          if best < 0 then None else Some i
 
       let idx =
-        cases
-        |> Array.tryFindIndex (fun (caseNames, tp) ->
-          (jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value))
-          && jsonCaseNames |> Seq.forall (fun n ->
-             caseNames |> Set.contains n))
-      
+        match x.ReadShape(&reader) with
+        | JsonShape.String value ->
+          cases
+          |> Array.tryFindIndex (function CaseDescriptor.Scalar t -> t = typeof<string> | _ -> false)
+          |> Option.orElseWith (fun () ->
+            cases |> Array.tryFindIndex (function CaseDescriptor.Nullary n -> n = value | _ -> false))
+        | JsonShape.Scalar candidateTypes ->
+          cases
+          |> Array.tryFindIndex (function
+             | CaseDescriptor.Scalar t -> candidateTypes |> List.contains t
+             | _ -> false)
+        | JsonShape.Array ->
+          cases |> Array.tryFindIndex (function CaseDescriptor.Array -> true | _ -> false)
+        | JsonShape.Object props ->
+          resolveObject props
+
       match idx with
-      | Some idx ->
-        deserializers[idx].Deserialize(&reader, options)
+      | Some i ->
+        deserializers[i].Deserialize(&reader, options)
       | None ->
-        // try to find most similar type
-        let item =
-          cases |> Array.maxBy (fun (caseNames, tp) ->
-            if jsonCaseTypes.Length = 0 || (tp.IsSome && jsonCaseTypes |> Seq.contains tp.Value) then
-              jsonCaseNames |> Seq.sumBy (fun n -> if caseNames |> Set.contains n then 1 else 0)
-            else
-              -1
-          )
-      
-        let idx = cases |> Array.findIndex (fun x -> x = item)
-        deserializers[idx].Deserialize(&reader, options)
+        raise (JsonException($"Unable to match JSON to any case of union {typeof<'a>.Name}"))
     
     override x.CanConvert(typeToConvert) =
       match TypeShape.Create(typeToConvert) with
@@ -248,4 +274,3 @@ module internal Converters =
       match TypeShape.Create(typeToConvert) with
       | Shape.FSharpOption _ -> true
       | _ -> false
-    

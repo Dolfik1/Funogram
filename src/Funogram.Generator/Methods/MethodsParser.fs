@@ -36,7 +36,7 @@ let loadRemapData remapPath config =
       { config with RemapMethods = result }
     with
     | e ->
-      printfn "ERR: Could not deserialize file! %A" e
+      printfn "ERR: Can't deserialize methods file! %A" e
       config
   else
     printfn "WARN: Remap file not found at path %s" remapPath
@@ -63,6 +63,7 @@ let private returnTypeRegexes =
       Regex("([A|a]rray of \w+|\w+) is returned, otherwise ([A|a]rray of \w+|\w+)")
 
       Regex("[R|r]eturns a ([A|a]rray of \w+|\w+)\s")
+      Regex("[R|r]eturns the .+ as (?:an? )?([A|a]rray of \w+|\w+)")
       Regex("[R|r]eturns the uploaded (\w+)\s")
       Regex("[R|r]eturns the ([A|a]rray of \w+|\w+)\s")
       Regex("[R|r]eturns an ([A|a]rray of \w+|\w+)\s")

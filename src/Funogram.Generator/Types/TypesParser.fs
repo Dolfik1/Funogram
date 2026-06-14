@@ -35,7 +35,7 @@ let loadRemapData remapPath config =
       { config with RemapTypes = result }
     with
     | e ->
-      printfn "ERR: Could not deserialize file! %A" e
+      printfn "ERR: Can't deserialize file! %A" e
       config
   else
     printfn "WARN: Remap file not found at path %s" remapPath
@@ -47,11 +47,7 @@ let private splitCaseNameAndType (typeName: string) (nameAndType: string) =
     | "InputMessageContent" -> "Input"
     | _ -> typeName
 
-  match typeName, nameAndType with
-  | "MaybeInaccessibleMessage", "Message" -> "Message"
-  | "MaybeInaccessibleMessage", "InaccessibleMessage" -> "InaccessibleMessage"
-  | _ ->
-    try nameAndType.Substring(typeName.Length) with | _ -> "ERROR!"
+  try nameAndType.Substring(typeName.Length) with | _ -> $"ERROR({typeName}, {nameAndType})!"
 
 let private isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
   let name = Helpers.innerText typeNodeInfo.TypeName
@@ -141,7 +137,21 @@ let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
 
             { tp with Kind = ApiTypeKind.Fields fields }
             
-          | ApiTypeKind.Cases cases, ApiTypeKind.Cases remapCases -> tp
+          | ApiTypeKind.Cases cases, ApiTypeKind.Cases remapCases ->
+            let cases =
+              cases
+              |> Array.map (fun case ->
+                remapCases
+                |> Array.fold (fun case remapCase ->
+                  let matched = not (String.IsNullOrEmpty remapCase.CaseType) && Helpers.compareWildcard remapCase.CaseType case.CaseType
+                  if matched then
+                    { case with
+                        Name = remapCase.Name |> Option.ofObj |> Option.defaultValue case.Name }
+                  else
+                    case
+                ) case
+              )
+            { tp with Kind = ApiTypeKind.Cases cases }
           | _ -> tp
         else
           tp
@@ -258,12 +268,14 @@ let mergeCustomFields (customFieldsPath: string) (types: ApiType[]) =
           match tp.Kind, typeWithCustomFields.Kind with
           | ApiTypeKind.Fields fields, ApiTypeKind.Fields extraFields ->
             let mergedFields = Array.append fields extraFields
-            let mergedFieldsDistinct = mergedFields |> Array.distinctBy (_.ConvertedName)
+            let mergedFieldsDistinct = mergedFields |> Array.distinctBy _.ConvertedName
             
             if mergedFields.Length <> mergedFieldsDistinct.Length then
               failwith $"Custom fields must be unique (type {tp.Name}).\nTelegram API fields:\n%A{fields}\nCustom fields:\n%A{extraFields}"
             
             yield { tp with Kind = ApiTypeKind.Fields mergedFields }
+          | ApiTypeKind.Cases cases, ApiTypeKind.Cases extraCases ->
+            yield { tp with Kind = ApiTypeKind.Cases (Array.append cases extraCases) }
           | ApiTypeKind.Stub, kind ->
             yield { tp with Kind = kind }
           | _ ->

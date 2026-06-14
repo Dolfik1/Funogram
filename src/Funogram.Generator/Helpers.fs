@@ -82,10 +82,13 @@ let convertTLTypeToFSharpType (typeString: string) (description: string) (option
     typeString
 
 let getJsonSerializerOptions () =
-  let serializerOptions = JsonSerializerOptions()
-  serializerOptions.Converters.Add(JsonFSharpConverter(allowNullFields = true))
-  serializerOptions.WriteIndented <- true
-  serializerOptions
+  let options =
+    JsonSerializerOptions(
+      WriteIndented = true,
+      DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)
+  let fsharpOpts = JsonFSharpOptions.Default().WithSkippableOptionFields()
+  options.Converters.Add(JsonFSharpConverter(fsharpOpts))
+  options
 
 let compareWildcard (expression: string) (value: string) =
   FileSystemName.MatchesSimpleExpression(expression, value, false)
