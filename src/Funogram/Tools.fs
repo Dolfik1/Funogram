@@ -76,7 +76,12 @@ module internal RequestLogger =
     logger.Text.Append("Res: ").Append(e.ToString()) |> ignore
     logger.Logger.Log(logger.Text.ToString())
 
-let internal options =
+/// Shared JSON serializer settings used by Funogram for request and response payloads.
+///
+/// Reuse this instance when serializing or deserializing Funogram types so external code
+/// stays aligned with the library's snake_case wire format, union handling, Unix timestamps,
+/// and null-skipping behavior.
+let options =
   let o =
     JsonSerializerOptions(
       WriteIndented = false,
