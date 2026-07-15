@@ -78,14 +78,18 @@ module internal Converters =
     | Nullary of name: string
     | Scalar  of clrType: Type
     | Array
-    | Object  of props: Set<string>
+    /// tag = (discriminator property name, expected value) from TelegramTagAttribute,
+    /// for subtypes discriminated by a field value rather than by shape.
+    | Object  of props: Set<string> * tag: (string * string) option
 
   [<RequireQualifiedAccess>]
   type private JsonShape =
     | String of value: string
     | Scalar of candidateTypes: Type list
     | Array
-    | Object of props: string list
+    /// Top-level property names, with the value kept for string-valued properties
+    /// (candidates for a discriminator tag).
+    | Object of props: (string * string option) list
 
   let private fsharpListTypeDef = typedefof<_ list>
 
@@ -114,10 +118,17 @@ module internal Converters =
           elif isArrayLike tp then
             CaseDescriptor.Array
           else
-            tp.GetProperties()
-            |> Seq.map (fun x -> x.Name |> toSnakeCase)
-            |> Set.ofSeq
-            |> CaseDescriptor.Object)
+            let props =
+              tp.GetProperties()
+              |> Seq.map (fun x -> x.Name |> toSnakeCase)
+              |> Set.ofSeq
+            let tag =
+              tp.GetCustomAttributes(typeof<Funogram.Types.TelegramTagAttribute>, false)
+              |> Seq.tryHead
+              |> Option.map (fun a ->
+                let a = a :?> Funogram.Types.TelegramTagAttribute
+                a.Field, a.Value)
+            CaseDescriptor.Object (props, tag))
       |> Seq.toArray
     
     let serializers =
@@ -147,13 +158,30 @@ module internal Converters =
       | JsonTokenType.StartArray ->
         JsonShape.Array
       | JsonTokenType.StartObject ->
-        let props = List<string>()
+        let props = List<string * string option>()
         let mutable loop = reader.Read()
         while loop do
           match reader.TokenType with
           | JsonTokenType.PropertyName ->
-            props.Add(reader.GetString())
+            let name = reader.GetString()
             loop <- reader.Read()
+            if loop then
+              match reader.TokenType with
+              | JsonTokenType.String ->
+                // keep string values: they are discriminator-tag candidates
+                props.Add(name, Some (reader.GetString()))
+                loop <- reader.Read()
+              | JsonTokenType.StartObject
+              | JsonTokenType.StartArray ->
+                props.Add(name, None)
+                reader.Skip()
+                loop <- reader.Read()
+              | JsonTokenType.EndObject ->
+                props.Add(name, None)
+                loop <- false
+              | _ ->
+                props.Add(name, None)
+                loop <- reader.Read()
           | JsonTokenType.StartObject
           | JsonTokenType.StartArray ->
             reader.Skip()
@@ -167,24 +195,38 @@ module internal Converters =
         JsonShape.Object []
     
     override x.Read(reader, _, options) =
-      let resolveObject (props: string list) =
-        let exact =
+      let resolveObject (props: (string * string option) list) =
+        // 1) Discriminator value: a case tagged (field, value) wins when the JSON
+        //    carries exactly that value (e.g. {"status":"member"} -> ChatMember.Member).
+        //    Shape matching cannot do this — some subtypes are shape-identical.
+        let byTag =
           cases
           |> Array.tryFindIndex (function
-             | CaseDescriptor.Object known -> props |> List.forall known.Contains
+             | CaseDescriptor.Object (_, Some (tagField, tagValue)) ->
+               props |> List.exists (fun (n, v) -> n = tagField && v = Some tagValue)
              | _ -> false)
-        match exact with
-        | Some _ -> exact
+        match byTag with
+        | Some _ -> byTag
         | None ->
-          let scored =
+          // 2) Shape fallback (untagged unions, or an unknown future tag value).
+          let names = props |> List.map fst
+          let exact =
             cases
-            |> Array.mapi (fun i c ->
-              match c with
-              | CaseDescriptor.Object known ->
-                i, props |> List.sumBy (fun n -> if known.Contains n then 1 else 0)
-              | _ -> i, -1)
-          let i, best = scored |> Array.maxBy snd
-          if best < 0 then None else Some i
+            |> Array.tryFindIndex (function
+               | CaseDescriptor.Object (known, _) -> names |> List.forall known.Contains
+               | _ -> false)
+          match exact with
+          | Some _ -> exact
+          | None ->
+            let scored =
+              cases
+              |> Array.mapi (fun i c ->
+                match c with
+                | CaseDescriptor.Object (known, _) ->
+                  i, names |> List.sumBy (fun n -> if known.Contains n then 1 else 0)
+                | _ -> i, -1)
+            let i, best = scored |> Array.maxBy snd
+            if best < 0 then None else Some i
 
       let idx =
         match x.ReadShape(&reader) with

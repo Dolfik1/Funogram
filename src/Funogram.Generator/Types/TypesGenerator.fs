@@ -163,9 +163,29 @@ let private generateFieldsCreateMember tp (fields: ApiTypeField[]) code =
   |> Code.setIndent 2
   |> Code.printNewLine "}"
 
+// Subtypes of tag-discriminated unions (ChatMember, MessageOrigin, ReactionType, ...)
+// document their fixed discriminator as `always "X"` on a required string field.
+// Emit it as a TelegramTag attribute so the union converter can select the case by
+// the discriminator value (shape-identical subtypes like ChatMemberLeft vs
+// ChatMemberMember cannot be discriminated any other way).
+let private discriminatorRegex =
+  System.Text.RegularExpressions.Regex("""always [“"]([A-Za-z0-9_]+)[”"]""",
+                                       System.Text.RegularExpressions.RegexOptions.Compiled)
+
+let private discriminatorTag (fields: ApiTypeField[]) =
+  fields
+  |> Array.tryPick (fun f ->
+    if f.IsOptional || f.ConvertedFieldType <> "string" then None
+    else
+      let m = discriminatorRegex.Match f.Description
+      if m.Success then Some (f.OriginalName, m.Groups[1].Value) else None)
+
 let private attributesForType tp =
   match tp.Kind with
-  | ApiTypeKind.Fields _ -> " [<CLIMutable>]"
+  | ApiTypeKind.Fields fields ->
+    match discriminatorTag fields with
+    | Some (field, value) -> sprintf " [<CLIMutable; Funogram.Types.TelegramTag(\"%s\", \"%s\")>]" field value
+    | None -> " [<CLIMutable>]"
   | _ -> ""
 
 let generate config =

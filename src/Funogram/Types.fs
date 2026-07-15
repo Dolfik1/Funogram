@@ -11,6 +11,18 @@ type IBotLogger =
   abstract member Log: message: string -> unit
   abstract member Enabled: bool
 
+/// Marks a generated Telegram type as a tag-discriminated union payload: the JSON
+/// property `Field` always carries the literal `Value` for this subtype (e.g.
+/// ChatMemberOwner -> ("status", "creator")). The union converter uses it to select
+/// the case by discriminator value; several subtypes (ChatMemberLeft vs
+/// ChatMemberMember) are shape-identical on the wire, so field-shape matching alone
+/// cannot discriminate them.
+[<AttributeUsage(AttributeTargets.Class, AllowMultiple = false)>]
+type TelegramTagAttribute(field: string, value: string) =
+  inherit Attribute()
+  member _.Field = field
+  member _.Value = value
+
 type BotConfig = 
   { IsTest: bool
     Token: string

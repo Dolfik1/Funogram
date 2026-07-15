@@ -8,6 +8,7 @@
     <Compile Include="Constants.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="Json.fs" />
+    <Compile Include="UnionDiscriminators.fs" />
     <Compile Include="Core.fs" />
     <Compile Include="Deserializer.fs" />
   </ItemGroup>

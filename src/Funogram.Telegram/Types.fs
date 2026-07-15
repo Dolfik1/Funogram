@@ -1305,7 +1305,7 @@ and MessageOrigin =
   | Channel of MessageOriginChannel
 
 /// The message was originally sent by a known user.
-and [<CLIMutable>] MessageOriginUser =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "user")>] MessageOriginUser =
   {
     /// Type of the message origin, always “user”
     [<DataMember(Name = "type")>]
@@ -1325,7 +1325,7 @@ and [<CLIMutable>] MessageOriginUser =
     }
 
 /// The message was originally sent by an unknown user.
-and [<CLIMutable>] MessageOriginHiddenUser =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "hidden_user")>] MessageOriginHiddenUser =
   {
     /// Type of the message origin, always “hidden_user”
     [<DataMember(Name = "type")>]
@@ -1345,7 +1345,7 @@ and [<CLIMutable>] MessageOriginHiddenUser =
     }
 
 /// The message was originally sent on behalf of a chat to a group chat.
-and [<CLIMutable>] MessageOriginChat =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "chat")>] MessageOriginChat =
   {
     /// Type of the message origin, always “chat”
     [<DataMember(Name = "type")>]
@@ -1369,7 +1369,7 @@ and [<CLIMutable>] MessageOriginChat =
     }
 
 /// The message was originally sent to a channel chat.
-and [<CLIMutable>] MessageOriginChannel =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "channel")>] MessageOriginChannel =
   {
     /// Type of the message origin, always “channel”
     [<DataMember(Name = "type")>]
@@ -1772,7 +1772,7 @@ and PaidMedia =
   | Video of PaidMediaVideo
 
 /// The paid media is a live photo.
-and [<CLIMutable>] PaidMediaLivePhoto =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "live_photo")>] PaidMediaLivePhoto =
   {
     /// Type of the paid media, always “live_photo”
     [<DataMember(Name = "type")>]
@@ -1788,7 +1788,7 @@ and [<CLIMutable>] PaidMediaLivePhoto =
     }
 
 /// The paid media is a photo.
-and [<CLIMutable>] PaidMediaPhoto =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "photo")>] PaidMediaPhoto =
   {
     /// Type of the paid media, always “photo”
     [<DataMember(Name = "type")>]
@@ -1804,7 +1804,7 @@ and [<CLIMutable>] PaidMediaPhoto =
     }
 
 /// The paid media isn't available before the payment.
-and [<CLIMutable>] PaidMediaPreview =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "preview")>] PaidMediaPreview =
   {
     /// Type of the paid media, always “preview”
     [<DataMember(Name = "type")>]
@@ -1828,7 +1828,7 @@ and [<CLIMutable>] PaidMediaPreview =
     }
 
 /// The paid media is a video.
-and [<CLIMutable>] PaidMediaVideo =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "video")>] PaidMediaVideo =
   {
     /// Type of the paid media, always “video”
     [<DataMember(Name = "type")>]
@@ -2516,7 +2516,7 @@ and BackgroundFill =
   | FreeformGradient of BackgroundFillFreeformGradient
 
 /// The background is filled using the selected color.
-and [<CLIMutable>] BackgroundFillSolid =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "solid")>] BackgroundFillSolid =
   {
     /// Type of the background fill, always “solid”
     [<DataMember(Name = "type")>]
@@ -2532,7 +2532,7 @@ and [<CLIMutable>] BackgroundFillSolid =
     }
 
 /// The background is a gradient fill.
-and [<CLIMutable>] BackgroundFillGradient =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "gradient")>] BackgroundFillGradient =
   {
     /// Type of the background fill, always “gradient”
     [<DataMember(Name = "type")>]
@@ -2556,7 +2556,7 @@ and [<CLIMutable>] BackgroundFillGradient =
     }
 
 /// The background is a freeform gradient that rotates after every message in the chat.
-and [<CLIMutable>] BackgroundFillFreeformGradient =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "freeform_gradient")>] BackgroundFillFreeformGradient =
   {
     /// Type of the background fill, always “freeform_gradient”
     [<DataMember(Name = "type")>]
@@ -2579,7 +2579,7 @@ and BackgroundType =
   | ChatTheme of BackgroundTypeChatTheme
 
 /// The background is automatically filled based on the selected colors.
-and [<CLIMutable>] BackgroundTypeFill =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "fill")>] BackgroundTypeFill =
   {
     /// Type of the background, always “fill”
     [<DataMember(Name = "type")>]
@@ -2599,7 +2599,7 @@ and [<CLIMutable>] BackgroundTypeFill =
     }
 
 /// The background is a wallpaper in the JPEG format.
-and [<CLIMutable>] BackgroundTypeWallpaper =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "wallpaper")>] BackgroundTypeWallpaper =
   {
     /// Type of the background, always “wallpaper”
     [<DataMember(Name = "type")>]
@@ -2627,7 +2627,7 @@ and [<CLIMutable>] BackgroundTypeWallpaper =
     }
 
 /// The background is a .PNG or .TGV (gzipped subset of SVG with MIME type “application/x-tgwallpattern”) pattern to be combined with the background fill chosen by the user.
-and [<CLIMutable>] BackgroundTypePattern =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "pattern")>] BackgroundTypePattern =
   {
     /// Type of the background, always “pattern”
     [<DataMember(Name = "type")>]
@@ -2659,7 +2659,7 @@ and [<CLIMutable>] BackgroundTypePattern =
     }
 
 /// The background is taken directly from a built-in chat theme.
-and [<CLIMutable>] BackgroundTypeChatTheme =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "chat_theme")>] BackgroundTypeChatTheme =
   {
     /// Type of the background, always “chat_theme”
     [<DataMember(Name = "type")>]
@@ -3933,7 +3933,7 @@ and ChatMember =
   | Banned of ChatMemberBanned
 
 /// Represents a chat member that owns the chat and has all administrator privileges.
-and [<CLIMutable>] ChatMemberOwner =
+and [<CLIMutable; Funogram.Types.TelegramTag("status", "creator")>] ChatMemberOwner =
   {
     /// The member's status in the chat, always “creator”
     [<DataMember(Name = "status")>]
@@ -3957,7 +3957,7 @@ and [<CLIMutable>] ChatMemberOwner =
     }
 
 /// Represents a chat member that has some additional privileges.
-and [<CLIMutable>] ChatMemberAdministrator =
+and [<CLIMutable; Funogram.Types.TelegramTag("status", "administrator")>] ChatMemberAdministrator =
   {
     /// The member's status in the chat, always “administrator”
     [<DataMember(Name = "status")>]
@@ -4053,7 +4053,7 @@ and [<CLIMutable>] ChatMemberAdministrator =
     }
 
 /// Represents a chat member that has no additional privileges or restrictions.
-and [<CLIMutable>] ChatMemberMember =
+and [<CLIMutable; Funogram.Types.TelegramTag("status", "member")>] ChatMemberMember =
   {
     /// The member's status in the chat, always “member”
     [<DataMember(Name = "status")>]
@@ -4077,7 +4077,7 @@ and [<CLIMutable>] ChatMemberMember =
     }
 
 /// Represents a chat member that is under certain restrictions in the chat. Supergroups only.
-and [<CLIMutable>] ChatMemberRestricted =
+and [<CLIMutable; Funogram.Types.TelegramTag("status", "restricted")>] ChatMemberRestricted =
   {
     /// The member's status in the chat, always “restricted”
     [<DataMember(Name = "status")>]
@@ -4169,7 +4169,7 @@ and [<CLIMutable>] ChatMemberRestricted =
     }
 
 /// Represents a chat member that isn't currently a member of the chat, but may join it themselves.
-and [<CLIMutable>] ChatMemberLeft =
+and [<CLIMutable; Funogram.Types.TelegramTag("status", "left")>] ChatMemberLeft =
   {
     /// The member's status in the chat, always “left”
     [<DataMember(Name = "status")>]
@@ -4185,7 +4185,7 @@ and [<CLIMutable>] ChatMemberLeft =
     }
 
 /// Represents a chat member that was banned in the chat and can't return to the chat or view chat messages.
-and [<CLIMutable>] ChatMemberBanned =
+and [<CLIMutable; Funogram.Types.TelegramTag("status", "kicked")>] ChatMemberBanned =
   {
     /// The member's status in the chat, always “kicked”
     [<DataMember(Name = "status")>]
@@ -4489,7 +4489,7 @@ and StoryAreaType =
   | UniqueGift of StoryAreaTypeUniqueGift
 
 /// Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.
-and [<CLIMutable>] StoryAreaTypeLocation =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "location")>] StoryAreaTypeLocation =
   {
     /// Type of the area, always “location”
     [<DataMember(Name = "type")>]
@@ -4513,7 +4513,7 @@ and [<CLIMutable>] StoryAreaTypeLocation =
     }
 
 /// Describes a story area pointing to a suggested reaction. Currently, a story can have up to 5 suggested reaction areas.
-and [<CLIMutable>] StoryAreaTypeSuggestedReaction =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "suggested_reaction")>] StoryAreaTypeSuggestedReaction =
   {
     /// Type of the area, always “suggested_reaction”
     [<DataMember(Name = "type")>]
@@ -4537,7 +4537,7 @@ and [<CLIMutable>] StoryAreaTypeSuggestedReaction =
     }
 
 /// Describes a story area pointing to an HTTP or tg:// link. Currently, a story can have up to 3 link areas.
-and [<CLIMutable>] StoryAreaTypeLink =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "link")>] StoryAreaTypeLink =
   {
     /// Type of the area, always “link”
     [<DataMember(Name = "type")>]
@@ -4553,7 +4553,7 @@ and [<CLIMutable>] StoryAreaTypeLink =
     }
 
 /// Describes a story area containing weather information. Currently, a story can have up to 3 weather areas.
-and [<CLIMutable>] StoryAreaTypeWeather =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "weather")>] StoryAreaTypeWeather =
   {
     /// Type of the area, always “weather”
     [<DataMember(Name = "type")>]
@@ -4577,7 +4577,7 @@ and [<CLIMutable>] StoryAreaTypeWeather =
     }
 
 /// Describes a story area pointing to a unique gift. Currently, a story can have at most 1 unique gift area.
-and [<CLIMutable>] StoryAreaTypeUniqueGift =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "unique_gift")>] StoryAreaTypeUniqueGift =
   {
     /// Type of the area, always “unique_gift”
     [<DataMember(Name = "type")>]
@@ -4631,7 +4631,7 @@ and ReactionType =
   | Paid of ReactionTypePaid
 
 /// The reaction is based on an emoji.
-and [<CLIMutable>] ReactionTypeEmoji =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "emoji")>] ReactionTypeEmoji =
   {
     /// Type of the reaction, always “emoji”
     [<DataMember(Name = "type")>]
@@ -4647,7 +4647,7 @@ and [<CLIMutable>] ReactionTypeEmoji =
     }
 
 /// The reaction is based on a custom emoji.
-and [<CLIMutable>] ReactionTypeCustomEmoji =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "custom_emoji")>] ReactionTypeCustomEmoji =
   {
     /// Type of the reaction, always “custom_emoji”
     [<DataMember(Name = "type")>]
@@ -4663,7 +4663,7 @@ and [<CLIMutable>] ReactionTypeCustomEmoji =
     }
 
 /// The reaction is paid.
-and [<CLIMutable>] ReactionTypePaid =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "paid")>] ReactionTypePaid =
   {
     /// Type of the reaction, always “paid”
     [<DataMember(Name = "type")>]
@@ -5136,7 +5136,7 @@ and OwnedGift =
   | Unique of OwnedGiftUnique
 
 /// Describes a regular gift owned by a user or a chat.
-and [<CLIMutable>] OwnedGiftRegular =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "regular")>] OwnedGiftRegular =
   {
     /// Type of the gift, always “regular”
     [<DataMember(Name = "type")>]
@@ -5204,7 +5204,7 @@ and [<CLIMutable>] OwnedGiftRegular =
     }
 
 /// Describes a unique gift received and owned by a user or a chat.
-and [<CLIMutable>] OwnedGiftUnique =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "unique")>] OwnedGiftUnique =
   {
     /// Type of the gift, always “unique”
     [<DataMember(Name = "type")>]
@@ -5547,7 +5547,7 @@ and ChatBoostSource =
   | Giveaway of ChatBoostSourceGiveaway
 
 /// The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
-and [<CLIMutable>] ChatBoostSourcePremium =
+and [<CLIMutable; Funogram.Types.TelegramTag("source", "premium")>] ChatBoostSourcePremium =
   {
     /// Source of the boost, always “premium”
     [<DataMember(Name = "source")>]
@@ -5563,7 +5563,7 @@ and [<CLIMutable>] ChatBoostSourcePremium =
     }
 
 /// The boost was obtained by the creation of Telegram Premium gift codes to boost a chat. Each such code boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription.
-and [<CLIMutable>] ChatBoostSourceGiftCode =
+and [<CLIMutable; Funogram.Types.TelegramTag("source", "gift_code")>] ChatBoostSourceGiftCode =
   {
     /// Source of the boost, always “gift_code”
     [<DataMember(Name = "source")>]
@@ -5579,7 +5579,7 @@ and [<CLIMutable>] ChatBoostSourceGiftCode =
     }
 
 /// The boost was obtained by the creation of a Telegram Premium or a Telegram Star giveaway. This boosts the chat 4 times for the duration of the corresponding Telegram Premium subscription for Telegram Premium giveaways and prize_star_count / 500 times for one year for Telegram Star giveaways.
-and [<CLIMutable>] ChatBoostSourceGiveaway =
+and [<CLIMutable; Funogram.Types.TelegramTag("source", "giveaway")>] ChatBoostSourceGiveaway =
   {
     /// Source of the boost, always “giveaway”
     [<DataMember(Name = "source")>]
@@ -6670,7 +6670,7 @@ and RichText =
   | ArrayOf of RichText array
 
 /// A bold text.
-and [<CLIMutable>] RichTextBold =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "bold")>] RichTextBold =
   {
     /// Type of the rich text, always “bold”
     [<DataMember(Name = "type")>]
@@ -6686,7 +6686,7 @@ and [<CLIMutable>] RichTextBold =
     }
 
 /// An italicized text.
-and [<CLIMutable>] RichTextItalic =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "italic")>] RichTextItalic =
   {
     /// Type of the rich text, always “italic”
     [<DataMember(Name = "type")>]
@@ -6702,7 +6702,7 @@ and [<CLIMutable>] RichTextItalic =
     }
 
 /// An underlined text.
-and [<CLIMutable>] RichTextUnderline =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "underline")>] RichTextUnderline =
   {
     /// Type of the rich text, always “underline”
     [<DataMember(Name = "type")>]
@@ -6718,7 +6718,7 @@ and [<CLIMutable>] RichTextUnderline =
     }
 
 /// A strikethrough text.
-and [<CLIMutable>] RichTextStrikethrough =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "strikethrough")>] RichTextStrikethrough =
   {
     /// Type of the rich text, always “strikethrough”
     [<DataMember(Name = "type")>]
@@ -6734,7 +6734,7 @@ and [<CLIMutable>] RichTextStrikethrough =
     }
 
 /// A text covered by a spoiler.
-and [<CLIMutable>] RichTextSpoiler =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "spoiler")>] RichTextSpoiler =
   {
     /// Type of the rich text, always “spoiler”
     [<DataMember(Name = "type")>]
@@ -6750,7 +6750,7 @@ and [<CLIMutable>] RichTextSpoiler =
     }
 
 /// Formatted date and time.
-and [<CLIMutable>] RichTextDateTime =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "date_time")>] RichTextDateTime =
   {
     /// Type of the rich text, always “date_time”
     [<DataMember(Name = "type")>]
@@ -6774,7 +6774,7 @@ and [<CLIMutable>] RichTextDateTime =
     }
 
 /// A mention of a Telegram user by their identifier.
-and [<CLIMutable>] RichTextTextMention =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "text_mention")>] RichTextTextMention =
   {
     /// Type of the rich text, always “text_mention”
     [<DataMember(Name = "type")>]
@@ -6794,7 +6794,7 @@ and [<CLIMutable>] RichTextTextMention =
     }
 
 /// A subscript text.
-and [<CLIMutable>] RichTextSubscript =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "subscript")>] RichTextSubscript =
   {
     /// Type of the rich text, always “subscript”
     [<DataMember(Name = "type")>]
@@ -6810,7 +6810,7 @@ and [<CLIMutable>] RichTextSubscript =
     }
 
 /// A superscript text.
-and [<CLIMutable>] RichTextSuperscript =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "superscript")>] RichTextSuperscript =
   {
     /// Type of the rich text, always “superscript”
     [<DataMember(Name = "type")>]
@@ -6826,7 +6826,7 @@ and [<CLIMutable>] RichTextSuperscript =
     }
 
 /// A marked text.
-and [<CLIMutable>] RichTextMarked =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "marked")>] RichTextMarked =
   {
     /// Type of the rich text, always “marked”
     [<DataMember(Name = "type")>]
@@ -6842,7 +6842,7 @@ and [<CLIMutable>] RichTextMarked =
     }
 
 /// A monowidth text.
-and [<CLIMutable>] RichTextCode =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "code")>] RichTextCode =
   {
     /// Type of the rich text, always “code”
     [<DataMember(Name = "type")>]
@@ -6858,7 +6858,7 @@ and [<CLIMutable>] RichTextCode =
     }
 
 /// A custom emoji.
-and [<CLIMutable>] RichTextCustomEmoji =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "custom_emoji")>] RichTextCustomEmoji =
   {
     /// Type of the rich text, always “custom_emoji”
     [<DataMember(Name = "type")>]
@@ -6878,7 +6878,7 @@ and [<CLIMutable>] RichTextCustomEmoji =
     }
 
 /// A mathematical expression.
-and [<CLIMutable>] RichTextMathematicalExpression =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "mathematical_expression")>] RichTextMathematicalExpression =
   {
     /// Type of the rich text, always “mathematical_expression”
     [<DataMember(Name = "type")>]
@@ -6894,7 +6894,7 @@ and [<CLIMutable>] RichTextMathematicalExpression =
     }
 
 /// A text with a link.
-and [<CLIMutable>] RichTextUrl =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "url")>] RichTextUrl =
   {
     /// Type of the rich text, always “url”
     [<DataMember(Name = "type")>]
@@ -6914,7 +6914,7 @@ and [<CLIMutable>] RichTextUrl =
     }
 
 /// A text with an email address.
-and [<CLIMutable>] RichTextEmailAddress =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "email_address")>] RichTextEmailAddress =
   {
     /// Type of the rich text, always “email_address”
     [<DataMember(Name = "type")>]
@@ -6934,7 +6934,7 @@ and [<CLIMutable>] RichTextEmailAddress =
     }
 
 /// A text with a phone number.
-and [<CLIMutable>] RichTextPhoneNumber =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "phone_number")>] RichTextPhoneNumber =
   {
     /// Type of the rich text, always “phone_number”
     [<DataMember(Name = "type")>]
@@ -6954,7 +6954,7 @@ and [<CLIMutable>] RichTextPhoneNumber =
     }
 
 /// A text with a bank card number.
-and [<CLIMutable>] RichTextBankCardNumber =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "bank_card_number")>] RichTextBankCardNumber =
   {
     /// Type of the rich text, always “bank_card_number”
     [<DataMember(Name = "type")>]
@@ -6974,7 +6974,7 @@ and [<CLIMutable>] RichTextBankCardNumber =
     }
 
 /// A mention by a username.
-and [<CLIMutable>] RichTextMention =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "mention")>] RichTextMention =
   {
     /// Type of the rich text, always “mention”
     [<DataMember(Name = "type")>]
@@ -6994,7 +6994,7 @@ and [<CLIMutable>] RichTextMention =
     }
 
 /// A hashtag.
-and [<CLIMutable>] RichTextHashtag =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "hashtag")>] RichTextHashtag =
   {
     /// Type of the rich text, always “hashtag”
     [<DataMember(Name = "type")>]
@@ -7014,7 +7014,7 @@ and [<CLIMutable>] RichTextHashtag =
     }
 
 /// A cashtag.
-and [<CLIMutable>] RichTextCashtag =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "cashtag")>] RichTextCashtag =
   {
     /// Type of the rich text, always “cashtag”
     [<DataMember(Name = "type")>]
@@ -7034,7 +7034,7 @@ and [<CLIMutable>] RichTextCashtag =
     }
 
 /// A bot command.
-and [<CLIMutable>] RichTextBotCommand =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "bot_command")>] RichTextBotCommand =
   {
     /// Type of the rich text, always “bot_command”
     [<DataMember(Name = "type")>]
@@ -7054,7 +7054,7 @@ and [<CLIMutable>] RichTextBotCommand =
     }
 
 /// An anchor.
-and [<CLIMutable>] RichTextAnchor =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "anchor")>] RichTextAnchor =
   {
     /// Type of the rich text, always “anchor”
     [<DataMember(Name = "type")>]
@@ -7070,7 +7070,7 @@ and [<CLIMutable>] RichTextAnchor =
     }
 
 /// A link to an anchor.
-and [<CLIMutable>] RichTextAnchorLink =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "anchor_link")>] RichTextAnchorLink =
   {
     /// Type of the rich text, always “anchor_link”
     [<DataMember(Name = "type")>]
@@ -7090,7 +7090,7 @@ and [<CLIMutable>] RichTextAnchorLink =
     }
 
 /// A reference.
-and [<CLIMutable>] RichTextReference =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "reference")>] RichTextReference =
   {
     /// Type of the rich text, always “reference”
     [<DataMember(Name = "type")>]
@@ -7110,7 +7110,7 @@ and [<CLIMutable>] RichTextReference =
     }
 
 /// A link to a reference.
-and [<CLIMutable>] RichTextReferenceLink =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "reference_link")>] RichTextReferenceLink =
   {
     /// Type of the rich text, always “reference_link”
     [<DataMember(Name = "type")>]
@@ -7234,7 +7234,7 @@ and RichBlock =
   | Thinking of RichBlockThinking
 
 /// A text paragraph, corresponding to the HTML tag <p>.
-and [<CLIMutable>] RichBlockParagraph =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "paragraph")>] RichBlockParagraph =
   {
     /// Type of the block, always “paragraph”
     [<DataMember(Name = "type")>]
@@ -7250,7 +7250,7 @@ and [<CLIMutable>] RichBlockParagraph =
     }
 
 /// A section heading, corresponding to the HTML tags <h1>, <h2>, <h3>, <h4>, <h5>, or <h6>.
-and [<CLIMutable>] RichBlockSectionHeading =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "heading")>] RichBlockSectionHeading =
   {
     /// Type of the block, always “heading”
     [<DataMember(Name = "type")>]
@@ -7270,7 +7270,7 @@ and [<CLIMutable>] RichBlockSectionHeading =
     }
 
 /// A preformatted text block, corresponding to the nested HTML tags <pre> and <code>.
-and [<CLIMutable>] RichBlockPreformatted =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "pre")>] RichBlockPreformatted =
   {
     /// Type of the block, always “pre”
     [<DataMember(Name = "type")>]
@@ -7290,7 +7290,7 @@ and [<CLIMutable>] RichBlockPreformatted =
     }
 
 /// A footer, corresponding to the HTML tag <footer>.
-and [<CLIMutable>] RichBlockFooter =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "footer")>] RichBlockFooter =
   {
     /// Type of the block, always “footer”
     [<DataMember(Name = "type")>]
@@ -7306,7 +7306,7 @@ and [<CLIMutable>] RichBlockFooter =
     }
 
 /// A divider, corresponding to the HTML tag <hr/>.
-and [<CLIMutable>] RichBlockDivider =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "divider")>] RichBlockDivider =
   {
     /// Type of the block, always “divider”
     [<DataMember(Name = "type")>]
@@ -7318,7 +7318,7 @@ and [<CLIMutable>] RichBlockDivider =
     }
 
 /// A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag <tg-math-block>.
-and [<CLIMutable>] RichBlockMathematicalExpression =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "mathematical_expression")>] RichBlockMathematicalExpression =
   {
     /// Type of the block, always “mathematical_expression”
     [<DataMember(Name = "type")>]
@@ -7334,7 +7334,7 @@ and [<CLIMutable>] RichBlockMathematicalExpression =
     }
 
 /// A block with an anchor, corresponding to the HTML tag <a> with the attribute name.
-and [<CLIMutable>] RichBlockAnchor =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "anchor")>] RichBlockAnchor =
   {
     /// Type of the block, always “anchor”
     [<DataMember(Name = "type")>]
@@ -7350,7 +7350,7 @@ and [<CLIMutable>] RichBlockAnchor =
     }
 
 /// A list of blocks, corresponding to the HTML tag <ul> or <ol> with multiple nested tags <li>.
-and [<CLIMutable>] RichBlockList =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "list")>] RichBlockList =
   {
     /// Type of the block, always “list”
     [<DataMember(Name = "type")>]
@@ -7366,7 +7366,7 @@ and [<CLIMutable>] RichBlockList =
     }
 
 /// A block quotation, corresponding to the HTML tag <blockquote>.
-and [<CLIMutable>] RichBlockBlockQuotation =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "blockquote")>] RichBlockBlockQuotation =
   {
     /// Type of the block, always “blockquote”
     [<DataMember(Name = "type")>]
@@ -7386,7 +7386,7 @@ and [<CLIMutable>] RichBlockBlockQuotation =
     }
 
 /// A quotation with centered text, loosely corresponding to the HTML tag <aside>.
-and [<CLIMutable>] RichBlockPullQuotation =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "pullquote")>] RichBlockPullQuotation =
   {
     /// Type of the block, always “pullquote”
     [<DataMember(Name = "type")>]
@@ -7406,7 +7406,7 @@ and [<CLIMutable>] RichBlockPullQuotation =
     }
 
 /// A collage, corresponding to the custom HTML tag <tg-collage>.
-and [<CLIMutable>] RichBlockCollage =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "collage")>] RichBlockCollage =
   {
     /// Type of the block, always “collage”
     [<DataMember(Name = "type")>]
@@ -7426,7 +7426,7 @@ and [<CLIMutable>] RichBlockCollage =
     }
 
 /// A slideshow, corresponding to the custom HTML tag <tg-slideshow>.
-and [<CLIMutable>] RichBlockSlideshow =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "slideshow")>] RichBlockSlideshow =
   {
     /// Type of the block, always “slideshow”
     [<DataMember(Name = "type")>]
@@ -7446,7 +7446,7 @@ and [<CLIMutable>] RichBlockSlideshow =
     }
 
 /// A table, corresponding to the HTML tag <table>.
-and [<CLIMutable>] RichBlockTable =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "table")>] RichBlockTable =
   {
     /// Type of the block, always “table”
     [<DataMember(Name = "type")>]
@@ -7474,7 +7474,7 @@ and [<CLIMutable>] RichBlockTable =
     }
 
 /// An expandable block for details disclosure, corresponding to the HTML tag <details>.
-and [<CLIMutable>] RichBlockDetails =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "details")>] RichBlockDetails =
   {
     /// Type of the block, always “details”
     [<DataMember(Name = "type")>]
@@ -7498,7 +7498,7 @@ and [<CLIMutable>] RichBlockDetails =
     }
 
 /// A block with a map, corresponding to the custom HTML tag <tg-map>.
-and [<CLIMutable>] RichBlockMap =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "map")>] RichBlockMap =
   {
     /// Type of the block, always “map”
     [<DataMember(Name = "type")>]
@@ -7530,7 +7530,7 @@ and [<CLIMutable>] RichBlockMap =
     }
 
 /// A block with an animation, corresponding to the HTML tag <video>.
-and [<CLIMutable>] RichBlockAnimation =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "animation")>] RichBlockAnimation =
   {
     /// Type of the block, always “animation”
     [<DataMember(Name = "type")>]
@@ -7554,7 +7554,7 @@ and [<CLIMutable>] RichBlockAnimation =
     }
 
 /// A block with a music file, corresponding to the HTML tag <audio>.
-and [<CLIMutable>] RichBlockAudio =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "audio")>] RichBlockAudio =
   {
     /// Type of the block, always “audio”
     [<DataMember(Name = "type")>]
@@ -7574,7 +7574,7 @@ and [<CLIMutable>] RichBlockAudio =
     }
 
 /// A block with a photo, corresponding to the HTML tag <photo>.
-and [<CLIMutable>] RichBlockPhoto =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "photo")>] RichBlockPhoto =
   {
     /// Type of the block, always “photo”
     [<DataMember(Name = "type")>]
@@ -7598,7 +7598,7 @@ and [<CLIMutable>] RichBlockPhoto =
     }
 
 /// A block with a video, corresponding to the HTML tag <video>.
-and [<CLIMutable>] RichBlockVideo =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "video")>] RichBlockVideo =
   {
     /// Type of the block, always “video”
     [<DataMember(Name = "type")>]
@@ -7622,7 +7622,7 @@ and [<CLIMutable>] RichBlockVideo =
     }
 
 /// A block with a voice note, corresponding to the HTML tag <audio>.
-and [<CLIMutable>] RichBlockVoiceNote =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "voice_note")>] RichBlockVoiceNote =
   {
     /// Type of the block, always “voice_note”
     [<DataMember(Name = "type")>]
@@ -7645,7 +7645,7 @@ and [<CLIMutable>] RichBlockVoiceNote =
 /// The following methods and objects allow your bot to work in inline mode.
 /// Please see our Introduction to Inline bots for more details.
 /// To enable this option, send the /setinline command to @BotFather and provide the placeholder text that the user will see in the input field after typing your bot's name.
-and [<CLIMutable>] RichBlockThinking =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "thinking")>] RichBlockThinking =
   {
     /// Type of the block, always “thinking”
     [<DataMember(Name = "type")>]
@@ -9218,7 +9218,7 @@ and [<CLIMutable>] SuccessfulPayment =
     }
 
 /// This object contains basic information about a refunded payment.
-and [<CLIMutable>] RefundedPayment =
+and [<CLIMutable; Funogram.Types.TelegramTag("currency", "XTR")>] RefundedPayment =
   {
     /// Three-letter ISO 4217 currency code, or “XTR” for payments in Telegram Stars. Currently, always “XTR”.
     [<DataMember(Name = "currency")>]
@@ -9328,7 +9328,7 @@ and RevenueWithdrawalState =
   | Failed of RevenueWithdrawalStateFailed
 
 /// The withdrawal is in progress.
-and [<CLIMutable>] RevenueWithdrawalStatePending =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "pending")>] RevenueWithdrawalStatePending =
   {
     /// Type of the state, always “pending”
     [<DataMember(Name = "type")>]
@@ -9340,7 +9340,7 @@ and [<CLIMutable>] RevenueWithdrawalStatePending =
     }
 
 /// The withdrawal succeeded.
-and [<CLIMutable>] RevenueWithdrawalStateSucceeded =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "succeeded")>] RevenueWithdrawalStateSucceeded =
   {
     /// Type of the state, always “succeeded”
     [<DataMember(Name = "type")>]
@@ -9360,7 +9360,7 @@ and [<CLIMutable>] RevenueWithdrawalStateSucceeded =
     }
 
 /// The withdrawal failed and the transaction was refunded.
-and [<CLIMutable>] RevenueWithdrawalStateFailed =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "failed")>] RevenueWithdrawalStateFailed =
   {
     /// Type of the state, always “failed”
     [<DataMember(Name = "type")>]
@@ -9410,7 +9410,7 @@ and TransactionPartner =
   | Other of TransactionPartnerOther
 
 /// Describes a transaction with a user.
-and [<CLIMutable>] TransactionPartnerUser =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "user")>] TransactionPartnerUser =
   {
     /// Type of the transaction partner, always “user”
     [<DataMember(Name = "type")>]
@@ -9458,7 +9458,7 @@ and [<CLIMutable>] TransactionPartnerUser =
     }
 
 /// Describes a transaction with a chat.
-and [<CLIMutable>] TransactionPartnerChat =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "chat")>] TransactionPartnerChat =
   {
     /// Type of the transaction partner, always “chat”
     [<DataMember(Name = "type")>]
@@ -9478,7 +9478,7 @@ and [<CLIMutable>] TransactionPartnerChat =
     }
 
 /// Describes the affiliate program that issued the affiliate commission received via this transaction.
-and [<CLIMutable>] TransactionPartnerAffiliateProgram =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "affiliate_program")>] TransactionPartnerAffiliateProgram =
   {
     /// Type of the transaction partner, always “affiliate_program”
     [<DataMember(Name = "type")>]
@@ -9498,7 +9498,7 @@ and [<CLIMutable>] TransactionPartnerAffiliateProgram =
     }
 
 /// Describes a withdrawal transaction with Fragment.
-and [<CLIMutable>] TransactionPartnerFragment =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "fragment")>] TransactionPartnerFragment =
   {
     /// Type of the transaction partner, always “fragment”
     [<DataMember(Name = "type")>]
@@ -9514,7 +9514,7 @@ and [<CLIMutable>] TransactionPartnerFragment =
     }
 
 /// Describes a withdrawal transaction to the Telegram Ads platform.
-and [<CLIMutable>] TransactionPartnerTelegramAds =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "telegram_ads")>] TransactionPartnerTelegramAds =
   {
     /// Type of the transaction partner, always “telegram_ads”
     [<DataMember(Name = "type")>]
@@ -9526,7 +9526,7 @@ and [<CLIMutable>] TransactionPartnerTelegramAds =
     }
 
 /// Describes a transaction with payment for paid broadcasting.
-and [<CLIMutable>] TransactionPartnerTelegramApi =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "telegram_api")>] TransactionPartnerTelegramApi =
   {
     /// Type of the transaction partner, always “telegram_api”
     [<DataMember(Name = "type")>]
@@ -9542,7 +9542,7 @@ and [<CLIMutable>] TransactionPartnerTelegramApi =
     }
 
 /// Describes a transaction with an unknown source or recipient.
-and [<CLIMutable>] TransactionPartnerOther =
+and [<CLIMutable; Funogram.Types.TelegramTag("type", "other")>] TransactionPartnerOther =
   {
     /// Type of the transaction partner, always “other”
     [<DataMember(Name = "type")>]
