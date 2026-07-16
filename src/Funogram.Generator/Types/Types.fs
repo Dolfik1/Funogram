@@ -19,6 +19,7 @@ type ApiTypeField =
     Description: string
     OriginalFieldType: string
     ConvertedFieldType: string
+    AlwaysValue: string option
     Optional: bool option
   }
   [<IgnoreDataMember>]

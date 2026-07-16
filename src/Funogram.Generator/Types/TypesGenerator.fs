@@ -19,6 +19,7 @@ let private createHeaderCode () =
 open System
 open System.IO
 open System.Runtime.Serialization
+open Funogram.Types
 
 type ChatId = 
   | Int of int64
@@ -115,6 +116,7 @@ let private generateFieldsBody tp (fields: ApiTypeField[]) code =
     code
     |> Code.printNewLineComment field.Description
     |> Code.printNewLine (sprintf "[<DataMember(Name = \"%s\")>]" field.OriginalName)
+    |> Code.printNewLineOpt field.AlwaysValue (fun value -> $"[<Always(\"{value}\")>]")
     |> Code.printNewLine (sprintf "%s: %s" field.ConvertedName field.VisibleFieldType)
   ) code
 

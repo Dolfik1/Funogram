@@ -4,7 +4,9 @@ module Funogram.Generator.Types.TypesParser
 open System
 open System.Diagnostics
 open System.IO
+open System.Linq
 open System.Text.Json
+open System.Text.RegularExpressions
 open FSharp.Data
 open Funogram.Generator
 open Funogram.Generator.Types.Types
@@ -56,6 +58,24 @@ let private isValidTypeNode (typeNodeInfo: ApiTypeNodeInfo) =
 let private setConvertedFieldType (field: ApiTypeField) =
   { field with ConvertedFieldType = Helpers.convertTLTypeToFSharpType field.OriginalFieldType field.Description false }
 
+let private alwaysValueRegexes =
+  [|
+    Regex("""always [“"]([A-Za-z0-9_]+)[”"]""")
+    Regex("""must be <em>([A-Za-z0-9_]+)<\/em>""")
+  |]
+
+let private tryParseAlwaysValue (description: string): string option =
+  alwaysValueRegexes
+  |> Seq.choose (fun r -> 
+      let m = r.Match(description)
+      if m.Success && m.Groups.Count > 1 then
+        Some (m.Groups.Values.Last().Value)
+      else
+        None
+    )
+  |> Seq.tryHead
+
+
 let private parseApiTypeFields apiTypeName (node: HtmlNode) =
   node.CssSelect("tr")
   |> Seq.skip 1 // skip the header
@@ -65,12 +85,14 @@ let private parseApiTypeFields apiTypeName (node: HtmlNode) =
     let desc = Helpers.innerText elements[2]
     let optionalIndex = desc.IndexOf("Optional. ") 
     let trimmedDesc = if optionalIndex >= 0 then desc.Substring(10) else desc
+    let originalFieldType = Helpers.innerText elements[1]
     {
       OriginalName = Helpers.innerText elements[0]
       ConvertedName = elements[0] |> Helpers.innerText |> Helpers.toPascalCase
       Description = trimmedDesc
-      OriginalFieldType = Helpers.innerText elements[1]
+      OriginalFieldType = originalFieldType
       ConvertedFieldType = ""
+      AlwaysValue = if originalFieldType = "String" then tryParseAlwaysValue (Helpers.innerHtml elements[2]) else None
       Optional = Some (optionalIndex >= 0)
     } |> setConvertedFieldType
   )
@@ -86,6 +108,24 @@ let private parseApiTypeCases (typeName: string) (node: HtmlNode) =
     }
   )
   |> Array.ofSeq
+
+let private cleanup (types: ApiType[]) =
+  let caseTypes =
+    types
+    |> Seq.collect (fun x ->
+      match x.Kind with
+      | Cases cases -> cases |> Seq.map _.CaseType
+      | _ -> Seq.empty
+    )
+    |> Set.ofSeq
+  
+  types
+  |> Array.map (fun x ->
+    match x.Kind with
+    | Fields fields when (caseTypes.Contains(x.Name) |> not) && fields |> Seq.exists _.AlwaysValue.IsSome ->
+      { x with Kind = ApiTypeKind.Fields (fields |> Array.map (fun f -> { f with AlwaysValue = None })) }
+    | _ -> x      
+  )
 
 let private remap (remapTypes: ApiType[]) (types: ApiType[]) =
   types
@@ -233,7 +273,10 @@ let parse (config: ParseConfig) =
   
   printfn "Types are read successfully in %i ms!" sw.ElapsedMilliseconds
 
-  let types = types |> remap config.RemapTypes
+  let types =
+    types
+    |> remap config.RemapTypes
+    |> cleanup
   
   match config.ParseResultPath with
   | Some parseResultPath ->

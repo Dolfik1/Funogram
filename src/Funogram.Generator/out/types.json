@@ -213,6 +213,14 @@
             "OriginalFieldType": "ManagedBotUpdated",
             "ConvertedFieldType": "ManagedBotUpdated",
             "Optional": true
+          },
+          {
+            "OriginalName": "subscription",
+            "ConvertedName": "Subscription",
+            "Description": "User payment subscription has changed",
+            "OriginalFieldType": "BotSubscriptionUpdated",
+            "ConvertedFieldType": "BotSubscriptionUpdated",
+            "Optional": true
           }
         ]
       ]
@@ -953,6 +961,14 @@
             "OriginalFieldType": "User",
             "ConvertedFieldType": "User",
             "Optional": true
+          },
+          {
+            "OriginalName": "community",
+            "ConvertedName": "Community",
+            "Description": "The Community to which the chat belongs",
+            "OriginalFieldType": "Community",
+            "ConvertedFieldType": "Community",
+            "Optional": true
           }
         ]
       ]
@@ -968,7 +984,7 @@
           {
             "OriginalName": "message_id",
             "ConvertedName": "MessageId",
-            "Description": "Unique message identifier inside this chat. In specific instances (e.g., message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.",
+            "Description": "Unique message identifier inside this chat; 0 for ephemeral messages. In specific instances (e.g., a message containing a video sent to a big chat), the server might automatically schedule a message instead of sending it immediately. In such cases, this field will be 0 and the relevant message will be unusable until it is actually sent.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -1030,6 +1046,22 @@
             "Optional": true
           },
           {
+            "OriginalName": "receiver_user",
+            "ConvertedName": "ReceiverUser",
+            "Description": "For ephemeral messages, the user who received the message",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": true
+          },
+          {
+            "OriginalName": "ephemeral_message_id",
+            "ConvertedName": "EphemeralMessageId",
+            "Description": "For ephemeral messages, identifier of the ephemeral message inside this chat. The identifier may be reused for another ephemeral message after the message is deleted or expires.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "date",
             "ConvertedName": "Date",
             "Description": "Date the message was sent in Unix time. It is always a positive number, representing a valid date.",
@@ -1088,7 +1120,7 @@
           {
             "OriginalName": "reply_to_message",
             "ConvertedName": "ReplyToMessage",
-            "Description": "For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply.",
+            "Description": "For replies in the same chat and message thread, the original message. Note that the Message object in this field will not contain further reply_to_message fields even if it itself is a reply. If the message is a reply to an ephemeral message, then this field may be omitted.",
             "OriginalFieldType": "Message",
             "ConvertedFieldType": "Message",
             "Optional": true
@@ -1640,7 +1672,7 @@
           {
             "OriginalName": "proximity_alert_triggered",
             "ConvertedName": "ProximityAlertTriggered",
-            "Description": "Service message. A user in the chat triggered another user\u0027s proximity alert while sharing Live Location.",
+            "Description": "Service message: a user in the chat triggered another user\u0027s proximity alert while sharing Live Location",
             "OriginalFieldType": "ProximityAlertTriggered",
             "ConvertedFieldType": "ProximityAlertTriggered",
             "Optional": true
@@ -1675,6 +1707,22 @@
             "Description": "Service message: tasks were added to a checklist",
             "OriginalFieldType": "ChecklistTasksAdded",
             "ConvertedFieldType": "ChecklistTasksAdded",
+            "Optional": true
+          },
+          {
+            "OriginalName": "community_chat_added",
+            "ConvertedName": "CommunityChatAdded",
+            "Description": "Service message: chat added to a Community",
+            "OriginalFieldType": "CommunityChatAdded",
+            "ConvertedFieldType": "CommunityChatAdded",
+            "Optional": true
+          },
+          {
+            "OriginalName": "community_chat_removed",
+            "ConvertedName": "CommunityChatRemoved",
+            "Description": "Service message: chat removed from a Community",
+            "OriginalFieldType": "CommunityChatRemoved",
+            "ConvertedFieldType": "CommunityChatRemoved",
             "Optional": true
           },
           {
@@ -2317,23 +2365,31 @@
           {
             "OriginalName": "message_id",
             "ConvertedName": "MessageId",
-            "Description": "Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified",
+            "Description": "Identifier of the message that will be replied to in the current chat, or in the chat chat_id if it is specified. Required if ephemeral_message_id isn\u0027t specified.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "chat_id",
             "ConvertedName": "ChatId",
-            "Description": "If the message to be replied to is from a different chat, unique identifier for the chat or username of the bot, supergroup or channel in the format @username. Not supported for messages sent on behalf of a business account and messages from channel direct messages chats.",
+            "Description": "If the message to be replied to is from a different chat, unique identifier for the chat or username of the bot, supergroup or channel in the format @username. Not supported for messages sent on behalf of a business account, messages from channel direct messages chats and ephemeral messages.",
             "OriginalFieldType": "Integer or String",
             "ConvertedFieldType": "ChatId",
             "Optional": true
           },
           {
+            "OriginalName": "ephemeral_message_id",
+            "ConvertedName": "EphemeralMessageId",
+            "Description": "Identifier of the incoming ephemeral message that will be replied to in the current chat. A reply to an ephemeral message must itself be an ephemeral message. An ephemeral message may only be replied to within 15 seconds of being sent. Required if message_id isn\u0027t specified.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
             "OriginalName": "allow_sending_without_reply",
             "ConvertedName": "AllowSendingWithoutReply",
-            "Description": "Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic. Always True for messages sent on behalf of a business account.",
+            "Description": "Pass True if the message should be sent even if the specified message to be replied to is not found. Always False for replies in another chat or forum topic, and sent ephemeral messages. Always True for messages sent on behalf of a business account.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -2341,7 +2397,7 @@
           {
             "OriginalName": "quote",
             "ConvertedName": "Quote",
-            "Description": "Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities. The message will fail to send if the quote isn\u0027t found in the original message.",
+            "Description": "Quoted part of the message to be replied to; 0-1024 characters after entities parsing. The quote must be an exact substring of the message to be replied to, including bold, italic, underline, strikethrough, spoiler, custom_emoji, and date_time entities. The message will fail to send if the quote isn\u0027t found in the original message. Ignored for ephemeral messages.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -2430,6 +2486,7 @@
             "Description": "Type of the message origin, always \u201Cuser\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "user",
             "Optional": false
           },
           {
@@ -2465,6 +2522,7 @@
             "Description": "Type of the message origin, always \u201Chidden_user\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "hidden_user",
             "Optional": false
           },
           {
@@ -2500,6 +2558,7 @@
             "Description": "Type of the message origin, always \u201Cchat\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "chat",
             "Optional": false
           },
           {
@@ -2543,6 +2602,7 @@
             "Description": "Type of the message origin, always \u201Cchannel\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "channel",
             "Optional": false
           },
           {
@@ -3302,6 +3362,7 @@
             "Description": "Type of the paid media, always \u201Clive_photo\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "live_photo",
             "Optional": false
           },
           {
@@ -3329,6 +3390,7 @@
             "Description": "Type of the paid media, always \u201Cphoto\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -3356,6 +3418,7 @@
             "Description": "Type of the paid media, always \u201Cpreview\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "preview",
             "Optional": false
           },
           {
@@ -3399,6 +3462,7 @@
             "Description": "Type of the paid media, always \u201Cvideo\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -4248,68 +4312,6 @@
     }
   },
   {
-    "Name": "ChecklistTasksDone",
-    "Description": "Describes a service message about checklist tasks marked as done or not done.",
-    "Kind": {
-      "Case": "Fields",
-      "Fields": [
-        [
-          {
-            "OriginalName": "checklist_message",
-            "ConvertedName": "ChecklistMessage",
-            "Description": "Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
-            "OriginalFieldType": "Message",
-            "ConvertedFieldType": "Message",
-            "Optional": true
-          },
-          {
-            "OriginalName": "marked_as_done_task_ids",
-            "ConvertedName": "MarkedAsDoneTaskIds",
-            "Description": "Identifiers of the tasks that were marked as done",
-            "OriginalFieldType": "Array of Integer",
-            "ConvertedFieldType": "int64[]",
-            "Optional": true
-          },
-          {
-            "OriginalName": "marked_as_not_done_task_ids",
-            "ConvertedName": "MarkedAsNotDoneTaskIds",
-            "Description": "Identifiers of the tasks that were marked as not done",
-            "OriginalFieldType": "Array of Integer",
-            "ConvertedFieldType": "int64[]",
-            "Optional": true
-          }
-        ]
-      ]
-    }
-  },
-  {
-    "Name": "ChecklistTasksAdded",
-    "Description": "Describes a service message about tasks added to a checklist.",
-    "Kind": {
-      "Case": "Fields",
-      "Fields": [
-        [
-          {
-            "OriginalName": "checklist_message",
-            "ConvertedName": "ChecklistMessage",
-            "Description": "Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
-            "OriginalFieldType": "Message",
-            "ConvertedFieldType": "Message",
-            "Optional": true
-          },
-          {
-            "OriginalName": "tasks",
-            "ConvertedName": "Tasks",
-            "Description": "List of tasks added to the checklist",
-            "OriginalFieldType": "Array of ChecklistTask",
-            "ConvertedFieldType": "ChecklistTask[]",
-            "Optional": false
-          }
-        ]
-      ]
-    }
-  },
-  {
     "Name": "Location",
     "Description": "This object represents a point on the map.",
     "Kind": {
@@ -4563,6 +4565,41 @@
     }
   },
   {
+    "Name": "BotSubscriptionUpdated",
+    "Description": "This object contains information about changes to a user payment subscription toward the current bot.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "user",
+            "ConvertedName": "User",
+            "Description": "User who subscribed for payments toward the bot",
+            "OriginalFieldType": "User",
+            "ConvertedFieldType": "User",
+            "Optional": false
+          },
+          {
+            "OriginalName": "invoice_payload",
+            "ConvertedName": "InvoicePayload",
+            "Description": "Bot-specified invoice payload",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "state",
+            "ConvertedName": "State",
+            "Description": "The new state of the subscription. Currently, it can be one of \u201Ccanceled\u201D if the user canceled the subscription, \u201Cactive\u201D if the user re-enabled a previously canceled subscription, or \u201Cfailed\u201D if payment for the subscription failed.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "PollOptionAdded",
     "Description": "Describes a service message about an option added to a poll.",
     "Kind": {
@@ -4703,6 +4740,7 @@
             "Description": "Type of the background fill, always \u201Csolid\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "solid",
             "Optional": false
           },
           {
@@ -4730,6 +4768,7 @@
             "Description": "Type of the background fill, always \u201Cgradient\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "gradient",
             "Optional": false
           },
           {
@@ -4773,6 +4812,7 @@
             "Description": "Type of the background fill, always \u201Cfreeform_gradient\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "freeform_gradient",
             "Optional": false
           },
           {
@@ -4827,6 +4867,7 @@
             "Description": "Type of the background, always \u201Cfill\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "fill",
             "Optional": false
           },
           {
@@ -4862,6 +4903,7 @@
             "Description": "Type of the background, always \u201Cwallpaper\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "wallpaper",
             "Optional": false
           },
           {
@@ -4913,6 +4955,7 @@
             "Description": "Type of the background, always \u201Cpattern\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "pattern",
             "Optional": false
           },
           {
@@ -4972,6 +5015,7 @@
             "Description": "Type of the background, always \u201Cchat_theme\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "chat_theme",
             "Optional": false
           },
           {
@@ -5003,6 +5047,94 @@
           }
         ]
       ]
+    }
+  },
+  {
+    "Name": "ChecklistTasksDone",
+    "Description": "Describes a service message about checklist tasks marked as done or not done.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "checklist_message",
+            "ConvertedName": "ChecklistMessage",
+            "Description": "Message containing the checklist whose tasks were marked as done or not done. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "marked_as_done_task_ids",
+            "ConvertedName": "MarkedAsDoneTaskIds",
+            "Description": "Identifiers of the tasks that were marked as done",
+            "OriginalFieldType": "Array of Integer",
+            "ConvertedFieldType": "int64[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "marked_as_not_done_task_ids",
+            "ConvertedName": "MarkedAsNotDoneTaskIds",
+            "Description": "Identifiers of the tasks that were marked as not done",
+            "OriginalFieldType": "Array of Integer",
+            "ConvertedFieldType": "int64[]",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "ChecklistTasksAdded",
+    "Description": "Describes a service message about tasks added to a checklist.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "checklist_message",
+            "ConvertedName": "ChecklistMessage",
+            "Description": "Message containing the checklist to which the tasks were added. Note that the Message object in this field will not contain the reply_to_message field even if it itself is a reply.",
+            "OriginalFieldType": "Message",
+            "ConvertedFieldType": "Message",
+            "Optional": true
+          },
+          {
+            "OriginalName": "tasks",
+            "ConvertedName": "Tasks",
+            "Description": "List of tasks added to the checklist",
+            "OriginalFieldType": "Array of ChecklistTask",
+            "ConvertedFieldType": "ChecklistTask[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "CommunityChatAdded",
+    "Description": "Describes a service message about a chat being added to a community.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "community",
+            "ConvertedName": "Community",
+            "Description": "The new community to which the chat belongs",
+            "OriginalFieldType": "Community",
+            "ConvertedFieldType": "Community",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "CommunityChatRemoved",
+    "Description": "Describes a service message about a chat being removed from a community. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
     }
   },
   {
@@ -5360,7 +5492,7 @@
           {
             "OriginalName": "are_direct_messages_enabled",
             "ConvertedName": "AreDirectMessagesEnabled",
-            "Description": "True, if direct messages are enabled for the channel chat; false otherwise",
+            "Description": "True, if direct messages are enabled for the channel chat; False otherwise",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -5484,7 +5616,7 @@
           {
             "OriginalName": "currency",
             "ConvertedName": "Currency",
-            "Description": "Currency in which the payment was made. Currently, one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for toncoins.",
+            "Description": "Currency in which the payment was made. Currently, one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for TON grams.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -5492,7 +5624,7 @@
           {
             "OriginalName": "amount",
             "ConvertedName": "Amount",
-            "Description": "The amount of the currency that was received by the channel in nanotoncoins; for payments in toncoins only",
+            "Description": "The amount of the currency that was received by the channel in nanograms; for payments in TON grams only",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -5849,7 +5981,7 @@
           {
             "OriginalName": "currency",
             "ConvertedName": "Currency",
-            "Description": "Currency in which the post will be paid. Currently, must be one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for toncoins.",
+            "Description": "Currency in which the post will be paid. Currently, must be one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for TON grams.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -5857,7 +5989,7 @@
           {
             "OriginalName": "amount",
             "ConvertedName": "Amount",
-            "Description": "The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanotoncoins. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanotoncoins must be between 10000000 and 10000000000000.",
+            "Description": "The amount of the currency that will be paid for the post in the smallest units of the currency, i.e. Telegram Stars or nanograms. Currently, price in Telegram Stars must be between 5 and 100000, and price in nanograms must be between 10000000 and 10000000000000.",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -6089,7 +6221,7 @@
           {
             "OriginalName": "is_persistent",
             "ConvertedName": "IsPersistent",
-            "Description": "Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to false, in which case the custom keyboard can be hidden and opened with a keyboard icon.",
+            "Description": "Requests clients to always show the keyboard when the regular keyboard is hidden. Defaults to False, in which case the custom keyboard can be hidden and opened with a keyboard icon.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6097,7 +6229,7 @@
           {
             "OriginalName": "resize_keyboard",
             "ConvertedName": "ResizeKeyboard",
-            "Description": "Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to false, in which case the custom keyboard is always of the same height as the app\u0027s standard keyboard.",
+            "Description": "Requests clients to resize the keyboard vertically for optimal fit (e.g., make the keyboard smaller if there are just two rows of buttons). Defaults to False, in which case the custom keyboard is always of the same height as the app\u0027s standard keyboard.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6105,7 +6237,7 @@
           {
             "OriginalName": "one_time_keyboard",
             "ConvertedName": "OneTimeKeyboard",
-            "Description": "Requests clients to hide the keyboard as soon as it\u0027s been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to false.",
+            "Description": "Requests clients to hide the keyboard as soon as it\u0027s been used. The keyboard will still be available, but clients will automatically display the usual letter-keyboard in the chat - the user can press a special button in the input field to see the custom keyboard again. Defaults to False.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -6818,6 +6950,33 @@
     }
   },
   {
+    "Name": "Community",
+    "Description": "Represents a community (a group of chats).",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier for this community. This number may have more than 32 significant bits and some programming languages may have difficulty/silent defects in interpreting it. But it has at most 52 significant bits, so a signed 64-bit integer or double-precision float type are safe for storing this identifier.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "Name of the community",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "ChatPhoto",
     "Description": "This object represents a chat photo.",
     "Kind": {
@@ -7097,7 +7256,7 @@
           {
             "OriginalName": "can_manage_tags",
             "ConvertedName": "CanManageTags",
-            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted defaults to the value of can_pin_messages.",
+            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -7237,6 +7396,7 @@
             "Description": "The member\u0027s status in the chat, always \u201Ccreator\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "creator",
             "Optional": false
           },
           {
@@ -7280,6 +7440,7 @@
             "Description": "The member\u0027s status in the chat, always \u201Cadministrator\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "administrator",
             "Optional": false
           },
           {
@@ -7429,7 +7590,7 @@
           {
             "OriginalName": "can_manage_tags",
             "ConvertedName": "CanManageTags",
-            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted defaults to the value of can_pin_messages.",
+            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -7467,6 +7628,7 @@
             "Description": "The member\u0027s status in the chat, always \u201Cmember\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "member",
             "Optional": false
           },
           {
@@ -7510,6 +7672,7 @@
             "Description": "The member\u0027s status in the chat, always \u201Crestricted\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "restricted",
             "Optional": false
           },
           {
@@ -7689,6 +7852,7 @@
             "Description": "The member\u0027s status in the chat, always \u201Cleft\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "left",
             "Optional": false
           },
           {
@@ -7716,6 +7880,7 @@
             "Description": "The member\u0027s status in the chat, always \u201Ckicked\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "kicked",
             "Optional": false
           },
           {
@@ -7796,7 +7961,7 @@
           {
             "OriginalName": "query_id",
             "ConvertedName": "QueryId",
-            "Description": "Identifier of the join request query. If present, then the bot must call sendChatJoinRequestWebApp or directly call answerChatJoinRequestQuery within 10 seconds.",
+            "Description": "Identifier of the join request query; for bots assigned to process join requests only. If present, then the bot must call sendChatJoinRequestWebApp or directly call answerChatJoinRequestQuery within 10 seconds.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -7935,7 +8100,7 @@
           {
             "OriginalName": "can_manage_topics",
             "ConvertedName": "CanManageTopics",
-            "Description": "True, if the user is allowed to create forum topics. If omitted defaults to the value of can_pin_messages.",
+            "Description": "True, if the user is allowed to create forum topics. If omitted, defaults to the value of can_pin_messages.",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -8284,6 +8449,7 @@
             "Description": "Type of the area, always \u201Clocation\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "location",
             "Optional": false
           },
           {
@@ -8327,6 +8493,7 @@
             "Description": "Type of the area, always \u201Csuggested_reaction\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "suggested_reaction",
             "Optional": false
           },
           {
@@ -8370,6 +8537,7 @@
             "Description": "Type of the area, always \u201Clink\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "link",
             "Optional": false
           },
           {
@@ -8397,6 +8565,7 @@
             "Description": "Type of the area, always \u201Cweather\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "weather",
             "Optional": false
           },
           {
@@ -8440,6 +8609,7 @@
             "Description": "Type of the area, always \u201Cunique_gift\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "unique_gift",
             "Optional": false
           },
           {
@@ -8544,6 +8714,7 @@
             "Description": "Type of the reaction, always \u201Cemoji\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "emoji",
             "Optional": false
           },
           {
@@ -8571,6 +8742,7 @@
             "Description": "Type of the reaction, always \u201Ccustom_emoji\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "custom_emoji",
             "Optional": false
           },
           {
@@ -8598,6 +8770,7 @@
             "Description": "Type of the reaction, always \u201Cpaid\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "paid",
             "Optional": false
           }
         ]
@@ -9400,7 +9573,7 @@
           {
             "OriginalName": "last_resale_currency",
             "ConvertedName": "LastResaleCurrency",
-            "Description": "For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for toncoins.",
+            "Description": "For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of \u201CXTR\u201D for Telegram Stars or \u201CTON\u201D for TON grams.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -9408,7 +9581,7 @@
           {
             "OriginalName": "last_resale_amount",
             "ConvertedName": "LastResaleAmount",
-            "Description": "For gifts bought from other users, the price paid for the gift in either Telegram Stars or nanotoncoins",
+            "Description": "For gifts bought from other users, the price paid for the gift in either Telegram Stars or nanograms",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": true
@@ -9473,6 +9646,7 @@
             "Description": "Type of the gift, always \u201Cregular\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "regular",
             "Optional": false
           },
           {
@@ -9604,6 +9778,7 @@
             "Description": "Type of the gift, always \u201Cunique\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "unique",
             "Optional": false
           },
           {
@@ -9836,6 +10011,14 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "is_ephemeral",
+            "ConvertedName": "IsEphemeral",
+            "Description": "True, if the command sends an ephemeral message, which can be seen only by the sender of the message and the bot",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -9893,6 +10076,7 @@
             "Description": "Scope type, must be default",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "default",
             "Optional": false
           }
         ]
@@ -9912,6 +10096,7 @@
             "Description": "Scope type, must be all_private_chats",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "all_private_chats",
             "Optional": false
           }
         ]
@@ -9931,6 +10116,7 @@
             "Description": "Scope type, must be all_group_chats",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "all_group_chats",
             "Optional": false
           }
         ]
@@ -9950,6 +10136,7 @@
             "Description": "Scope type, must be all_chat_administrators",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "all_chat_administrators",
             "Optional": false
           }
         ]
@@ -9969,6 +10156,7 @@
             "Description": "Scope type, must be chat",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "chat",
             "Optional": false
           },
           {
@@ -9996,6 +10184,7 @@
             "Description": "Scope type, must be chat_administrators",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "chat_administrators",
             "Optional": false
           },
           {
@@ -10023,6 +10212,7 @@
             "Description": "Scope type, must be chat_member",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "chat_member",
             "Optional": false
           },
           {
@@ -10138,6 +10328,7 @@
             "Description": "Type of the button, must be commands",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "commands",
             "Optional": false
           }
         ]
@@ -10157,6 +10348,7 @@
             "Description": "Type of the button, must be web_app",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "web_app",
             "Optional": false
           },
           {
@@ -10192,6 +10384,7 @@
             "Description": "Type of the button, must be default",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "default",
             "Optional": false
           }
         ]
@@ -10234,6 +10427,7 @@
             "Description": "Source of the boost, always \u201Cpremium\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "premium",
             "Optional": false
           },
           {
@@ -10261,6 +10455,7 @@
             "Description": "Source of the boost, always \u201Cgift_code\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "gift_code",
             "Optional": false
           },
           {
@@ -10288,6 +10483,7 @@
             "Description": "Source of the boost, always \u201Cgiveaway\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "giveaway",
             "Optional": false
           },
           {
@@ -10872,6 +11068,7 @@
             "Description": "Type of the media, must be animation",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "animation",
             "Optional": false
           },
           {
@@ -10917,7 +11114,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -10971,6 +11168,7 @@
             "Description": "Type of the media, must be audio",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "audio",
             "Optional": false
           },
           {
@@ -11054,6 +11252,7 @@
             "Description": "Type of the media, must be document",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "document",
             "Optional": false
           },
           {
@@ -11121,6 +11320,7 @@
             "Description": "Type of the media, must be link",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "link",
             "Optional": false
           },
           {
@@ -11148,6 +11348,7 @@
             "Description": "Type of the media, must be live_photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "live_photo",
             "Optional": false
           },
           {
@@ -11193,7 +11394,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -11223,6 +11424,7 @@
             "Description": "Type of the media, must be location",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "location",
             "Optional": false
           },
           {
@@ -11266,6 +11468,7 @@
             "Description": "Type of the media, must be photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -11303,7 +11506,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -11333,6 +11536,7 @@
             "Description": "Type of the media, must be sticker",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "sticker",
             "Optional": false
           },
           {
@@ -11368,6 +11572,7 @@
             "Description": "Type of the media, must be venue",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "venue",
             "Optional": false
           },
           {
@@ -11451,6 +11656,7 @@
             "Description": "Type of the media, must be video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -11512,7 +11718,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -11562,6 +11768,65 @@
     }
   },
   {
+    "Name": "InputMediaVoiceNote",
+    "Description": "Represents a voice message file to be sent.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the media, must be voice_note",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "media",
+            "ConvertedName": "Media",
+            "Description": "File to send. Pass a file_id to send a file that exists on the Telegram servers (recommended), pass an HTTP URL for Telegram to get a file from the Internet, or pass \u0022attach://\u003Cfile_attach_name\u003E\u0022 to upload a new one using multipart/form-data under \u003Cfile_attach_name\u003E name. More information on Sending Files \u00BB",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "InputFile",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the voice message to be sent, 0-1024 characters after entities parsing",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "parse_mode",
+            "ConvertedName": "ParseMode",
+            "Description": "Mode for parsing entities in the voice message caption. See formatting options for more details.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "ParseMode",
+            "Optional": true
+          },
+          {
+            "OriginalName": "caption_entities",
+            "ConvertedName": "CaptionEntities",
+            "Description": "List of special entities that appear in the caption, which can be specified instead of parse_mode",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "duration",
+            "ConvertedName": "Duration",
+            "Description": "Duration of the voice message in seconds",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "InputFile",
     "Description": "This object represents the contents of a file to be uploaded. Must be posted using multipart/form-data in the usual way that files are uploaded via the browser.",
     "Kind": {
@@ -11604,6 +11869,7 @@
             "Description": "Type of the media, must be live_photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "live_photo",
             "Optional": false
           },
           {
@@ -11639,6 +11905,7 @@
             "Description": "Type of the media, must be photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -11666,6 +11933,7 @@
             "Description": "Type of the media, must be video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -11768,6 +12036,7 @@
             "Description": "Type of the profile photo, must be static",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "static",
             "Optional": false
           },
           {
@@ -11795,6 +12064,7 @@
             "Description": "Type of the profile photo, must be animated",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "animated",
             "Optional": false
           },
           {
@@ -11849,6 +12119,7 @@
             "Description": "Type of the content, must be photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -11876,6 +12147,7 @@
             "Description": "Type of the content, must be video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -12219,15 +12491,23 @@
   },
   {
     "Name": "InputRichMessage",
-    "Description": "Describes a rich message to be sent. Exactly one of the fields html or markdown must be used.",
+    "Description": "Describes a rich message to be sent. Exactly one of the fields html, markdown, or blocks must be used.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
         [
           {
+            "OriginalName": "blocks",
+            "ConvertedName": "Blocks",
+            "Description": "Content of the rich message to send described as a list of blocks",
+            "OriginalFieldType": "Array of InputRichBlock",
+            "ConvertedFieldType": "InputRichBlock[]",
+            "Optional": true
+          },
+          {
             "OriginalName": "html",
             "ConvertedName": "Html",
-            "Description": "Content of the rich message to send described using HTML formatting. See rich message formatting options for more details.",
+            "Description": "Content of the rich message to send described using HTML formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -12235,9 +12515,17 @@
           {
             "OriginalName": "markdown",
             "ConvertedName": "Markdown",
-            "Description": "Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details.",
+            "Description": "Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "media",
+            "ConvertedName": "Media",
+            "Description": "List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=, and tg://audio?id= links",
+            "OriginalFieldType": "Array of InputRichMessageMedia",
+            "ConvertedFieldType": "InputRichMessageMedia[]",
             "Optional": true
           },
           {
@@ -12255,6 +12543,33 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichMessageMedia",
+    "Description": "Describes a media element embedded in an outgoing rich message.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "id",
+            "ConvertedName": "Id",
+            "Description": "Unique identifier of the media used in a tg://photo?id=, tg://video?id=, or tg://audio?id= link. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          },
+          {
+            "OriginalName": "media",
+            "ConvertedName": "Media",
+            "Description": "The media to be sent. Everything except the media itself and its properties is ignored.",
+            "OriginalFieldType": "InputMediaAnimation or InputMediaAudio or InputMediaPhoto or InputMediaVideo or InputMediaVoiceNote",
+            "ConvertedFieldType": "InputMedia",
+            "Optional": false
           }
         ]
       ]
@@ -12384,6 +12699,7 @@
             "Description": "Type of the rich text, always \u201Cbold\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "bold",
             "Optional": false
           },
           {
@@ -12411,6 +12727,7 @@
             "Description": "Type of the rich text, always \u201Citalic\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "italic",
             "Optional": false
           },
           {
@@ -12438,6 +12755,7 @@
             "Description": "Type of the rich text, always \u201Cunderline\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "underline",
             "Optional": false
           },
           {
@@ -12465,6 +12783,7 @@
             "Description": "Type of the rich text, always \u201Cstrikethrough\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "strikethrough",
             "Optional": false
           },
           {
@@ -12492,6 +12811,7 @@
             "Description": "Type of the rich text, always \u201Cspoiler\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "spoiler",
             "Optional": false
           },
           {
@@ -12519,6 +12839,7 @@
             "Description": "Type of the rich text, always \u201Cdate_time\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "date_time",
             "Optional": false
           },
           {
@@ -12562,6 +12883,7 @@
             "Description": "Type of the rich text, always \u201Ctext_mention\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "text_mention",
             "Optional": false
           },
           {
@@ -12597,6 +12919,7 @@
             "Description": "Type of the rich text, always \u201Csubscript\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "subscript",
             "Optional": false
           },
           {
@@ -12624,6 +12947,7 @@
             "Description": "Type of the rich text, always \u201Csuperscript\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "superscript",
             "Optional": false
           },
           {
@@ -12651,6 +12975,7 @@
             "Description": "Type of the rich text, always \u201Cmarked\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "marked",
             "Optional": false
           },
           {
@@ -12678,6 +13003,7 @@
             "Description": "Type of the rich text, always \u201Ccode\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "code",
             "Optional": false
           },
           {
@@ -12705,6 +13031,7 @@
             "Description": "Type of the rich text, always \u201Ccustom_emoji\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "custom_emoji",
             "Optional": false
           },
           {
@@ -12740,6 +13067,7 @@
             "Description": "Type of the rich text, always \u201Cmathematical_expression\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "mathematical_expression",
             "Optional": false
           },
           {
@@ -12767,6 +13095,7 @@
             "Description": "Type of the rich text, always \u201Curl\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "url",
             "Optional": false
           },
           {
@@ -12802,6 +13131,7 @@
             "Description": "Type of the rich text, always \u201Cemail_address\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "email_address",
             "Optional": false
           },
           {
@@ -12837,6 +13167,7 @@
             "Description": "Type of the rich text, always \u201Cphone_number\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "phone_number",
             "Optional": false
           },
           {
@@ -12872,6 +13203,7 @@
             "Description": "Type of the rich text, always \u201Cbank_card_number\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "bank_card_number",
             "Optional": false
           },
           {
@@ -12907,6 +13239,7 @@
             "Description": "Type of the rich text, always \u201Cmention\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "mention",
             "Optional": false
           },
           {
@@ -12942,6 +13275,7 @@
             "Description": "Type of the rich text, always \u201Chashtag\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "hashtag",
             "Optional": false
           },
           {
@@ -12977,6 +13311,7 @@
             "Description": "Type of the rich text, always \u201Ccashtag\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "cashtag",
             "Optional": false
           },
           {
@@ -13012,6 +13347,7 @@
             "Description": "Type of the rich text, always \u201Cbot_command\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "bot_command",
             "Optional": false
           },
           {
@@ -13047,6 +13383,7 @@
             "Description": "Type of the rich text, always \u201Canchor\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "anchor",
             "Optional": false
           },
           {
@@ -13074,6 +13411,7 @@
             "Description": "Type of the rich text, always \u201Canchor_link\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "anchor_link",
             "Optional": false
           },
           {
@@ -13109,6 +13447,7 @@
             "Description": "Type of the rich text, always \u201Creference\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "reference",
             "Optional": false
           },
           {
@@ -13144,6 +13483,7 @@
             "Description": "Type of the rich text, always \u201Creference_link\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "reference_link",
             "Optional": false
           },
           {
@@ -13419,6 +13759,7 @@
             "Description": "Type of the block, always \u201Cparagraph\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "paragraph",
             "Optional": false
           },
           {
@@ -13446,6 +13787,7 @@
             "Description": "Type of the block, always \u201Cheading\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "heading",
             "Optional": false
           },
           {
@@ -13481,6 +13823,7 @@
             "Description": "Type of the block, always \u201Cpre\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "pre",
             "Optional": false
           },
           {
@@ -13516,6 +13859,7 @@
             "Description": "Type of the block, always \u201Cfooter\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "footer",
             "Optional": false
           },
           {
@@ -13543,6 +13887,7 @@
             "Description": "Type of the block, always \u201Cdivider\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "divider",
             "Optional": false
           }
         ]
@@ -13562,6 +13907,7 @@
             "Description": "Type of the block, always \u201Cmathematical_expression\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "mathematical_expression",
             "Optional": false
           },
           {
@@ -13589,6 +13935,7 @@
             "Description": "Type of the block, always \u201Canchor\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "anchor",
             "Optional": false
           },
           {
@@ -13616,6 +13963,7 @@
             "Description": "Type of the block, always \u201Clist\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "list",
             "Optional": false
           },
           {
@@ -13643,6 +13991,7 @@
             "Description": "Type of the block, always \u201Cblockquote\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "blockquote",
             "Optional": false
           },
           {
@@ -13678,6 +14027,7 @@
             "Description": "Type of the block, always \u201Cpullquote\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "pullquote",
             "Optional": false
           },
           {
@@ -13713,6 +14063,7 @@
             "Description": "Type of the block, always \u201Ccollage\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "collage",
             "Optional": false
           },
           {
@@ -13748,6 +14099,7 @@
             "Description": "Type of the block, always \u201Cslideshow\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "slideshow",
             "Optional": false
           },
           {
@@ -13783,6 +14135,7 @@
             "Description": "Type of the block, always \u201Ctable\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "table",
             "Optional": false
           },
           {
@@ -13834,6 +14187,7 @@
             "Description": "Type of the block, always \u201Cdetails\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "details",
             "Optional": false
           },
           {
@@ -13877,6 +14231,7 @@
             "Description": "Type of the block, always \u201Cmap\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "map",
             "Optional": false
           },
           {
@@ -13936,6 +14291,7 @@
             "Description": "Type of the block, always \u201Canimation\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "animation",
             "Optional": false
           },
           {
@@ -13979,6 +14335,7 @@
             "Description": "Type of the block, always \u201Caudio\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "audio",
             "Optional": false
           },
           {
@@ -14003,7 +14360,7 @@
   },
   {
     "Name": "RichBlockPhoto",
-    "Description": "A block with a photo, corresponding to the HTML tag \u003Cphoto\u003E.",
+    "Description": "A block with a photo, corresponding to the HTML tag \u003Cimg\u003E.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -14014,6 +14371,7 @@
             "Description": "Type of the block, always \u201Cphoto\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -14057,6 +14415,7 @@
             "Description": "Type of the block, always \u201Cvideo\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -14100,6 +14459,7 @@
             "Description": "Type of the block, always \u201Cvoice_note\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "voice_note",
             "Optional": false
           },
           {
@@ -14124,7 +14484,7 @@
   },
   {
     "Name": "RichBlockThinking",
-    "Description": "A block with a \u201CThinking\u2026\u201D placeholder, corresponding to the custom HTML tag \u003Ctg-thinking\u003E. The block may be used only in sendRichMessageDraft, therefore it can\u0027t be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji, which are recommended for usage in the block.\nThe following methods and objects allow your bot to work in inline mode.\nPlease see our Introduction to Inline bots for more details.\nTo enable this option, send the /setinline command to @BotFather and provide the placeholder text that the user will see in the input field after typing your bot\u0027s name.",
+    "Description": "A block with a \u201CThinking\u2026\u201D placeholder, corresponding to the custom HTML tag \u003Ctg-thinking\u003E. The block may be used only in sendRichMessageDraft, therefore it can\u0027t be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -14135,12 +14495,899 @@
             "Description": "Type of the block, always \u201Cthinking\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "thinking",
             "Optional": false
           },
           {
             "OriginalName": "text",
             "ConvertedName": "Text",
-            "Description": "Text of the block. See https://t.me/addemoji/AIActions for examples of custom emoji, which are recommended for usage in the block.",
+            "Description": "Text of the block. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockListItem",
+    "Description": "An item of a list to be sent.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "blocks",
+            "ConvertedName": "Blocks",
+            "Description": "The content of the item",
+            "OriginalFieldType": "Array of InputRichBlock",
+            "ConvertedFieldType": "InputRichBlock[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "has_checkbox",
+            "ConvertedName": "HasCheckbox",
+            "Description": "Pass True if the item has a checkbox",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_checked",
+            "ConvertedName": "IsChecked",
+            "Description": "Pass True if the item has a checked checkbox",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "value",
+            "ConvertedName": "Value",
+            "Description": "For ordered lists, the numeric value of the item label",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "For ordered lists, the type of the item label; must be one of \u201Ca\u201D for lowercase letters, \u201CA\u201D for uppercase letters, \u201Ci\u201D for lowercase Roman numerals, \u201CI\u201D for uppercase Roman numerals, or \u201C1\u201D for decimal numbers",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlock",
+    "Description": "This object represents a block in a rich formatted message to be sent. Currently, it can be any of the following types:",
+    "Kind": {
+      "Case": "Cases",
+      "Fields": [
+        [
+          {
+            "Name": "Paragraph",
+            "CaseType": "InputRichBlockParagraph"
+          },
+          {
+            "Name": "SectionHeading",
+            "CaseType": "InputRichBlockSectionHeading"
+          },
+          {
+            "Name": "Preformatted",
+            "CaseType": "InputRichBlockPreformatted"
+          },
+          {
+            "Name": "Footer",
+            "CaseType": "InputRichBlockFooter"
+          },
+          {
+            "Name": "Divider",
+            "CaseType": "InputRichBlockDivider"
+          },
+          {
+            "Name": "MathematicalExpression",
+            "CaseType": "InputRichBlockMathematicalExpression"
+          },
+          {
+            "Name": "Anchor",
+            "CaseType": "InputRichBlockAnchor"
+          },
+          {
+            "Name": "List",
+            "CaseType": "InputRichBlockList"
+          },
+          {
+            "Name": "BlockQuotation",
+            "CaseType": "InputRichBlockBlockQuotation"
+          },
+          {
+            "Name": "PullQuotation",
+            "CaseType": "InputRichBlockPullQuotation"
+          },
+          {
+            "Name": "Collage",
+            "CaseType": "InputRichBlockCollage"
+          },
+          {
+            "Name": "Slideshow",
+            "CaseType": "InputRichBlockSlideshow"
+          },
+          {
+            "Name": "Table",
+            "CaseType": "InputRichBlockTable"
+          },
+          {
+            "Name": "Details",
+            "CaseType": "InputRichBlockDetails"
+          },
+          {
+            "Name": "Map",
+            "CaseType": "InputRichBlockMap"
+          },
+          {
+            "Name": "Animation",
+            "CaseType": "InputRichBlockAnimation"
+          },
+          {
+            "Name": "Audio",
+            "CaseType": "InputRichBlockAudio"
+          },
+          {
+            "Name": "Photo",
+            "CaseType": "InputRichBlockPhoto"
+          },
+          {
+            "Name": "Video",
+            "CaseType": "InputRichBlockVideo"
+          },
+          {
+            "Name": "VoiceNote",
+            "CaseType": "InputRichBlockVoiceNote"
+          },
+          {
+            "Name": "Thinking",
+            "CaseType": "InputRichBlockThinking"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockParagraph",
+    "Description": "A text paragraph, corresponding to the HTML tag \u003Cp\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cparagraph\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "paragraph",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockSectionHeading",
+    "Description": "A section heading, corresponding to the HTML tags \u003Ch1\u003E, \u003Ch2\u003E, \u003Ch3\u003E, \u003Ch4\u003E, \u003Ch5\u003E, or \u003Ch6\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cheading\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "heading",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "size",
+            "ConvertedName": "Size",
+            "Description": "Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockPreformatted",
+    "Description": "A preformatted text block, corresponding to the nested HTML tags \u003Cpre\u003E and \u003Ccode\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cpre\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "pre",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "language",
+            "ConvertedName": "Language",
+            "Description": "The programming language of the text",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockFooter",
+    "Description": "A footer, corresponding to the HTML tag \u003Cfooter\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cfooter\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "footer",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockDivider",
+    "Description": "A divider, corresponding to the HTML tag \u003Chr/\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cdivider\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "divider",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockMathematicalExpression",
+    "Description": "A block with a mathematical expression in LaTeX format, corresponding to the custom HTML tag \u003Ctg-math-block\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cmathematical_expression\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "mathematical_expression",
+            "Optional": false
+          },
+          {
+            "OriginalName": "expression",
+            "ConvertedName": "Expression",
+            "Description": "The mathematical expression in LaTeX format",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockAnchor",
+    "Description": "A block with an anchor, corresponding to the HTML tag \u003Ca\u003E with the attribute name.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Canchor\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "anchor",
+            "Optional": false
+          },
+          {
+            "OriginalName": "name",
+            "ConvertedName": "Name",
+            "Description": "The name of the anchor",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockList",
+    "Description": "A list of blocks, corresponding to the HTML tag \u003Cul\u003E or \u003Col\u003E with multiple nested tags \u003Cli\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Clist\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "list",
+            "Optional": false
+          },
+          {
+            "OriginalName": "items",
+            "ConvertedName": "Items",
+            "Description": "Items of the list",
+            "OriginalFieldType": "Array of InputRichBlockListItem",
+            "ConvertedFieldType": "InputRichBlockListItem[]",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockBlockQuotation",
+    "Description": "A block quotation, corresponding to the HTML tag \u003Cblockquote\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cblockquote\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "blockquote",
+            "Optional": false
+          },
+          {
+            "OriginalName": "blocks",
+            "ConvertedName": "Blocks",
+            "Description": "Content of the block",
+            "OriginalFieldType": "Array of InputRichBlock",
+            "ConvertedFieldType": "InputRichBlock[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "credit",
+            "ConvertedName": "Credit",
+            "Description": "Credit of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockPullQuotation",
+    "Description": "A quotation with centered text, loosely corresponding to the HTML tag \u003Caside\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cpullquote\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "pullquote",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "credit",
+            "ConvertedName": "Credit",
+            "Description": "Credit of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockCollage",
+    "Description": "A collage, corresponding to the custom HTML tag \u003Ctg-collage\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Ccollage\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "collage",
+            "Optional": false
+          },
+          {
+            "OriginalName": "blocks",
+            "ConvertedName": "Blocks",
+            "Description": "Elements of the collage",
+            "OriginalFieldType": "Array of InputRichBlock",
+            "ConvertedFieldType": "InputRichBlock[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockSlideshow",
+    "Description": "A slideshow, corresponding to the custom HTML tag \u003Ctg-slideshow\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cslideshow\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "slideshow",
+            "Optional": false
+          },
+          {
+            "OriginalName": "blocks",
+            "ConvertedName": "Blocks",
+            "Description": "Elements of the slideshow",
+            "OriginalFieldType": "Array of InputRichBlock",
+            "ConvertedFieldType": "InputRichBlock[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockTable",
+    "Description": "A table, corresponding to the HTML tag \u003Ctable\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Ctable\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "table",
+            "Optional": false
+          },
+          {
+            "OriginalName": "cells",
+            "ConvertedName": "Cells",
+            "Description": "Cells of the table",
+            "OriginalFieldType": "Array of Array of RichBlockTableCell",
+            "ConvertedFieldType": "RichBlockTableCell[][]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_bordered",
+            "ConvertedName": "IsBordered",
+            "Description": "Pass True if the table has borders",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_striped",
+            "ConvertedName": "IsStriped",
+            "Description": "Pass True if the table is striped",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the table",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockDetails",
+    "Description": "An expandable block for details disclosure, corresponding to the HTML tag \u003Cdetails\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cdetails\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "details",
+            "Optional": false
+          },
+          {
+            "OriginalName": "summary",
+            "ConvertedName": "Summary",
+            "Description": "Always shown summary of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "blocks",
+            "ConvertedName": "Blocks",
+            "Description": "Content of the block",
+            "OriginalFieldType": "Array of InputRichBlock",
+            "ConvertedFieldType": "InputRichBlock[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "is_open",
+            "ConvertedName": "IsOpen",
+            "Description": "Pass True if the content of the block is visible by default",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockMap",
+    "Description": "A block with a map, corresponding to the custom HTML tag \u003Ctg-map\u003E. The map\u0027s width and height must not exceed 10000 in total. The width and height ratio must be at most 20.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cmap\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "map",
+            "Optional": false
+          },
+          {
+            "OriginalName": "location",
+            "ConvertedName": "Location",
+            "Description": "Location of the center of the map",
+            "OriginalFieldType": "Location",
+            "ConvertedFieldType": "Location",
+            "Optional": false
+          },
+          {
+            "OriginalName": "zoom",
+            "ConvertedName": "Zoom",
+            "Description": "Map zoom level; 0-24",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "width",
+            "ConvertedName": "Width",
+            "Description": "Map width; 0-10000",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "height",
+            "ConvertedName": "Height",
+            "Description": "Map height; 0-10000",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockAnimation",
+    "Description": "A block with an animation, corresponding to the HTML tag \u003Cvideo\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Canimation\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "animation",
+            "Optional": false
+          },
+          {
+            "OriginalName": "animation",
+            "ConvertedName": "Animation",
+            "Description": "The animation. Caption is ignored.",
+            "OriginalFieldType": "InputMediaAnimation",
+            "ConvertedFieldType": "InputMediaAnimation",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockAudio",
+    "Description": "A block with a music file, corresponding to the HTML tag \u003Caudio\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Caudio\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "audio",
+            "Optional": false
+          },
+          {
+            "OriginalName": "audio",
+            "ConvertedName": "Audio",
+            "Description": "The audio. Caption is ignored.",
+            "OriginalFieldType": "InputMediaAudio",
+            "ConvertedFieldType": "InputMediaAudio",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockPhoto",
+    "Description": "A block with a photo, corresponding to the HTML tag \u003Cimg\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cphoto\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
+            "Optional": false
+          },
+          {
+            "OriginalName": "photo",
+            "ConvertedName": "Photo",
+            "Description": "The photo. Caption is ignored.",
+            "OriginalFieldType": "InputMediaPhoto",
+            "ConvertedFieldType": "InputMediaPhoto",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockVideo",
+    "Description": "A block with a video, corresponding to the HTML tag \u003Cvideo\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cvideo\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
+            "Optional": false
+          },
+          {
+            "OriginalName": "video",
+            "ConvertedName": "Video",
+            "Description": "The video. Caption is ignored.",
+            "OriginalFieldType": "InputMediaVideo",
+            "ConvertedFieldType": "InputMediaVideo",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockVoiceNote",
+    "Description": "A block with a voice note, corresponding to the HTML tag \u003Caudio\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cvoice_note\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "voice_note",
+            "Optional": false
+          },
+          {
+            "OriginalName": "voice_note",
+            "ConvertedName": "VoiceNote",
+            "Description": "The voice note. Caption is ignored.",
+            "OriginalFieldType": "InputMediaVoiceNote",
+            "ConvertedFieldType": "InputMediaVoiceNote",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockThinking",
+    "Description": "A block with a \u201CThinking\u2026\u201D placeholder, corresponding to the custom HTML tag \u003Ctg-thinking\u003E. The block may be used only in sendRichMessageDraft, therefore it can\u0027t be received in messages. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.\nThe following methods and objects allow your bot to work in inline mode.\nPlease see our Introduction to Inline bots for more details.\nTo enable this option, send the /setinline command to @BotFather and provide the placeholder text that the user will see in the input field after typing your bot\u0027s name.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cthinking\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "thinking",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the block. See https://t.me/addemoji/AIActions for examples of custom emoji that are recommended for usage in the block.",
             "OriginalFieldType": "RichText",
             "ConvertedFieldType": "RichText",
             "Optional": false
@@ -14347,6 +15594,7 @@
             "Description": "Type of the result, must be article",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "article",
             "Optional": false
           },
           {
@@ -14438,6 +15686,7 @@
             "Description": "Type of the result, must be photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -14523,7 +15772,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -14561,6 +15810,7 @@
             "Description": "Type of the result, must be gif",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "gif",
             "Optional": false
           },
           {
@@ -14654,7 +15904,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -14692,6 +15942,7 @@
             "Description": "Type of the result, must be mpeg4_gif",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "mpeg4_gif",
             "Optional": false
           },
           {
@@ -14785,7 +16036,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -14823,6 +16074,7 @@
             "Description": "Type of the result, must be video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -14892,7 +16144,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -14962,6 +16214,7 @@
             "Description": "Type of the result, must be audio",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "audio",
             "Optional": false
           },
           {
@@ -15061,6 +16314,7 @@
             "Description": "Type of the result, must be voice",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "voice",
             "Optional": false
           },
           {
@@ -15152,6 +16406,7 @@
             "Description": "Type of the result, must be document",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "document",
             "Optional": false
           },
           {
@@ -15275,6 +16530,7 @@
             "Description": "Type of the result, must be location",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "location",
             "Optional": false
           },
           {
@@ -15398,6 +16654,7 @@
             "Description": "Type of the result, must be venue",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "venue",
             "Optional": false
           },
           {
@@ -15529,6 +16786,7 @@
             "Description": "Type of the result, must be contact",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "contact",
             "Optional": false
           },
           {
@@ -15628,6 +16886,7 @@
             "Description": "Type of the result, must be game",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "game",
             "Optional": false
           },
           {
@@ -15671,6 +16930,7 @@
             "Description": "Type of the result, must be photo",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "photo",
             "Optional": false
           },
           {
@@ -15732,7 +16992,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -15770,6 +17030,7 @@
             "Description": "Type of the result, must be gif",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "gif",
             "Optional": false
           },
           {
@@ -15823,7 +17084,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -15861,6 +17122,7 @@
             "Description": "Type of the result, must be mpeg4_gif",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "mpeg4_gif",
             "Optional": false
           },
           {
@@ -15914,7 +17176,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -15952,6 +17214,7 @@
             "Description": "Type of the result, must be sticker",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "sticker",
             "Optional": false
           },
           {
@@ -16003,6 +17266,7 @@
             "Description": "Type of the result, must be document",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "document",
             "Optional": false
           },
           {
@@ -16094,6 +17358,7 @@
             "Description": "Type of the result, must be video",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "video",
             "Optional": false
           },
           {
@@ -16155,7 +17420,7 @@
           {
             "OriginalName": "show_caption_above_media",
             "ConvertedName": "ShowCaptionAboveMedia",
-            "Description": "Pass True, if the caption must be shown above the message media",
+            "Description": "Pass True if the caption must be shown above the message media",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
@@ -16193,6 +17458,7 @@
             "Description": "Type of the result, must be voice",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "voice",
             "Optional": false
           },
           {
@@ -16276,6 +17542,7 @@
             "Description": "Type of the result, must be audio",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "audio",
             "Optional": false
           },
           {
@@ -16678,7 +17945,7 @@
           {
             "OriginalName": "suggested_tip_amounts",
             "ConvertedName": "SuggestedTipAmounts",
-            "Description": "A JSON-serialized array of suggested amounts of tip in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.",
+            "Description": "A JSON-serialized Array of suggested amounts of tip in the smallest units of the currency (integer, not float/double). At most 4 suggested tip amounts can be specified. The suggested tip amounts must be positive, passed in a strictly increased order and must not exceed max_tip_amount.",
             "OriginalFieldType": "Array of Integer",
             "ConvertedFieldType": "int64[]",
             "Optional": true
@@ -17364,6 +18631,7 @@
             "Description": "Type of the state, always \u201Cpending\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "pending",
             "Optional": false
           }
         ]
@@ -17383,6 +18651,7 @@
             "Description": "Type of the state, always \u201Csucceeded\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "succeeded",
             "Optional": false
           },
           {
@@ -17418,6 +18687,7 @@
             "Description": "Type of the state, always \u201Cfailed\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "failed",
             "Optional": false
           }
         ]
@@ -17527,6 +18797,7 @@
             "Description": "Type of the transaction partner, always \u201Cuser\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "user",
             "Optional": false
           },
           {
@@ -17618,6 +18889,7 @@
             "Description": "Type of the transaction partner, always \u201Cchat\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "chat",
             "Optional": false
           },
           {
@@ -17653,6 +18925,7 @@
             "Description": "Type of the transaction partner, always \u201Caffiliate_program\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "affiliate_program",
             "Optional": false
           },
           {
@@ -17688,6 +18961,7 @@
             "Description": "Type of the transaction partner, always \u201Cfragment\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "fragment",
             "Optional": false
           },
           {
@@ -17715,6 +18989,7 @@
             "Description": "Type of the transaction partner, always \u201Ctelegram_ads\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "telegram_ads",
             "Optional": false
           }
         ]
@@ -17734,6 +19009,7 @@
             "Description": "Type of the transaction partner, always \u201Ctelegram_api\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "telegram_api",
             "Optional": false
           },
           {
@@ -17761,6 +19037,7 @@
             "Description": "Type of the transaction partner, always \u201Cother\u201D",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "other",
             "Optional": false
           }
         ]
@@ -18101,6 +19378,7 @@
             "Description": "Error source, must be data",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "data",
             "Optional": false
           },
           {
@@ -18152,6 +19430,7 @@
             "Description": "Error source, must be front_side",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "front_side",
             "Optional": false
           },
           {
@@ -18195,6 +19474,7 @@
             "Description": "Error source, must be reverse_side",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "reverse_side",
             "Optional": false
           },
           {
@@ -18238,6 +19518,7 @@
             "Description": "Error source, must be selfie",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "selfie",
             "Optional": false
           },
           {
@@ -18281,6 +19562,7 @@
             "Description": "Error source, must be file",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "file",
             "Optional": false
           },
           {
@@ -18324,6 +19606,7 @@
             "Description": "Error source, must be files",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "files",
             "Optional": false
           },
           {
@@ -18367,6 +19650,7 @@
             "Description": "Error source, must be translation_file",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "translation_file",
             "Optional": false
           },
           {
@@ -18410,6 +19694,7 @@
             "Description": "Error source, must be translation_files",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "translation_files",
             "Optional": false
           },
           {
@@ -18453,6 +19738,7 @@
             "Description": "Error source, must be unspecified",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "AlwaysValue": "unspecified",
             "Optional": false
           },
           {

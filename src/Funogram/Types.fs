@@ -5,6 +5,11 @@ open System.Net.Http
 open System.Runtime.Serialization
 open System.Net
 
+[<AttributeUsage(AttributeTargets.Property, AllowMultiple = false)>]
+type AlwaysAttribute(value: string) =
+  inherit Attribute()
+  member _.Value = value
+
 type BotWebHook = { Listener: HttpListener; ValidateRequest: HttpListenerRequest -> bool }
 
 type IBotLogger =

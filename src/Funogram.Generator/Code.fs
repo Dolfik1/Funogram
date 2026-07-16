@@ -50,6 +50,15 @@ let printNewLine (line: string) code =
         code.StringBuilder.Append(line)
   }
 
+let printNewLineOpt (opt: Option<'a>) (lineFn: 'a -> string) code =
+  match opt with
+  | Some value ->
+    { (code |> appendLine |> appendIndent) with
+        StringBuilder =
+          code.StringBuilder.Append(lineFn value)
+    }
+  | None -> code
+  
 let printNewLineFormatted (line: string, args: Object[]) code =
   { (code |> appendLine |> appendIndent) with
       StringBuilder =
