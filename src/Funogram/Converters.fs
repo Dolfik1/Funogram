@@ -2,10 +2,14 @@
 
 open System
 open System.Collections.Generic
+open System.Collections.ObjectModel
 open System.IO
+open System.Linq
+open System.Reflection
 open System.Runtime.CompilerServices
 open System.Text.Json
 open System.Text.Json.Serialization
+open Funogram.Types
 open TypeShape.Core
 open TypeShape.Core.SubtypeExtensions
 
@@ -14,6 +18,7 @@ do ()
 module internal Converters =
   open Funogram.StringUtils
 
+  let private EmptyProps = List<string * string option>().AsReadOnly()
   let private unixEpoch = DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
   let toUnix (x: DateTime) = (x.ToUniversalTime() - unixEpoch).TotalSeconds |> int64
   
@@ -78,14 +83,14 @@ module internal Converters =
     | Nullary of name: string
     | Scalar  of clrType: Type
     | Array
-    | Object  of props: Set<string>
+    | Object of Map<string, string option> // key is prop name and value is prop "always" value
 
   [<RequireQualifiedAccess>]
   type private JsonShape =
     | String of value: string
     | Scalar of candidateTypes: Type list
     | Array
-    | Object of props: string list
+    | Object of props: ReadOnlyCollection<string * string option>
 
   let private fsharpListTypeDef = typedefof<_ list>
 
@@ -115,10 +120,34 @@ module internal Converters =
             CaseDescriptor.Array
           else
             tp.GetProperties()
-            |> Seq.map (fun x -> x.Name |> toSnakeCase)
-            |> Set.ofSeq
+            |> Seq.map (fun x ->
+                (x.Name |> toSnakeCase, x.GetCustomAttribute<AlwaysAttribute>() |> Option.ofObj |> Option.map _.Value)
+            )
+            |> Map.ofSeq
             |> CaseDescriptor.Object)
       |> Seq.toArray
+    
+    let alwaysFields =
+      cases
+      |> Seq.collect (fun x ->
+        match x with
+        | CaseDescriptor.Object o -> o |> Seq.choose (fun x -> if x.Value.IsSome then Some x.Key else None)
+        | _ -> Seq.empty
+      )
+      |> Set.ofSeq
+    
+    let casesAlwaysIndices =
+      cases
+      |> Seq.mapi (fun i x ->
+        match x with
+        | CaseDescriptor.Object props ->
+          let requiredFields =
+            props
+            |> Seq.choose (fun kv -> if kv.Value.IsSome then Some(kv.Key, kv.Value.Value) else None)
+            |> Set.ofSeq
+          (requiredFields, i)
+        | _ -> (Set.empty, i)
+      ) |> Map.ofSeq
     
     let serializers =
       union.UnionCases
@@ -129,6 +158,40 @@ module internal Converters =
       union.UnionCases
       |> Seq.map (fun case -> mkMemberDeserializer case case.CreateUninitialized)
       |> Seq.toArray
+    
+    let resolveObject (props: ReadOnlyCollection<string * string option>): int option =
+      let requiredFields =
+        if alwaysFields.IsEmpty then
+          Set.empty
+        else
+          props
+          |> Seq.choose (fun (name, value) -> if value.IsSome then Some(name, value.Value) else None)
+          |> Set.ofSeq
+
+      let exact =
+        if requiredFields.IsEmpty |> not then
+          match casesAlwaysIndices.TryGetValue(requiredFields) with
+          | true, idx -> Some idx
+          | _ -> None
+        else
+          cases
+          |> Array.tryFindIndex (function
+             | CaseDescriptor.Object known -> props.All(fun (name, _) -> known.ContainsKey(name))
+             | _ -> false)
+        
+      match exact with
+      | Some _ -> exact
+      | None ->
+        let scored =
+          cases
+          |> Array.mapi (fun i c ->
+            match c with
+            | CaseDescriptor.Object known ->
+              i, props.Sum(fun (n, _) -> if known.ContainsKey n then 1 else 0)
+            | _ -> i, -1)
+        let i, best = scored |> Array.maxBy snd
+        if best < 0 then None else Some i
+
     
     override x.Write(writer, value, options) =
       let serialize = serializers[union.GetTag value] // all union cases
@@ -147,13 +210,22 @@ module internal Converters =
       | JsonTokenType.StartArray ->
         JsonShape.Array
       | JsonTokenType.StartObject ->
-        let props = List<string>()
+        let props = List<string * string option>()
         let mutable loop = reader.Read()
         while loop do
           match reader.TokenType with
           | JsonTokenType.PropertyName ->
-            props.Add(reader.GetString())
+            let name = reader.GetString()
             loop <- reader.Read()
+            if alwaysFields.Contains(name) && loop then
+              match reader.TokenType with
+              | JsonTokenType.String ->
+                props.Add(name, Some (reader.GetString()))
+                loop <- reader.Read()
+              | _ ->
+                props.Add(name, None)
+            else
+              props.Add(name, None)
           | JsonTokenType.StartObject
           | JsonTokenType.StartArray ->
             reader.Skip()
@@ -162,29 +234,11 @@ module internal Converters =
             loop <- false
           | _ ->
             loop <- reader.Read()
-        JsonShape.Object (List.ofSeq props)
+        JsonShape.Object (props.AsReadOnly())
       | _ ->
-        JsonShape.Object []
+        JsonShape.Object EmptyProps
     
     override x.Read(reader, _, options) =
-      let resolveObject (props: string list) =
-        let exact =
-          cases
-          |> Array.tryFindIndex (function
-             | CaseDescriptor.Object known -> props |> List.forall known.Contains
-             | _ -> false)
-        match exact with
-        | Some _ -> exact
-        | None ->
-          let scored =
-            cases
-            |> Array.mapi (fun i c ->
-              match c with
-              | CaseDescriptor.Object known ->
-                i, props |> List.sumBy (fun n -> if known.Contains n then 1 else 0)
-              | _ -> i, -1)
-          let i, best = scored |> Array.maxBy snd
-          if best < 0 then None else Some i
 
       let idx =
         match x.ReadShape(&reader) with

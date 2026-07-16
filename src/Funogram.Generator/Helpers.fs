@@ -101,3 +101,6 @@ let directInnerText (node: HtmlNode) =
 
 let innerText (node: HtmlNode) =
   normalize <| node.InnerText()
+
+let innerHtml (node: HtmlNode) =
+  normalize <| node.ToString()

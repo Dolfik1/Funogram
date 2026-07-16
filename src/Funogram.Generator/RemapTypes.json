@@ -150,6 +150,20 @@
     }
   },
   {
+    "Name": "InputRichMessageMedia",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "media",
+            "ConvertedFieldType": "InputMedia"
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "MaybeInaccessibleMessage",
     "Kind": {
       "Case": "Cases",
