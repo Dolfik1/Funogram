@@ -1,5 +1,8 @@
 module Funogram.Tests.UnionDiscriminators
 
+open System.Text
+open System.Text.Json
+open Funogram
 open Funogram.Telegram.Types
 open Xunit
 open Helpers
@@ -82,3 +85,15 @@ let ``MessageOrigin deserializes to the case matching the type value`` (json: st
       | MessageOrigin.Channel _ -> "Channel"
     Assert.Equal(expectedCase, actual)
   | Error e -> failwith e.Description
+
+[<Fact>]
+let ``Strict RichBlock throws on a gibberish discriminator instead of guessing a case`` () =
+  let json = """{"type":"foo","text":"x"}"""
+  let bytes = Encoding.UTF8.GetBytes json
+  Assert.Throws<JsonException>(fun () -> JsonSerializer.Deserialize<RichBlock>(bytes, Tools.strictOptions) |> ignore) |> ignore
+  Assert.NotNull(box (JsonSerializer.Deserialize<RichBlock>(bytes, Tools.options)))
+
+[<Fact>]
+let ``Strict RichBlock throws when a known discriminator is missing a required field`` () =
+  let bytes = Encoding.UTF8.GetBytes """{"type":"paragraph"}"""
+  Assert.Throws<JsonException>(fun () -> JsonSerializer.Deserialize<RichBlock>(bytes, Tools.strictOptions) |> ignore) |> ignore

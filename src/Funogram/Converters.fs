@@ -10,6 +10,7 @@ open System.Runtime.CompilerServices
 open System.Text.Json
 open System.Text.Json.Serialization
 open Funogram.Types
+open Microsoft.FSharp.Reflection
 open TypeShape.Core
 open TypeShape.Core.SubtypeExtensions
 
@@ -98,7 +99,7 @@ module internal Converters =
     t.IsArray
     || (t.IsGenericType && t.GetGenericTypeDefinition() = fsharpListTypeDef)
 
-  type DiscriminatedUnionConverter<'a>() =
+  type DiscriminatedUnionConverter<'a>(strict: bool) =
     inherit JsonConverter<'a>()
     
     let shape = shapeof<'a>
@@ -127,6 +128,19 @@ module internal Converters =
             |> CaseDescriptor.Object)
       |> Seq.toArray
     
+    // "required" = reference-typed, non-option property (Nullable<_> is a value type, excluded by IsValueType)
+    let requiredProps =
+      union.UnionCases
+      |> Seq.map (fun c ->
+        let tp = if c.Fields.Length = 0 then typeof<unit> else c.Fields[0].Member.Type
+        if c.Fields.Length = 0 || tp.IsPrimitive || tp = typeof<string> || isArrayLike tp then [||]
+        else
+          tp.GetProperties()
+          |> Array.filter (fun p ->
+            not p.PropertyType.IsValueType
+            && not (p.PropertyType.IsGenericType && p.PropertyType.GetGenericTypeDefinition() = typedefof<_ option>)))
+      |> Seq.toArray
+
     let alwaysFields =
       cases
       |> Seq.collect (fun x ->
@@ -181,6 +195,9 @@ module internal Converters =
         
       match exact with
       | Some _ -> exact
+      | None when strict && not requiredFields.IsEmpty ->
+        let discriminator = requiredFields |> Set.toList |> List.map (fun (n, v) -> $"{n}={v}") |> String.concat ", "
+        raise (JsonException($"Unable to match JSON to any case of union {typeof<'a>.Name}: no case declares discriminator {discriminator}"))
       | None ->
         let scored =
           cases
@@ -259,7 +276,13 @@ module internal Converters =
 
       match idx with
       | Some i ->
-        deserializers[i].Deserialize(&reader, options)
+        let result = deserializers[i].Deserialize(&reader, options)
+        if strict && requiredProps[i].Length > 0 then
+          let caseInfo, fields = FSharpValue.GetUnionFields(box result, typeof<'a>)
+          for p in requiredProps[i] do
+            if isNull (p.GetValue(fields[0])) then
+              raise (JsonException($"Missing required field '{p.Name}' for {typeof<'a>.Name} case {caseName caseInfo}"))
+        result
       | None ->
         raise (JsonException($"Unable to match JSON to any case of union {typeof<'a>.Name}"))
     
@@ -269,12 +292,14 @@ module internal Converters =
       | Shape.FSharpUnion _ -> true
       | _ -> false
 
-  type DiscriminatedUnionConverterFactory() =
+  type DiscriminatedUnionConverterFactory(?strict: bool) =
     inherit JsonConverterFactory()
+
+    let strict = defaultArg strict false
 
     override x.CreateConverter(typeToConvert, _) =
       let g = typedefof<DiscriminatedUnionConverter<_>>.MakeGenericType(typeToConvert)
-      Activator.CreateInstance(g) :?> JsonConverter
+      Activator.CreateInstance(g, [| box strict |]) :?> JsonConverter
       
     override x.CanConvert(typeToConvert) =
       match TypeShape.Create(typeToConvert) with

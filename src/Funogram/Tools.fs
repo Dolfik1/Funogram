@@ -76,22 +76,27 @@ module internal RequestLogger =
     logger.Text.Append("Res: ").Append(e.ToString()) |> ignore
     logger.Logger.Log(logger.Text.ToString())
 
-/// Shared JSON serializer settings used by Funogram for request and response payloads.
-///
-/// Reuse this instance when serializing or deserializing Funogram types so external code
-/// stays aligned with the library's snake_case wire format, union handling, Unix timestamps,
-/// and null-skipping behavior.
-let options =
+let private mkOptions (strict: bool) =
   let o =
     JsonSerializerOptions(
       WriteIndented = false,
       PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
       DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     )
-  o.Converters.Add(DiscriminatedUnionConverterFactory())
+  o.Converters.Add(DiscriminatedUnionConverterFactory(strict))
   o.Converters.Add(UnixTimestampDateTimeConverter())
   o.Converters.Add(OptionConverterFactory())
   o
+
+/// Shared JSON serializer settings used by Funogram for request and response payloads.
+///
+/// Reuse this instance when serializing or deserializing Funogram types so external code
+/// stays aligned with the library's snake_case wire format, union handling, Unix timestamps,
+/// and null-skipping behavior.
+let options = mkOptions false
+
+/// Like `options`, but an unmatched union discriminator or a missing required field raises JsonException instead of guessing a case.
+let strictOptions = mkOptions true
 
 let private getUrl (config: BotConfig) methodName = 
   let botToken = sprintf "%s%s" (config.ApiEndpointUrl |> string) config.Token
