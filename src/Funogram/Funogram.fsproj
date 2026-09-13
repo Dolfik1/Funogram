@@ -19,7 +19,10 @@
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="StringUtils.fs" />
-    <Compile Include="Converters.fs" />
+    <Compile Include="Converters/DiscriminatedUnionConverter.fs" />
+    <Compile Include="Converters/OptionConverter.fs" />
+    <Compile Include="Converters/UnixTimestampDateTimeConverter.fs" />
+    <Compile Include="Converters\SafeUpdateConverter.fs" />
     <Compile Include="Tools.fs" />
     <Compile Include="Api.fs" />
   </ItemGroup>

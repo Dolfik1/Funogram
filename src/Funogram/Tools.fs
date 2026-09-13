@@ -91,6 +91,7 @@ let options =
   o.Converters.Add(DiscriminatedUnionConverterFactory())
   o.Converters.Add(UnixTimestampDateTimeConverter())
   o.Converters.Add(OptionConverterFactory())
+  o.Converters.Add(SafeUpdateConverterFactory())
   o
 
 let private getUrl (config: BotConfig) methodName = 
@@ -373,6 +374,7 @@ module Api =
     | Shape.String ->
       wrap(fun x prop data -> data.Add(strf "%s" x, prop) $ true)
     | Shape.DateTime ->
+      let inline toUnix (x: DateTime) = DateTimeOffset(DateTime.SpecifyKind(x, DateTimeKind.Utc)).ToUnixTimeSeconds()
       wrap(fun x prop data -> data.Add(strf "%i" (toUnix x), prop) $ true)
     | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
       let fieldPrinters : (string * ('T -> string -> MultipartFormDataContent -> bool)) [] = 
