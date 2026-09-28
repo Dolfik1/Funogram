@@ -64,7 +64,7 @@
         [
           {
             "OriginalName": "date",
-            "ConvertedFieldType": "DateTime"
+            "ConvertedFieldType": "DateTimeOffset"
           }
         ]
       ]
@@ -78,7 +78,7 @@
         [
           {
             "OriginalName": "until_date",
-            "ConvertedFieldType": "DateTime"
+            "ConvertedFieldType": "DateTimeOffset"
           }
         ]
       ]
@@ -92,7 +92,7 @@
         [
           {
             "OriginalName": "forward_date",
-            "ConvertedFieldType": "DateTime"
+            "ConvertedFieldType": "DateTimeOffset"
           }
         ]
       ]

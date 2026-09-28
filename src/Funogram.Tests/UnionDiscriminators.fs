@@ -1,6 +1,7 @@
 module Funogram.Tests.UnionDiscriminators
 
 open Funogram.Telegram.Types
+open Funogram.Types
 open Xunit
 open Helpers
 
@@ -15,7 +16,7 @@ let private caseName (m: ChatMember) =
 
 let private user = """{"id":42,"is_bot":false,"first_name":"x"}"""
 
-let private parseResult<'a> (payload: string) : Result<'a, Funogram.Types.ApiResponseError> =
+let private parseResult<'a> (payload: string) : Result<'a, ApiError> =
   parseJson<'a> ("""{"ok":true,"result":""" + payload + "}")
 
 [<Theory>]
@@ -39,7 +40,7 @@ let ``ChatMember deserializes to the case matching the status value`` (status: s
       | ChatMember.Left x -> x.Status
       | ChatMember.Banned x -> x.Status
     Assert.Equal(status, actualStatus)
-  | Error e -> failwith e.Description
+  | Error e -> e.AsException() |> raise
 
 [<Fact>]
 let ``ChatMember member round-trip does not invent fields`` () =
@@ -48,7 +49,7 @@ let ``ChatMember member round-trip does not invent fields`` () =
   | Ok m ->
     let reserialized = toJsonString m
     Assert.DoesNotContain("is_anonymous", reserialized)
-  | Error e -> failwith e.Description
+  | Error e -> e.AsException() |> raise
 
 // [<Fact>]
 // let ``ChatMember with an unknown future status falls back to shape matching without throwing`` () =
@@ -81,4 +82,4 @@ let ``MessageOrigin deserializes to the case matching the type value`` (json: st
       | MessageOrigin.Chat _ -> "Chat"
       | MessageOrigin.Channel _ -> "Channel"
     Assert.Equal(expectedCase, actual)
-  | Error e -> failwith e.Description
+  | Error e -> e.AsException() |> raise

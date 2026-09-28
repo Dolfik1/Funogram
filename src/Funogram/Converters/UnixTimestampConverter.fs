@@ -7,11 +7,11 @@ open System.Text.Json.Serialization
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 do ()
 
-type internal UnixTimestampDateTimeConverter() =
-  inherit JsonConverter<DateTime>()
+type internal UnixTimestampConverter() =
+  inherit JsonConverter<DateTimeOffset>()
 
   override x.Read(reader, _, _) =
-    DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64()).UtcDateTime
+    DateTimeOffset.FromUnixTimeSeconds(reader.GetInt64())
 
   override x.Write(writer, value, _) =
-    writer.WriteNumberValue(DateTimeOffset(value.ToUniversalTime()).ToUnixTimeSeconds())
+    writer.WriteNumberValue(value.ToUnixTimeSeconds())

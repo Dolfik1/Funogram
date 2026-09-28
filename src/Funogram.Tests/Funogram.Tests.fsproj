@@ -12,6 +12,7 @@
     <Compile Include="Deserializer.fs" />
     <Compile Include="UnionDiscriminators.fs" />
     <Compile Include="MultipartSerializer.fs" />
+    <Compile Include="WebHook.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />

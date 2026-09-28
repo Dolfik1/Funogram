@@ -28,16 +28,14 @@ type private CaseShape =
 and private ObjectShape =
   { PayloadType: Type
     Props: Map<string, string option>
-    Discriminator: Set<string * string>
-    NonNullableProps: PropertyInfo[] }
+    Discriminator: Set<string * string> }
 
 type private CaseState<'a> =
   { Tag: int
     Name: string
     Shape: CaseShape
     Serialize: Utf8JsonWriter -> 'a -> JsonSerializerOptions -> unit
-    Deserializer: IUnionDeserializer<'a>
-    GetPayload: 'a -> obj }
+    Deserializer: IUnionDeserializer<'a> }
 
 [<RequireQualifiedAccess>]
 type private Resolution<'a> =
@@ -54,6 +52,13 @@ type private JsonShape =
   | Object of props: ReadOnlyCollection<string * string option>
 
 module private DiscriminatedUnionConverter =
+  let mkCachedConverter<'T> () =
+    let cell = ref (null: JsonConverter<'T>)
+    fun (options: JsonSerializerOptions) ->
+      if isNull cell.Value then
+        cell.Value <- options.GetConverter(typeof<'T>) :?> JsonConverter<'T>
+      cell.Value
+
   let mkMemberSerializer (case: ShapeFSharpUnionCase<'DeclaringType>) =
     let isFile =
       case.Fields.Length = 2
@@ -67,15 +72,13 @@ module private DiscriminatedUnionConverter =
     else
       case.Fields[0].Accept { new IMemberVisitor<'DeclaringType, Utf8JsonWriter -> 'DeclaringType -> JsonSerializerOptions -> unit> with
         member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
+          let converter = mkCachedConverter<'Field> ()
           fun writer value options ->
             if isFile then
               let str = box (shape.Get value) |> unbox<string>
               writer.WriteStringValue($"attach://{str}")
             else
-              let v = shape.Get value
-              let converter = options.GetConverter(v.GetType())
-              let c = converter :?> JsonConverter<'Field>
-              c.Write(writer, v, options)
+              (converter options).Write(writer, shape.Get value, options)
       }
   
   let mkMemberDeserializer (case: ShapeFSharpUnionCase<'DeclaringType>) (init: unit -> 'DeclaringType) =
@@ -88,23 +91,13 @@ module private DiscriminatedUnionConverter =
     else
       case.Fields[0].Accept { new IMemberVisitor<'DeclaringType, IUnionDeserializer<'DeclaringType>> with
           member x.Visit (shape: ShapeMember<'DeclaringType, 'Field>) =
+            let converter = mkCachedConverter<'Field> ()
             { new IUnionDeserializer<'DeclaringType> with
                 member x.Deserialize(reader, options) =
-                  let converter = options.GetConverter(typeof<'Field>)
-                  let converter = converter :?> JsonConverter<'Field>
-                  converter.Read(&reader, typeof<'Field>, options) |> shape.Set (init ())
+                  (converter options).Read(&reader, typeof<'Field>, options) |> shape.Set (init ())
             }
       }
 
-  let mkPayloadGetter (case: ShapeFSharpUnionCase<'DeclaringType>) : 'DeclaringType -> obj =
-    match case.Fields with
-    | [||] -> fun _ -> null
-    | fields ->
-      fields[0].Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> obj> with
-          member _.Visit (shape: ShapeMember<'DeclaringType, 'Field>) =
-            fun value -> box (shape.Get value)
-      }
-  
   let EmptyProps = List<string * string option>().AsReadOnly()
   
   [<Literal>]
@@ -115,11 +108,6 @@ module private DiscriminatedUnionConverter =
   let isArrayLike (t: Type) =
     t.IsArray
     || (t.IsGenericType && t.GetGenericTypeDefinition() = fsharpListTypeDef)
-
-  let isNonNullable (p: PropertyInfo) =
-    not p.PropertyType.IsValueType
-    && not (p.PropertyType.IsGenericType
-            && p.PropertyType.GetGenericTypeDefinition() = typedefof<_ option>)
 
   let mkObjectShape (payloadType: Type) =
     let clrProps =
@@ -138,8 +126,7 @@ module private DiscriminatedUnionConverter =
       Discriminator =
         props
         |> Seq.choose (fun kv -> kv.Value |> Option.map (fun v -> kv.Key, v))
-        |> Set.ofSeq
-      NonNullableProps = clrProps |> Array.filter isNonNullable }
+        |> Set.ofSeq }
 
   let mkCaseShape (c: ShapeFSharpUnionCase<'a>): CaseShape =
     match c.Fields with
@@ -157,8 +144,7 @@ module private DiscriminatedUnionConverter =
         Name = caseName c.CaseInfo
         Shape = mkCaseShape c
         Serialize = mkMemberSerializer c
-        Deserializer = mkMemberDeserializer c c.CreateUninitialized
-        GetPayload = mkPayloadGetter c })
+        Deserializer = mkMemberDeserializer c c.CreateUninitialized })
 
   let describeFound (found: Set<string * string>) =
     found |> Seq.map (fun (n, v) -> $"{n}={v}") |> String.concat ", "
@@ -313,17 +299,7 @@ type internal DiscriminatedUnionConverter<'a>() =
 
   override this.Read(reader, _, options) =
     let state = this.ResolveCase(this.ReadShape(&reader))
-    let result = state.Deserializer.Deserialize(&reader, options)
-
-    // match state.Shape with
-    // | CaseShape.Object o when o.NonNullableProps.Length > 0 ->
-    //   let payload = state.GetPayload result
-    //   for p in o.NonNullableProps do
-    //     if isNull (p.GetValue payload) then
-    //       raise (JsonException($"Missing required field '{toSnakeCase p.Name}' for {typeof<'a>.Name} case {state.Name}"))
-    // | _ -> ()
-
-    result
+    state.Deserializer.Deserialize(&reader, options)
 
   override x.Write(writer, value, options) =
     cases[union.GetTag value].Serialize writer value options

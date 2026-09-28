@@ -1,26 +1,19 @@
 module Funogram.Tests.Json
 
-open Funogram.Telegram.Types
-open Funogram.Types
 open Xunit
 open Extensions
 open Helpers
 
 [<Fact>]
 let ``JSON deserializing MessageEntity`` () =
-  let a = parseJson(Constants.jsonTestObjResultString)
-    
-  match a with
-  | Ok r -> shouldEqual r Constants.jsonTestObj
-  | Error e -> failwith e.Description
+  parseJson(Constants.jsonTestObjResultString)
+  |> shouldEqual (Result.Ok Constants.jsonTestObj)
 
 [<Fact>]
 let ``JSON deserializing MessageEntity as Object`` () =
-  let a = parseJson(Constants.jsonTestObjResultString)
-    
-  match a with
-  | Ok r -> shouldEqual true (r <> null)
-  | Error e -> failwith e.Description
+  parseJson(Constants.jsonTestObjResultString)
+  |> Result.map (fun x -> x <> null)
+  |> shouldEqual (Result.Ok true)
 
 [<Fact>]
 let ``JSON serializing MessageEntity``() =
@@ -32,25 +25,19 @@ let ``JSON serializing MessageEntity``() =
 let ``JSON deserializing User``() =
   Constants.jsonTestObjUserResultString
   |> parseJson
-  |> function
-  | Ok result -> shouldEqual result Constants.jsonTestObjUser
-  | Error error -> failwith error.Description
+  |> shouldEqual (Result.Ok Constants.jsonTestObjUser)
 
 [<Fact>]
 let ``JSON deserializing EditMessageResult 1``() =
   Constants.jsonTestEditResult1ApiString
   |> parseJson
-  |> function
-  | Ok result -> shouldEqual result Constants.jsonTestEditResult1
-  | Error error -> failwith error.Description
+  |> shouldEqual (Result.Ok Constants.jsonTestEditResult1)
 
 [<Fact>]
 let ``JSON deserializing EditMessageResult 2`` () =
   Constants.jsonTestEditResult2ApiString
   |> parseJson
-  |> function
-  | Ok result -> shouldEqual result Constants.jsonTestEditResult2
-  | Error error -> failwith error.Description
+  |> shouldEqual (Result.Ok Constants.jsonTestEditResult2)
 
 [<Fact>]
 let ``JSON deserializing EditMessageResult 3`` () =
@@ -74,9 +61,7 @@ let ``JSON serializing EditMessageResult 2`` () =
 let ``JSON deserializing MaskPosition`` () =
   Constants.jsonTestMaskPositionResult
   |> parseJson
-  |> function
-  | Ok result -> shouldEqual result Constants.testMaskPosition
-  | Error error -> failwith error.Description
+  |> shouldEqual (Result.Ok Constants.testMaskPosition)
 
 [<Fact>]
 let ``JSON serializing MaskPosition`` () =
@@ -94,9 +79,7 @@ let ``JSON serializing ForwardMessage`` () =
 let ``JSON deserializing ForwardMessage`` () =
   Constants.jsonMessageForwardDateApiString
   |> parseJson
-  |> function
-  | Ok result -> shouldEqual result Constants.jsonMessageForward
-  | Error error -> failwith error.Description
+  |> shouldEqual (Result.Ok Constants.jsonMessageForward)
 
 [<Fact>]
 let ``JSON serializing params dictionary`` () =
@@ -107,30 +90,32 @@ let ``JSON serializing params dictionary`` () =
 [<Fact>]
 let ``JSON serializing forward message request`` () =
   Constants.forwardMessageReq
-  |> toJsonBotRequestString
+  |> toJsonString
   |> shouldEqual Constants.jsonForwardMessageReq
 
 [<Fact>]
 let ``JSON deserializing ChatMember``() =
   Constants.jsonTestObjChatMemberResultString
   |> parseJson
-  |> function
-  | Ok result -> shouldEqual result Constants.jsonTestObjChatMember
-  | Error error -> failwith error.Description
+  |> shouldEqual (Result.Ok Constants.jsonTestObjChatMember)
 
 [<Fact>]
 let ``JSON serializing send message request`` () =
   Constants.sendMessageReq
-  |> toJsonBotRequestString
+  |> toJsonString
   |> shouldEqual Constants.jsonSendMessageReq
   
 [<Fact>]
 let ``JSON deserializing message request with RichText`` () =
-  let _: Result<Message, ApiResponseError> = Constants.jsonMessageWithRichTextResultString |> parseJson
-  ()
+  Constants.jsonMessageWithRichTextResultString
+  |> parseJson
+  |> Result.map (fun _ -> ())
+  |> shouldEqual (Result.Ok ())
 
 [<Fact>]
 let ``JSON deserializing RichText`` () =
   let json = """{"ok":true,"result":{"type":"bot_command","text":"example","bot_command":"/test"}}"""
-  let _: Result<RichTextBotCommand, ApiResponseError> = json |> parseJson
-  ()
+  json
+  |> parseJson
+  |> Result.map (fun _ -> ())
+  |> shouldEqual (Result.Ok ())

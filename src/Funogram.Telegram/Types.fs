@@ -616,7 +616,7 @@ and [<CLIMutable>] Message =
     EphemeralMessageId: int64 option
     /// Date the message was sent in Unix time. It is always a positive number, representing a valid date.
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// The unique identifier for the guest query. Use this identifier with the method answerGuestQuery to send a response message. If non-empty, the message belongs to the chat where the guest bot was summoned, which may not coincide with other existing bot chats sharing the same identifier.
     [<DataMember(Name = "guest_query_id")>]
     GuestQueryId: string option
@@ -945,7 +945,7 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?giftUpgradeSent: GiftInfo, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?pinnedMessage: MaybeInaccessibleMessage, ?chatBackgroundSet: ChatBackground, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?chatOwnerChanged: ChatOwnerChanged, ?chatOwnerLeft: ChatOwnerLeft, ?invoice: Invoice, ?checklistTasksDone: ChecklistTasksDone, ?communityChatAdded: CommunityChatAdded, ?leftChatMember: User, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?suggestedPostRefunded: SuggestedPostRefunded, ?suggestedPostPaid: SuggestedPostPaid, ?suggestedPostDeclined: SuggestedPostDeclined, ?suggestedPostApprovalFailed: SuggestedPostApprovalFailed, ?suggestedPostApproved: SuggestedPostApproved, ?pollOptionDeleted: PollOptionDeleted, ?pollOptionAdded: PollOptionAdded, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?checklistTasksAdded: ChecklistTasksAdded, ?managedBotCreated: ManagedBotCreated, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?communityChatRemoved: CommunityChatRemoved, ?communityChatJoined: CommunityChatJoined, ?giveawayCompleted: GiveawayCompleted, ?newChatMembers: User[], ?venue: Venue, ?webAppData: WebAppData, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?guestBotCallerChat: Chat, ?guestBotCallerUser: User, ?viaBot: User, ?replyToPollOptionId: string, ?replyToChecklistTaskId: int64, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isPaidPost: bool, ?isAutomaticForward: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?guestQueryId: string, ?ephemeralMessageId: int64, ?receiverUser: User, ?senderTag: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?directMessagesTopic: DirectMessagesTopic, ?messageThreadId: int64, ?isTopicMessage: bool, ?location: Location, ?mediaGroupId: string, ?paidStarCount: int64, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?authorSignature: string, ?story: Story, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?livePhoto: LivePhoto, ?document: Document, ?audio: Audio, ?animation: Animation, ?richMessage: RichMessage, ?effectId: string, ?suggestedPostInfo: SuggestedPostInfo, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTimeOffset, chat: Chat, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?giftUpgradeSent: GiftInfo, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?pinnedMessage: MaybeInaccessibleMessage, ?chatBackgroundSet: ChatBackground, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?chatOwnerChanged: ChatOwnerChanged, ?chatOwnerLeft: ChatOwnerLeft, ?invoice: Invoice, ?checklistTasksDone: ChecklistTasksDone, ?communityChatAdded: CommunityChatAdded, ?leftChatMember: User, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?suggestedPostRefunded: SuggestedPostRefunded, ?suggestedPostPaid: SuggestedPostPaid, ?suggestedPostDeclined: SuggestedPostDeclined, ?suggestedPostApprovalFailed: SuggestedPostApprovalFailed, ?suggestedPostApproved: SuggestedPostApproved, ?pollOptionDeleted: PollOptionDeleted, ?pollOptionAdded: PollOptionAdded, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?checklistTasksAdded: ChecklistTasksAdded, ?managedBotCreated: ManagedBotCreated, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?communityChatRemoved: CommunityChatRemoved, ?communityChatJoined: CommunityChatJoined, ?giveawayCompleted: GiveawayCompleted, ?newChatMembers: User[], ?venue: Venue, ?webAppData: WebAppData, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?guestBotCallerChat: Chat, ?guestBotCallerUser: User, ?viaBot: User, ?replyToPollOptionId: string, ?replyToChecklistTaskId: int64, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isPaidPost: bool, ?isAutomaticForward: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?guestQueryId: string, ?ephemeralMessageId: int64, ?receiverUser: User, ?senderTag: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?directMessagesTopic: DirectMessagesTopic, ?messageThreadId: int64, ?isTopicMessage: bool, ?location: Location, ?mediaGroupId: string, ?paidStarCount: int64, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?authorSignature: string, ?story: Story, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?livePhoto: LivePhoto, ?document: Document, ?audio: Audio, ?animation: Animation, ?richMessage: RichMessage, ?effectId: string, ?suggestedPostInfo: SuggestedPostInfo, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
@@ -1092,9 +1092,9 @@ and [<CLIMutable>] InaccessibleMessage =
     MessageId: int64
     /// Always 0. The field can be used to differentiate regular and inaccessible messages.
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
   }
-  static member Create(chat: Chat, messageId: int64, date: DateTime) = 
+  static member Create(chat: Chat, messageId: int64, date: DateTimeOffset) = 
     {
       Chat = chat
       MessageId = messageId
@@ -1370,12 +1370,12 @@ and [<CLIMutable>] MessageOriginUser =
     Type: string
     /// Date the message was sent originally in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// User that sent the message originally
     [<DataMember(Name = "sender_user")>]
     SenderUser: User
   }
-  static member Create(``type``: string, date: DateTime, senderUser: User) = 
+  static member Create(``type``: string, date: DateTimeOffset, senderUser: User) = 
     {
       Type = ``type``
       Date = date
@@ -1391,12 +1391,12 @@ and [<CLIMutable>] MessageOriginHiddenUser =
     Type: string
     /// Date the message was sent originally in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Name of the user that sent the message originally
     [<DataMember(Name = "sender_user_name")>]
     SenderUserName: string
   }
-  static member Create(``type``: string, date: DateTime, senderUserName: string) = 
+  static member Create(``type``: string, date: DateTimeOffset, senderUserName: string) = 
     {
       Type = ``type``
       Date = date
@@ -1412,7 +1412,7 @@ and [<CLIMutable>] MessageOriginChat =
     Type: string
     /// Date the message was sent originally in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Chat that sent the message originally
     [<DataMember(Name = "sender_chat")>]
     SenderChat: Chat
@@ -1420,7 +1420,7 @@ and [<CLIMutable>] MessageOriginChat =
     [<DataMember(Name = "author_signature")>]
     AuthorSignature: string option
   }
-  static member Create(``type``: string, date: DateTime, senderChat: Chat, ?authorSignature: string) = 
+  static member Create(``type``: string, date: DateTimeOffset, senderChat: Chat, ?authorSignature: string) = 
     {
       Type = ``type``
       Date = date
@@ -1437,7 +1437,7 @@ and [<CLIMutable>] MessageOriginChannel =
     Type: string
     /// Date the message was sent originally in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Channel chat to which the message was originally sent
     [<DataMember(Name = "chat")>]
     Chat: Chat
@@ -1448,7 +1448,7 @@ and [<CLIMutable>] MessageOriginChannel =
     [<DataMember(Name = "author_signature")>]
     AuthorSignature: string option
   }
-  static member Create(``type``: string, date: DateTime, chat: Chat, messageId: int64, ?authorSignature: string) = 
+  static member Create(``type``: string, date: DateTimeOffset, chat: Chat, messageId: int64, ?authorSignature: string) = 
     {
       Type = ``type``
       Date = date
@@ -4069,7 +4069,7 @@ and [<CLIMutable>] ChatMemberUpdated =
     From: User
     /// Date the change was done in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Previous information about the chat member
     [<DataMember(Name = "old_chat_member")>]
     OldChatMember: ChatMember
@@ -4086,7 +4086,7 @@ and [<CLIMutable>] ChatMemberUpdated =
     [<DataMember(Name = "via_chat_folder_invite_link")>]
     ViaChatFolderInviteLink: bool option
   }
-  static member Create(chat: Chat, from: User, date: DateTime, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaJoinRequest: bool, ?viaChatFolderInviteLink: bool) = 
+  static member Create(chat: Chat, from: User, date: DateTimeOffset, oldChatMember: ChatMember, newChatMember: ChatMember, ?inviteLink: ChatInviteLink, ?viaJoinRequest: bool, ?viaChatFolderInviteLink: bool) = 
     {
       Chat = chat
       From = from
@@ -4248,9 +4248,9 @@ and [<CLIMutable>] ChatMemberMember =
     User: User
     /// Date when the user's subscription will expire; Unix time
     [<DataMember(Name = "until_date")>]
-    UntilDate: DateTime option
+    UntilDate: DateTimeOffset option
   }
-  static member Create(status: string, user: User, ?tag: string, ?untilDate: DateTime) = 
+  static member Create(status: string, user: User, ?tag: string, ?untilDate: DateTimeOffset) = 
     {
       Status = status
       User = user
@@ -4324,9 +4324,9 @@ and [<CLIMutable>] ChatMemberRestricted =
     CanManageTopics: bool
     /// Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever.
     [<DataMember(Name = "until_date")>]
-    UntilDate: DateTime
+    UntilDate: DateTimeOffset
   }
-  static member Create(status: string, canPinMessages: bool, canInviteUsers: bool, canChangeInfo: bool, canEditTag: bool, canReactToMessages: bool, canAddWebPagePreviews: bool, canSendOtherMessages: bool, canSendPolls: bool, canManageTopics: bool, canSendVoiceNotes: bool, canSendVideos: bool, canSendPhotos: bool, canSendDocuments: bool, canSendAudios: bool, canSendMessages: bool, isMember: bool, user: User, canSendVideoNotes: bool, untilDate: DateTime, ?tag: string) = 
+  static member Create(status: string, canPinMessages: bool, canInviteUsers: bool, canChangeInfo: bool, canEditTag: bool, canReactToMessages: bool, canAddWebPagePreviews: bool, canSendOtherMessages: bool, canSendPolls: bool, canManageTopics: bool, canSendVoiceNotes: bool, canSendVideos: bool, canSendPhotos: bool, canSendDocuments: bool, canSendAudios: bool, canSendMessages: bool, isMember: bool, user: User, canSendVideoNotes: bool, untilDate: DateTimeOffset, ?tag: string) = 
     {
       Status = status
       CanPinMessages = canPinMessages
@@ -4380,9 +4380,9 @@ and [<CLIMutable>] ChatMemberBanned =
     User: User
     /// Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever.
     [<DataMember(Name = "until_date")>]
-    UntilDate: DateTime
+    UntilDate: DateTimeOffset
   }
-  static member Create(status: string, user: User, untilDate: DateTime) = 
+  static member Create(status: string, user: User, untilDate: DateTimeOffset) = 
     {
       Status = status
       User = user
@@ -4403,7 +4403,7 @@ and [<CLIMutable>] ChatJoinRequest =
     UserChatId: int64
     /// Date the request was sent in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Bio of the user
     [<DataMember(Name = "bio")>]
     Bio: string option
@@ -4414,7 +4414,7 @@ and [<CLIMutable>] ChatJoinRequest =
     [<DataMember(Name = "query_id")>]
     QueryId: string option
   }
-  static member Create(chat: Chat, from: User, userChatId: int64, date: DateTime, ?bio: string, ?inviteLink: ChatInviteLink, ?queryId: string) = 
+  static member Create(chat: Chat, from: User, userChatId: int64, date: DateTimeOffset, ?bio: string, ?inviteLink: ChatInviteLink, ?queryId: string) = 
     {
       Chat = chat
       From = from
@@ -4900,7 +4900,7 @@ and [<CLIMutable>] MessageReactionUpdated =
     ActorChat: Chat option
     /// Date of the change in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Previous list of reaction types that were set by the user
     [<DataMember(Name = "old_reaction")>]
     OldReaction: ReactionType[]
@@ -4908,7 +4908,7 @@ and [<CLIMutable>] MessageReactionUpdated =
     [<DataMember(Name = "new_reaction")>]
     NewReaction: ReactionType[]
   }
-  static member Create(chat: Chat, messageId: int64, date: DateTime, oldReaction: ReactionType[], newReaction: ReactionType[], ?user: User, ?actorChat: Chat) = 
+  static member Create(chat: Chat, messageId: int64, date: DateTimeOffset, oldReaction: ReactionType[], newReaction: ReactionType[], ?user: User, ?actorChat: Chat) = 
     {
       Chat = chat
       MessageId = messageId
@@ -4930,12 +4930,12 @@ and [<CLIMutable>] MessageReactionCountUpdated =
     MessageId: int64
     /// Date of the change in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// List of reactions that are present on the message
     [<DataMember(Name = "reactions")>]
     Reactions: ReactionCount[]
   }
-  static member Create(chat: Chat, messageId: int64, date: DateTime, reactions: ReactionCount[]) = 
+  static member Create(chat: Chat, messageId: int64, date: DateTimeOffset, reactions: ReactionCount[]) = 
     {
       Chat = chat
       MessageId = messageId
@@ -6008,7 +6008,7 @@ and [<CLIMutable>] BusinessConnection =
     UserChatId: int64
     /// Date the connection was established in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Rights of the business bot
     [<DataMember(Name = "rights")>]
     Rights: BusinessBotRights option
@@ -6016,7 +6016,7 @@ and [<CLIMutable>] BusinessConnection =
     [<DataMember(Name = "is_enabled")>]
     IsEnabled: bool
   }
-  static member Create(id: string, user: User, userChatId: int64, date: DateTime, isEnabled: bool, ?rights: BusinessBotRights) = 
+  static member Create(id: string, user: User, userChatId: int64, date: DateTimeOffset, isEnabled: bool, ?rights: BusinessBotRights) = 
     {
       Id = id
       User = user
@@ -10407,12 +10407,12 @@ and [<CLIMutable>] RevenueWithdrawalStateSucceeded =
     Type: string
     /// Date the withdrawal was completed in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// An HTTPS URL that can be used to see transaction details
     [<DataMember(Name = "url")>]
     Url: string
   }
-  static member Create(``type``: string, date: DateTime, url: string) = 
+  static member Create(``type``: string, date: DateTimeOffset, url: string) = 
     {
       Type = ``type``
       Date = date
@@ -10635,7 +10635,7 @@ and [<CLIMutable>] StarTransaction =
     NanostarAmount: int64 option
     /// Date the transaction was created in Unix time
     [<DataMember(Name = "date")>]
-    Date: DateTime
+    Date: DateTimeOffset
     /// Source of an incoming transaction (e.g., a user purchasing goods or services, Fragment refunding a failed withdrawal). Only for incoming transactions.
     [<DataMember(Name = "source")>]
     Source: TransactionPartner option
@@ -10643,7 +10643,7 @@ and [<CLIMutable>] StarTransaction =
     [<DataMember(Name = "receiver")>]
     Receiver: TransactionPartner option
   }
-  static member Create(id: string, amount: int64, date: DateTime, ?nanostarAmount: int64, ?source: TransactionPartner, ?receiver: TransactionPartner) = 
+  static member Create(id: string, amount: int64, date: DateTimeOffset, ?nanostarAmount: int64, ?source: TransactionPartner, ?receiver: TransactionPartner) = 
     {
       Id = id
       Amount = amount

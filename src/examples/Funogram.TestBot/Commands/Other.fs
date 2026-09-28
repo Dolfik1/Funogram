@@ -28,4 +28,4 @@ let testGetChatInfo (ctx: UpdateContext) config chatId =
     botResult config (Api.sendMessage msg.Chat.Id (sprintf "Id: %i, Type: %O" x.Id x.Type))
     |> processResultWithValue
     |> ignore
-  | Error e -> printf "Error: %s" e.Description
+  | Error error -> printf "Error: %A" error

@@ -6,17 +6,10 @@ open Funogram.TestBot
 open Funogram.Api
 open Funogram.Telegram
 open Funogram.Telegram.Bot
-  
-type ConsoleLogger(color: ConsoleColor) =
-  interface Funogram.Types.IBotLogger with
-    member x.Log(text) =
-      let fc = Console.ForegroundColor
-      Console.ForegroundColor <- color
-      Console.WriteLine(text)
-      Console.ForegroundColor <- fc
-    member x.Enabled = true
+open Serilog
+open Serilog.Extensions.Logging
+open Serilog.Sinks.SystemConsole.Themes
 
-  
 [<EntryPoint>]
 let main _ =
   let cts = new CancellationTokenSource()
@@ -30,12 +23,19 @@ let main _ =
   )
   
   try
+    let serilog =
+      LoggerConfiguration()
+        .MinimumLevel.Verbose()
+        .WriteTo.Console(theme = AnsiConsoleTheme.Code)
+        .CreateLogger()
+    use loggerFactory = new SerilogLoggerFactory(serilog, dispose = true)
+
     Async.RunSynchronously(
       async {
         let config = Config.defaultConfig |> Config.withReadTokenFromFile
         let config =
           { config with
-              RequestLogger = Some (ConsoleLogger(ConsoleColor.Green)) }
+              Logger = loggerFactory.CreateLogger("Funogram") }
         let! _ = Api.deleteWebhookBase () |> api config
         return! startBot config Commands.Base.updateArrived None
       }, cancellationToken = cts.Token

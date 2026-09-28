@@ -3,5 +3,5 @@ namespace Funogram.Tests
 module internal Extensions =
   open Xunit
         
-  let inline shouldEqual (x: 'a) (y: 'a) = Assert.Equal<'a>(x, y)
+  let inline shouldEqual (expected: 'a) (actual: 'a) = Assert.Equal<'a>(expected, actual)
   let inline shouldThrow<'a when 'a :> exn>(y: unit -> unit) = Assert.Throws<'a>(y)

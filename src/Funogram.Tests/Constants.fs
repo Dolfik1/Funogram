@@ -8,7 +8,7 @@ open Funogram.Types
 module Constants =
   let private ok = sprintf """{"ok":true,"result":%s}"""
     
-  let testDate = DateTime(2117, 05, 28, 12, 47, 51, DateTimeKind.Utc)
+  let testDate = DateTimeOffset(2117, 05, 28, 12, 47, 51, TimeSpan.Zero)
   let testDateUnix = 4651649271L
   let testForwardOrigin = MessageOrigin.HiddenUser(
                             MessageOriginHiddenUser.Create(
