@@ -9,7 +9,7 @@ open Funogram
 open Funogram.Telegram.Types
 
 [<Fact>]
-let ``Deserializer should work``(): unit =
+let ``Deserializing a deeply nested update fails fast instead of hanging``(): unit =
     let brokenUpdate = """{
     "ok": true,
     "result": [
@@ -69,3 +69,29 @@ let ``Deserializer should work``(): unit =
     match update.Message with
     | None -> Assert.True(false, "No message")
     | Some message -> Assert.Equal(1L, message.MessageId)
+
+
+let private parseUpdates (json: string) =
+    use stream = new MemoryStream(Encoding.UTF8.GetBytes json)
+    match Tools.parseJsonStreamApiResponse<Update[]> stream with
+    | Ok result -> result
+    | Error e -> failwithf "Expected Ok, got %A" e
+
+[<Fact>]
+let ``Broken update falls back to empty update and keeps the rest of the batch``(): unit =
+    let result = parseUpdates """{"ok": true, "result": [
+        {"update_id": 1, "message": {"message_id": 1, "date": "broken", "chat": {"id": 1, "type": "private"}}},
+        {"update_id": 2, "message": {"message_id": 2, "date": 1707128500, "chat": {"id": 1, "type": "private"}}}
+    ]}"""
+
+    Assert.Equal(2, result.Length)
+    Assert.Equal(1L, result[0].UpdateId)
+    Assert.True(result[0].Message.IsNone)
+    Assert.Equal(2L, result[1].UpdateId)
+    Assert.Equal(Some 2L, result[1].Message |> Option.map _.MessageId)
+
+[<Fact>]
+let ``Broken update without update_id falls back to zero id``(): unit =
+    let update = parseUpdates """{"ok": true, "result": [{"message": "broken"}]}""" |> Assert.Single
+    Assert.Equal(0L, update.UpdateId)
+    Assert.True(update.Message.IsNone)
