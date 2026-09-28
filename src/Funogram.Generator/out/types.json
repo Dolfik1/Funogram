@@ -221,6 +221,14 @@
             "OriginalFieldType": "BotSubscriptionUpdated",
             "ConvertedFieldType": "BotSubscriptionUpdated",
             "Optional": true
+          },
+          {
+            "OriginalName": "stopped_message_generation",
+            "ConvertedName": "StoppedMessageGeneration",
+            "Description": "A user asked the bot to stop the generation of a message",
+            "OriginalFieldType": "MessageGenerationStopped",
+            "ConvertedFieldType": "MessageGenerationStopped",
+            "Optional": true
           }
         ]
       ]
@@ -1712,15 +1720,23 @@
           {
             "OriginalName": "community_chat_added",
             "ConvertedName": "CommunityChatAdded",
-            "Description": "Service message: chat added to a Community",
+            "Description": "Service message: chat or bot added to a Community",
             "OriginalFieldType": "CommunityChatAdded",
             "ConvertedFieldType": "CommunityChatAdded",
             "Optional": true
           },
           {
+            "OriginalName": "community_chat_joined",
+            "ConvertedName": "CommunityChatJoined",
+            "Description": "Service message: chat was joined by a user from a Community",
+            "OriginalFieldType": "CommunityChatJoined",
+            "ConvertedFieldType": "CommunityChatJoined",
+            "Optional": true
+          },
+          {
             "OriginalName": "community_chat_removed",
             "ConvertedName": "CommunityChatRemoved",
-            "Description": "Service message: chat removed from a Community",
+            "Description": "Service message: chat or bot removed from a Community",
             "OriginalFieldType": "CommunityChatRemoved",
             "ConvertedFieldType": "CommunityChatRemoved",
             "Optional": true
@@ -2440,6 +2456,41 @@
             "Description": "Persistent identifier of the specific poll option to be replied to",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "EphemeralMessageParameters",
+    "Description": "",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "receiver_user_id",
+            "ConvertedName": "ReceiverUserId",
+            "Description": "Identifier of the user who will receive the message. It is not guaranteed that the user will receive the message, especially if they are offline. See here for more details.",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          },
+          {
+            "OriginalName": "callback_query_id",
+            "ConvertedName": "CallbackQueryId",
+            "Description": "Identifier of the callback query which triggered the message, if any",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "replace_callback_query_message",
+            "ConvertedName": "ReplaceCallbackQueryMessage",
+            "Description": "Pass True if the ephemeral message must be shown in place of the original message. Must be False for callback queries from ephemeral messages, which must be edited using regular editEphemeralMessage\u2026 methods.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
             "Optional": true
           }
         ]
@@ -3187,7 +3238,7 @@
   },
   {
     "Name": "VideoNote",
-    "Description": "This object represents a video message (available in Telegram apps as of v.4.0).",
+    "Description": "This object represents a video message.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -4600,6 +4651,41 @@
     }
   },
   {
+    "Name": "MessageGenerationStopped",
+    "Description": "This object describes an update about a user stopping message generation.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "chat",
+            "ConvertedName": "Chat",
+            "Description": "Chat in which the message is generated",
+            "OriginalFieldType": "Chat",
+            "ConvertedFieldType": "Chat",
+            "Optional": false
+          },
+          {
+            "OriginalName": "message_thread_id",
+            "ConvertedName": "MessageThreadId",
+            "Description": "Unique identifier of the message thread in which the message is generated",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": true
+          },
+          {
+            "OriginalName": "draft_id",
+            "ConvertedName": "DraftId",
+            "Description": "Unique identifier of the message draft which was stopped",
+            "OriginalFieldType": "Integer",
+            "ConvertedFieldType": "int64",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "PollOptionAdded",
     "Description": "Describes a service message about an option added to a poll.",
     "Kind": {
@@ -5113,7 +5199,7 @@
   },
   {
     "Name": "CommunityChatAdded",
-    "Description": "Describes a service message about a chat being added to a community.",
+    "Description": "Describes a service message about a chat or a bot being added to a community.",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -5121,7 +5207,26 @@
           {
             "OriginalName": "community",
             "ConvertedName": "Community",
-            "Description": "The new community to which the chat belongs",
+            "Description": "The new community to which the chat or the bot belongs",
+            "OriginalFieldType": "Community",
+            "ConvertedFieldType": "Community",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "CommunityChatJoined",
+    "Description": "Describes a service message about a chat being joined by a user from a community.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "community",
+            "ConvertedName": "Community",
+            "Description": "The community from which the chat was joined",
             "OriginalFieldType": "Community",
             "ConvertedFieldType": "Community",
             "Optional": false
@@ -5132,7 +5237,7 @@
   },
   {
     "Name": "CommunityChatRemoved",
-    "Description": "Describes a service message about a chat being removed from a community. Currently holds no information.",
+    "Description": "Describes a service message about a chat or a bot being removed from a community. Currently holds no information.",
     "Kind": {
       "Case": "Stub"
     }
@@ -6257,6 +6362,14 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "force_reply",
+            "ConvertedName": "ForceReply",
+            "Description": "Pass True if the reply interface must be shown to the user, as if they had manually selected the bot\u0027s message and tapped \u0027Reply\u0027",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -6614,6 +6727,14 @@
             "OriginalFieldType": "Array of Array of InlineKeyboardButton",
             "ConvertedFieldType": "InlineKeyboardButton[][]",
             "Optional": false
+          },
+          {
+            "OriginalName": "force_reply",
+            "ConvertedName": "ForceReply",
+            "Description": "Pass True if the reply interface must be shown to the user, as if they had manually selected the bot\u0027s message and tapped \u0027Reply\u0027. The value of the field can\u0027t be changed when the inline keyboard is edited.",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           }
         ]
       ]
@@ -6677,7 +6798,7 @@
           {
             "OriginalName": "login_url",
             "ConvertedName": "LoginUrl",
-            "Description": "An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.",
+            "Description": "An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget. Not supported for ephemeral messages.",
             "OriginalFieldType": "LoginUrl",
             "ConvertedFieldType": "LoginUrl",
             "Optional": true
@@ -6729,6 +6850,14 @@
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "disabled",
+            "ConvertedName": "Disabled",
+            "Description": "If set, then the button is disabled and does nothing",
+            "OriginalFieldType": "DisabledButton",
+            "ConvertedFieldType": "DisabledButton",
+            "Optional": true
           }
         ]
       ]
@@ -6736,7 +6865,7 @@
   },
   {
     "Name": "LoginUrl",
-    "Description": "This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:\nTelegram apps support these buttons as of version 5.7.",
+    "Description": "This object represents a parameter of the inline keyboard button used to automatically authorize a user. It serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:",
     "Kind": {
       "Case": "Fields",
       "Fields": [
@@ -6760,7 +6889,7 @@
           {
             "OriginalName": "bot_username",
             "ConvertedName": "BotUsername",
-            "Description": "Username of a bot, which will be used for user authorization. See Setting up a bot for more details. If not specified, the current bot\u0027s username will be assumed. The url\u0027s domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details.",
+            "Description": "Username of a bot, which will be used for user authorization; not supported in RichMessageButton. See Setting up a bot for more details. If not specified, the current bot\u0027s username will be assumed. The url\u0027s domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": true
@@ -6848,6 +6977,13 @@
     }
   },
   {
+    "Name": "DisabledButton",
+    "Description": "This object represents a disabled button which does nothing. Currently holds no information.",
+    "Kind": {
+      "Case": "Stub"
+    }
+  },
+  {
     "Name": "CallbackQuery",
     "Description": "This object represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.",
     "Kind": {
@@ -6924,7 +7060,7 @@
           {
             "OriginalName": "force_reply",
             "ConvertedName": "ForceReply",
-            "Description": "Shows reply interface to the user, as if they manually selected the bot\u0027s message and tapped \u0027Reply\u0027",
+            "Description": "Shows reply interface to the user, as if they had manually selected the bot\u0027s message and tapped \u0027Reply\u0027",
             "OriginalFieldType": "True",
             "ConvertedFieldType": "bool",
             "Optional": false
@@ -7256,10 +7392,18 @@
           {
             "OriginalName": "can_manage_tags",
             "ConvertedName": "CanManageTags",
-            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.",
+            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "can_send_welcome_messages",
+            "ConvertedName": "CanSendWelcomeMessages",
+            "Description": "True, if the administrator can manage chat welcome messages or directly send them in the case of bots",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
           },
           {
             "OriginalName": "can_manage_voice_chats",
@@ -7590,10 +7734,18 @@
           {
             "OriginalName": "can_manage_tags",
             "ConvertedName": "CanManageTags",
-            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.",
+            "Description": "True, if the administrator can edit the tags of regular members; for groups and supergroups only",
             "OriginalFieldType": "Boolean",
             "ConvertedFieldType": "bool",
             "Optional": true
+          },
+          {
+            "OriginalName": "can_send_welcome_messages",
+            "ConvertedName": "CanSendWelcomeMessages",
+            "Description": "True, if the administrator can manage chat welcome messages or directly send them in the case of bots",
+            "OriginalFieldType": "Boolean",
+            "ConvertedFieldType": "bool",
+            "Optional": false
           },
           {
             "OriginalName": "custom_title",
@@ -9569,6 +9721,30 @@
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the message that was added to the gift",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "entities",
+            "ConvertedName": "Entities",
+            "Description": "Special entities that appear in the text",
+            "OriginalFieldType": "Array of MessageEntity",
+            "ConvertedFieldType": "MessageEntity[]",
+            "Optional": true
+          },
+          {
+            "OriginalName": "is_private",
+            "ConvertedName": "IsPrivate",
+            "Description": "True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
           },
           {
             "OriginalName": "last_resale_currency",
@@ -12523,7 +12699,7 @@
           {
             "OriginalName": "media",
             "ConvertedName": "Media",
-            "Description": "List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=, and tg://audio?id= links",
+            "Description": "List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=, tg://document?id=, and tg://audio?id= links",
             "OriginalFieldType": "Array of InputRichMessageMedia",
             "ConvertedFieldType": "InputRichMessageMedia[]",
             "Optional": true
@@ -12558,7 +12734,7 @@
           {
             "OriginalName": "id",
             "ConvertedName": "Id",
-            "Description": "Unique identifier of the media used in a tg://photo?id=, tg://video?id=, or tg://audio?id= link. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.",
+            "Description": "Unique identifier of the media used in a tg://photo?id=, tg://video?id=, tg://document?id=, or tg://audio?id= link. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.",
             "OriginalFieldType": "String",
             "ConvertedFieldType": "string",
             "Optional": false
@@ -12567,9 +12743,108 @@
             "OriginalName": "media",
             "ConvertedName": "Media",
             "Description": "The media to be sent. Everything except the media itself and its properties is ignored.",
-            "OriginalFieldType": "InputMediaAnimation or InputMediaAudio or InputMediaPhoto or InputMediaVideo or InputMediaVoiceNote",
+            "OriginalFieldType": "InputMediaAnimation or InputMediaAudio or InputMediaDocument or InputMediaPhoto or InputMediaVideo or InputMediaVoiceNote",
             "ConvertedFieldType": "InputMedia",
             "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RichMessageButton",
+    "Description": "This object represents a button in a RichMessage. Exactly one of the fields other than text and style must be used to specify the type of the button.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Text of the button. May contain only plain text, RichTextCustomEmoji and RichTextDateTime entities.",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "style",
+            "ConvertedName": "Style",
+            "Description": "Style of the button. Must be one of \u201Cdanger\u201D, \u201Csuccess\u201D, \u201Cprimary\u201D, or \u201Clink\u201D (the button is shown as a regular link without borders). Apps may use theme-specific colors for the button background and text based on the style. The style \u201Clink\u201D is allowed only for callback buttons.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "url",
+            "ConvertedName": "Url",
+            "Description": "HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=\u003Cuser_id\u003E can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "callback_data",
+            "ConvertedName": "CallbackData",
+            "Description": "Data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "web_app",
+            "ConvertedName": "WebApp",
+            "Description": "Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.",
+            "OriginalFieldType": "WebAppInfo",
+            "ConvertedFieldType": "WebAppInfo",
+            "Optional": true
+          },
+          {
+            "OriginalName": "login_url",
+            "ConvertedName": "LoginUrl",
+            "Description": "An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget. Not supported for ephemeral messages.",
+            "OriginalFieldType": "LoginUrl",
+            "ConvertedFieldType": "LoginUrl",
+            "Optional": true
+          },
+          {
+            "OriginalName": "switch_inline_query",
+            "ConvertedName": "SwitchInlineQuery",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot\u0027s username and the specified inline query in the input field. May be empty, in which case just the bot\u0027s username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "switch_inline_query_current_chat",
+            "ConvertedName": "SwitchInlineQueryCurrentChat",
+            "Description": "If set, pressing the button will insert the bot\u0027s username and the specified inline query in the current chat\u0027s input field. May be empty, in which case only the bot\u0027s username will be inserted. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "Optional": true
+          },
+          {
+            "OriginalName": "switch_inline_query_chosen_chat",
+            "ConvertedName": "SwitchInlineQueryChosenChat",
+            "Description": "If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot\u0027s username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a business account.",
+            "OriginalFieldType": "SwitchInlineQueryChosenChat",
+            "ConvertedFieldType": "SwitchInlineQueryChosenChat",
+            "Optional": true
+          },
+          {
+            "OriginalName": "copy_text",
+            "ConvertedName": "CopyText",
+            "Description": "A button that copies the specified text to the clipboard",
+            "OriginalFieldType": "CopyTextButton",
+            "ConvertedFieldType": "CopyTextButton",
+            "Optional": true
+          },
+          {
+            "OriginalName": "disabled",
+            "ConvertedName": "Disabled",
+            "Description": "If set, then the button is disabled and does nothing",
+            "OriginalFieldType": "DisabledButton",
+            "ConvertedFieldType": "DisabledButton",
+            "Optional": true
           }
         ]
       ]
@@ -12665,6 +12940,10 @@
           {
             "Name": "BotCommand",
             "CaseType": "RichTextBotCommand"
+          },
+          {
+            "Name": "Button",
+            "CaseType": "RichTextButton"
           },
           {
             "Name": "Anchor",
@@ -13371,6 +13650,34 @@
     }
   },
   {
+    "Name": "RichTextButton",
+    "Description": "A button.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the rich text, always \u201Cbutton\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "button",
+            "Optional": false
+          },
+          {
+            "OriginalName": "button",
+            "ConvertedName": "Button",
+            "Description": "The button",
+            "OriginalFieldType": "RichMessageButton",
+            "ConvertedFieldType": "RichMessageButton",
+            "Optional": false
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "RichTextAnchor",
     "Description": "An anchor.",
     "Kind": {
@@ -13695,6 +14002,10 @@
             "CaseType": "RichBlockBlockQuotation"
           },
           {
+            "Name": "ExpandableBlockQuotation",
+            "CaseType": "RichBlockExpandableBlockQuotation"
+          },
+          {
             "Name": "PullQuotation",
             "CaseType": "RichBlockPullQuotation"
           },
@@ -13719,12 +14030,20 @@
             "CaseType": "RichBlockMap"
           },
           {
+            "Name": "Buttons",
+            "CaseType": "RichBlockButtons"
+          },
+          {
             "Name": "Animation",
             "CaseType": "RichBlockAnimation"
           },
           {
             "Name": "Audio",
             "CaseType": "RichBlockAudio"
+          },
+          {
+            "Name": "Document",
+            "CaseType": "RichBlockDocument"
           },
           {
             "Name": "Photo",
@@ -14015,6 +14334,42 @@
     }
   },
   {
+    "Name": "RichBlockExpandableBlockQuotation",
+    "Description": "A block quotation, corresponding to the HTML tag \u003Cblockquote\u003E with custom attribute \u0022expandable\u0022.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cexpandable_blockquote\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "expandable_blockquote",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Content of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "credit",
+            "ConvertedName": "Credit",
+            "Description": "Credit of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "RichBlockPullQuotation",
     "Description": "A quotation with centered text, loosely corresponding to the HTML tag \u003Caside\u003E.",
     "Kind": {
@@ -14163,6 +14518,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "is_compact",
+            "ConvertedName": "IsCompact",
+            "Description": "True, if table cells have smaller indents",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "caption",
             "ConvertedName": "Caption",
             "Description": "Caption of the table",
@@ -14245,7 +14608,7 @@
           {
             "OriginalName": "zoom",
             "ConvertedName": "Zoom",
-            "Description": "Map zoom level; 13-20",
+            "Description": "Map zoom level",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
             "Optional": false
@@ -14272,6 +14635,42 @@
             "Description": "Caption of the block",
             "OriginalFieldType": "RichBlockCaption",
             "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RichBlockButtons",
+    "Description": "A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag \u003Ctg-button-row\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cbuttons\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "buttons",
+            "Optional": false
+          },
+          {
+            "OriginalName": "buttons",
+            "ConvertedName": "Buttons",
+            "Description": "The buttons",
+            "OriginalFieldType": "Array of RichMessageButton",
+            "ConvertedFieldType": "RichMessageButton[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "align",
+            "ConvertedName": "Align",
+            "Description": "Horizontal alignment of the buttons. Currently, must be one of \u201Cleft\u201D, \u201Ccenter\u201D, or \u201Cright\u201D.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           }
         ]
@@ -14344,6 +14743,42 @@
             "Description": "The audio",
             "OriginalFieldType": "Audio",
             "ConvertedFieldType": "Audio",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "RichBlockDocument",
+    "Description": "A block with a general file, corresponding to the custom HTML tag \u003Ctg-document\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cdocument\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "document",
+            "Optional": false
+          },
+          {
+            "OriginalName": "document",
+            "ConvertedName": "Document",
+            "Description": "The document",
+            "OriginalFieldType": "Document",
+            "ConvertedFieldType": "Document",
             "Optional": false
           },
           {
@@ -14605,6 +15040,10 @@
             "CaseType": "InputRichBlockBlockQuotation"
           },
           {
+            "Name": "ExpandableBlockQuotation",
+            "CaseType": "InputRichBlockExpandableBlockQuotation"
+          },
+          {
             "Name": "PullQuotation",
             "CaseType": "InputRichBlockPullQuotation"
           },
@@ -14629,12 +15068,20 @@
             "CaseType": "InputRichBlockMap"
           },
           {
+            "Name": "Buttons",
+            "CaseType": "InputRichBlockButtons"
+          },
+          {
             "Name": "Animation",
             "CaseType": "InputRichBlockAnimation"
           },
           {
             "Name": "Audio",
             "CaseType": "InputRichBlockAudio"
+          },
+          {
+            "Name": "Document",
+            "CaseType": "InputRichBlockDocument"
           },
           {
             "Name": "Photo",
@@ -14925,6 +15372,42 @@
     }
   },
   {
+    "Name": "InputRichBlockExpandableBlockQuotation",
+    "Description": "A block quotation, corresponding to the HTML tag \u003Cblockquote\u003E with custom attribute \u0022expandable\u0022.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cexpandable_blockquote\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "expandable_blockquote",
+            "Optional": false
+          },
+          {
+            "OriginalName": "text",
+            "ConvertedName": "Text",
+            "Description": "Content of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": false
+          },
+          {
+            "OriginalName": "credit",
+            "ConvertedName": "Credit",
+            "Description": "Credit of the block",
+            "OriginalFieldType": "RichText",
+            "ConvertedFieldType": "RichText",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
     "Name": "InputRichBlockPullQuotation",
     "Description": "A quotation with centered text, loosely corresponding to the HTML tag \u003Caside\u003E.",
     "Kind": {
@@ -15073,6 +15556,14 @@
             "Optional": true
           },
           {
+            "OriginalName": "is_compact",
+            "ConvertedName": "IsCompact",
+            "Description": "Pass True if table cells must have smaller indents",
+            "OriginalFieldType": "True",
+            "ConvertedFieldType": "bool",
+            "Optional": true
+          },
+          {
             "OriginalName": "caption",
             "ConvertedName": "Caption",
             "Description": "Caption of the table",
@@ -15158,7 +15649,7 @@
             "Description": "Map zoom level; 0-24",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "width",
@@ -15166,7 +15657,7 @@
             "Description": "Map width; 0-10000",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "height",
@@ -15174,7 +15665,7 @@
             "Description": "Map height; 0-10000",
             "OriginalFieldType": "Integer",
             "ConvertedFieldType": "int64",
-            "Optional": false
+            "Optional": true
           },
           {
             "OriginalName": "caption",
@@ -15182,6 +15673,42 @@
             "Description": "Caption of the block",
             "OriginalFieldType": "RichBlockCaption",
             "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockButtons",
+    "Description": "A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag \u003Ctg-button-row\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cbuttons\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "buttons",
+            "Optional": false
+          },
+          {
+            "OriginalName": "buttons",
+            "ConvertedName": "Buttons",
+            "Description": "List of 1-8 buttons to send",
+            "OriginalFieldType": "Array of RichMessageButton",
+            "ConvertedFieldType": "RichMessageButton[]",
+            "Optional": false
+          },
+          {
+            "OriginalName": "align",
+            "ConvertedName": "Align",
+            "Description": "Horizontal alignment of the buttons. Currently, must be one of \u201Cleft\u201D, \u201Ccenter\u201D, or \u201Cright\u201D.",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
             "Optional": true
           }
         ]
@@ -15246,6 +15773,42 @@
             "Description": "The audio. Caption is ignored.",
             "OriginalFieldType": "InputMediaAudio",
             "ConvertedFieldType": "InputMediaAudio",
+            "Optional": false
+          },
+          {
+            "OriginalName": "caption",
+            "ConvertedName": "Caption",
+            "Description": "Caption of the block",
+            "OriginalFieldType": "RichBlockCaption",
+            "ConvertedFieldType": "RichBlockCaption",
+            "Optional": true
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "Name": "InputRichBlockDocument",
+    "Description": "A block with a general file, corresponding to the custom HTML tag \u003Ctg-document\u003E.",
+    "Kind": {
+      "Case": "Fields",
+      "Fields": [
+        [
+          {
+            "OriginalName": "type",
+            "ConvertedName": "Type",
+            "Description": "Type of the block, always \u201Cdocument\u201D",
+            "OriginalFieldType": "String",
+            "ConvertedFieldType": "string",
+            "AlwaysValue": "document",
+            "Optional": false
+          },
+          {
+            "OriginalName": "document",
+            "ConvertedName": "Document",
+            "Description": "The document. Caption is ignored.",
+            "OriginalFieldType": "InputMediaDocument",
+            "ConvertedFieldType": "InputMediaDocument",
             "Optional": false
           },
           {
@@ -17693,7 +18256,7 @@
           {
             "OriginalName": "rich_message",
             "ConvertedName": "RichMessage",
-            "Description": "The message to be sent",
+            "Description": "The message to be sent. Only previously uploaded files may be used in the message.",
             "OriginalFieldType": "InputRichMessage",
             "ConvertedFieldType": "InputRichMessage",
             "Optional": false

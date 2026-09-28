@@ -220,92 +220,109 @@ module Api =
       File.Bytes (a x, b x)
   
   let fileFinders = ConcurrentDictionary<Type, obj>()
-  let rec mkFilesFinder<'T> () : 'T -> File[] =
-    let mkMemberFinder (shape : IShapeMember<'T>) =
-       shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
-         member _.Visit (shape : ShapeMember<'T, 'a>) =
-          let fieldFinder = mkFilesFinder<'a>()
-          fieldFinder << shape.Get }    
-    let wrap(p : 'a -> File[]) = unbox<'T -> File[]> p
-    
-    match shapeof<'T> with
-    | Shape.FSharpOption s ->
-      s.Element.Accept {
-        new ITypeVisitor<'T -> File[]> with
-          member _.Visit<'a> () =
-            let tp = mkFilesFinder<'a>()
-            wrap(function None -> [||] | Some t -> (tp t))
-      }
-    | Shape.FSharpList s ->
-      s.Element.Accept {
-        new ITypeVisitor<'T -> File[]> with
-          member _.Visit<'a> () =
-            let tp = mkFilesFinder<'a>()
-            wrap(fun ts -> ts |> Seq.map tp |> Array.concat)
-        }
 
-    | Shape.Array s when s.Rank = 1 ->
-      s.Element.Accept {
-        new ITypeVisitor<'T -> File[]> with
-          member _.Visit<'a> () =
-            let tp = mkFilesFinder<'a> ()
-            fun (t: 'T) ->
-              let r = t |> box :?> seq<'a>
-              r |> Seq.map tp |> Array.concat
-      }
-        
-    | Shape.Tuple (:? ShapeTuple<'T> as shape) ->
-      let mkElemFinder (shape : IShapeMember<'T>) =
-        shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
-          member _.Visit (shape : ShapeMember<'T, 'Field>) =
-            let fieldFinder = mkFilesFinder<'Field>()
+  let rec mkFilesFinderCached<'T> (cache: System.Collections.Generic.Dictionary<Type, obj>) : 'T -> File[] =
+    match cache.TryGetValue typeof<'T> with
+    | true, cell ->
+      // Recursive reference: defer to the finder that is still being built.
+      let cell = unbox<('T -> File[]) ref> cell
+      fun x -> cell.Value x
+    | _ ->
+      let cell : ('T -> File[]) ref = ref (fun _ -> Array.empty)
+      cache[typeof<'T>] <- box cell
+
+      let mkMemberFinder (shape : IShapeMember<'T>) =
+         shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
+           member _.Visit (shape : ShapeMember<'T, 'a>) =
+            let fieldFinder = mkFilesFinderCached<'a> cache
             fieldFinder << shape.Get }
+      let wrap(p : 'a -> File[]) = unbox<'T -> File[]> p
 
-      let elemPrinters : ('T -> File[]) [] = shape.Elements |> Array.map mkElemFinder
+      let finder =
+        match shapeof<'T> with
+        | Shape.FSharpOption s ->
+          s.Element.Accept {
+            new ITypeVisitor<'T -> File[]> with
+              member _.Visit<'a> () =
+                let tp = mkFilesFinderCached<'a> cache
+                wrap(function None -> [||] | Some t -> (tp t))
+          }
+        | Shape.FSharpList s ->
+          s.Element.Accept {
+            new ITypeVisitor<'T -> File[]> with
+              member _.Visit<'a> () =
+                let tp = mkFilesFinderCached<'a> cache
+                wrap(fun ts -> ts |> Seq.map tp |> Array.concat)
+            }
 
-      fun (r:'T) ->
-        elemPrinters
-        |> Seq.map (fun ep -> ep r)
-        |> Array.concat
+        | Shape.Array s when s.Rank = 1 ->
+          s.Element.Accept {
+            new ITypeVisitor<'T -> File[]> with
+              member _.Visit<'a> () =
+                let tp = mkFilesFinderCached<'a> cache
+                fun (t: 'T) ->
+                  let r = t |> box :?> seq<'a>
+                  r |> Seq.map tp |> Array.concat
+          }
 
-    | Shape.FSharpSet s ->
-      s.Accept {
-        new IFSharpSetVisitor<'T -> File[]> with
-          member _.Visit<'a when 'a : comparison> () =
-            let tp = mkFilesFinder<'a>()
-            wrap(fun (s:Set<'a>) -> s |> Seq.map tp |> Array.concat)
-      }
-    | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
-      let fieldPrinters : ('T -> File[]) [] = 
-        shape.Fields |> Array.map mkMemberFinder
+        | Shape.Tuple (:? ShapeTuple<'T> as shape) ->
+          let mkElemFinder (shape : IShapeMember<'T>) =
+            shape.Accept { new IMemberVisitor<'T, 'T -> File[]> with
+              member _.Visit (shape : ShapeMember<'T, 'Field>) =
+                let fieldFinder = mkFilesFinderCached<'Field> cache
+                fieldFinder << shape.Get }
 
-      fun (r:'T) ->
-        fieldPrinters |> Seq.map (fun fp -> fp r) |> Array.concat
-    | Shape.FSharpUnion (:? ShapeFSharpUnion<'T> as shape) ->
-      let cases : ShapeFSharpUnionCase<'T> [] = shape.UnionCases // all union cases
-      let mkUnionCasePrinter (case : ShapeFSharpUnionCase<'T>) =
-        let readFile =
-          if isFileStream case then
-            readFileStream |> Some
-          elif isFileBytes case then
-            readFileBytes |> Some
-          else None
-        
-        let fieldPrinters = case.Fields |> Array.map mkMemberFinder
-        fun (x: 'T) ->
-          match readFile with
-          | Some fn ->
-            [| fn x case |]
-          | None ->
-            fieldPrinters 
-            |> Seq.map (fun fp -> fp x) 
+          let elemPrinters : ('T -> File[]) [] = shape.Elements |> Array.map mkElemFinder
+
+          fun (r:'T) ->
+            elemPrinters
+            |> Seq.map (fun ep -> ep r)
             |> Array.concat
 
-      let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
-      fun (u:'T) ->
-        let tag : int = shape.GetTag u // get the underlying tag for the union case
-        casePrinters[tag] u
-    | _ -> fun _ -> [||]
+        | Shape.FSharpSet s ->
+          s.Accept {
+            new IFSharpSetVisitor<'T -> File[]> with
+              member _.Visit<'a when 'a : comparison> () =
+                let tp = mkFilesFinderCached<'a> cache
+                wrap(fun (s:Set<'a>) -> s |> Seq.map tp |> Array.concat)
+          }
+        | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
+          let fieldPrinters : ('T -> File[]) [] =
+            shape.Fields |> Array.map mkMemberFinder
+
+          fun (r:'T) ->
+            fieldPrinters |> Seq.map (fun fp -> fp r) |> Array.concat
+        | Shape.FSharpUnion (:? ShapeFSharpUnion<'T> as shape) ->
+          let cases : ShapeFSharpUnionCase<'T> [] = shape.UnionCases // all union cases
+          let mkUnionCasePrinter (case : ShapeFSharpUnionCase<'T>) =
+            let readFile =
+              if isFileStream case then
+                readFileStream |> Some
+              elif isFileBytes case then
+                readFileBytes |> Some
+              else None
+
+            let fieldPrinters = case.Fields |> Array.map mkMemberFinder
+            fun (x: 'T) ->
+              match readFile with
+              | Some fn ->
+                [| fn x case |]
+              | None ->
+                fieldPrinters
+                |> Seq.map (fun fp -> fp x)
+                |> Array.concat
+
+          let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
+          fun (u:'T) ->
+            let tag : int = shape.GetTag u // get the underlying tag for the union case
+            casePrinters[tag] u
+        | _ -> fun _ -> [||]
+
+      cell.Value <- finder
+      finder
+
+  let mkFilesFinder<'T> () : 'T -> File[] =
+    mkFilesFinderCached<'T> (System.Collections.Generic.Dictionary())
 
   let multipartSerializers = ConcurrentDictionary<Type, IBotRequest -> MultipartFormDataContent -> bool>()
   

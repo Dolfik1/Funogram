@@ -159,10 +159,14 @@ and [<CLIMutable>] Update =
     /// User payment subscription has changed
     [<DataMember(Name = "subscription")>]
     Subscription: BotSubscriptionUpdated option
+    /// A user asked the bot to stop the generation of a message
+    [<DataMember(Name = "stopped_message_generation")>]
+    StoppedMessageGeneration: MessageGenerationStopped option
   }
-  static member Create(updateId: int64, ?removedChatBoost: ChatBoostRemoved, ?chatBoost: ChatBoostUpdated, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?purchasedPaidMedia: PaidMediaPurchased, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?callbackQuery: CallbackQuery, ?managedBot: ManagedBotUpdated, ?chosenInlineResult: ChosenInlineResult, ?messageReactionCount: MessageReactionCountUpdated, ?messageReaction: MessageReactionUpdated, ?guestMessage: Message, ?deletedBusinessMessages: BusinessMessagesDeleted, ?editedBusinessMessage: Message, ?businessMessage: Message, ?businessConnection: BusinessConnection, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?inlineQuery: InlineQuery, ?subscription: BotSubscriptionUpdated) = 
+  static member Create(updateId: int64, ?managedBot: ManagedBotUpdated, ?removedChatBoost: ChatBoostRemoved, ?chatBoost: ChatBoostUpdated, ?chatJoinRequest: ChatJoinRequest, ?chatMember: ChatMemberUpdated, ?myChatMember: ChatMemberUpdated, ?pollAnswer: PollAnswer, ?poll: Poll, ?purchasedPaidMedia: PaidMediaPurchased, ?preCheckoutQuery: PreCheckoutQuery, ?shippingQuery: ShippingQuery, ?callbackQuery: CallbackQuery, ?chosenInlineResult: ChosenInlineResult, ?inlineQuery: InlineQuery, ?messageReactionCount: MessageReactionCountUpdated, ?messageReaction: MessageReactionUpdated, ?guestMessage: Message, ?deletedBusinessMessages: BusinessMessagesDeleted, ?editedBusinessMessage: Message, ?businessMessage: Message, ?businessConnection: BusinessConnection, ?editedChannelPost: Message, ?channelPost: Message, ?editedMessage: Message, ?message: Message, ?subscription: BotSubscriptionUpdated, ?stoppedMessageGeneration: MessageGenerationStopped) = 
     {
       UpdateId = updateId
+      ManagedBot = managedBot
       RemovedChatBoost = removedChatBoost
       ChatBoost = chatBoost
       ChatJoinRequest = chatJoinRequest
@@ -174,8 +178,8 @@ and [<CLIMutable>] Update =
       PreCheckoutQuery = preCheckoutQuery
       ShippingQuery = shippingQuery
       CallbackQuery = callbackQuery
-      ManagedBot = managedBot
       ChosenInlineResult = chosenInlineResult
+      InlineQuery = inlineQuery
       MessageReactionCount = messageReactionCount
       MessageReaction = messageReaction
       GuestMessage = guestMessage
@@ -187,8 +191,8 @@ and [<CLIMutable>] Update =
       ChannelPost = channelPost
       EditedMessage = editedMessage
       Message = message
-      InlineQuery = inlineQuery
       Subscription = subscription
+      StoppedMessageGeneration = stoppedMessageGeneration
     }
 
 /// Describes the current status of a webhook.
@@ -853,10 +857,13 @@ and [<CLIMutable>] Message =
     /// Service message: tasks were added to a checklist
     [<DataMember(Name = "checklist_tasks_added")>]
     ChecklistTasksAdded: ChecklistTasksAdded option
-    /// Service message: chat added to a Community
+    /// Service message: chat or bot added to a Community
     [<DataMember(Name = "community_chat_added")>]
     CommunityChatAdded: CommunityChatAdded option
-    /// Service message: chat removed from a Community
+    /// Service message: chat was joined by a user from a Community
+    [<DataMember(Name = "community_chat_joined")>]
+    CommunityChatJoined: CommunityChatJoined option
+    /// Service message: chat or bot removed from a Community
     [<DataMember(Name = "community_chat_removed")>]
     CommunityChatRemoved: CommunityChatRemoved option
     /// Service message: the price for paid messages in the corresponding direct messages chat of a channel has changed
@@ -938,11 +945,12 @@ and [<CLIMutable>] Message =
     [<DataMember(Name = "reply_markup")>]
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Create(messageId: int64, date: DateTime, chat: Chat, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?giftUpgradeSent: GiftInfo, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?invoice: Invoice, ?migrateFromChatId: int64, ?boostAdded: ChatBoostAdded, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?chatOwnerChanged: ChatOwnerChanged, ?chatOwnerLeft: ChatOwnerLeft, ?leftChatMember: User, ?pinnedMessage: MaybeInaccessibleMessage, ?chatBackgroundSet: ChatBackground, ?checklistTasksAdded: ChecklistTasksAdded, ?newChatMembers: User[], ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?suggestedPostRefunded: SuggestedPostRefunded, ?suggestedPostPaid: SuggestedPostPaid, ?suggestedPostDeclined: SuggestedPostDeclined, ?suggestedPostApprovalFailed: SuggestedPostApprovalFailed, ?suggestedPostApproved: SuggestedPostApproved, ?pollOptionDeleted: PollOptionDeleted, ?pollOptionAdded: PollOptionAdded, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?checklistTasksDone: ChecklistTasksDone, ?managedBotCreated: ManagedBotCreated, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?communityChatRemoved: CommunityChatRemoved, ?communityChatAdded: CommunityChatAdded, ?giveawayCompleted: GiveawayCompleted, ?location: Location, ?venue: Venue, ?poll: Poll, ?hasProtectedContent: bool, ?editDate: int64, ?guestBotCallerChat: Chat, ?guestBotCallerUser: User, ?viaBot: User, ?replyToPollOptionId: string, ?replyToChecklistTaskId: int64, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isAutomaticForward: bool, ?isTopicMessage: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?guestQueryId: string, ?ephemeralMessageId: int64, ?receiverUser: User, ?senderTag: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?directMessagesTopic: DirectMessagesTopic, ?messageThreadId: int64, ?isFromOffline: bool, ?isPaidPost: bool, ?mediaGroupId: string, ?authorSignature: string, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?story: Story, ?webAppData: WebAppData, ?sticker: Sticker, ?paidMedia: PaidMediaInfo, ?livePhoto: LivePhoto, ?document: Document, ?audio: Audio, ?animation: Animation, ?richMessage: RichMessage, ?effectId: string, ?suggestedPostInfo: SuggestedPostInfo, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?text: string, ?paidStarCount: int64, ?photo: PhotoSize[], ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Create(messageId: int64, date: DateTime, chat: Chat, ?boostAdded: ChatBoostAdded, ?proximityAlertTriggered: ProximityAlertTriggered, ?passportData: PassportData, ?writeAccessAllowed: WriteAccessAllowed, ?connectedWebsite: string, ?giftUpgradeSent: GiftInfo, ?uniqueGift: UniqueGiftInfo, ?gift: GiftInfo, ?chatShared: ChatShared, ?usersShared: UsersShared, ?refundedPayment: RefundedPayment, ?successfulPayment: SuccessfulPayment, ?pinnedMessage: MaybeInaccessibleMessage, ?chatBackgroundSet: ChatBackground, ?migrateFromChatId: int64, ?migrateToChatId: int64, ?messageAutoDeleteTimerChanged: MessageAutoDeleteTimerChanged, ?channelChatCreated: bool, ?supergroupChatCreated: bool, ?groupChatCreated: bool, ?deleteChatPhoto: bool, ?newChatPhoto: PhotoSize[], ?newChatTitle: string, ?chatOwnerChanged: ChatOwnerChanged, ?chatOwnerLeft: ChatOwnerLeft, ?invoice: Invoice, ?checklistTasksDone: ChecklistTasksDone, ?communityChatAdded: CommunityChatAdded, ?leftChatMember: User, ?videoChatParticipantsInvited: VideoChatParticipantsInvited, ?videoChatEnded: VideoChatEnded, ?videoChatStarted: VideoChatStarted, ?videoChatScheduled: VideoChatScheduled, ?suggestedPostRefunded: SuggestedPostRefunded, ?suggestedPostPaid: SuggestedPostPaid, ?suggestedPostDeclined: SuggestedPostDeclined, ?suggestedPostApprovalFailed: SuggestedPostApprovalFailed, ?suggestedPostApproved: SuggestedPostApproved, ?pollOptionDeleted: PollOptionDeleted, ?pollOptionAdded: PollOptionAdded, ?paidMessagePriceChanged: PaidMessagePriceChanged, ?checklistTasksAdded: ChecklistTasksAdded, ?managedBotCreated: ManagedBotCreated, ?giveawayWinners: GiveawayWinners, ?giveaway: Giveaway, ?giveawayCreated: GiveawayCreated, ?generalForumTopicUnhidden: GeneralForumTopicUnhidden, ?generalForumTopicHidden: GeneralForumTopicHidden, ?forumTopicReopened: ForumTopicReopened, ?forumTopicClosed: ForumTopicClosed, ?forumTopicEdited: ForumTopicEdited, ?forumTopicCreated: ForumTopicCreated, ?directMessagePriceChanged: DirectMessagePriceChanged, ?communityChatRemoved: CommunityChatRemoved, ?communityChatJoined: CommunityChatJoined, ?giveawayCompleted: GiveawayCompleted, ?newChatMembers: User[], ?venue: Venue, ?webAppData: WebAppData, ?isFromOffline: bool, ?hasProtectedContent: bool, ?editDate: int64, ?guestBotCallerChat: Chat, ?guestBotCallerUser: User, ?viaBot: User, ?replyToPollOptionId: string, ?replyToChecklistTaskId: int64, ?replyToStory: Story, ?quote: TextQuote, ?externalReply: ExternalReplyInfo, ?replyToMessage: Message, ?isPaidPost: bool, ?isAutomaticForward: bool, ?forwardOrigin: MessageOrigin, ?businessConnectionId: string, ?guestQueryId: string, ?ephemeralMessageId: int64, ?receiverUser: User, ?senderTag: string, ?senderBusinessBot: User, ?senderBoostCount: int64, ?senderChat: Chat, ?from: User, ?directMessagesTopic: DirectMessagesTopic, ?messageThreadId: int64, ?isTopicMessage: bool, ?location: Location, ?mediaGroupId: string, ?paidStarCount: int64, ?poll: Poll, ?game: Game, ?dice: Dice, ?contact: Contact, ?checklist: Checklist, ?hasMediaSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?voice: Voice, ?videoNote: VideoNote, ?video: Video, ?authorSignature: string, ?story: Story, ?photo: PhotoSize[], ?paidMedia: PaidMediaInfo, ?livePhoto: LivePhoto, ?document: Document, ?audio: Audio, ?animation: Animation, ?richMessage: RichMessage, ?effectId: string, ?suggestedPostInfo: SuggestedPostInfo, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?text: string, ?sticker: Sticker, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       MessageId = messageId
       Date = date
       Chat = chat
+      BoostAdded = boostAdded
       ProximityAlertTriggered = proximityAlertTriggered
       PassportData = passportData
       WriteAccessAllowed = writeAccessAllowed
@@ -954,9 +962,9 @@ and [<CLIMutable>] Message =
       UsersShared = usersShared
       RefundedPayment = refundedPayment
       SuccessfulPayment = successfulPayment
-      Invoice = invoice
+      PinnedMessage = pinnedMessage
+      ChatBackgroundSet = chatBackgroundSet
       MigrateFromChatId = migrateFromChatId
-      BoostAdded = boostAdded
       MigrateToChatId = migrateToChatId
       MessageAutoDeleteTimerChanged = messageAutoDeleteTimerChanged
       ChannelChatCreated = channelChatCreated
@@ -967,11 +975,10 @@ and [<CLIMutable>] Message =
       NewChatTitle = newChatTitle
       ChatOwnerChanged = chatOwnerChanged
       ChatOwnerLeft = chatOwnerLeft
+      Invoice = invoice
+      ChecklistTasksDone = checklistTasksDone
+      CommunityChatAdded = communityChatAdded
       LeftChatMember = leftChatMember
-      PinnedMessage = pinnedMessage
-      ChatBackgroundSet = chatBackgroundSet
-      ChecklistTasksAdded = checklistTasksAdded
-      NewChatMembers = newChatMembers
       VideoChatParticipantsInvited = videoChatParticipantsInvited
       VideoChatEnded = videoChatEnded
       VideoChatStarted = videoChatStarted
@@ -984,7 +991,7 @@ and [<CLIMutable>] Message =
       PollOptionDeleted = pollOptionDeleted
       PollOptionAdded = pollOptionAdded
       PaidMessagePriceChanged = paidMessagePriceChanged
-      ChecklistTasksDone = checklistTasksDone
+      ChecklistTasksAdded = checklistTasksAdded
       ManagedBotCreated = managedBotCreated
       GiveawayWinners = giveawayWinners
       Giveaway = giveaway
@@ -997,11 +1004,12 @@ and [<CLIMutable>] Message =
       ForumTopicCreated = forumTopicCreated
       DirectMessagePriceChanged = directMessagePriceChanged
       CommunityChatRemoved = communityChatRemoved
-      CommunityChatAdded = communityChatAdded
+      CommunityChatJoined = communityChatJoined
       GiveawayCompleted = giveawayCompleted
-      Location = location
+      NewChatMembers = newChatMembers
       Venue = venue
-      Poll = poll
+      WebAppData = webAppData
+      IsFromOffline = isFromOffline
       HasProtectedContent = hasProtectedContent
       EditDate = editDate
       GuestBotCallerChat = guestBotCallerChat
@@ -1013,8 +1021,8 @@ and [<CLIMutable>] Message =
       Quote = quote
       ExternalReply = externalReply
       ReplyToMessage = replyToMessage
+      IsPaidPost = isPaidPost
       IsAutomaticForward = isAutomaticForward
-      IsTopicMessage = isTopicMessage
       ForwardOrigin = forwardOrigin
       BusinessConnectionId = businessConnectionId
       GuestQueryId = guestQueryId
@@ -1027,10 +1035,11 @@ and [<CLIMutable>] Message =
       From = from
       DirectMessagesTopic = directMessagesTopic
       MessageThreadId = messageThreadId
-      IsFromOffline = isFromOffline
-      IsPaidPost = isPaidPost
+      IsTopicMessage = isTopicMessage
+      Location = location
       MediaGroupId = mediaGroupId
-      AuthorSignature = authorSignature
+      PaidStarCount = paidStarCount
+      Poll = poll
       Game = game
       Dice = dice
       Contact = contact
@@ -1042,9 +1051,9 @@ and [<CLIMutable>] Message =
       Voice = voice
       VideoNote = videoNote
       Video = video
+      AuthorSignature = authorSignature
       Story = story
-      WebAppData = webAppData
-      Sticker = sticker
+      Photo = photo
       PaidMedia = paidMedia
       LivePhoto = livePhoto
       Document = document
@@ -1056,8 +1065,7 @@ and [<CLIMutable>] Message =
       LinkPreviewOptions = linkPreviewOptions
       Entities = entities
       Text = text
-      PaidStarCount = paidStarCount
-      Photo = photo
+      Sticker = sticker
       ReplyMarkup = replyMarkup
     }
 
@@ -1324,6 +1332,26 @@ and [<CLIMutable>] ReplyParameters =
       QuotePosition = quotePosition
       ChecklistTaskId = checklistTaskId
       PollOptionId = pollOptionId
+    }
+
+/// 
+and [<CLIMutable>] EphemeralMessageParameters =
+  {
+    /// Identifier of the user who will receive the message. It is not guaranteed that the user will receive the message, especially if they are offline. See here for more details.
+    [<DataMember(Name = "receiver_user_id")>]
+    ReceiverUserId: int64
+    /// Identifier of the callback query which triggered the message, if any
+    [<DataMember(Name = "callback_query_id")>]
+    CallbackQueryId: string option
+    /// Pass True if the ephemeral message must be shown in place of the original message. Must be False for callback queries from ephemeral messages, which must be edited using regular editEphemeralMessage… methods.
+    [<DataMember(Name = "replace_callback_query_message")>]
+    ReplaceCallbackQueryMessage: bool option
+  }
+  static member Create(receiverUserId: int64, ?callbackQueryId: string, ?replaceCallbackQueryMessage: bool) = 
+    {
+      ReceiverUserId = receiverUserId
+      CallbackQueryId = callbackQueryId
+      ReplaceCallbackQueryMessage = replaceCallbackQueryMessage
     }
 
 /// This object describes the origin of a message. It can be one of
@@ -1721,7 +1749,7 @@ and [<CLIMutable>] Video =
       FileSize = fileSize
     }
 
-/// This object represents a video message (available in Telegram apps as of v.4.0).
+/// This object represents a video message.
 and [<CLIMutable>] VideoNote =
   {
     /// Identifier for this file, which can be used to download or reuse the file
@@ -2470,6 +2498,26 @@ and [<CLIMutable>] BotSubscriptionUpdated =
       State = state
     }
 
+/// This object describes an update about a user stopping message generation.
+and [<CLIMutable>] MessageGenerationStopped =
+  {
+    /// Chat in which the message is generated
+    [<DataMember(Name = "chat")>]
+    Chat: Chat
+    /// Unique identifier of the message thread in which the message is generated
+    [<DataMember(Name = "message_thread_id")>]
+    MessageThreadId: int64 option
+    /// Unique identifier of the message draft which was stopped
+    [<DataMember(Name = "draft_id")>]
+    DraftId: int64
+  }
+  static member Create(chat: Chat, draftId: int64, ?messageThreadId: int64) = 
+    {
+      Chat = chat
+      DraftId = draftId
+      MessageThreadId = messageThreadId
+    }
+
 /// Describes a service message about an option added to a poll.
 and [<CLIMutable>] PollOptionAdded =
   {
@@ -2750,10 +2798,10 @@ and [<CLIMutable>] ChecklistTasksAdded =
       ChecklistMessage = checklistMessage
     }
 
-/// Describes a service message about a chat being added to a community.
+/// Describes a service message about a chat or a bot being added to a community.
 and [<CLIMutable>] CommunityChatAdded =
   {
-    /// The new community to which the chat belongs
+    /// The new community to which the chat or the bot belongs
     [<DataMember(Name = "community")>]
     Community: Community
   }
@@ -2762,7 +2810,19 @@ and [<CLIMutable>] CommunityChatAdded =
       Community = community
     }
 
-/// Describes a service message about a chat being removed from a community. Currently holds no information.
+/// Describes a service message about a chat being joined by a user from a community.
+and [<CLIMutable>] CommunityChatJoined =
+  {
+    /// The community from which the chat was joined
+    [<DataMember(Name = "community")>]
+    Community: Community
+  }
+  static member Create(community: Community) = 
+    {
+      Community = community
+    }
+
+/// Describes a service message about a chat or a bot being removed from a community. Currently holds no information.
 and CommunityChatRemoved =
   new() = {}
 
@@ -3409,8 +3469,11 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
     /// Example: A user requests to change the bot's language, bot replies to the request with a keyboard to select the new language. Other users in the group don't see the keyboard.
     [<DataMember(Name = "selective")>]
     Selective: bool option
+    /// Pass True if the reply interface must be shown to the user, as if they had manually selected the bot's message and tapped 'Reply'
+    [<DataMember(Name = "force_reply")>]
+    ForceReply: bool option
   }
-  static member Create(keyboard: KeyboardButton[][], ?isPersistent: bool, ?resizeKeyboard: bool, ?oneTimeKeyboard: bool, ?inputFieldPlaceholder: string, ?selective: bool) = 
+  static member Create(keyboard: KeyboardButton[][], ?isPersistent: bool, ?resizeKeyboard: bool, ?oneTimeKeyboard: bool, ?inputFieldPlaceholder: string, ?selective: bool, ?forceReply: bool) = 
     {
       Keyboard = keyboard
       IsPersistent = isPersistent
@@ -3418,6 +3481,7 @@ and [<CLIMutable>] ReplyKeyboardMarkup =
       OneTimeKeyboard = oneTimeKeyboard
       InputFieldPlaceholder = inputFieldPlaceholder
       Selective = selective
+      ForceReply = forceReply
     }
 
 /// This object represents one button of the reply keyboard. At most one of the fields other than text, icon_custom_emoji_id, and style must be used to specify the type of the button. For simple text buttons, String can be used instead of this object to specify the button text.
@@ -3612,10 +3676,14 @@ and [<CLIMutable>] InlineKeyboardMarkup =
     /// Array of button rows, each represented by an Array of InlineKeyboardButton objects
     [<DataMember(Name = "inline_keyboard")>]
     InlineKeyboard: InlineKeyboardButton[][]
+    /// Pass True if the reply interface must be shown to the user, as if they had manually selected the bot's message and tapped 'Reply'. The value of the field can't be changed when the inline keyboard is edited.
+    [<DataMember(Name = "force_reply")>]
+    ForceReply: bool option
   }
-  static member Create(inlineKeyboard: InlineKeyboardButton[][]) = 
+  static member Create(inlineKeyboard: InlineKeyboardButton[][], ?forceReply: bool) = 
     {
       InlineKeyboard = inlineKeyboard
+      ForceReply = forceReply
     }
 
 /// This object represents one button of an inline keyboard. Exactly one of the fields other than text, icon_custom_emoji_id, and style must be used to specify the type of the button.
@@ -3639,7 +3707,7 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
     [<DataMember(Name = "web_app")>]
     WebApp: WebAppInfo option
-    /// An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget.
+    /// An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget. Not supported for ephemeral messages.
     [<DataMember(Name = "login_url")>]
     LoginUrl: LoginUrl option
     /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
@@ -3666,8 +3734,11 @@ and [<CLIMutable>] InlineKeyboardButton =
     /// NOTE: This type of button must always be the first button in the first row and can only be used in invoice messages.
     [<DataMember(Name = "pay")>]
     Pay: bool option
+    /// If set, then the button is disabled and does nothing
+    [<DataMember(Name = "disabled")>]
+    Disabled: DisabledButton option
   }
-  static member Create(text: string, ?iconCustomEmojiId: string, ?style: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?copyText: CopyTextButton, ?callbackGame: CallbackGame, ?pay: bool) = 
+  static member Create(text: string, ?iconCustomEmojiId: string, ?style: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?copyText: CopyTextButton, ?callbackGame: CallbackGame, ?pay: bool, ?disabled: DisabledButton) = 
     {
       Text = text
       IconCustomEmojiId = iconCustomEmojiId
@@ -3682,10 +3753,10 @@ and [<CLIMutable>] InlineKeyboardButton =
       CopyText = copyText
       CallbackGame = callbackGame
       Pay = pay
+      Disabled = disabled
     }
 
-/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. Serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
-/// Telegram apps support these buttons as of version 5.7.
+/// This object represents a parameter of the inline keyboard button used to automatically authorize a user. It serves as a great replacement for the Telegram Login Widget when the user is coming from Telegram. All the user needs to do is tap/click a button and confirm that they want to log in:
 and [<CLIMutable>] LoginUrl =
   {
     /// An HTTPS URL to be opened with user authorization data added to the query string when the button is pressed. If the user refuses to provide authorization data, the original URL without information about the user will be opened. The data added is the same as described in Receiving authorization data.
@@ -3696,7 +3767,7 @@ and [<CLIMutable>] LoginUrl =
     /// New text of the button in forwarded messages
     [<DataMember(Name = "forward_text")>]
     ForwardText: string option
-    /// Username of a bot, which will be used for user authorization. See Setting up a bot for more details. If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details.
+    /// Username of a bot, which will be used for user authorization; not supported in RichMessageButton. See Setting up a bot for more details. If not specified, the current bot's username will be assumed. The url's domain must be the same as the domain linked with the bot. See Linking your domain to the bot for more details.
     [<DataMember(Name = "bot_username")>]
     BotUsername: string option
     /// Pass True to request the permission for your bot to send messages to the user
@@ -3751,6 +3822,10 @@ and [<CLIMutable>] CopyTextButton =
       Text = text
     }
 
+/// This object represents a disabled button which does nothing. Currently holds no information.
+and DisabledButton =
+  new() = {}
+
 /// This object represents an incoming callback query from a callback button in an inline keyboard. If the button that originated the query was attached to a message sent by the bot, the field message will be present. If the button was attached to a message sent via the bot (in inline mode), the field inline_message_id will be present. Exactly one of the fields data or game_short_name will be present.
 and [<CLIMutable>] CallbackQuery =
   {
@@ -3790,7 +3865,7 @@ and [<CLIMutable>] CallbackQuery =
 /// Upon receiving a message with this object, Telegram clients will display a reply interface to the user (act as if the user has selected the bot's message and tapped 'Reply'). This can be extremely useful if you want to create user-friendly step-by-step interfaces without having to sacrifice privacy mode. Not supported in channels and for messages sent on behalf of a user account.
 and [<CLIMutable>] ForceReply =
   {
-    /// Shows reply interface to the user, as if they manually selected the bot's message and tapped 'Reply'
+    /// Shows reply interface to the user, as if they had manually selected the bot's message and tapped 'Reply'
     [<DataMember(Name = "force_reply")>]
     ForceReply: bool
     /// The placeholder to be shown in the input field when the reply is active; 1-64 characters
@@ -3950,32 +4025,36 @@ and [<CLIMutable>] ChatAdministratorRights =
     /// True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
     [<DataMember(Name = "can_manage_direct_messages")>]
     CanManageDirectMessages: bool option
-    /// True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.
+    /// True, if the administrator can edit the tags of regular members; for groups and supergroups only
     [<DataMember(Name = "can_manage_tags")>]
     CanManageTags: bool option
+    /// True, if the administrator can manage chat welcome messages or directly send them in the case of bots
+    [<DataMember(Name = "can_send_welcome_messages")>]
+    CanSendWelcomeMessages: bool
     /// DEPRECATED: use can_manage_video_chats instead
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(isAnonymous: bool, canDeleteStories: bool, canEditStories: bool, canInviteUsers: bool, canChangeInfo: bool, canPostStories: bool, canRestrictMembers: bool, canManageVideoChats: bool, canDeleteMessages: bool, canManageChat: bool, canPromoteMembers: bool, ?canManageTags: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageDirectMessages: bool, ?canManageVoiceChats: bool) = 
+  static member Create(isAnonymous: bool, canDeleteStories: bool, canSendWelcomeMessages: bool, canPostStories: bool, canInviteUsers: bool, canChangeInfo: bool, canEditStories: bool, canRestrictMembers: bool, canManageVideoChats: bool, canDeleteMessages: bool, canManageChat: bool, canPromoteMembers: bool, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageDirectMessages: bool, ?canManageTags: bool, ?canManageVoiceChats: bool) = 
     {
       IsAnonymous = isAnonymous
       CanDeleteStories = canDeleteStories
-      CanEditStories = canEditStories
+      CanSendWelcomeMessages = canSendWelcomeMessages
+      CanPostStories = canPostStories
       CanInviteUsers = canInviteUsers
       CanChangeInfo = canChangeInfo
-      CanPostStories = canPostStories
+      CanEditStories = canEditStories
       CanRestrictMembers = canRestrictMembers
       CanManageVideoChats = canManageVideoChats
       CanDeleteMessages = canDeleteMessages
       CanManageChat = canManageChat
       CanPromoteMembers = canPromoteMembers
-      CanManageTags = canManageTags
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
       CanPinMessages = canPinMessages
       CanManageTopics = canManageTopics
       CanManageDirectMessages = canManageDirectMessages
+      CanManageTags = canManageTags
       CanManageVoiceChats = canManageVoiceChats
     }
 
@@ -4114,9 +4193,12 @@ and [<CLIMutable>] ChatMemberAdministrator =
     /// True, if the administrator can manage direct messages of the channel and decline suggested posts; for channels only
     [<DataMember(Name = "can_manage_direct_messages")>]
     CanManageDirectMessages: bool option
-    /// True, if the administrator can edit the tags of regular members; for groups and supergroups only. If omitted, defaults to the value of can_pin_messages.
+    /// True, if the administrator can edit the tags of regular members; for groups and supergroups only
     [<DataMember(Name = "can_manage_tags")>]
     CanManageTags: bool option
+    /// True, if the administrator can manage chat welcome messages or directly send them in the case of bots
+    [<DataMember(Name = "can_send_welcome_messages")>]
+    CanSendWelcomeMessages: bool
     /// Custom title for this user
     [<DataMember(Name = "custom_title")>]
     CustomTitle: string option
@@ -4124,22 +4206,23 @@ and [<CLIMutable>] ChatMemberAdministrator =
     [<DataMember(Name = "can_manage_voice_chats")>]
     CanManageVoiceChats: bool option
   }
-  static member Create(status: string, canDeleteStories: bool, canEditStories: bool, canPostStories: bool, canChangeInfo: bool, canPromoteMembers: bool, canRestrictMembers: bool, canInviteUsers: bool, canDeleteMessages: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canManageVideoChats: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageDirectMessages: bool, ?canManageTags: bool, ?canManageVoiceChats: bool) = 
+  static member Create(status: string, canSendWelcomeMessages: bool, canDeleteStories: bool, canEditStories: bool, canInviteUsers: bool, canChangeInfo: bool, canPromoteMembers: bool, canPostStories: bool, canManageVideoChats: bool, canDeleteMessages: bool, canManageChat: bool, isAnonymous: bool, canBeEdited: bool, user: User, canRestrictMembers: bool, ?customTitle: string, ?canPostMessages: bool, ?canEditMessages: bool, ?canPinMessages: bool, ?canManageTopics: bool, ?canManageDirectMessages: bool, ?canManageTags: bool, ?canManageVoiceChats: bool) = 
     {
       Status = status
+      CanSendWelcomeMessages = canSendWelcomeMessages
       CanDeleteStories = canDeleteStories
       CanEditStories = canEditStories
-      CanPostStories = canPostStories
+      CanInviteUsers = canInviteUsers
       CanChangeInfo = canChangeInfo
       CanPromoteMembers = canPromoteMembers
-      CanRestrictMembers = canRestrictMembers
-      CanInviteUsers = canInviteUsers
+      CanPostStories = canPostStories
+      CanManageVideoChats = canManageVideoChats
       CanDeleteMessages = canDeleteMessages
       CanManageChat = canManageChat
       IsAnonymous = isAnonymous
       CanBeEdited = canBeEdited
       User = user
-      CanManageVideoChats = canManageVideoChats
+      CanRestrictMembers = canRestrictMembers
       CustomTitle = customTitle
       CanPostMessages = canPostMessages
       CanEditMessages = canEditMessages
@@ -5213,6 +5296,15 @@ and [<CLIMutable>] UniqueGiftInfo =
     /// Origin of the gift. Currently, either “upgrade” for gifts upgraded from regular gifts, “transfer” for gifts transferred from other users or channels, “resale” for gifts bought from other users, “gifted_upgrade” for upgrades purchased after the gift was sent, or “offer” for gifts bought or sold through gift purchase offers.
     [<DataMember(Name = "origin")>]
     Origin: string
+    /// Text of the message that was added to the gift
+    [<DataMember(Name = "text")>]
+    Text: string option
+    /// Special entities that appear in the text
+    [<DataMember(Name = "entities")>]
+    Entities: MessageEntity[] option
+    /// True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them
+    [<DataMember(Name = "is_private")>]
+    IsPrivate: bool option
     /// For gifts bought from other users, the currency in which the payment for the gift was done. Currently, one of “XTR” for Telegram Stars or “TON” for TON grams.
     [<DataMember(Name = "last_resale_currency")>]
     LastResaleCurrency: string option
@@ -5229,10 +5321,13 @@ and [<CLIMutable>] UniqueGiftInfo =
     [<DataMember(Name = "next_transfer_date")>]
     NextTransferDate: int64 option
   }
-  static member Create(gift: UniqueGift, origin: string, ?lastResaleCurrency: string, ?lastResaleAmount: int64, ?ownedGiftId: string, ?transferStarCount: int64, ?nextTransferDate: int64) = 
+  static member Create(gift: UniqueGift, origin: string, ?text: string, ?entities: MessageEntity[], ?isPrivate: bool, ?lastResaleCurrency: string, ?lastResaleAmount: int64, ?ownedGiftId: string, ?transferStarCount: int64, ?nextTransferDate: int64) = 
     {
       Gift = gift
       Origin = origin
+      Text = text
+      Entities = entities
+      IsPrivate = isPrivate
       LastResaleCurrency = lastResaleCurrency
       LastResaleAmount = lastResaleAmount
       OwnedGiftId = ownedGiftId
@@ -6805,7 +6900,7 @@ and [<CLIMutable>] InputRichMessage =
     /// Content of the rich message to send described using Markdown formatting. See rich message formatting options for more details. Use media field to specify the media used in the message.
     [<DataMember(Name = "markdown")>]
     Markdown: string option
-    /// List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=, and tg://audio?id= links
+    /// List of media that are specified in the markdown or html fields using tg://photo?id=, tg://video?id=, tg://document?id=, and tg://audio?id= links
     [<DataMember(Name = "media")>]
     Media: InputRichMessageMedia[] option
     /// Pass True if the rich message must be shown right-to-left
@@ -6828,7 +6923,7 @@ and [<CLIMutable>] InputRichMessage =
 /// Describes a media element embedded in an outgoing rich message.
 and [<CLIMutable>] InputRichMessageMedia =
   {
-    /// Unique identifier of the media used in a tg://photo?id=, tg://video?id=, or tg://audio?id= link. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
+    /// Unique identifier of the media used in a tg://photo?id=, tg://video?id=, tg://document?id=, or tg://audio?id= link. 1-64 characters, only A-Z, a-z, 0-9, _ and - are allowed.
     [<DataMember(Name = "id")>]
     Id: string
     /// The media to be sent. Everything except the media itself and its properties is ignored.
@@ -6839,6 +6934,58 @@ and [<CLIMutable>] InputRichMessageMedia =
     {
       Id = id
       Media = media
+    }
+
+/// This object represents a button in a RichMessage. Exactly one of the fields other than text and style must be used to specify the type of the button.
+and [<CLIMutable>] RichMessageButton =
+  {
+    /// Text of the button. May contain only plain text, RichTextCustomEmoji and RichTextDateTime entities.
+    [<DataMember(Name = "text")>]
+    Text: RichText
+    /// Style of the button. Must be one of “danger”, “success”, “primary”, or “link” (the button is shown as a regular link without borders). Apps may use theme-specific colors for the button background and text based on the style. The style “link” is allowed only for callback buttons.
+    [<DataMember(Name = "style")>]
+    Style: string option
+    /// HTTP or tg:// URL to be opened when the button is pressed. Links tg://user?id=<user_id> can be used to mention a user by their identifier without using a username, if this is allowed by their privacy settings.
+    [<DataMember(Name = "url")>]
+    Url: string option
+    /// Data to be sent in a callback query to the bot when the button is pressed, 1-64 bytes
+    [<DataMember(Name = "callback_data")>]
+    CallbackData: string option
+    /// Description of the Web App that will be launched when the user presses the button. The Web App will be able to send an arbitrary message on behalf of the user using the method answerWebAppQuery. Available only in private chats between a user and the bot. Not supported for messages sent on behalf of a business account.
+    [<DataMember(Name = "web_app")>]
+    WebApp: WebAppInfo option
+    /// An HTTPS URL used to automatically authorize the user. Can be used as a replacement for the Telegram Login Widget. Not supported for ephemeral messages.
+    [<DataMember(Name = "login_url")>]
+    LoginUrl: LoginUrl option
+    /// If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot's username and the specified inline query in the input field. May be empty, in which case just the bot's username will be inserted. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
+    [<DataMember(Name = "switch_inline_query")>]
+    SwitchInlineQuery: string option
+    /// If set, pressing the button will insert the bot's username and the specified inline query in the current chat's input field. May be empty, in which case only the bot's username will be inserted. Not supported in channels and for messages sent in channel direct messages chats and on behalf of a business account.
+    [<DataMember(Name = "switch_inline_query_current_chat")>]
+    SwitchInlineQueryCurrentChat: string option
+    /// If set, pressing the button will prompt the user to select one of their chats of the specified type, open that chat and insert the bot's username and the specified inline query in the input field. Not supported for messages sent in channel direct messages chats and on behalf of a business account.
+    [<DataMember(Name = "switch_inline_query_chosen_chat")>]
+    SwitchInlineQueryChosenChat: SwitchInlineQueryChosenChat option
+    /// A button that copies the specified text to the clipboard
+    [<DataMember(Name = "copy_text")>]
+    CopyText: CopyTextButton option
+    /// If set, then the button is disabled and does nothing
+    [<DataMember(Name = "disabled")>]
+    Disabled: DisabledButton option
+  }
+  static member Create(text: RichText, ?style: string, ?url: string, ?callbackData: string, ?webApp: WebAppInfo, ?loginUrl: LoginUrl, ?switchInlineQuery: string, ?switchInlineQueryCurrentChat: string, ?switchInlineQueryChosenChat: SwitchInlineQueryChosenChat, ?copyText: CopyTextButton, ?disabled: DisabledButton) = 
+    {
+      Text = text
+      Style = style
+      Url = url
+      CallbackData = callbackData
+      WebApp = webApp
+      LoginUrl = loginUrl
+      SwitchInlineQuery = switchInlineQuery
+      SwitchInlineQueryCurrentChat = switchInlineQueryCurrentChat
+      SwitchInlineQueryChosenChat = switchInlineQueryChosenChat
+      CopyText = copyText
+      Disabled = disabled
     }
 
 /// This object represents a rich formatted text. Currently, it can be either a String for plain text, an Array of RichText, or any of the following types:
@@ -6864,6 +7011,7 @@ and RichText =
   | Hashtag of RichTextHashtag
   | Cashtag of RichTextCashtag
   | BotCommand of RichTextBotCommand
+  | Button of RichTextButton
   | Anchor of RichTextAnchor
   | AnchorLink of RichTextAnchorLink
   | Reference of RichTextReference
@@ -7276,6 +7424,23 @@ and [<CLIMutable>] RichTextBotCommand =
       BotCommand = botCommand
     }
 
+/// A button.
+and [<CLIMutable>] RichTextButton =
+  {
+    /// Type of the rich text, always “button”
+    [<DataMember(Name = "type")>]
+    [<Always("button")>]
+    Type: string
+    /// The button
+    [<DataMember(Name = "button")>]
+    Button: RichMessageButton
+  }
+  static member Create(``type``: string, button: RichMessageButton) = 
+    {
+      Type = ``type``
+      Button = button
+    }
+
 /// An anchor.
 and [<CLIMutable>] RichTextAnchor =
   {
@@ -7447,14 +7612,17 @@ and RichBlock =
   | Anchor of RichBlockAnchor
   | List of RichBlockList
   | BlockQuotation of RichBlockBlockQuotation
+  | ExpandableBlockQuotation of RichBlockExpandableBlockQuotation
   | PullQuotation of RichBlockPullQuotation
   | Collage of RichBlockCollage
   | Slideshow of RichBlockSlideshow
   | Table of RichBlockTable
   | Details of RichBlockDetails
   | Map of RichBlockMap
+  | Buttons of RichBlockButtons
   | Animation of RichBlockAnimation
   | Audio of RichBlockAudio
+  | Document of RichBlockDocument
   | Photo of RichBlockPhoto
   | Video of RichBlockVideo
   | VoiceNote of RichBlockVoiceNote
@@ -7621,6 +7789,27 @@ and [<CLIMutable>] RichBlockBlockQuotation =
       Credit = credit
     }
 
+/// A block quotation, corresponding to the HTML tag <blockquote> with custom attribute "expandable".
+and [<CLIMutable>] RichBlockExpandableBlockQuotation =
+  {
+    /// Type of the block, always “expandable_blockquote”
+    [<DataMember(Name = "type")>]
+    [<Always("expandable_blockquote")>]
+    Type: string
+    /// Content of the block
+    [<DataMember(Name = "text")>]
+    Text: RichText
+    /// Credit of the block
+    [<DataMember(Name = "credit")>]
+    Credit: RichText option
+  }
+  static member Create(``type``: string, text: RichText, ?credit: RichText) = 
+    {
+      Type = ``type``
+      Text = text
+      Credit = credit
+    }
+
 /// A quotation with centered text, loosely corresponding to the HTML tag <aside>.
 and [<CLIMutable>] RichBlockPullQuotation =
   {
@@ -7700,16 +7889,20 @@ and [<CLIMutable>] RichBlockTable =
     /// True, if the table is striped
     [<DataMember(Name = "is_striped")>]
     IsStriped: bool option
+    /// True, if table cells have smaller indents
+    [<DataMember(Name = "is_compact")>]
+    IsCompact: bool option
     /// Caption of the table
     [<DataMember(Name = "caption")>]
     Caption: RichText option
   }
-  static member Create(``type``: string, cells: RichBlockTableCell[][], ?isBordered: bool, ?isStriped: bool, ?caption: RichText) = 
+  static member Create(``type``: string, cells: RichBlockTableCell[][], ?isBordered: bool, ?isStriped: bool, ?isCompact: bool, ?caption: RichText) = 
     {
       Type = ``type``
       Cells = cells
       IsBordered = isBordered
       IsStriped = isStriped
+      IsCompact = isCompact
       Caption = caption
     }
 
@@ -7748,7 +7941,7 @@ and [<CLIMutable>] RichBlockMap =
     /// Location of the center of the map
     [<DataMember(Name = "location")>]
     Location: Location
-    /// Map zoom level; 13-20
+    /// Map zoom level
     [<DataMember(Name = "zoom")>]
     Zoom: int64
     /// Expected width of the map
@@ -7769,6 +7962,27 @@ and [<CLIMutable>] RichBlockMap =
       Width = width
       Height = height
       Caption = caption
+    }
+
+/// A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag <tg-button-row>.
+and [<CLIMutable>] RichBlockButtons =
+  {
+    /// Type of the block, always “buttons”
+    [<DataMember(Name = "type")>]
+    [<Always("buttons")>]
+    Type: string
+    /// The buttons
+    [<DataMember(Name = "buttons")>]
+    Buttons: RichMessageButton[]
+    /// Horizontal alignment of the buttons. Currently, must be one of “left”, “center”, or “right”.
+    [<DataMember(Name = "align")>]
+    Align: string option
+  }
+  static member Create(``type``: string, buttons: RichMessageButton[], ?align: string) = 
+    {
+      Type = ``type``
+      Buttons = buttons
+      Align = align
     }
 
 /// A block with an animation, corresponding to the HTML tag <video>.
@@ -7814,6 +8028,27 @@ and [<CLIMutable>] RichBlockAudio =
     {
       Type = ``type``
       Audio = audio
+      Caption = caption
+    }
+
+/// A block with a general file, corresponding to the custom HTML tag <tg-document>.
+and [<CLIMutable>] RichBlockDocument =
+  {
+    /// Type of the block, always “document”
+    [<DataMember(Name = "type")>]
+    [<Always("document")>]
+    Type: string
+    /// The document
+    [<DataMember(Name = "document")>]
+    Document: Document
+    /// Caption of the block
+    [<DataMember(Name = "caption")>]
+    Caption: RichBlockCaption option
+  }
+  static member Create(``type``: string, document: Document, ?caption: RichBlockCaption) = 
+    {
+      Type = ``type``
+      Document = document
       Caption = caption
     }
 
@@ -7944,14 +8179,17 @@ and InputRichBlock =
   | Anchor of InputRichBlockAnchor
   | List of InputRichBlockList
   | BlockQuotation of InputRichBlockBlockQuotation
+  | ExpandableBlockQuotation of InputRichBlockExpandableBlockQuotation
   | PullQuotation of InputRichBlockPullQuotation
   | Collage of InputRichBlockCollage
   | Slideshow of InputRichBlockSlideshow
   | Table of InputRichBlockTable
   | Details of InputRichBlockDetails
   | Map of InputRichBlockMap
+  | Buttons of InputRichBlockButtons
   | Animation of InputRichBlockAnimation
   | Audio of InputRichBlockAudio
+  | Document of InputRichBlockDocument
   | Photo of InputRichBlockPhoto
   | Video of InputRichBlockVideo
   | VoiceNote of InputRichBlockVoiceNote
@@ -8118,6 +8356,27 @@ and [<CLIMutable>] InputRichBlockBlockQuotation =
       Credit = credit
     }
 
+/// A block quotation, corresponding to the HTML tag <blockquote> with custom attribute "expandable".
+and [<CLIMutable>] InputRichBlockExpandableBlockQuotation =
+  {
+    /// Type of the block, always “expandable_blockquote”
+    [<DataMember(Name = "type")>]
+    [<Always("expandable_blockquote")>]
+    Type: string
+    /// Content of the block
+    [<DataMember(Name = "text")>]
+    Text: RichText
+    /// Credit of the block
+    [<DataMember(Name = "credit")>]
+    Credit: RichText option
+  }
+  static member Create(``type``: string, text: RichText, ?credit: RichText) = 
+    {
+      Type = ``type``
+      Text = text
+      Credit = credit
+    }
+
 /// A quotation with centered text, loosely corresponding to the HTML tag <aside>.
 and [<CLIMutable>] InputRichBlockPullQuotation =
   {
@@ -8197,16 +8456,20 @@ and [<CLIMutable>] InputRichBlockTable =
     /// Pass True if the table is striped
     [<DataMember(Name = "is_striped")>]
     IsStriped: bool option
+    /// Pass True if table cells must have smaller indents
+    [<DataMember(Name = "is_compact")>]
+    IsCompact: bool option
     /// Caption of the table
     [<DataMember(Name = "caption")>]
     Caption: RichText option
   }
-  static member Create(``type``: string, cells: RichBlockTableCell[][], ?isBordered: bool, ?isStriped: bool, ?caption: RichText) = 
+  static member Create(``type``: string, cells: RichBlockTableCell[][], ?isBordered: bool, ?isStriped: bool, ?isCompact: bool, ?caption: RichText) = 
     {
       Type = ``type``
       Cells = cells
       IsBordered = isBordered
       IsStriped = isStriped
+      IsCompact = isCompact
       Caption = caption
     }
 
@@ -8247,18 +8510,18 @@ and [<CLIMutable>] InputRichBlockMap =
     Location: Location
     /// Map zoom level; 0-24
     [<DataMember(Name = "zoom")>]
-    Zoom: int64
+    Zoom: int64 option
     /// Map width; 0-10000
     [<DataMember(Name = "width")>]
-    Width: int64
+    Width: int64 option
     /// Map height; 0-10000
     [<DataMember(Name = "height")>]
-    Height: int64
+    Height: int64 option
     /// Caption of the block
     [<DataMember(Name = "caption")>]
     Caption: RichBlockCaption option
   }
-  static member Create(``type``: string, location: Location, zoom: int64, width: int64, height: int64, ?caption: RichBlockCaption) = 
+  static member Create(``type``: string, location: Location, ?zoom: int64, ?width: int64, ?height: int64, ?caption: RichBlockCaption) = 
     {
       Type = ``type``
       Location = location
@@ -8266,6 +8529,27 @@ and [<CLIMutable>] InputRichBlockMap =
       Width = width
       Height = height
       Caption = caption
+    }
+
+/// A block containing a list of buttons that are shown in one row, corresponding to the custom HTML tag <tg-button-row>.
+and [<CLIMutable>] InputRichBlockButtons =
+  {
+    /// Type of the block, always “buttons”
+    [<DataMember(Name = "type")>]
+    [<Always("buttons")>]
+    Type: string
+    /// List of 1-8 buttons to send
+    [<DataMember(Name = "buttons")>]
+    Buttons: RichMessageButton[]
+    /// Horizontal alignment of the buttons. Currently, must be one of “left”, “center”, or “right”.
+    [<DataMember(Name = "align")>]
+    Align: string option
+  }
+  static member Create(``type``: string, buttons: RichMessageButton[], ?align: string) = 
+    {
+      Type = ``type``
+      Buttons = buttons
+      Align = align
     }
 
 /// A block with an animation, corresponding to the HTML tag <video>.
@@ -8307,6 +8591,27 @@ and [<CLIMutable>] InputRichBlockAudio =
     {
       Type = ``type``
       Audio = audio
+      Caption = caption
+    }
+
+/// A block with a general file, corresponding to the custom HTML tag <tg-document>.
+and [<CLIMutable>] InputRichBlockDocument =
+  {
+    /// Type of the block, always “document”
+    [<DataMember(Name = "type")>]
+    [<Always("document")>]
+    Type: string
+    /// The document. Caption is ignored.
+    [<DataMember(Name = "document")>]
+    Document: InputMediaDocument
+    /// Caption of the block
+    [<DataMember(Name = "caption")>]
+    Caption: RichBlockCaption option
+  }
+  static member Create(``type``: string, document: InputMediaDocument, ?caption: RichBlockCaption) = 
+    {
+      Type = ``type``
+      Document = document
       Caption = caption
     }
 
@@ -9579,7 +9884,7 @@ and [<CLIMutable>] InputTextMessageContent =
 /// Represents the content of a rich message to be sent as the result of an inline query.
 and [<CLIMutable>] InputRichMessageContent =
   {
-    /// The message to be sent
+    /// The message to be sent. Only previously uploaded files may be used in the message.
     [<DataMember(Name = "rich_message")>]
     RichMessage: InputRichMessage
   }
