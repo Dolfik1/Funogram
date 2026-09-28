@@ -82,8 +82,7 @@ type SendMessage =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Text: string
     ParseMode: ParseMode option
     Entities: MessageEntity[] option
@@ -96,14 +95,13 @@ type SendMessage =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, text: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?parseMode: ParseMode, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, text: string, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Text = text
       ParseMode = parseMode
       Entities = entities
@@ -116,10 +114,10 @@ type SendMessage =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, text: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?parseMode: ParseMode, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendMessage.Make(ChatId.Int chatId, text, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?linkPreviewOptions = linkPreviewOptions, ?entities = entities, ?parseMode = parseMode, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, text: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?linkPreviewOptions: LinkPreviewOptions, ?entities: MessageEntity[], ?parseMode: ParseMode, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendMessage.Make(ChatId.String chatId, text, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?linkPreviewOptions = linkPreviewOptions, ?entities = entities, ?parseMode = parseMode, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, text: string, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendMessage.Make(ChatId.Int chatId, text, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?parseMode = parseMode, ?entities = entities, ?linkPreviewOptions = linkPreviewOptions, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, text: string, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendMessage.Make(ChatId.String chatId, text, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?parseMode = parseMode, ?entities = entities, ?linkPreviewOptions = linkPreviewOptions, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendMessage"
     
@@ -265,8 +263,7 @@ type SendPhoto =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Photo: InputFile
     Caption: string option
     ParseMode: ParseMode option
@@ -281,14 +278,13 @@ type SendPhoto =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?replyParameters: ReplyParameters, ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?showCaptionAboveMedia: bool, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Photo = photo
       Caption = caption
       ParseMode = parseMode
@@ -303,10 +299,10 @@ type SendPhoto =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendPhoto.Make(ChatId.Int chatId, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendPhoto.Make(ChatId.String chatId, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?replyParameters: ReplyParameters, ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?showCaptionAboveMedia: bool, ?replyMarkup: Markup) = 
+    SendPhoto.Make(ChatId.Int chatId, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?replyParameters = replyParameters, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?showCaptionAboveMedia = showCaptionAboveMedia, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?replyParameters: ReplyParameters, ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?showCaptionAboveMedia: bool, ?replyMarkup: Markup) = 
+    SendPhoto.Make(ChatId.String chatId, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?replyParameters = replyParameters, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?showCaptionAboveMedia = showCaptionAboveMedia, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendPhoto"
     
@@ -316,8 +312,7 @@ type SendLivePhoto =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     LivePhoto: InputFile
     Photo: InputFile
     Caption: string option
@@ -333,14 +328,13 @@ type SendLivePhoto =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, livePhoto: InputFile, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, livePhoto: InputFile, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?replyParameters: ReplyParameters, ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?showCaptionAboveMedia: bool, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       LivePhoto = livePhoto
       Photo = photo
       Caption = caption
@@ -356,10 +350,10 @@ type SendLivePhoto =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, livePhoto: InputFile, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
-    SendLivePhoto.Make(ChatId.Int chatId, livePhoto, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, livePhoto: InputFile, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
-    SendLivePhoto.Make(ChatId.String chatId, livePhoto, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, livePhoto: InputFile, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?replyParameters: ReplyParameters, ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?showCaptionAboveMedia: bool, ?replyMarkup: Markup) = 
+    SendLivePhoto.Make(ChatId.Int chatId, livePhoto, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?replyParameters = replyParameters, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?showCaptionAboveMedia = showCaptionAboveMedia, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, livePhoto: InputFile, photo: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?captionEntities: MessageEntity[], ?replyParameters: ReplyParameters, ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?showCaptionAboveMedia: bool, ?replyMarkup: Markup) = 
+    SendLivePhoto.Make(ChatId.String chatId, livePhoto, photo, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?captionEntities = captionEntities, ?replyParameters = replyParameters, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?showCaptionAboveMedia = showCaptionAboveMedia, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendLivePhoto"
     
@@ -369,8 +363,7 @@ type SendAudio =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Audio: InputFile
     Caption: string option
     ParseMode: ParseMode option
@@ -387,14 +380,13 @@ type SendAudio =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, audio: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?title: string, ?performer: string, ?duration: int64, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, audio: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?title: string, ?duration: int64, ?replyParameters: ReplyParameters, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?performer: string, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Audio = audio
       Caption = caption
       ParseMode = parseMode
@@ -411,10 +403,10 @@ type SendAudio =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, audio: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?title: string, ?performer: string, ?duration: int64, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendAudio.Make(ChatId.Int chatId, audio, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?thumbnail = thumbnail, ?title = title, ?performer = performer, ?duration = duration, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, audio: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?title: string, ?performer: string, ?duration: int64, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendAudio.Make(ChatId.String chatId, audio, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?thumbnail = thumbnail, ?title = title, ?performer = performer, ?duration = duration, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, audio: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?title: string, ?duration: int64, ?replyParameters: ReplyParameters, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?performer: string, ?replyMarkup: Markup) = 
+    SendAudio.Make(ChatId.Int chatId, audio, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?thumbnail = thumbnail, ?title = title, ?duration = duration, ?replyParameters = replyParameters, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?performer = performer, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, audio: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?title: string, ?duration: int64, ?replyParameters: ReplyParameters, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?performer: string, ?replyMarkup: Markup) = 
+    SendAudio.Make(ChatId.String chatId, audio, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?thumbnail = thumbnail, ?title = title, ?duration = duration, ?replyParameters = replyParameters, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?performer = performer, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendAudio"
     
@@ -424,8 +416,7 @@ type SendDocument =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Document: InputFile
     Thumbnail: InputFile option
     Caption: string option
@@ -440,14 +431,13 @@ type SendDocument =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, document: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?disableContentTypeDetection: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, document: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?disableContentTypeDetection: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?thumbnail: InputFile, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Document = document
       Thumbnail = thumbnail
       Caption = caption
@@ -462,10 +452,10 @@ type SendDocument =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, document: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?disableContentTypeDetection: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendDocument.Make(ChatId.Int chatId, document, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?disableContentTypeDetection = disableContentTypeDetection, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumbnail = thumbnail, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, document: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?disableContentTypeDetection: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendDocument.Make(ChatId.String chatId, document, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?disableContentTypeDetection = disableContentTypeDetection, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumbnail = thumbnail, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, document: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?disableContentTypeDetection: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?thumbnail: InputFile, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
+    SendDocument.Make(ChatId.Int chatId, document, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?disableContentTypeDetection = disableContentTypeDetection, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?thumbnail = thumbnail, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, document: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?disableContentTypeDetection: bool, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?thumbnail: InputFile, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
+    SendDocument.Make(ChatId.String chatId, document, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?disableContentTypeDetection = disableContentTypeDetection, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?thumbnail = thumbnail, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendDocument"
     
@@ -475,8 +465,7 @@ type SendVideo =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Video: InputFile
     Duration: int64 option
     Width: int64 option
@@ -498,14 +487,13 @@ type SendVideo =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, video: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?startTimestamp: int64, ?replyParameters: ReplyParameters, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?caption: string, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, video: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?startTimestamp: int64, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Video = video
       Duration = duration
       Width = width
@@ -527,10 +515,10 @@ type SendVideo =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, video: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?startTimestamp: int64, ?replyParameters: ReplyParameters, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?caption: string, ?replyMarkup: Markup) = 
-    SendVideo.Make(ChatId.Int chatId, video, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?startTimestamp = startTimestamp, ?replyParameters = replyParameters, ?cover = cover, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?caption = caption, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, video: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?startTimestamp: int64, ?replyParameters: ReplyParameters, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?caption: string, ?replyMarkup: Markup) = 
-    SendVideo.Make(ChatId.String chatId, video, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?startTimestamp = startTimestamp, ?replyParameters = replyParameters, ?cover = cover, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?caption = caption, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, video: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?startTimestamp: int64, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendVideo.Make(ChatId.Int chatId, video, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?startTimestamp = startTimestamp, ?cover = cover, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, video: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?supportsStreaming: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?startTimestamp: int64, ?cover: InputFile, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendVideo.Make(ChatId.String chatId, video, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?supportsStreaming = supportsStreaming, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?startTimestamp = startTimestamp, ?cover = cover, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVideo"
     
@@ -540,8 +528,7 @@ type SendAnimation =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Animation: InputFile
     Duration: int64 option
     Width: int64 option
@@ -560,14 +547,13 @@ type SendAnimation =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, animation: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, animation: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?replyParameters: ReplyParameters, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?parseMode: ParseMode, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Animation = animation
       Duration = duration
       Width = width
@@ -586,10 +572,10 @@ type SendAnimation =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, animation: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendAnimation.Make(ChatId.Int chatId, animation, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, animation: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendAnimation.Make(ChatId.String chatId, animation, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, animation: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?replyParameters: ReplyParameters, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?parseMode: ParseMode, ?replyMarkup: Markup) = 
+    SendAnimation.Make(ChatId.Int chatId, animation, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?caption = caption, ?replyParameters = replyParameters, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?parseMode = parseMode, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, animation: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?hasSpoiler: bool, ?showCaptionAboveMedia: bool, ?captionEntities: MessageEntity[], ?caption: string, ?replyParameters: ReplyParameters, ?thumbnail: InputFile, ?height: int64, ?width: int64, ?duration: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?parseMode: ParseMode, ?replyMarkup: Markup) = 
+    SendAnimation.Make(ChatId.String chatId, animation, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?hasSpoiler = hasSpoiler, ?showCaptionAboveMedia = showCaptionAboveMedia, ?captionEntities = captionEntities, ?caption = caption, ?replyParameters = replyParameters, ?thumbnail = thumbnail, ?height = height, ?width = width, ?duration = duration, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?parseMode = parseMode, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendAnimation"
     
@@ -599,8 +585,7 @@ type SendVoice =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Voice: InputFile
     Caption: string option
     ParseMode: ParseMode option
@@ -614,14 +599,13 @@ type SendVoice =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, voice: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?duration: int64, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, voice: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?duration: int64, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Voice = voice
       Caption = caption
       ParseMode = parseMode
@@ -635,10 +619,10 @@ type SendVoice =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, voice: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?duration: int64, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
-    SendVoice.Make(ChatId.Int chatId, voice, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?duration = duration, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, voice: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?duration: int64, ?parseMode: ParseMode, ?replyParameters: ReplyParameters, ?caption: string, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?captionEntities: MessageEntity[], ?replyMarkup: Markup) = 
-    SendVoice.Make(ChatId.String chatId, voice, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?duration = duration, ?parseMode = parseMode, ?replyParameters = replyParameters, ?caption = caption, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, voice: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?duration: int64, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendVoice.Make(ChatId.Int chatId, voice, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?duration = duration, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, voice: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?duration: int64, ?captionEntities: MessageEntity[], ?parseMode: ParseMode, ?caption: string, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendVoice.Make(ChatId.String chatId, voice, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?duration = duration, ?captionEntities = captionEntities, ?parseMode = parseMode, ?caption = caption, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVoice"
     
@@ -648,8 +632,7 @@ type SendVideoNote =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     VideoNote: InputFile
     Duration: int64 option
     Length: int64 option
@@ -662,14 +645,13 @@ type SendVideoNote =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, videoNote: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?length: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, videoNote: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?duration: int64, ?length: int64, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       VideoNote = videoNote
       Duration = duration
       Length = length
@@ -682,10 +664,10 @@ type SendVideoNote =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, videoNote: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?length: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendVideoNote.Make(ChatId.Int chatId, videoNote, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?thumbnail = thumbnail, ?length = length, ?duration = duration, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, videoNote: InputFile, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?thumbnail: InputFile, ?length: int64, ?duration: int64, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendVideoNote.Make(ChatId.String chatId, videoNote, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?thumbnail = thumbnail, ?length = length, ?duration = duration, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, videoNote: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?duration: int64, ?length: int64, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendVideoNote.Make(ChatId.Int chatId, videoNote, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?duration = duration, ?length = length, ?thumbnail = thumbnail, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, videoNote: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?duration: int64, ?length: int64, ?thumbnail: InputFile, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendVideoNote.Make(ChatId.String chatId, videoNote, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?duration = duration, ?length = length, ?thumbnail = thumbnail, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVideoNote"
     
@@ -775,8 +757,7 @@ type SendLocation =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Latitude: float
     Longitude: float
     HorizontalAccuracy: float option
@@ -791,14 +772,13 @@ type SendLocation =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, latitude: float, longitude: float, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?proximityAlertRadius: int64, ?livePeriod: int64, ?replyParameters: ReplyParameters, ?horizontalAccuracy: float, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?heading: int64, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, latitude: float, longitude: float, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?proximityAlertRadius: int64, ?livePeriod: int64, ?replyParameters: ReplyParameters, ?horizontalAccuracy: float, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?heading: int64, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Latitude = latitude
       Longitude = longitude
       HorizontalAccuracy = horizontalAccuracy
@@ -813,10 +793,10 @@ type SendLocation =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, latitude: float, longitude: float, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?proximityAlertRadius: int64, ?livePeriod: int64, ?replyParameters: ReplyParameters, ?horizontalAccuracy: float, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?heading: int64, ?replyMarkup: Markup) = 
-    SendLocation.Make(ChatId.Int chatId, latitude, longitude, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?proximityAlertRadius = proximityAlertRadius, ?livePeriod = livePeriod, ?replyParameters = replyParameters, ?horizontalAccuracy = horizontalAccuracy, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?heading = heading, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, latitude: float, longitude: float, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?proximityAlertRadius: int64, ?livePeriod: int64, ?replyParameters: ReplyParameters, ?horizontalAccuracy: float, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?heading: int64, ?replyMarkup: Markup) = 
-    SendLocation.Make(ChatId.String chatId, latitude, longitude, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?proximityAlertRadius = proximityAlertRadius, ?livePeriod = livePeriod, ?replyParameters = replyParameters, ?horizontalAccuracy = horizontalAccuracy, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?heading = heading, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, latitude: float, longitude: float, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?proximityAlertRadius: int64, ?livePeriod: int64, ?replyParameters: ReplyParameters, ?horizontalAccuracy: float, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?heading: int64, ?replyMarkup: Markup) = 
+    SendLocation.Make(ChatId.Int chatId, latitude, longitude, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?proximityAlertRadius = proximityAlertRadius, ?livePeriod = livePeriod, ?replyParameters = replyParameters, ?horizontalAccuracy = horizontalAccuracy, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?heading = heading, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, latitude: float, longitude: float, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?proximityAlertRadius: int64, ?livePeriod: int64, ?replyParameters: ReplyParameters, ?horizontalAccuracy: float, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?heading: int64, ?replyMarkup: Markup) = 
+    SendLocation.Make(ChatId.String chatId, latitude, longitude, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?proximityAlertRadius = proximityAlertRadius, ?livePeriod = livePeriod, ?replyParameters = replyParameters, ?horizontalAccuracy = horizontalAccuracy, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?heading = heading, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendLocation"
     
@@ -826,8 +806,7 @@ type SendVenue =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Latitude: float
     Longitude: float
     Title: string
@@ -844,14 +823,13 @@ type SendVenue =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, latitude: float, longitude: float, title: string, address: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?googlePlaceType: string, ?foursquareId: string, ?foursquareType: string, ?replyParameters: ReplyParameters, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?googlePlaceId: string, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, latitude: float, longitude: float, title: string, address: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?googlePlaceType: string, ?foursquareId: string, ?foursquareType: string, ?replyParameters: ReplyParameters, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?googlePlaceId: string, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Latitude = latitude
       Longitude = longitude
       Title = title
@@ -868,10 +846,10 @@ type SendVenue =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, latitude: float, longitude: float, title: string, address: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?googlePlaceType: string, ?foursquareId: string, ?foursquareType: string, ?replyParameters: ReplyParameters, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?googlePlaceId: string, ?replyMarkup: Markup) = 
-    SendVenue.Make(ChatId.Int chatId, latitude, longitude, title, address, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?googlePlaceType = googlePlaceType, ?foursquareId = foursquareId, ?foursquareType = foursquareType, ?replyParameters = replyParameters, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?googlePlaceId = googlePlaceId, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, latitude: float, longitude: float, title: string, address: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?googlePlaceType: string, ?foursquareId: string, ?foursquareType: string, ?replyParameters: ReplyParameters, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?googlePlaceId: string, ?replyMarkup: Markup) = 
-    SendVenue.Make(ChatId.String chatId, latitude, longitude, title, address, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?googlePlaceType = googlePlaceType, ?foursquareId = foursquareId, ?foursquareType = foursquareType, ?replyParameters = replyParameters, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?googlePlaceId = googlePlaceId, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, latitude: float, longitude: float, title: string, address: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?googlePlaceType: string, ?foursquareId: string, ?foursquareType: string, ?replyParameters: ReplyParameters, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?googlePlaceId: string, ?replyMarkup: Markup) = 
+    SendVenue.Make(ChatId.Int chatId, latitude, longitude, title, address, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?googlePlaceType = googlePlaceType, ?foursquareId = foursquareId, ?foursquareType = foursquareType, ?replyParameters = replyParameters, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?googlePlaceId = googlePlaceId, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, latitude: float, longitude: float, title: string, address: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?googlePlaceType: string, ?foursquareId: string, ?foursquareType: string, ?replyParameters: ReplyParameters, ?ephemeralMessageParameters: EphemeralMessageParameters, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?googlePlaceId: string, ?replyMarkup: Markup) = 
+    SendVenue.Make(ChatId.String chatId, latitude, longitude, title, address, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?googlePlaceType = googlePlaceType, ?foursquareId = foursquareId, ?foursquareType = foursquareType, ?replyParameters = replyParameters, ?ephemeralMessageParameters = ephemeralMessageParameters, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?googlePlaceId = googlePlaceId, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendVenue"
     
@@ -881,8 +859,7 @@ type SendContact =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     PhoneNumber: string
     FirstName: string
     LastName: string option
@@ -895,14 +872,13 @@ type SendContact =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, phoneNumber: string, firstName: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?lastName: string, ?replyParameters: ReplyParameters, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?vcard: string, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, phoneNumber: string, firstName: string, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?lastName: string, ?vcard: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       PhoneNumber = phoneNumber
       FirstName = firstName
       LastName = lastName
@@ -915,10 +891,10 @@ type SendContact =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, phoneNumber: string, firstName: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?lastName: string, ?replyParameters: ReplyParameters, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?vcard: string, ?replyMarkup: Markup) = 
-    SendContact.Make(ChatId.Int chatId, phoneNumber, firstName, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?lastName = lastName, ?replyParameters = replyParameters, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?vcard = vcard, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, phoneNumber: string, firstName: string, ?businessConnectionId: string, ?suggestedPostParameters: SuggestedPostParameters, ?messageEffectId: string, ?allowPaidBroadcast: bool, ?protectContent: bool, ?disableNotification: bool, ?lastName: string, ?replyParameters: ReplyParameters, ?callbackQueryId: string, ?receiverUserId: int64, ?directMessagesTopicId: int64, ?messageThreadId: int64, ?vcard: string, ?replyMarkup: Markup) = 
-    SendContact.Make(ChatId.String chatId, phoneNumber, firstName, ?businessConnectionId = businessConnectionId, ?suggestedPostParameters = suggestedPostParameters, ?messageEffectId = messageEffectId, ?allowPaidBroadcast = allowPaidBroadcast, ?protectContent = protectContent, ?disableNotification = disableNotification, ?lastName = lastName, ?replyParameters = replyParameters, ?callbackQueryId = callbackQueryId, ?receiverUserId = receiverUserId, ?directMessagesTopicId = directMessagesTopicId, ?messageThreadId = messageThreadId, ?vcard = vcard, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, phoneNumber: string, firstName: string, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?lastName: string, ?vcard: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendContact.Make(ChatId.Int chatId, phoneNumber, firstName, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?lastName = lastName, ?vcard = vcard, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, phoneNumber: string, firstName: string, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?lastName: string, ?vcard: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendContact.Make(ChatId.String chatId, phoneNumber, firstName, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?lastName = lastName, ?vcard = vcard, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendContact"
     
@@ -1073,8 +1049,10 @@ type SendMessageDraft =
     Text: string option
     ParseMode: ParseMode option
     Entities: MessageEntity[] option
+    CanStop: bool option
+    KeepOnStop: bool option
   }
-  static member Make(chatId: int64, draftId: int64, ?messageThreadId: int64, ?text: string, ?parseMode: ParseMode, ?entities: MessageEntity[]) = 
+  static member Make(chatId: int64, draftId: int64, ?messageThreadId: int64, ?text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?canStop: bool, ?keepOnStop: bool) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
@@ -1082,6 +1060,8 @@ type SendMessageDraft =
       Text = text
       ParseMode = parseMode
       Entities = entities
+      CanStop = canStop
+      KeepOnStop = keepOnStop
     }
   interface IRequestBase<bool> with
     member _.MethodName = "sendMessageDraft"
@@ -1268,8 +1248,9 @@ type PromoteChatMember =
     CanManageTopics: bool option
     CanManageDirectMessages: bool option
     CanManageTags: bool option
+    CanSendWelcomeMessages: bool option
   }
-  static member Make(chatId: ChatId, userId: int64, ?canManageTopics: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canDeleteStories: bool, ?canEditStories: bool, ?canPostStories: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canManageDirectMessages: bool, ?canManageTags: bool) = 
+  static member Make(chatId: ChatId, userId: int64, ?canManageDirectMessages: bool, ?canManageTopics: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canDeleteStories: bool, ?canEditStories: bool, ?canPostStories: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canManageTags: bool, ?canSendWelcomeMessages: bool) = 
     {
       ChatId = chatId
       UserId = userId
@@ -1290,11 +1271,12 @@ type PromoteChatMember =
       CanManageTopics = canManageTopics
       CanManageDirectMessages = canManageDirectMessages
       CanManageTags = canManageTags
+      CanSendWelcomeMessages = canSendWelcomeMessages
     }
-  static member Make(chatId: int64, userId: int64, ?canManageTopics: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canDeleteStories: bool, ?canEditStories: bool, ?canPostStories: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canManageDirectMessages: bool, ?canManageTags: bool) = 
-    PromoteChatMember.Make(ChatId.Int chatId, userId, ?canManageTopics = canManageTopics, ?canPinMessages = canPinMessages, ?canEditMessages = canEditMessages, ?canPostMessages = canPostMessages, ?canDeleteStories = canDeleteStories, ?canEditStories = canEditStories, ?canPostStories = canPostStories, ?canInviteUsers = canInviteUsers, ?canChangeInfo = canChangeInfo, ?canPromoteMembers = canPromoteMembers, ?canRestrictMembers = canRestrictMembers, ?canManageVideoChats = canManageVideoChats, ?canDeleteMessages = canDeleteMessages, ?canManageChat = canManageChat, ?isAnonymous = isAnonymous, ?canManageDirectMessages = canManageDirectMessages, ?canManageTags = canManageTags)
-  static member Make(chatId: string, userId: int64, ?canManageTopics: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canDeleteStories: bool, ?canEditStories: bool, ?canPostStories: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canManageDirectMessages: bool, ?canManageTags: bool) = 
-    PromoteChatMember.Make(ChatId.String chatId, userId, ?canManageTopics = canManageTopics, ?canPinMessages = canPinMessages, ?canEditMessages = canEditMessages, ?canPostMessages = canPostMessages, ?canDeleteStories = canDeleteStories, ?canEditStories = canEditStories, ?canPostStories = canPostStories, ?canInviteUsers = canInviteUsers, ?canChangeInfo = canChangeInfo, ?canPromoteMembers = canPromoteMembers, ?canRestrictMembers = canRestrictMembers, ?canManageVideoChats = canManageVideoChats, ?canDeleteMessages = canDeleteMessages, ?canManageChat = canManageChat, ?isAnonymous = isAnonymous, ?canManageDirectMessages = canManageDirectMessages, ?canManageTags = canManageTags)
+  static member Make(chatId: int64, userId: int64, ?canManageDirectMessages: bool, ?canManageTopics: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canDeleteStories: bool, ?canEditStories: bool, ?canPostStories: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canManageTags: bool, ?canSendWelcomeMessages: bool) = 
+    PromoteChatMember.Make(ChatId.Int chatId, userId, ?canManageDirectMessages = canManageDirectMessages, ?canManageTopics = canManageTopics, ?canPinMessages = canPinMessages, ?canEditMessages = canEditMessages, ?canPostMessages = canPostMessages, ?canDeleteStories = canDeleteStories, ?canEditStories = canEditStories, ?canPostStories = canPostStories, ?canInviteUsers = canInviteUsers, ?canChangeInfo = canChangeInfo, ?canPromoteMembers = canPromoteMembers, ?canRestrictMembers = canRestrictMembers, ?canManageVideoChats = canManageVideoChats, ?canDeleteMessages = canDeleteMessages, ?canManageChat = canManageChat, ?isAnonymous = isAnonymous, ?canManageTags = canManageTags, ?canSendWelcomeMessages = canSendWelcomeMessages)
+  static member Make(chatId: string, userId: int64, ?canManageDirectMessages: bool, ?canManageTopics: bool, ?canPinMessages: bool, ?canEditMessages: bool, ?canPostMessages: bool, ?canDeleteStories: bool, ?canEditStories: bool, ?canPostStories: bool, ?canInviteUsers: bool, ?canChangeInfo: bool, ?canPromoteMembers: bool, ?canRestrictMembers: bool, ?canManageVideoChats: bool, ?canDeleteMessages: bool, ?canManageChat: bool, ?isAnonymous: bool, ?canManageTags: bool, ?canSendWelcomeMessages: bool) = 
+    PromoteChatMember.Make(ChatId.String chatId, userId, ?canManageDirectMessages = canManageDirectMessages, ?canManageTopics = canManageTopics, ?canPinMessages = canPinMessages, ?canEditMessages = canEditMessages, ?canPostMessages = canPostMessages, ?canDeleteStories = canDeleteStories, ?canEditStories = canEditStories, ?canPostStories = canPostStories, ?canInviteUsers = canInviteUsers, ?canChangeInfo = canChangeInfo, ?canPromoteMembers = canPromoteMembers, ?canRestrictMembers = canRestrictMembers, ?canManageVideoChats = canManageVideoChats, ?canDeleteMessages = canDeleteMessages, ?canManageChat = canManageChat, ?isAnonymous = isAnonymous, ?canManageTags = canManageTags, ?canSendWelcomeMessages = canSendWelcomeMessages)
   interface IRequestBase<bool> with
     member _.MethodName = "promoteChatMember"
     
@@ -3009,13 +2991,14 @@ type EditEphemeralMessageText =
     ChatId: ChatId
     ReceiverUserId: int64
     EphemeralMessageId: int64
-    Text: string
+    Text: string option
     ParseMode: ParseMode option
     Entities: MessageEntity[] option
+    RichMessage: InputRichMessage option
     LinkPreviewOptions: LinkPreviewOptions option
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Make(chatId: ChatId, receiverUserId: int64, ephemeralMessageId: int64, text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Make(chatId: ChatId, receiverUserId: int64, ephemeralMessageId: int64, ?text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?richMessage: InputRichMessage, ?linkPreviewOptions: LinkPreviewOptions, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       ChatId = chatId
       ReceiverUserId = receiverUserId
@@ -3023,13 +3006,14 @@ type EditEphemeralMessageText =
       Text = text
       ParseMode = parseMode
       Entities = entities
+      RichMessage = richMessage
       LinkPreviewOptions = linkPreviewOptions
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, receiverUserId: int64, ephemeralMessageId: int64, text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?replyMarkup: InlineKeyboardMarkup) = 
-    EditEphemeralMessageText.Make(ChatId.Int chatId, receiverUserId, ephemeralMessageId, text, ?parseMode = parseMode, ?entities = entities, ?linkPreviewOptions = linkPreviewOptions, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, receiverUserId: int64, ephemeralMessageId: int64, text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?linkPreviewOptions: LinkPreviewOptions, ?replyMarkup: InlineKeyboardMarkup) = 
-    EditEphemeralMessageText.Make(ChatId.String chatId, receiverUserId, ephemeralMessageId, text, ?parseMode = parseMode, ?entities = entities, ?linkPreviewOptions = linkPreviewOptions, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, receiverUserId: int64, ephemeralMessageId: int64, ?text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?richMessage: InputRichMessage, ?linkPreviewOptions: LinkPreviewOptions, ?replyMarkup: InlineKeyboardMarkup) = 
+    EditEphemeralMessageText.Make(ChatId.Int chatId, receiverUserId, ephemeralMessageId, ?text = text, ?parseMode = parseMode, ?entities = entities, ?richMessage = richMessage, ?linkPreviewOptions = linkPreviewOptions, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, receiverUserId: int64, ephemeralMessageId: int64, ?text: string, ?parseMode: ParseMode, ?entities: MessageEntity[], ?richMessage: InputRichMessage, ?linkPreviewOptions: LinkPreviewOptions, ?replyMarkup: InlineKeyboardMarkup) = 
+    EditEphemeralMessageText.Make(ChatId.String chatId, receiverUserId, ephemeralMessageId, ?text = text, ?parseMode = parseMode, ?entities = entities, ?richMessage = richMessage, ?linkPreviewOptions = linkPreviewOptions, ?replyMarkup = replyMarkup)
   interface IRequestBase<bool> with
     member _.MethodName = "editEphemeralMessageText"
     
@@ -3064,9 +3048,10 @@ type EditEphemeralMessageCaption =
     Caption: string option
     ParseMode: ParseMode option
     CaptionEntities: MessageEntity[] option
+    ShowCaptionAboveMedia: bool option
     ReplyMarkup: InlineKeyboardMarkup option
   }
-  static member Make(chatId: ChatId, receiverUserId: int64, ephemeralMessageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
+  static member Make(chatId: ChatId, receiverUserId: int64, ephemeralMessageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?replyMarkup: InlineKeyboardMarkup) = 
     {
       ChatId = chatId
       ReceiverUserId = receiverUserId
@@ -3074,12 +3059,13 @@ type EditEphemeralMessageCaption =
       Caption = caption
       ParseMode = parseMode
       CaptionEntities = captionEntities
+      ShowCaptionAboveMedia = showCaptionAboveMedia
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, receiverUserId: int64, ephemeralMessageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
-    EditEphemeralMessageCaption.Make(ChatId.Int chatId, receiverUserId, ephemeralMessageId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, receiverUserId: int64, ephemeralMessageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?replyMarkup: InlineKeyboardMarkup) = 
-    EditEphemeralMessageCaption.Make(ChatId.String chatId, receiverUserId, ephemeralMessageId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, receiverUserId: int64, ephemeralMessageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?replyMarkup: InlineKeyboardMarkup) = 
+    EditEphemeralMessageCaption.Make(ChatId.Int chatId, receiverUserId, ephemeralMessageId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, receiverUserId: int64, ephemeralMessageId: int64, ?caption: string, ?parseMode: ParseMode, ?captionEntities: MessageEntity[], ?showCaptionAboveMedia: bool, ?replyMarkup: InlineKeyboardMarkup) = 
+    EditEphemeralMessageCaption.Make(ChatId.String chatId, receiverUserId, ephemeralMessageId, ?caption = caption, ?parseMode = parseMode, ?captionEntities = captionEntities, ?showCaptionAboveMedia = showCaptionAboveMedia, ?replyMarkup = replyMarkup)
   interface IRequestBase<bool> with
     member _.MethodName = "editEphemeralMessageCaption"
     
@@ -3233,8 +3219,7 @@ type SendSticker =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
-    ReceiverUserId: int64 option
-    CallbackQueryId: string option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     Sticker: InputFile
     Emoji: string option
     DisableNotification: bool option
@@ -3245,14 +3230,13 @@ type SendSticker =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, sticker: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?receiverUserId: int64, ?callbackQueryId: string, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, sticker: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
-      ReceiverUserId = receiverUserId
-      CallbackQueryId = callbackQueryId
+      EphemeralMessageParameters = ephemeralMessageParameters
       Sticker = sticker
       Emoji = emoji
       DisableNotification = disableNotification
@@ -3263,10 +3247,10 @@ type SendSticker =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, sticker: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?receiverUserId: int64, ?callbackQueryId: string, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendSticker.Make(ChatId.Int chatId, sticker, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?receiverUserId = receiverUserId, ?callbackQueryId = callbackQueryId, ?emoji = emoji, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, sticker: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?receiverUserId: int64, ?callbackQueryId: string, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendSticker.Make(ChatId.String chatId, sticker, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?receiverUserId = receiverUserId, ?callbackQueryId = callbackQueryId, ?emoji = emoji, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, sticker: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendSticker.Make(ChatId.Int chatId, sticker, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?emoji = emoji, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, sticker: InputFile, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?emoji: string, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendSticker.Make(ChatId.String chatId, sticker, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?emoji = emoji, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendSticker"
     
@@ -3483,6 +3467,7 @@ type SendRichMessage =
     ChatId: ChatId
     MessageThreadId: int64 option
     DirectMessagesTopicId: int64 option
+    EphemeralMessageParameters: EphemeralMessageParameters option
     RichMessage: InputRichMessage
     DisableNotification: bool option
     ProtectContent: bool option
@@ -3492,12 +3477,13 @@ type SendRichMessage =
     ReplyParameters: ReplyParameters option
     ReplyMarkup: Markup option
   }
-  static member Make(chatId: ChatId, richMessage: InputRichMessage, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+  static member Make(chatId: ChatId, richMessage: InputRichMessage, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
     {
       BusinessConnectionId = businessConnectionId
       ChatId = chatId
       MessageThreadId = messageThreadId
       DirectMessagesTopicId = directMessagesTopicId
+      EphemeralMessageParameters = ephemeralMessageParameters
       RichMessage = richMessage
       DisableNotification = disableNotification
       ProtectContent = protectContent
@@ -3507,10 +3493,10 @@ type SendRichMessage =
       ReplyParameters = replyParameters
       ReplyMarkup = replyMarkup
     }
-  static member Make(chatId: int64, richMessage: InputRichMessage, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendRichMessage.Make(ChatId.Int chatId, richMessage, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
-  static member Make(chatId: string, richMessage: InputRichMessage, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
-    SendRichMessage.Make(ChatId.String chatId, richMessage, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: int64, richMessage: InputRichMessage, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendRichMessage.Make(ChatId.Int chatId, richMessage, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
+  static member Make(chatId: string, richMessage: InputRichMessage, ?businessConnectionId: string, ?messageThreadId: int64, ?directMessagesTopicId: int64, ?ephemeralMessageParameters: EphemeralMessageParameters, ?disableNotification: bool, ?protectContent: bool, ?allowPaidBroadcast: bool, ?messageEffectId: string, ?suggestedPostParameters: SuggestedPostParameters, ?replyParameters: ReplyParameters, ?replyMarkup: Markup) = 
+    SendRichMessage.Make(ChatId.String chatId, richMessage, ?businessConnectionId = businessConnectionId, ?messageThreadId = messageThreadId, ?directMessagesTopicId = directMessagesTopicId, ?ephemeralMessageParameters = ephemeralMessageParameters, ?disableNotification = disableNotification, ?protectContent = protectContent, ?allowPaidBroadcast = allowPaidBroadcast, ?messageEffectId = messageEffectId, ?suggestedPostParameters = suggestedPostParameters, ?replyParameters = replyParameters, ?replyMarkup = replyMarkup)
   interface IRequestBase<Message> with
     member _.MethodName = "sendRichMessage"
     
@@ -3520,13 +3506,17 @@ type SendRichMessageDraft =
     MessageThreadId: int64 option
     DraftId: int64
     RichMessage: InputRichMessage
+    CanStop: bool option
+    KeepOnStop: bool option
   }
-  static member Make(chatId: int64, draftId: int64, richMessage: InputRichMessage, ?messageThreadId: int64) = 
+  static member Make(chatId: int64, draftId: int64, richMessage: InputRichMessage, ?messageThreadId: int64, ?canStop: bool, ?keepOnStop: bool) = 
     {
       ChatId = chatId
       MessageThreadId = messageThreadId
       DraftId = draftId
       RichMessage = richMessage
+      CanStop = canStop
+      KeepOnStop = keepOnStop
     }
   interface IRequestBase<bool> with
     member _.MethodName = "sendRichMessageDraft"

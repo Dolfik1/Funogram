@@ -192,19 +192,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -456,7 +448,7 @@
   {
     "OriginalName": "copyMessage",
     "ConvertedName": "CopyMessage",
-    "Description": "Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
+    "Description": "Use this method to copy messages of any kind. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessage, but the copied message doesn\u0027t have a link to the original message. Returns the MessageId of the sent message on success.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -601,7 +593,7 @@
   {
     "OriginalName": "copyMessages",
     "ConvertedName": "CopyMessages",
-    "Description": "Use this method to copy messages of any kind. If some of the specified messages can\u0027t be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_id is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don\u0027t have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.",
+    "Description": "Use this method to copy messages of any kind. If some of the specified messages can\u0027t be found or copied, they are skipped. Service messages, paid media messages, giveaway messages, giveaway winners messages, and invoice messages can\u0027t be copied. A quiz poll can be copied only if the value of the field correct_option_ids is known to the bot. The method is analogous to the method forwardMessages, but the copied messages don\u0027t have a link to the original message. Album grouping is kept for copied messages. On success, an Array of MessageId of the sent messages is returned.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -709,19 +701,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -870,19 +854,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -1039,19 +1015,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -1216,19 +1184,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -1377,19 +1337,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -1594,19 +1546,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -1787,19 +1731,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -1905,7 +1841,7 @@
   {
     "OriginalName": "sendVideoNote",
     "ConvertedName": "SendVideoNote",
-    "Description": "As of v.4.0, Telegram clients support rounded square MPEG4 videos of up to 1 minute long. Use this method to send video messages. On success, the sent Message is returned.",
+    "Description": "Use this method to send a rounded square MPEG4 video of up to 1 minute long. On success, the sent Message is returned.",
     "Fields": [
       {
         "OriginalName": "business_connection_id",
@@ -1940,19 +1876,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -2319,19 +2247,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -2480,19 +2400,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -2657,19 +2569,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -3247,7 +3151,7 @@
       {
         "OriginalName": "draft_id",
         "ConvertedName": "DraftId",
-        "Description": "Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are animated.",
+        "Description": "Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are animated. Otherwise, the draft is replaced without animation.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false
@@ -3274,6 +3178,22 @@
         "Description": "A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode",
         "OriginalFieldType": "Array of MessageEntity",
         "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_stop",
+        "ConvertedName": "CanStop",
+        "Description": "Pass True to show the user a button to stop further drafts. The bot will receive an Update \u201Cstopped_message_generation\u201D if the user presses the button.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "keep_on_stop",
+        "ConvertedName": "KeepOnStop",
+        "Description": "Pass True to keep the draft in the chat when the button is pressed. The draft will still disappear after a short time or if the bot sends a message. To fully preserve the partial draft, the bot should send it as a new message.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
         "Optional": true
       }
     ],
@@ -3754,6 +3674,14 @@
         "OriginalName": "can_manage_tags",
         "ConvertedName": "CanManageTags",
         "Description": "Pass True if the administrator can edit the tags of regular members; for groups and supergroups only",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "can_send_welcome_messages",
+        "ConvertedName": "CanSendWelcomeMessages",
+        "Description": "Pass True if the administrator can manage chat welcome messages or directly send them in the case of bots",
         "OriginalFieldType": "Boolean",
         "ConvertedFieldType": "bool",
         "Optional": true
@@ -4924,7 +4852,7 @@
       {
         "OriginalName": "cache_time",
         "ConvertedName": "CacheTime",
-        "Description": "The maximum amount of time in seconds that the result of the callback query may be cached client-side. Telegram apps will support caching starting in version 3.14. Defaults to 0.",
+        "Description": "The maximum amount of time in seconds that the result of the callback query may be cached client-side. Defaults to 0.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": true
@@ -6679,7 +6607,7 @@
       {
         "OriginalName": "rich_message",
         "ConvertedName": "RichMessage",
-        "Description": "New rich content of the message; required if text isn\u0027t specified. Direct upload of new files isn\u0027t supported when an inline message is edited.",
+        "Description": "New rich content of the message; required if text isn\u0027t specified. Direct upload of new files and explicit upload of files by a URL isn\u0027t supported when an inline message is edited.",
         "OriginalFieldType": "InputRichMessage",
         "ConvertedFieldType": "InputRichMessage",
         "Optional": true
@@ -7122,7 +7050,7 @@
   {
     "OriginalName": "editEphemeralMessageText",
     "ConvertedName": "EditEphemeralMessageText",
-    "Description": "Use this method to edit an ephemeral text message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, True is returned.",
+    "Description": "Use this method to edit an ephemeral text or rich message. Note that it is not guaranteed that the user will receive the message edit event, especially if they are offline. On success, True is returned.",
     "Fields": [
       {
         "OriginalName": "chat_id",
@@ -7151,10 +7079,10 @@
       {
         "OriginalName": "text",
         "ConvertedName": "Text",
-        "Description": "New text of the message, 1-4096 characters after entity parsing",
+        "Description": "New text of the message, 1-4096 characters after entity parsing; required if rich_message isn\u0027t specified",
         "OriginalFieldType": "String",
         "ConvertedFieldType": "string",
-        "Optional": false
+        "Optional": true
       },
       {
         "OriginalName": "parse_mode",
@@ -7170,6 +7098,14 @@
         "Description": "A JSON-serialized list of special entities that appear in message text, which can be specified instead of parse_mode",
         "OriginalFieldType": "Array of MessageEntity",
         "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "rich_message",
+        "ConvertedName": "RichMessage",
+        "Description": "New rich content of the message; required if text isn\u0027t specified",
+        "OriginalFieldType": "InputRichMessage",
+        "ConvertedFieldType": "InputRichMessage",
         "Optional": true
       },
       {
@@ -7224,7 +7160,7 @@
       {
         "OriginalName": "media",
         "ConvertedName": "Media",
-        "Description": "A JSON-serialized object for the new media content of the message. A new file can\u0027t be uploaded; use a previously uploaded file via its file_id or specify a URL.",
+        "Description": "A JSON-serialized object for the new media content of the message",
         "OriginalFieldType": "InputMedia",
         "ConvertedFieldType": "InputMedia",
         "Optional": false
@@ -7292,6 +7228,14 @@
         "Description": "A JSON-serialized list of special entities that appear in the caption, which can be specified instead of parse_mode",
         "OriginalFieldType": "Array of MessageEntity",
         "ConvertedFieldType": "MessageEntity[]",
+        "Optional": true
+      },
+      {
+        "OriginalName": "show_caption_above_media",
+        "ConvertedName": "ShowCaptionAboveMedia",
+        "Description": "Pass True if the caption must be shown above the message media. Supported only for animation, photo and video messages.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
         "Optional": true
       },
       {
@@ -7608,19 +7552,11 @@
         "Optional": true
       },
       {
-        "OriginalName": "receiver_user_id",
-        "ConvertedName": "ReceiverUserId",
-        "Description": "For outgoing ephemeral messages, unique identifier of the user who will receive the message; for group and supergroup chats only. It is not guaranteed that the user will receive the message, especially if they are offline. See ephemeral message sending for more details.",
-        "OriginalFieldType": "Integer",
-        "ConvertedFieldType": "int64",
-        "Optional": true
-      },
-      {
-        "OriginalName": "callback_query_id",
-        "ConvertedName": "CallbackQueryId",
-        "Description": "For outgoing ephemeral messages, identifier of the callback query which triggered the message if any",
-        "OriginalFieldType": "String",
-        "ConvertedFieldType": "string",
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
         "Optional": true
       },
       {
@@ -8160,6 +8096,14 @@
         "Optional": true
       },
       {
+        "OriginalName": "ephemeral_message_parameters",
+        "ConvertedName": "EphemeralMessageParameters",
+        "Description": "A JSON-serialized object containing the parameters of the ephemeral message to send",
+        "OriginalFieldType": "EphemeralMessageParameters",
+        "ConvertedFieldType": "EphemeralMessageParameters",
+        "Optional": true
+      },
+      {
         "OriginalName": "rich_message",
         "ConvertedName": "RichMessage",
         "Description": "The message to be sent",
@@ -8251,7 +8195,7 @@
       {
         "OriginalName": "draft_id",
         "ConvertedName": "DraftId",
-        "Description": "Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are animated.",
+        "Description": "Unique identifier of the message draft; must be non-zero. Changes to drafts with the same identifier are animated. Otherwise, the draft is replaced without animation.",
         "OriginalFieldType": "Integer",
         "ConvertedFieldType": "int64",
         "Optional": false
@@ -8259,10 +8203,26 @@
       {
         "OriginalName": "rich_message",
         "ConvertedName": "RichMessage",
-        "Description": "The partial message to be streamed. Direct upload of new files isn\u0027t supported.",
+        "Description": "The partial message to be streamed. Direct upload of new files and explicit upload of files by a URL isn\u0027t supported.",
         "OriginalFieldType": "InputRichMessage",
         "ConvertedFieldType": "InputRichMessage",
         "Optional": false
+      },
+      {
+        "OriginalName": "can_stop",
+        "ConvertedName": "CanStop",
+        "Description": "Pass True to show the user a button to stop further drafts. The bot will receive an Update \u201Cstopped_message_generation\u201D if the user presses the button.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
+      },
+      {
+        "OriginalName": "keep_on_stop",
+        "ConvertedName": "KeepOnStop",
+        "Description": "Pass True to keep the draft in the chat when the button is pressed. The draft will still disappear after a short time or if the bot sends a message. To fully preserve the partial draft, the bot should send it as a new message.",
+        "OriginalFieldType": "Boolean",
+        "ConvertedFieldType": "bool",
+        "Optional": true
       }
     ],
     "OriginalReturnType": "True",
