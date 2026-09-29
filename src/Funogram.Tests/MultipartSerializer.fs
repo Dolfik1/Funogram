@@ -59,3 +59,14 @@ let ``DateTimeOffset serializes to the same Unix time in JSON and multipart rega
 
   shouldEqual expected (Helpers.toJsonString date)
   shouldEqual expected (multipartValue date)
+
+
+[<Fact>]
+let ``Multipart serializer writes UnrecognizedCase as raw JSON`` () =
+  let json = """{"type":"future_scope","chat_id":1}"""
+  let request = Req.SetMyCommands.Make([||], scope = BotCommandScope.UnrecognizedCase { Json = json })
+  let serialize = Funogram.Tools.Api.generateMultipartSerializer (request.GetType())
+  use content = new MultipartFormDataContent()
+  serialize Config.defaultConfig request content |> ignore
+  let scope = content |> Seq.find (fun x -> x.Headers.ContentDisposition.Name.Trim('"') = "scope")
+  shouldEqual json (scope.ReadAsStringAsync().Result)

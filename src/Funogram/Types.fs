@@ -13,6 +13,19 @@ type AlwaysAttribute(value: string) =
   inherit Attribute()
   member _.Value = value
 
+[<Serialization.JsonConverter(typeof<RawJsonConverter>)>]
+type RawJson =
+  { Json: string }
+and RawJsonConverter() =
+  inherit Serialization.JsonConverter<RawJson>()
+
+  override _.Read(reader, _, _) =
+    use doc = JsonDocument.ParseValue(&reader)
+    { Json = doc.RootElement.GetRawText() }
+
+  override _.Write(writer, value, _) =
+    writer.WriteRawValue(value.Json)
+
 type BotWebHook = { Listener: HttpListener; ValidateRequest: HttpListenerRequest -> bool }
 
 [<StructuredFormatDisplay("{Masked}")>]

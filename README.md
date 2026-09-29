@@ -18,6 +18,7 @@ Funogram 4.0.0 and Funogram.Telegram 10.3.0.1:
 * `Logger: ILogger` (Microsoft.Extensions.Logging) replaces `OnError` and `RequestLogger`.
 * The `ApiError` union replaces `ApiResponseError`. The cases are `Rejected`, `Network`, `InvalidResponse` and `UnexpectedResult`.
 * Unix time fields have the `DateTimeOffset` type instead of `DateTime`.
+* All generated union types have the `UnrecognizedCase of RawJson` case. The deserializer returns this case with the raw JSON when no other case matches. Before, it threw a `JsonException`. Add this case to complete `match` expressions.
 * `Tools.toJsonUtf8` and `Tools.toJsonString` replace `toJson` and `toJsonBotRequest`. The new functions take a `BotConfig`.
 * `Api.deleteWebhookBase` calls `deleteWebhook`. Before, it called `getWebhookInfo`.
 * The default `Timeout` is 60 seconds. Before, it was 60000.

@@ -159,7 +159,25 @@ type internal DiscriminatedUnionConverter<'a>() =
     | Shape.FSharpUnion (:? ShapeFSharpUnion<'a> as union) -> union
     | _ -> failwith $"Unsupported type: {typeof<'a>.FullName}"
   
-  let cases = mkCaseStates union |> Array.sortBy _.Tag
+  let allCases = mkCaseStates union |> Array.sortBy _.Tag
+
+  let isFallback (c: ShapeFSharpUnionCase<'a>) =
+    c.Fields.Length = 1 && c.Fields[0].Member.Type = typeof<RawJson>
+
+  let fallback =
+    union.UnionCases
+    |> Array.tryFind isFallback
+    |> Option.map (fun c -> allCases[c.CaseInfo.Tag])
+
+  let cases =
+    match fallback with
+    | Some f -> allCases |> Array.filter (fun s -> s.Tag <> f.Tag)
+    | None -> allCases
+
+  let orFail (message: unit -> string) =
+    match fallback with
+    | Some state -> state
+    | None -> raise (JsonException(message ()))
 
   let alwaysFields =
     cases
@@ -267,7 +285,7 @@ type internal DiscriminatedUnionConverter<'a>() =
       match scalar |> Option.orElseWith nullary with
       | Some s -> s
       | None ->
-        raise (JsonException($"No case of union {typeof<'a>.Name} accepts the string '{value}'"))
+        orFail (fun () -> $"No case of union {typeof<'a>.Name} accepts the string '{value}'")
 
     | JsonShape.Scalar candidateTypes ->
       let found =
@@ -278,31 +296,31 @@ type internal DiscriminatedUnionConverter<'a>() =
       match found with
       | Some s -> s
       | None ->
-        raise (JsonException($"No scalar case of union {typeof<'a>.Name} matches this JSON value"))
+        orFail (fun () -> $"No scalar case of union {typeof<'a>.Name} matches this JSON value")
 
     | JsonShape.Array ->
       match cases |> Array.tryFind (fun s -> s.Shape = CaseShape.Array) with
       | Some s -> s
       | None ->
-        raise (JsonException($"No array case of union {typeof<'a>.Name}"))
+        orFail (fun () -> $"No array case of union {typeof<'a>.Name}")
 
     | JsonShape.Object props ->
       match resolveObject props with
       | Resolution.Exact state -> state
       | Resolution.Guessed state when not hasDiscriminator -> state
       | Resolution.Guessed _ ->
-        raise (JsonException($"Union {typeof<'a>.Name} requires a discriminator, but the payload has none"))
+        orFail (fun () -> $"Union {typeof<'a>.Name} requires a discriminator, but the payload has none")
       | Resolution.UnknownDiscriminator found ->
-        raise (JsonException($"Unknown discriminator {describeFound found} for union {typeof<'a>.Name}; known values: {knownDiscriminators}"))
+        orFail (fun () -> $"Unknown discriminator {describeFound found} for union {typeof<'a>.Name}; known values: {knownDiscriminators}")
       | Resolution.NoMatch ->
-        raise (JsonException($"Unable to match JSON to any case of union {typeof<'a>.Name}"))
+        orFail (fun () -> $"Unable to match JSON to any case of union {typeof<'a>.Name}")
 
   override this.Read(reader, _, options) =
     let state = this.ResolveCase(this.ReadShape(&reader))
     state.Deserializer.Deserialize(&reader, options)
 
   override x.Write(writer, value, options) =
-    cases[union.GetTag value].Serialize writer value options
+    allCases[union.GetTag value].Serialize writer value options
 
 type internal DiscriminatedUnionConverterFactory() =
   inherit JsonConverterFactory()

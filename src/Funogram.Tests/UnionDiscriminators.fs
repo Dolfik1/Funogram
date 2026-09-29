@@ -3,6 +3,7 @@ module Funogram.Tests.UnionDiscriminators
 open Funogram.Telegram.Types
 open Funogram.Types
 open Xunit
+open Extensions
 open Helpers
 
 let private caseName (m: ChatMember) =
@@ -13,6 +14,7 @@ let private caseName (m: ChatMember) =
   | ChatMember.Restricted _ -> "Restricted"
   | ChatMember.Left _ -> "Left"
   | ChatMember.Banned _ -> "Banned"
+  | ChatMember.UnrecognizedCase _ -> "UnrecognizedCase"
 
 let private user = """{"id":42,"is_bot":false,"first_name":"x"}"""
 
@@ -39,6 +41,7 @@ let ``ChatMember deserializes to the case matching the status value`` (status: s
       | ChatMember.Restricted x -> x.Status
       | ChatMember.Left x -> x.Status
       | ChatMember.Banned x -> x.Status
+      | ChatMember.UnrecognizedCase _ -> null
     Assert.Equal(status, actualStatus)
   | Error e -> e.AsException() |> raise
 
@@ -51,21 +54,39 @@ let ``ChatMember member round-trip does not invent fields`` () =
     Assert.DoesNotContain("is_anonymous", reserialized)
   | Error e -> e.AsException() |> raise
 
-// [<Fact>]
-// let ``ChatMember with an unknown future status falls back to shape matching without throwing`` () =
-//   let json = """{"status":"holographic_member","user":""" + user + "}"
-//   match parseResult<ChatMember> json with
-//   | Ok m ->
-//     let status =
-//       match m with
-//       | ChatMember.Owner x -> x.Status
-//       | ChatMember.Administrator x -> x.Status
-//       | ChatMember.Member x -> x.Status
-//       | ChatMember.Restricted x -> x.Status
-//       | ChatMember.Left x -> x.Status
-//       | ChatMember.Banned x -> x.Status
-//     Assert.Equal("holographic_member", status)
-//   | Error e -> failwith e.Description
+[<Fact>]
+let ``ChatMember with an unknown status deserializes to UnrecognizedCase with the raw JSON`` () =
+  let json = """{"status":"holographic_member","user":""" + user + "}"
+  parseResult<ChatMember> json
+  |> shouldEqual (Ok (ChatMember.UnrecognizedCase { Json = json }))
+
+[<Fact>]
+let ``MessageOrigin with an unknown type deserializes to UnrecognizedCase`` () =
+  let json = """{"type":"robot","date":1}"""
+  parseResult<MessageOrigin> json
+  |> shouldEqual (Ok (MessageOrigin.UnrecognizedCase { Json = json }))
+
+[<Fact>]
+let ``Union with a discriminator and a partial match without discriminator deserializes to UnrecognizedCase`` () =
+  let json = """{"user":""" + user + ""","future_field":1}"""
+  parseResult<ChatMember> json
+  |> shouldEqual (Ok (ChatMember.UnrecognizedCase { Json = json }))
+
+[<Fact>]
+let ``UnrecognizedCase serializes back to the same JSON`` () =
+  let json = """{"type":"robot","date":1,"extra":[1,2,{"a":null}]}"""
+  MessageOrigin.UnrecognizedCase { Json = json }
+  |> toJsonString
+  |> shouldEqual json
+
+[<Fact>]
+let ``UnrecognizedCase inside a record round-trips`` () =
+  let json = """{"message_id":1,"date":1,"chat":{"id":-1,"type":"channel"},"forward_origin":{"type":"robot","date":1}}"""
+  match parseResult<Message> json with
+  | Ok m ->
+    shouldEqual (Some (MessageOrigin.UnrecognizedCase { Json = """{"type":"robot","date":1}""" })) m.ForwardOrigin
+    Assert.Contains(""""forward_origin":{"type":"robot","date":1}""", toJsonString m)
+  | Error e -> e.AsException() |> raise
 
 [<Theory>]
 [<InlineData("""{"type":"user","date":1,"sender_user":{"id":1,"is_bot":false,"first_name":"x"}}""", "User")>]
@@ -81,5 +102,6 @@ let ``MessageOrigin deserializes to the case matching the type value`` (json: st
       | MessageOrigin.HiddenUser _ -> "HiddenUser"
       | MessageOrigin.Chat _ -> "Chat"
       | MessageOrigin.Channel _ -> "Channel"
+      | MessageOrigin.UnrecognizedCase _ -> "UnrecognizedCase"
     Assert.Equal(expectedCase, actual)
   | Error e -> e.AsException() |> raise

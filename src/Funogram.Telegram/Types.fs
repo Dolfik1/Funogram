@@ -1105,6 +1105,8 @@ and [<CLIMutable>] InaccessibleMessage =
 and MaybeInaccessibleMessage =
   | Message of Message
   | InaccessibleMessage of InaccessibleMessage
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// This object represents one special entity in a text message. For example, hashtags, usernames, URLs, etc.
 and [<CLIMutable>] MessageEntity =
@@ -1360,6 +1362,8 @@ and MessageOrigin =
   | HiddenUser of MessageOriginHiddenUser
   | Chat of MessageOriginChat
   | Channel of MessageOriginChannel
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The message was originally sent by a known user.
 and [<CLIMutable>] MessageOriginUser =
@@ -1831,6 +1835,8 @@ and PaidMedia =
   | Photo of PaidMediaPhoto
   | Preview of PaidMediaPreview
   | Video of PaidMediaVideo
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The paid media is a live photo.
 and [<CLIMutable>] PaidMediaLivePhoto =
@@ -2022,6 +2028,8 @@ and InputPollMedia =
   | Photo of InputMediaPhoto
   | Venue of InputMediaVenue
   | Video of InputMediaVideo
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// This object represents the content of a poll option to be sent. It should be one of
 and InputPollOptionMedia =
@@ -2033,6 +2041,8 @@ and InputPollOptionMedia =
   | Sticker of InputMediaSticker
   | Venue of InputMediaVenue
   | Video of InputMediaVideo
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// This object contains information about one answer option in a poll.
 and [<CLIMutable>] PollOption =
@@ -2583,6 +2593,8 @@ and BackgroundFill =
   | Solid of BackgroundFillSolid
   | Gradient of BackgroundFillGradient
   | FreeformGradient of BackgroundFillFreeformGradient
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The background is filled using the selected color.
 and [<CLIMutable>] BackgroundFillSolid =
@@ -2649,6 +2661,8 @@ and BackgroundType =
   | Wallpaper of BackgroundTypeWallpaper
   | Pattern of BackgroundTypePattern
   | ChatTheme of BackgroundTypeChatTheme
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The background is automatically filled based on the selected colors.
 and [<CLIMutable>] BackgroundTypeFill =
@@ -4106,6 +4120,8 @@ and ChatMember =
   | Restricted of ChatMemberRestricted
   | Left of ChatMemberLeft
   | Banned of ChatMemberBanned
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents a chat member that owns the chat and has all administrator privileges.
 and [<CLIMutable>] ChatMemberOwner =
@@ -4672,6 +4688,8 @@ and StoryAreaType =
   | Link of StoryAreaTypeLink
   | Weather of StoryAreaTypeWeather
   | UniqueGift of StoryAreaTypeUniqueGift
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Describes a story area pointing to a location. Currently, a story can have up to 10 location areas.
 and [<CLIMutable>] StoryAreaTypeLocation =
@@ -4819,6 +4837,8 @@ and ReactionType =
   | Emoji of ReactionTypeEmoji
   | CustomEmoji of ReactionTypeCustomEmoji
   | Paid of ReactionTypePaid
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The reaction is based on an emoji.
 and [<CLIMutable>] ReactionTypeEmoji =
@@ -5339,6 +5359,8 @@ and [<CLIMutable>] UniqueGiftInfo =
 and OwnedGift =
   | Regular of OwnedGiftRegular
   | Unique of OwnedGiftUnique
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Describes a regular gift owned by a user or a chat.
 and [<CLIMutable>] OwnedGiftRegular =
@@ -5563,6 +5585,8 @@ and BotCommandScope =
   | Chat of BotCommandScopeChat
   | ChatAdministrators of BotCommandScopeChatAdministrators
   | ChatMember of BotCommandScopeChatMember
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents the default scope of bot commands. Default commands are used if no commands with a narrower scope are specified for the user.
 and [<CLIMutable>] BotCommandScopeDefault =
@@ -5713,6 +5737,8 @@ and MenuButton =
   | Commands of MenuButtonCommands
   | WebApp of MenuButtonWebApp
   | Default of MenuButtonDefault
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents a menu button, which opens the bot's list of commands.
 and [<CLIMutable>] MenuButtonCommands =
@@ -5766,6 +5792,8 @@ and ChatBoostSource =
   | Premium of ChatBoostSourcePremium
   | GiftCode of ChatBoostSourceGiftCode
   | Giveaway of ChatBoostSourceGiveaway
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The boost was obtained by subscribing to Telegram Premium or by gifting a Telegram Premium subscription to another user.
 and [<CLIMutable>] ChatBoostSourcePremium =
@@ -6122,6 +6150,8 @@ and InputMedia =
   | LivePhoto of InputMediaLivePhoto
   | Photo of InputMediaPhoto
   | Video of InputMediaVideo
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents an animation file (GIF or H.264/MPEG-4 AVC video without sound) to be sent.
 and [<CLIMutable>] InputMediaAnimation =
@@ -6546,6 +6576,8 @@ and InputPaidMedia =
   | LivePhoto of InputPaidMediaLivePhoto
   | Photo of InputPaidMediaPhoto
   | Video of InputPaidMediaVideo
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The paid media to send is a live photo.
 and [<CLIMutable>] InputPaidMediaLivePhoto =
@@ -6634,6 +6666,8 @@ and [<CLIMutable>] InputPaidMediaVideo =
 and InputProfilePhoto =
   | Static of InputProfilePhotoStatic
   | Animated of InputProfilePhotoAnimated
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// A static profile photo in the .JPG format.
 and [<CLIMutable>] InputProfilePhotoStatic =
@@ -6677,6 +6711,8 @@ and [<CLIMutable>] InputProfilePhotoAnimated =
 and InputStoryContent =
   | Photo of InputStoryContentPhoto
   | Video of InputStoryContentVideo
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Describes a photo to post as a story.
 and [<CLIMutable>] InputStoryContentPhoto =
@@ -7018,6 +7054,8 @@ and RichText =
   | ReferenceLink of RichTextReferenceLink
   | Plain of string
   | ArrayOf of RichText array
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// A bold text.
 and [<CLIMutable>] RichTextBold =
@@ -7627,6 +7665,8 @@ and RichBlock =
   | Video of RichBlockVideo
   | VoiceNote of RichBlockVoiceNote
   | Thinking of RichBlockThinking
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// A text paragraph, corresponding to the HTML tag <p>.
 and [<CLIMutable>] RichBlockParagraph =
@@ -8194,6 +8234,8 @@ and InputRichBlock =
   | Video of InputRichBlockVideo
   | VoiceNote of InputRichBlockVoiceNote
   | Thinking of InputRichBlockThinking
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// A text paragraph, corresponding to the HTML tag <p>.
 and [<CLIMutable>] InputRichBlockParagraph =
@@ -8775,6 +8817,8 @@ and InlineQueryResult =
   | Venue of InlineQueryResultVenue
   | Video of InlineQueryResultVideo
   | Voice of InlineQueryResultVoice
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents a link to an article or web page.
 and [<CLIMutable>] InlineQueryResultArticle =
@@ -9856,6 +9900,8 @@ and InputMessageContent =
   | VenueMessageContent of InputVenueMessageContent
   | ContactMessageContent of InputContactMessageContent
   | InvoiceMessageContent of InputInvoiceMessageContent
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents the content of a text message to be sent as the result of an inline query.
 and [<CLIMutable>] InputTextMessageContent =
@@ -10384,6 +10430,8 @@ and RevenueWithdrawalState =
   | Pending of RevenueWithdrawalStatePending
   | Succeeded of RevenueWithdrawalStateSucceeded
   | Failed of RevenueWithdrawalStateFailed
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// The withdrawal is in progress.
 and [<CLIMutable>] RevenueWithdrawalStatePending =
@@ -10469,6 +10517,8 @@ and TransactionPartner =
   | TelegramAds of TransactionPartnerTelegramAds
   | TelegramApi of TransactionPartnerTelegramApi
   | Other of TransactionPartnerOther
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Describes a transaction with a user.
 and [<CLIMutable>] TransactionPartnerUser =
@@ -10785,6 +10835,8 @@ and PassportElementError =
   | TranslationFile of PassportElementErrorTranslationFile
   | TranslationFiles of PassportElementErrorTranslationFiles
   | Unspecified of PassportElementErrorUnspecified
+  /// A value that this Funogram version cannot map to a known case
+  | UnrecognizedCase of RawJson
 
 /// Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
 and [<CLIMutable>] PassportElementErrorDataField =
