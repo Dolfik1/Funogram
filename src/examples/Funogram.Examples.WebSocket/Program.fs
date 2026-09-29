@@ -31,7 +31,7 @@ let main _ =
   let config = { Config.defaultConfig with Client = new HttpClient(handler, true) } |> Config.withReadTokenFromFile
 
   async {
-    let apiPath = sprintf "/%s" config.Token
+    let apiPath = sprintf "/%s" (config.Token.Reveal())
     let webSocketEndpoint = sprintf "%s%s" WebSocketEndpoint apiPath
     let! hook = Req.SetWebhook.Make(webSocketEndpoint) |> api config
     match hook with

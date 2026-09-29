@@ -1,28 +1,30 @@
-[<Microsoft.FSharp.Core.RequireQualifiedAccess>]
+[<RequireQualifiedAccess>]
 module Funogram.Telegram.Api
 
 open Funogram.Telegram
 open Funogram.Telegram.Types
 open Types
 
-let deleteWebhookBase () =
-  Req.GetWebhookInfo()
+let deleteWebhookBase () = Req.DeleteWebhook.Make()
 
 let getMe = Req.GetMe()
 
-let sendMessage chatId text = Req.SendMessage.Make(ChatId.Int chatId, text)
+let sendMessage chatId text = Req.SendMessage.Make(ChatId.Int chatId, text = text)
   
-let sendMessageByChatName chatName text = Req.SendMessage.Make(ChatId.String chatName, text)
+let sendMessageByChatName chatName text = Req.SendMessage.Make(ChatId.String chatName, text = text)
 
-let sendMessageMarkup chatId text replyMarkup = Req.SendMessage.Make(ChatId.Int chatId, text, replyMarkup = replyMarkup)
+let sendMessageMarkup chatId text replyMarkup =
+  Req.SendMessage.Make(ChatId.Int chatId, text, replyMarkup = replyMarkup)
 
-let sendMessageReply chatId text replyToMessageId = Req.SendMessage.Make(ChatId.Int chatId, text, replyParameters = ReplyParameters.Create replyToMessageId)
+let sendMessageReply chatId text replyToMessageId =
+  Req.SendMessage.Make(ChatId.Int chatId, text, replyParameters = ReplyParameters.Create replyToMessageId)
 
-let forwardMessage chatId fromChatId messageId = Req.ForwardMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId)
+let forwardMessage chatId fromChatId messageId =
+  Req.ForwardMessage.Make(ChatId.Int chatId, ChatId.Int fromChatId, messageId = messageId)
 
-let sendPhoto chatId photo caption = Req.SendPhoto.Make(ChatId.Int chatId, photo, caption)
+let sendPhoto chatId photo caption = Req.SendPhoto.Make(ChatId.Int chatId, photo, caption = caption)
 
-let sendAudio chatId audio caption = Req.SendAudio.Make(ChatId.Int chatId, audio, caption)
+let sendAudio chatId audio caption = Req.SendAudio.Make(ChatId.Int chatId, audio, caption = caption)
 
 let sendDocument chatId document caption = Req.SendDocument.Make(ChatId.Int chatId, document, caption = caption)
 
@@ -30,62 +32,69 @@ let sendSticker chatId sticker = Req.SendSticker.Make(ChatId.Int chatId, sticker
 
 let sendVideo chatId video caption = Req.SendVideo.Make(ChatId.Int chatId, video, caption = caption)
 
-let sendAnimation chatId animation caption = Req.SendAnimation.Make(ChatId.Int chatId, animation, caption = caption)
+let sendAnimation chatId animation caption =
+  Req.SendAnimation.Make(ChatId.Int chatId, animation, caption = caption)
 
 let sendVoice chatId voice caption = Req.SendVoice.Make(ChatId.Int chatId, voice, caption = caption)
 
-let sendVideoNote chatId videoNote = Req.SendVideoNote.Make(ChatId.Int chatId, videoNote)
+let sendVideoNote chatId videoNote = Req.SendVideoNote.Make(ChatId.Int chatId, videoNote = videoNote)
 
-let sendMediaGroup chatId media = Req.SendMediaGroup.Make(ChatId.Int chatId, media)
+let sendMediaGroup chatId media = Req.SendMediaGroup.Make(ChatId.Int chatId, media = media)
 
-let sendLocation chatId latitude longitude = Req.SendLocation.Make(ChatId.Int chatId, latitude, longitude)
+let sendLocation chatId latitude longitude =
+  Req.SendLocation.Make(ChatId.Int chatId, latitude = latitude, longitude = longitude)
 
-let sendVenue chatId latitude longitude title address =  Req.SendVenue.Make(ChatId.Int chatId, latitude, longitude, title, address)
+let sendVenue chatId latitude longitude title address =
+  Req.SendVenue.Make(ChatId.Int chatId, latitude = latitude, longitude = longitude, title = title, address = address)
 
-let sendContact chatId phoneNumber firstName lastName = Req.SendContact.Make(ChatId.Int chatId, phoneNumber, firstName, ?lastName = lastName)
+let sendContact chatId phoneNumber firstName lastName =
+  Req.SendContact.Make(ChatId.Int chatId, phoneNumber = phoneNumber, firstName = firstName, ?lastName = lastName)
   
-let sendPoll chatId question options = Req.SendPoll.Make(ChatId.Int chatId, question, options)
+let sendPoll chatId question options = Req.SendPoll.Make(ChatId.Int chatId, question = question, options = options)
 
-let sendChatAction chatId action = Req.SendChatAction.Make(ChatId.Int chatId, action)
-let sendChatActionByChatName chatName action = Req.SendChatAction.Make(ChatId.String chatName, action)
+let sendChatAction chatId action = Req.SendChatAction.Make(ChatId.Int chatId, action = action)
+let sendChatActionByChatName chatName action = Req.SendChatAction.Make(ChatId.String chatName, action = action)
 
-let private getUserProfilePhotosBase userId offset limit = Req.GetUserProfilePhotos.Make(userId, ?offset = offset, ?limit = limit)
+let private getUserProfilePhotosBase userId offset limit =
+  Req.GetUserProfilePhotos.Make(userId, ?offset = offset, ?limit = limit)
 let getUserProfilePhotos userId offset limit = getUserProfilePhotosBase userId (Some offset) (Some limit)
 let getUserProfilePhotosAll userId = getUserProfilePhotosBase userId None None
 
 let getFile fileId = { Req.GetFile.FileId = fileId }
 
-let banChatMember chatId userId = Req.BanChatMember.Make(ChatId.Int chatId, userId)
-let banChatMemberUntil chatId userId untilDate = Req.BanChatMember.Make(ChatId.Int chatId, userId, untilDate = untilDate)
+let banChatMember chatId userId = Req.BanChatMember.Make(ChatId.Int chatId, userId = userId)
+let banChatMemberUntil chatId userId untilDate = Req.BanChatMember.Make(ChatId.Int chatId, userId = userId, untilDate = untilDate)
 let banChatMemberByChatName chatName userId = Req.BanChatMember.Make(ChatId.String chatName, userId) 
-let banChatMemberByChatNameUntil chatName userId untilDate = Req.BanChatMember.Make(ChatId.String chatName, userId, untilDate = untilDate)
+let banChatMemberByChatNameUntil chatName userId untilDate =
+  Req.BanChatMember.Make(ChatId.String chatName, userId = userId, untilDate = untilDate)
 
-let unbanChatMember chatId userId = Req.UnbanChatMember.Make(ChatId.Int chatId, userId)
-let unbanChatMemberByChatName chatName userId = Req.UnbanChatMember.Make(ChatId.String chatName, userId)
+let unbanChatMember chatId userId = Req.UnbanChatMember.Make(ChatId.Int chatId, userId = userId)
+let unbanChatMemberByChatName chatName userId = Req.UnbanChatMember.Make(ChatId.String chatName, userId = userId)
 
-let restrictChatMember chatId userId permissions untilDate = Req.RestrictChatMember.Make(ChatId.Int chatId, userId, permissions)
+let restrictChatMember chatId userId permissions untilDate =
+  Req.RestrictChatMember.Make(ChatId.Int chatId, userId = userId, permissions = permissions, untilDate = untilDate)
 
-let setChatPermission chatId permissions = Req.SetChatPermissions.Make(ChatId.Int chatId, permissions)
+let setChatPermission chatId permissions = Req.SetChatPermissions.Make(ChatId.Int chatId, permissions = permissions)
 
 let exportChatInviteLink chatId = Req.ExportChatInviteLink.Make(ChatId.Int chatId)
 let exportChatInviteLinkByChatName chatName = Req.ExportChatInviteLink.Make(ChatId.String chatName)
 
-let setChatPhoto chatId photo = Req.SetChatPhoto.Make(ChatId.Int chatId, photo)
-let setChatPhotoByChatName chatName photo = Req.SetChatPhoto.Make(ChatId.String chatName, photo)
+let setChatPhoto chatId photo = Req.SetChatPhoto.Make(ChatId.Int chatId, photo = photo)
+let setChatPhotoByChatName chatName photo = Req.SetChatPhoto.Make(ChatId.String chatName, photo = photo)
 
 let deleteChatPhoto chatId = Req.DeleteChatPhoto.Make(ChatId.Int chatId)
 let deleteChatPhotoByChatName chatName = Req.DeleteChatPhoto.Make(ChatId.String chatName)
 
-let setChatTitle chatId title = Req.SetChatTitle.Make(ChatId.Int chatId, title)
-let setChatTitleByChatName chatName title = Req.SetChatTitle.Make(ChatId.String chatName, title)
+let setChatTitle chatId title = Req.SetChatTitle.Make(ChatId.Int chatId, title = title)
+let setChatTitleByChatName chatName title = Req.SetChatTitle.Make(ChatId.String chatName, title = title)
 
-let setChatDescription chatId description = Req.SetChatDescription.Make(ChatId.Int chatId, description)
-let rec setChatDescriptionByChatName chatName description = Req.SetChatDescription.Make(ChatId.String chatName, description)
+let setChatDescription chatId description = Req.SetChatDescription.Make(ChatId.Int chatId, description = description)
+let rec setChatDescriptionByChatName chatName description = Req.SetChatDescription.Make(ChatId.String chatName, description = description)
 
-let pinChatMessage chatId messageId = Req.PinChatMessage.Make(ChatId.Int chatId, messageId)
-let pinChatMessageByName chatName messageId = Req.PinChatMessage.Make(ChatId.String chatName, messageId)
-let pinChatMessageNotify chatId messageId disableNotification = Req.PinChatMessage.Make(ChatId.Int chatId, messageId, disableNotification)
-let pinChatMessageByNameNotify chatName messageId disableNotification = Req.PinChatMessage.Make(ChatId.String chatName, messageId, disableNotification)
+let pinChatMessage chatId messageId = Req.PinChatMessage.Make(ChatId.Int chatId, messageId = messageId)
+let pinChatMessageByName chatName messageId = Req.PinChatMessage.Make(ChatId.String chatName, messageId = messageId)
+let pinChatMessageNotify chatId messageId disableNotification = Req.PinChatMessage.Make(ChatId.Int chatId, messageId, disableNotification = disableNotification)
+let pinChatMessageByNameNotify chatName messageId disableNotification = Req.PinChatMessage.Make(ChatId.String chatName, messageId, disableNotification = disableNotification)
 
 let unpinChatMessage chatId = Req.UnpinChatMessage.Make(ChatId.Int chatId)
 let unpinChatMessageByChatName chatName = Req.UnpinChatMessage.Make(ChatId.String chatName)
@@ -103,13 +112,14 @@ let getChatAdministratorsByChatName chatName = Req.GetChatAdministrators.Make(Ch
 let getChatMembersCount chatId = Req.GetChatMemberCount.Make(ChatId.Int chatId)
 let getChatMembersCountByChatName chatName = Req.GetChatMemberCount.Make(ChatId.String chatName)
 
-let getChatMember chatId userId = Req.GetChatMember.Make(ChatId.Int chatId, userId)
-let getChatMemberByChatName chatName userId = Req.GetChatMember.Make(ChatId.String chatName, userId)
+let getChatMember chatId userId = Req.GetChatMember.Make(ChatId.Int chatId, userId = userId)
+let getChatMemberByChatName chatName userId = Req.GetChatMember.Make(ChatId.String chatName, userId = userId)
 
-let rec setChatStickerSet chatId stickerSetName = Req.SetChatStickerSet.Make(ChatId.Int chatId, stickerSetName)
+let rec setChatStickerSet chatId stickerSetName = Req.SetChatStickerSet.Make(ChatId.Int chatId, stickerSetName = stickerSetName)
 let deleteChatStickerSet chatId = Req.DeleteChatStickerSet.Make(ChatId.Int chatId)
 
-let answerCallbackQuery callbackQueryId text showAlert url cacheTime = Req.AnswerCallbackQuery.Make(callbackQueryId, text, showAlert, url, cacheTime)
+let answerCallbackQuery callbackQueryId text showAlert url cacheTime =
+  Req.AnswerCallbackQuery.Make(callbackQueryId = callbackQueryId, text = text, showAlert = showAlert, url = url, cacheTime = cacheTime)
 
 let editMessageMediaBase chatId messageId inlineMessageId media replyMarkup =
   Req.EditMessageMedia.Make(media = media, ?chatId = chatId, ?messageId = messageId, ?inlineMessageId = inlineMessageId, ?replyMarkup = replyMarkup)

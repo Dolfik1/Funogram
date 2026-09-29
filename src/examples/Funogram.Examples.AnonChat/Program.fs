@@ -9,12 +9,12 @@ open Funogram.Types
 
 // hooks to catch errors
 // you can add logger if you want
-let processResultWithValue (result: Async<Result<'a, ApiResponseError>>) =
+let processResultWithValue (result: Async<Result<'a, ApiError>>) =
   async {
     let! result = result
     match result with
     | Ok _ -> ()
-    | Error e -> printfn "Server error: %s" e.Description
+    | Error e -> printfn "Server error: %A" e
     
     return result
   }

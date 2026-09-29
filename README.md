@@ -13,9 +13,19 @@ In addition to the pure API implementation, this library provides high-level fun
 
 ## Breaking changes
 
-Funogram.Telegram 6.0.0.x has breaking changes.
-* All request types are moved from `RequestsTypes` module to `Req` module;
-* Some types changed due to Telegram Bot API changes
+Funogram 4.0.0 and Funogram.Telegram 10.3.0.1:
+* `BotConfig.Token` has the `BotToken` type. Use `BotToken.Create "..."` to make a token and `Reveal()` to get the raw value. Logs and `%A` show a masked token.
+* `Logger: ILogger` (Microsoft.Extensions.Logging) replaces `OnError` and `RequestLogger`.
+* The `ApiError` union replaces `ApiResponseError`. The cases are `Rejected`, `Network`, `InvalidResponse` and `UnexpectedResult`.
+* Unix time fields have the `DateTimeOffset` type instead of `DateTime`.
+* All generated union types have the `UnrecognizedCase of RawJson` case. The deserializer returns this case with the raw JSON when no other case matches. Before, it threw a `JsonException`. Add this case to complete `match` expressions.
+* `Tools.toJsonUtf8` and `Tools.toJsonString` replace `toJson` and `toJsonBotRequest`. The new functions take a `BotConfig`.
+* `Api.deleteWebhookBase` calls `deleteWebhook`. Before, it called `getWebhookInfo`.
+* The default `Timeout` is 60 seconds. Before, it was 60000.
+
+Funogram.Telegram 6.0.0.x:
+* The `Req` module contains all request types. Before, they were in the `RequestsTypes` module.
+* Some types changed because of Telegram Bot API changes.
 
 ## Installation
 You need to install latest Funogram and Funogram.Telegram packages from nuget:
@@ -95,15 +105,17 @@ let config = Config.defaultConfig |> Config.withReadTokenFromFile
 The default config looks like:
 ```f#
 let defaultConfig =
-  { Token = ""
+  { IsTest = false
+    Token = BotToken.Create(String.Empty)
     Offset = Some 0L
     Limit = Some 100
-    Timeout = Some 60000
+    Timeout = Some 60
     AllowedUpdates = None
     Client = new HttpClient()
     ApiEndpointUrl = Uri("https://api.telegram.org/bot")
     WebHook = None
-    OnError = (fun e -> printfn "%A" e) }
+    Logger = NullLogger.Instance
+    JsonOptions = Funogram.Tools.options }
 ```
 
 as you can notice there is no set token by default. There are two built-in ways to setup token:
@@ -112,8 +124,30 @@ as you can notice there is no set token by default. There are two built-in ways 
 
 You also can specify token manually:
 ```f#
-let config = { Config.defaultConfig with Token = "mysecrettoken" }
+let config = { Config.defaultConfig with Token = BotToken.Create "mysecrettoken" }
 ```
+
+## Logging
+Funogram writes logs to `BotConfig.Logger` (`ILogger`, disabled by default):
+* Error: network errors and handler exceptions;
+* Debug: method, status code and duration of each request;
+* Trace: the same plus request and response bodies.
+
+```f#
+let config = { config with Logger = loggerFactory.CreateLogger("Funogram") }
+```
+
+## Error handling
+All requests return `Result<'T, ApiError>`:
+```f#
+match! Api.sendMessage chatId "Hi" |> api config with
+| Ok message -> ()
+| Error (ApiError.Rejected e) -> printfn "Telegram error %i: %s" e.ErrorCode e.Description
+| Error (ApiError.Network ex) -> printfn "Network error: %s" ex.Message
+| Error e -> printfn "Unexpected response: %A" e
+```
+
+`ApiError.AsException()` converts the error to an exception.
 
 When token is set we are ready to make requests. Let's invoke `deleteWebhook` function:
 
@@ -174,7 +208,7 @@ You can use [ngrok](https://ngrok.com/) service to test webhooks on your local m
 
 Then you should set `WebHook` field in `BotConfig`. `WebHook` field have `BotWebHook` type that contains two fields: `Listener` and `ValidateRequest`:
 ```f#
-let apiPath = sprintf "/%s" config.Token
+let apiPath = sprintf "/%s" (config.Token.Reveal())
 let webSocketEndpoint = sprintf "https://1c0860ec2320.ngrok.io/%s" webSocketEndpoint apiPath
 let! hook = setWebhookBase webSocketEndpoint None None None |> api config
 match hook with

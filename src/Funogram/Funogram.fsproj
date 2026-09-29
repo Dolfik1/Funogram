@@ -3,7 +3,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup>
-    <VersionPrefix>3.0.6</VersionPrefix>
+    <VersionPrefix>4.0.0</VersionPrefix>
     <Authors>Nikolay Matyushin</Authors>
     <Product>Funogram</Product>
     <Description>Funogram is a functional Telegram Bot Api library for F#</Description>
@@ -21,14 +21,15 @@
     <Compile Include="StringUtils.fs" />
     <Compile Include="Converters/DiscriminatedUnionConverter.fs" />
     <Compile Include="Converters/OptionConverter.fs" />
-    <Compile Include="Converters/UnixTimestampDateTimeConverter.fs" />
-    <Compile Include="Converters\SafeUpdateConverter.fs" />
+    <Compile Include="Converters/UnixTimestampConverter.fs" />
+    <Compile Include="Converters/SafeUpdateConverter.fs" />
     <Compile Include="Tools.fs" />
     <Compile Include="Api.fs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.0.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
-    <PackageReference Include="System.Text.Json" Version="10.0.12" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="System.ValueTuple" Version="4.6.2" />
     <PackageReference Include="TypeShape" Version="10.0.0" />
     <PackageReference Update="FSharp.Core" Version="10.1.401" />

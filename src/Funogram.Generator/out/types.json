@@ -1074,7 +1074,7 @@
             "ConvertedName": "Date",
             "Description": "Date the message was sent in Unix time. It is always a positive number, representing a valid date.",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -2000,7 +2000,7 @@
             "ConvertedName": "Date",
             "Description": "Always 0. The field can be used to differentiate regular and inaccessible messages.",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           }
         ]
@@ -2545,7 +2545,7 @@
             "ConvertedName": "Date",
             "Description": "Date the message was sent originally in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -2581,7 +2581,7 @@
             "ConvertedName": "Date",
             "Description": "Date the message was sent originally in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -2617,7 +2617,7 @@
             "ConvertedName": "Date",
             "Description": "Date the message was sent originally in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -2661,7 +2661,7 @@
             "ConvertedName": "Date",
             "Description": "Date the message was sent originally in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -7445,7 +7445,7 @@
             "ConvertedName": "Date",
             "Description": "Date the change was done in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -7804,7 +7804,7 @@
             "ConvertedName": "UntilDate",
             "Description": "Date when the user\u0027s subscription will expire; Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": true
           }
         ]
@@ -7984,7 +7984,7 @@
             "ConvertedName": "UntilDate",
             "Description": "Date when restrictions will be lifted for this user; Unix time. If 0, then the user is restricted forever.",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           }
         ]
@@ -8048,7 +8048,7 @@
             "ConvertedName": "UntilDate",
             "Description": "Date when restrictions will be lifted for this user; Unix time. If 0, then the user is banned forever.",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           }
         ]
@@ -8091,7 +8091,7 @@
             "ConvertedName": "Date",
             "Description": "Date the request was sent in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -9000,7 +9000,7 @@
             "ConvertedName": "Date",
             "Description": "Date of the change in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -9051,7 +9051,7 @@
             "ConvertedName": "Date",
             "Description": "Date of the change in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -11027,7 +11027,7 @@
             "ConvertedName": "Date",
             "Description": "Date the connection was established in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -19222,7 +19222,7 @@
             "ConvertedName": "Date",
             "Description": "Date the withdrawal was completed in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {
@@ -19643,7 +19643,7 @@
             "ConvertedName": "Date",
             "Description": "Date the transaction was created in Unix time",
             "OriginalFieldType": "Integer",
-            "ConvertedFieldType": "DateTime",
+            "ConvertedFieldType": "DateTimeOffset",
             "Optional": false
           },
           {

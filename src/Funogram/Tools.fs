@@ -8,73 +8,120 @@ open System.Runtime.CompilerServices
 open System.Text
 open System.Text.Json
 open System.Text.Json.Serialization
+open Funogram
 open Funogram.Types
+open Microsoft.Extensions.Logging
 
 [<assembly:InternalsVisibleTo("Funogram.Tests")>]
 [<assembly:InternalsVisibleTo("Funogram.Telegram")>]
 do ()
 
 open System.Collections.Concurrent
-open System.Linq.Expressions
 open Funogram.Converters
 open TypeShape.Core
 
+/// Request logging levels:
+/// - Trace: method, status, duration, request and response bodies
+/// - Debug: method, status, duration
+/// - Error: transport exceptions (always, regardless of Trace/Debug)
 module internal RequestLogger =
-  type Logger =
-    {
-      Text: StringBuilder
-      Logger: IBotLogger
-    }
-  
-  let createIfRequired (config: BotConfig) =
-    match config.RequestLogger with
-    | Some logger when logger.Enabled -> { Text = StringBuilder(); Logger = logger } |> Some
-    | _ -> None
-  
-  let appendReqAsync (url: string) (content: MultipartFormDataContent) (hasData: bool) (logger: Logger) =
+  let private completedEvent = EventId(1, "RequestCompleted")
+  let private failedEvent = EventId(2, "RequestFailed")
+
+  /// Created for every request, so it must stay cheap: the token is masked
+  /// and the elapsed time is computed only when something is actually logged
+  type Scope =
+    { Logger: ILogger
+      Method: string
+      Token: BotToken
+      Request: string
+      StartedAt: int64 }
+
+  let private start (config: BotConfig) methodName request =
+    { Logger = config.Logger
+      Method = methodName
+      Token = config.Token
+      Request = request
+      StartedAt = Diagnostics.Stopwatch.GetTimestamp() }
+
+  let private elapsedMs (scope: Scope) =
+    (Diagnostics.Stopwatch.GetTimestamp() - scope.StartedAt) * 1000L / Diagnostics.Stopwatch.Frequency
+
+  /// Keeps a multipart value on a single log line
+  let private escapeValue (value: string) =
+    value.Replace("\\", "\\\\").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t")
+
+  let private formatMultipartAsync (content: MultipartFormDataContent) =
     task {
-      let req = if hasData then "POST" else "GET"
-      let sb = logger.Text.Append("Req: ").Append(req).Append(" ").AppendLine(url)
+      let parts = ResizeArray<string>()
       try
-        if hasData then
-          sb.AppendLine("multipart/form-data") |> ignore
-          for item in content do
-            sb.Append(item.Headers.ContentDisposition.Name) |> ignore
-            match item with
-            | :? StringContent as s ->
-              let! s = s.ReadAsStringAsync()
-              sb.Append("=").Append(s).AppendLine() |> ignore
-            | :? ByteArrayContent as b ->
-              let fileName = item.Headers.ContentDisposition.FileName
-              if String.IsNullOrEmpty(fileName) then
-                let! b = b.ReadAsByteArrayAsync()
-                let s = Encoding.UTF8.GetString(b)
-                sb.Append("=").AppendLine(s) |> ignore
-              else
-                sb.Append("=[file ").Append(fileName).AppendLine("]") |> ignore
-            | _ -> ()
-      with | _ -> ()
+        for item in content do
+          let disposition = item.Headers.ContentDisposition
+          let name = disposition.Name.Trim('"')
+          if not (String.IsNullOrEmpty disposition.FileName) then
+            parts.Add($"{name}=[file {disposition.FileName.Trim('"')}]")
+          else
+            let! value = item.ReadAsStringAsync()
+            parts.Add($"{name}={escapeValue value}")
+      with _ -> ()
+      return String.Join(", ", parts)
     }
-  
-  let appendReqJson (url: string) (data: byte[]) (logger: Logger) =
-    logger.Text
-      .Append("Req: POST ")
-      .AppendLine(url)
-      .AppendLine("application/json")
-      .AppendLine(Encoding.UTF8.GetString(data)) |> ignore
-    
-  
-  let appendResAndWriteAsync (stream: Stream) (logger: Logger) =
+
+  let startMultipartAsync (config: BotConfig) methodName (content: MultipartFormDataContent) (hasData: bool) =
     async {
-      let! data = stream.AsyncRead(int stream.Length)
-      logger.Text.Append("Res: ").Append(Encoding.UTF8.GetString(data)) |> ignore
-      stream.Seek(0, SeekOrigin.Begin) |> ignore
-      logger.Logger.Log(logger.Text.ToString())
+      let! request =
+        if hasData && config.Logger.IsEnabled LogLevel.Trace then
+          formatMultipartAsync content |> Async.AwaitTask
+        else
+          async.Return ""
+      return start config methodName request
     }
-  
-  let appendResExceptionAndWrite (e: exn) (logger: Logger) =
-    logger.Text.Append("Res: ").Append(e.ToString()) |> ignore
-    logger.Logger.Log(logger.Text.ToString())
+
+  let startJson (config: BotConfig) methodName (data: byte[]) =
+    let request = if config.Logger.IsEnabled LogLevel.Trace then Encoding.UTF8.GetString data else ""
+    start config methodName request
+
+  let completedAsync (scope: Scope) (statusCode: int) (stream: Stream) =
+    async {
+      let logger = scope.Logger
+      let elapsed = elapsedMs scope
+      if logger.IsEnabled LogLevel.Trace then
+        let! data = stream.AsyncRead(int stream.Length)
+        stream.Seek(0L, SeekOrigin.Begin) |> ignore
+        let response = Encoding.UTF8.GetString data
+        if String.IsNullOrEmpty scope.Request then
+          logger.LogTrace(
+            completedEvent,
+            "{BotMethod} → {StatusCode} in {ElapsedMs} ms (bot {Bot})\n\n← {Response}",
+            scope.Method, statusCode, elapsed, scope.Token, response)
+        else
+          logger.LogTrace(
+            completedEvent,
+            "{BotMethod} → {StatusCode} in {ElapsedMs} ms (bot {Bot})\n→ {Request}\n\n← {Response}",
+            scope.Method, statusCode, elapsed, scope.Token, scope.Request, response)
+      elif logger.IsEnabled LogLevel.Debug then
+        logger.LogDebug(
+          completedEvent,
+          "{BotMethod} → {StatusCode} in {ElapsedMs} ms (bot {Bot})",
+          scope.Method, statusCode, elapsed, scope.Token)
+    }
+
+  let failed (scope: Scope) (statusCode: int) (e: exn) =
+    let elapsed = elapsedMs scope
+    let e =
+      match e with
+      | :? AggregateException as ae when ae.InnerExceptions.Count = 1 -> ae.InnerException
+      | e -> e
+    if statusCode < 0 then
+      scope.Logger.LogError(
+        failedEvent, e,
+        "{BotMethod} failed after {ElapsedMs} ms (bot {Bot})",
+        scope.Method, elapsed, scope.Token)
+    else
+      scope.Logger.LogError(
+        failedEvent, e,
+        "{BotMethod} failed with {StatusCode} after {ElapsedMs} ms (bot {Bot})",
+        scope.Method, statusCode, elapsed, scope.Token)
 
 /// Shared JSON serializer settings used by Funogram for request and response payloads.
 ///
@@ -89,84 +136,65 @@ let options =
       DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     )
   o.Converters.Add(DiscriminatedUnionConverterFactory())
-  o.Converters.Add(UnixTimestampDateTimeConverter())
+  o.Converters.Add(UnixTimestampConverter())
   o.Converters.Add(OptionConverterFactory())
   o.Converters.Add(SafeUpdateConverterFactory())
   o
 
 let private getUrl (config: BotConfig) methodName = 
-  let botToken = sprintf "%s%s" (config.ApiEndpointUrl |> string) config.Token
-  
+  let botToken = $"{config.ApiEndpointUrl}{config.Token.Reveal()}"
   if config.IsTest then
-    sprintf "%s/test/%s" botToken methodName
+    $"{botToken}/test/{methodName}"
   else
-    sprintf "%s/%s" botToken methodName
+    $"{botToken}/{methodName}"
 
-let internal getUnix (date: DateTime) = 
-  Convert.ToInt64(date.Subtract(DateTime(1970, 1, 1)).TotalSeconds)
+let internal parseJsonUtf8<'a> (config: BotConfig) (data: byte[]) =
+  JsonSerializer.Deserialize<'a>(data, config.JsonOptions)
 
-let internal parseJson<'a> (data: byte[]) =
+let internal parseJsonUtf8Stream<'a> (config: BotConfig) (data: Stream) =
+  JsonSerializer.Deserialize<'a>(data, config.JsonOptions)
+
+let private toApiResult<'a> (statusCode: int) (response: ApiResponse<'a>) =
+  match response with
+  | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
+  | x when x.Description.IsSome && x.ErrorCode.IsSome ->
+    Error (ApiError.Rejected { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value; Parameters = x.Parameters })
+  | _ ->
+    Error (ApiError.InvalidResponse (statusCode, JsonException "Malformed Bot API response"))
+
+/// Telegram accepted the request (ok = true), but its result does not match the expected type.
+/// Anything else means the response itself is not a valid Bot API response (e.g. an HTML page from a proxy)
+let private isResultError (e: exn) =
+  match e with
+  | :? JsonException as e -> not (isNull e.Path) && e.Path.StartsWith("$.result", StringComparison.Ordinal)
+  | _ -> false
+
+/// The stream belongs to the caller, so it is left open
+let private readRaw (data: Stream) =
+  if data.CanSeek then
+    data.Seek(0L, SeekOrigin.Begin) |> ignore
+    use sr = new StreamReader(data, Encoding.UTF8, false, 1024, true)
+    sr.ReadToEnd()
+  else
+    ""
+
+let internal parseJsonResponseUtf8<'a> (config: BotConfig) (statusCode: int) (data: byte[]) =
   try
-    match JsonSerializer.Deserialize<ApiResponse<'a>>(data, options) with
-    | x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
-    | x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-      Error { Description = x.Description.Value
-              ErrorCode = x.ErrorCode.Value }
-    | x -> 
-      Error { Description = "Unknown error"
-              ErrorCode = -1 }
-  with ex ->
-    let json = Encoding.UTF8.GetString data
-    let message = sprintf "%s in %s" ex.Message json
-    ArgumentException(message, ex) |> raise
+    parseJsonUtf8<ApiResponse<'a>> config data |> toApiResult statusCode
+  with
+  | e when isResultError e -> Error (ApiError.UnexpectedResult (Encoding.UTF8.GetString data, e))
+  | e -> Error (ApiError.InvalidResponse (statusCode, e))
 
-let internal parseJsonStream<'a> (data: Stream) =
+let internal parseJsonResponseUtf8Stream<'a> (config: BotConfig) (statusCode: int) (data: Stream) =
   try
-    JsonSerializer.Deserialize<'a>(data, options) |> Ok
-  with ex ->
-    if data.CanSeek then 
-      data.Seek(0L, SeekOrigin.Begin) |> ignore
-      use sr = new StreamReader(data)
-      let message = sprintf "%s in %s" ex.Message (sr.ReadToEnd())
-      ArgumentException(message, ex) :> Exception |> Result.Error
-    else
-      Exception("Unable to parse json") |> Result.Error
+    parseJsonUtf8Stream<ApiResponse<'a>> config data |> toApiResult statusCode
+  with
+  | e when isResultError e -> Error (ApiError.UnexpectedResult (readRaw data, e))
+  | e -> Error (ApiError.InvalidResponse (statusCode, e))
 
-let internal parseJsonStreamApiResponse<'a> (data: Stream) =
-  match parseJsonStream<ApiResponse<'a>> data with
-  | Ok x when x.Ok && x.Result.IsSome -> Ok x.Result.Value
+let toJsonUtf8 (config: BotConfig) (o: obj) = JsonSerializer.SerializeToUtf8Bytes(o, config.JsonOptions)
 
-  | Ok x when x.Description.IsSome && x.ErrorCode.IsSome -> 
-    Error { Description = x.Description.Value; ErrorCode = x.ErrorCode.Value }
-
-  | Error e -> 
-    Error { Description = e.Message; ErrorCode = -1 }
-
-  | _ -> 
-    Error { Description = "Unknown error"; ErrorCode = -1 }
-
-[<ReflectedDefinition>]
-let toJson (o: 'a) = JsonSerializer.SerializeToUtf8Bytes<'a>(o, options)
-
-let private toJsonMethodInfo =
-  System.Reflection.Assembly.GetExecutingAssembly()
-    .GetType("Funogram.Tools").GetMethod("toJson")
-
-// json request serializer
-let private jsonSerializers = ConcurrentDictionary<Type, Func<IBotRequest, byte[]>>()
-let private generateSerializer tp =
-  let sourceParam = Expression.Parameter(typeof<IBotRequest>)
-  let convert = Expression.Convert(sourceParam, tp)
-  let method = toJsonMethodInfo.MakeGenericMethod(tp)
-  let call = Expression.Call(method, convert)
-  Expression.Lambda<Func<IBotRequest, byte[]>>(call, [sourceParam]).Compile()
-  
-let toJsonBotRequest (request: IBotRequest) =
-  let toJson =
-    jsonSerializers.GetOrAdd(
-      request.GetType(),
-      Func<Type, Func<IBotRequest, byte[]>>(generateSerializer))
-  toJson.Invoke(request)  
+let toJsonString (config: BotConfig) (o: obj) = JsonSerializer.Serialize(o, config.JsonOptions)
 
 module Api =
   type File =
@@ -324,171 +352,177 @@ module Api =
   let mkFilesFinder<'T> () : 'T -> File[] =
     mkFilesFinderCached<'T> (System.Collections.Generic.Dictionary())
 
-  let multipartSerializers = ConcurrentDictionary<Type, IBotRequest -> MultipartFormDataContent -> bool>()
+  let multipartSerializers = ConcurrentDictionary<Type, Lazy<BotConfig -> IBotRequest -> MultipartFormDataContent -> bool>>()
   
-  let mkBaseGeneratorMethod =
-    System.Reflection.Assembly.GetExecutingAssembly()
-      .GetType("Funogram.Tools")
-      .GetNestedType("Api")
-      .GetMethod("mkBaseGenerator")
-
-  let generateMultipartSerializer (tp: Type) =
-    let method = mkBaseGeneratorMethod.MakeGenericMethod(tp)
-    Expression.Lambda<Func<IBotRequest -> MultipartFormDataContent -> bool>>(Expression.Call(method))
-      .Compile().Invoke()
-
-  let rec mkRequestGenerator<'T> () : 'T -> string -> MultipartFormDataContent -> bool =
-    
-    let inline ($) _ x = x
-  
-    let mkGenerateInMember (shape : IShapeMember<'DeclaringType>) =
-      shape.Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> string -> MultipartFormDataContent -> bool> with
-        member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
-          let inFieldFinder = mkRequestGenerator<'Field>()
-          inFieldFinder << shape.Get }
-
-    let wrap(p : 'a -> string -> MultipartFormDataContent -> bool) =
-      unbox<'T -> string -> MultipartFormDataContent -> bool> p
-
-    let addFiles (a: 'v) (data: MultipartFormDataContent) =
-      let finder =
-        fileFinders.GetOrAdd(typeof<'v>, Func<Type, obj>(fun x -> mkFilesFinder<'v> () |> box))
-        |> unbox<'v -> File[]>
-      let files = finder a
-      files |> Seq.iter (fun x ->
-        match x with
-        | File.Stream (name, stream) -> data.Add(new StreamContent(stream), name, name)
-        | File.Bytes (name, bytes) -> data.Add(new ByteArrayContent(bytes), name, name)
-      )
-    
-    let strf a b = new StringContent(sprintf a b)
-    
-    match shapeof<'T> with
-    | Shape.Bool ->
-      wrap(fun x prop data -> data.Add(strf "%b" x, prop) $ true)
-    | Shape.Int16 ->
-      wrap(fun (x: int16) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.Int32 ->
-      wrap(fun x prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.Int64 ->
-      wrap(fun (x: int64) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.Decimal ->
-      wrap(fun x prop data -> data.Add(strf "%f" x, prop) $ true)
-    | Shape.Double ->
-      wrap(fun x prop data -> data.Add(strf "%f" x, prop) $ true)
-    | Shape.Uri ->
-      wrap(fun (x: Uri) prop data -> data.Add(strf "%O" x, prop) $ true)
-    | Shape.UInt16 ->
-      wrap(fun (x: uint16) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.UInt32 ->
-      wrap(fun (x: uint32) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.UInt64 ->
-      wrap(fun (x: uint32) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.Byte ->
-      wrap(fun (x: byte) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.SByte ->
-      wrap(fun (x: byte) prop data -> data.Add(strf "%i" x, prop) $ true)
-    | Shape.String ->
-      wrap(fun x prop data -> data.Add(strf "%s" x, prop) $ true)
-    | Shape.DateTime ->
-      let inline toUnix (x: DateTime) = DateTimeOffset(DateTime.SpecifyKind(x, DateTimeKind.Utc)).ToUnixTimeSeconds()
-      wrap(fun x prop data -> data.Add(strf "%i" (toUnix x), prop) $ true)
-    | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
-      let fieldPrinters : (string * ('T -> string -> MultipartFormDataContent -> bool)) [] = 
-        shape.Fields |> Array.map (fun f -> f.Label, mkGenerateInMember f)
-
-      fun (x: 'T) prop data ->
-        if String.IsNullOrEmpty(prop) then
-          fieldPrinters
-          |> Array.map (fun (prop, fp) -> fp x (StringUtils.toSnakeCase prop) data)
-          |> Array.contains true
-        else
-          let json = toJson x
-          data.Add(new ByteArrayContent(json), prop)
-          addFiles x data
-          true
-    | Shape.FSharpOption s ->
-      s.Element.Accept {
-        new ITypeVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member _.Visit<'a> () =
-            let tp = mkRequestGenerator<'a>()
-            wrap(fun x prop data ->
-              match x with
-              | None -> false
-              | Some t -> tp t prop data)
-      }
-    | Shape.FSharpList s ->
-      s.Element.Accept {
-        new ITypeVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member _.Visit<'a> () =
-            fun x prop data ->
-              let json = toJson x
-              data.Add(new ByteArrayContent(json), prop)
-              addFiles x data
-              true
-      }
-    | Shape.Array s when s.Rank = 1 ->
-      s.Element.Accept {
-        new ITypeVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member _.Visit<'a> () =
-            fun x prop data ->
-              let json = toJson x
-              data.Add(new ByteArrayContent(json), prop)
-              addFiles x data
-              true
-        }
-    | Shape.FSharpSet s ->
-      s.Accept {
-        new IFSharpSetVisitor<'T -> string -> MultipartFormDataContent -> bool> with
-          member _.Visit<'a when 'a : comparison> () =
-            fun x prop data ->
-              let json = toJson x
-              data.Add(new ByteArrayContent(json), prop)
-              addFiles x data
-              true
-     }
-    | Shape.FSharpUnion (:? ShapeFSharpUnion<'T> as shape) ->
-      let cases : ShapeFSharpUnionCase<'T> [] = shape.UnionCases // all union cases
-      let mkUnionCasePrinter (case : ShapeFSharpUnionCase<'T>) =
-        let isEnum = case.Fields.Length = 0
-
-        let readFile =
-          if isFileStream case then
-            readFileStream |> Some
-          elif isFileBytes case then
-            readFileBytes |> Some
-          else None
-        
-        if isEnum then
-          let name = StringUtils.caseName case.CaseInfo
-          fun _ (prop: string) (data: MultipartFormDataContent) ->
-            data.Add(strf "%s" name, prop) $ true
-        else
-          fun (x: 'T) (prop: string) (data: MultipartFormDataContent) ->
-            match readFile with
-            | Some fn ->
-              let file = fn x case
-              match file with
-              | Stream (name, stream) ->
-                data.Add(new StreamContent(stream), prop, name) $ true
-              | Bytes (name, bytes) ->
-                data.Add(new ByteArrayContent(bytes), prop, name) $ true
-            | None ->
-              let fieldPrinters = case.Fields |> Array.map mkGenerateInMember
-              fieldPrinters
-              |> Array.map (fun fp -> fp x prop data) 
-              |> Array.contains true
-
-      let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
-      fun (u:'T) ->
-        let tag : int = shape.GetTag u // get the underlying tag for the union case
-        casePrinters[tag] u
+  let rec mkRequestGeneratorCached<'T> (cache: System.Collections.Generic.Dictionary<Type, obj>)
+    : 'T -> BotConfig -> string -> MultipartFormDataContent -> bool =
+    match cache.TryGetValue typeof<'T> with
+    | true, cell ->
+      let cell = unbox<('T -> BotConfig -> string -> MultipartFormDataContent -> bool) ref> cell
+      fun x config prop data -> cell.Value x config prop data
     | _ ->
-      fun _ _ _ -> false
-  
-  let mkBaseGenerator<'a when 'a :> IBotRequest> () =
-    let fn = mkRequestGenerator<'a> ()
-    fun (request: IBotRequest) -> fn (request :?> 'a) ""
+      let cell : ('T -> BotConfig -> string -> MultipartFormDataContent -> bool) ref = ref (fun _ _ _ _ -> false)
+      cache[typeof<'T>] <- box cell
+
+      let inline ($) _ x = x
+
+      let mkGenerateInMember (shape : IShapeMember<'DeclaringType>) =
+        shape.Accept { new IMemberVisitor<'DeclaringType, 'DeclaringType -> BotConfig -> string -> MultipartFormDataContent -> bool> with
+          member _.Visit (shape : ShapeMember<'DeclaringType, 'Field>) =
+            let inFieldFinder = mkRequestGeneratorCached<'Field> cache
+            inFieldFinder << shape.Get }
+
+      let wrap(p : 'a -> BotConfig -> string -> MultipartFormDataContent -> bool) =
+        unbox<'T -> BotConfig -> string -> MultipartFormDataContent -> bool> p
+
+      let addFiles (a: 'v) (data: MultipartFormDataContent) =
+        let finder =
+          fileFinders.GetOrAdd(typeof<'v>, Func<Type, obj>(fun x -> mkFilesFinder<'v> () |> box))
+          |> unbox<'v -> File[]>
+        let files = finder a
+        files |> Seq.iter (fun x ->
+          match x with
+          | File.Stream (name, stream) -> data.Add(new StreamContent(stream), name, name)
+          | File.Bytes (name, bytes) -> data.Add(new ByteArrayContent(bytes), name, name)
+        )
+
+      let inline str (a: 'a) = new StringContent(string a)
+      let generator =
+        match shapeof<'T> with
+        | Shape.Bool ->
+          wrap(fun (x: bool) _ prop data -> data.Add((if x then str "true" else str "false"), prop) $ true)
+        | Shape.Int16 ->
+          wrap(fun (x: int16) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.Int32 ->
+          wrap(fun (x: int32) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.Int64 ->
+          wrap(fun (x: int64) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.Decimal ->
+          wrap(fun (x: decimal) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.Double ->
+          wrap(fun (x: float) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.Uri ->
+          wrap(fun (x: Uri) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.UInt16 ->
+          wrap(fun (x: uint16) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.UInt32 ->
+          wrap(fun (x: uint32) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.UInt64 ->
+          wrap(fun (x: uint64) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.Byte ->
+          wrap(fun (x: byte) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.SByte ->
+          wrap(fun (x: sbyte) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.String ->
+          wrap(fun (x: string) _ prop data -> data.Add(str x, prop) $ true)
+        | Shape.DateTimeOffset ->
+          wrap(fun (x: DateTimeOffset) _ prop data -> data.Add(str (x.ToUnixTimeSeconds()), prop) $ true)
+        | Shape.FSharpRecord (:? ShapeFSharpRecord<'T> as shape) ->
+          let fieldPrinters : (string * ('T -> BotConfig -> string -> MultipartFormDataContent -> bool)) [] = 
+            shape.Fields |> Array.map (fun f -> f.Label, mkGenerateInMember f)
+
+          fun (x: 'T) (config: BotConfig) prop data ->
+            if String.IsNullOrEmpty(prop) then
+              fieldPrinters
+              |> Array.map (fun (prop, fp) -> fp x config (StringUtils.toSnakeCase prop) data)
+              |> Array.contains true
+            else
+              let json = toJsonUtf8 config x
+              data.Add(new ByteArrayContent(json), prop)
+              addFiles x data
+              true
+        | Shape.FSharpOption s ->
+          s.Element.Accept {
+            new ITypeVisitor<'T -> BotConfig -> string -> MultipartFormDataContent -> bool> with
+              member _.Visit<'a> () =
+                let tp = mkRequestGeneratorCached<'a> cache
+                wrap(fun x config prop data ->
+                  match x with
+                  | None -> false
+                  | Some t -> tp t config prop data)
+          }
+        | Shape.FSharpList s ->
+          s.Element.Accept {
+            new ITypeVisitor<'T -> BotConfig -> string -> MultipartFormDataContent -> bool> with
+              member _.Visit<'a> () =
+                fun x config prop data ->
+                  let json = toJsonUtf8 config x
+                  data.Add(new ByteArrayContent(json), prop)
+                  addFiles x data
+                  true
+          }
+        | Shape.Array s when s.Rank = 1 ->
+          s.Element.Accept {
+            new ITypeVisitor<'T -> BotConfig -> string -> MultipartFormDataContent -> bool> with
+              member _.Visit<'a> () =
+                fun x config prop data ->
+                  let json = toJsonUtf8 config x
+                  data.Add(new ByteArrayContent(json), prop)
+                  addFiles x data
+                  true
+            }
+        | Shape.FSharpSet s ->
+          s.Accept {
+            new IFSharpSetVisitor<'T -> BotConfig -> string -> MultipartFormDataContent -> bool> with
+              member _.Visit<'a when 'a : comparison> () =
+                fun x config prop data ->
+                  let json = toJsonUtf8 config x
+                  data.Add(new ByteArrayContent(json), prop)
+                  addFiles x data
+                  true
+         }
+        | Shape.FSharpUnion (:? ShapeFSharpUnion<'T> as shape) ->
+          let cases : ShapeFSharpUnionCase<'T> [] = shape.UnionCases // all union cases
+          let mkUnionCasePrinter (case : ShapeFSharpUnionCase<'T>) =
+            let isEnum = case.Fields.Length = 0
+
+            let readFile =
+              if isFileStream case then
+                readFileStream |> Some
+              elif isFileBytes case then
+                readFileBytes |> Some
+              else None
+
+            if isEnum then
+              let name = StringUtils.caseName case.CaseInfo
+              fun _ (_: BotConfig) (prop: string) (data: MultipartFormDataContent) ->
+                data.Add(str name, prop) $ true
+            else
+              let fieldPrinters = case.Fields |> Array.map mkGenerateInMember
+              fun (x: 'T) (config: BotConfig) (prop: string) (data: MultipartFormDataContent) ->
+                match readFile with
+                | Some fn ->
+                  let file = fn x case
+                  match file with
+                  | Stream (name, stream) ->
+                    data.Add(new StreamContent(stream), prop, name) $ true
+                  | Bytes (name, bytes) ->
+                    data.Add(new ByteArrayContent(bytes), prop, name) $ true
+                | None ->
+                  fieldPrinters
+                  |> Array.map (fun fp -> fp x config prop data) 
+                  |> Array.contains true
+
+          let casePrinters = cases |> Array.map mkUnionCasePrinter // generate printers for all union cases
+          fun (u:'T) ->
+            let tag : int = shape.GetTag u // get the underlying tag for the union case
+            casePrinters[tag] u
+        | _ ->
+          fun _ _ _ _ -> false
+
+      cell.Value <- generator
+      generator
+
+  let mkRequestGenerator<'T> () =
+    mkRequestGeneratorCached<'T> (System.Collections.Generic.Dictionary())
+
+  let generateMultipartSerializer (tp: Type) : BotConfig -> IBotRequest -> MultipartFormDataContent -> bool =
+    TypeShape.Create(tp).Accept {
+      new ITypeVisitor<BotConfig -> IBotRequest -> MultipartFormDataContent -> bool> with
+        member _.Visit<'a> () =
+          let fn = mkRequestGenerator<'a> ()
+          fun config request -> fn (unbox<'a> request) config ""
+    }
   
   let makeRequestAsync<'a> config (request: IBotRequest) =
     async {
@@ -498,47 +532,41 @@ module Api =
       let serialize =
         multipartSerializers.GetOrAdd(
           request.GetType(),
-          Func<Type, IBotRequest -> MultipartFormDataContent -> bool>(generateMultipartSerializer)
-        )
+          Func<Type, Lazy<BotConfig -> IBotRequest -> MultipartFormDataContent -> bool>>(fun tp ->
+            lazy generateMultipartSerializer tp)
+        ).Value
 
       use content = new MultipartFormDataContent()
-      let hasData = serialize request content
+      let hasData = serialize config request content
       
-      let logger = RequestLogger.createIfRequired config
-      match logger with
-      | Some logger -> do! logger |> RequestLogger.appendReqAsync url content hasData |> Async.AwaitTask
-      | _ -> ()
+      let! log = RequestLogger.startMultipartAsync config request.MethodName content hasData
 
       let mutable statusCode = -1
       try
         let! result =
           if hasData then client.PostAsync(url, content, cancellationToken = ct) |> Async.AwaitTask
           else client.GetAsync(url, cancellationToken = ct) |> Async.AwaitTask
-        
+
         statusCode <- result.StatusCode |> int
-        
+
         use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
-        match logger with
-        | Some logger -> do! logger |> RequestLogger.appendResAndWriteAsync stream
-        | _ -> ()
-        return parseJsonStreamApiResponse<'a> stream
+        do! RequestLogger.completedAsync log statusCode stream
+        return parseJsonResponseUtf8Stream<'a> config statusCode stream
       with
-      | e ->
-        logger |> Option.iter (RequestLogger.appendResExceptionAndWrite e)
-        return Error { Description = "HTTP_ERROR"; ErrorCode = statusCode }
+      | e when not ct.IsCancellationRequested ->
+        RequestLogger.failed log statusCode e
+        return Error (ApiError.Network e)
     }
 
-  let makeJsonBodyRequestAsync<'a, 'b when 'a :> IRequestBase<'b>> config (request: 'a) =
+  let makeJsonBodyRequestAsync<'a, 'b when 'a :> IRequestBase<'b>> config (request: 'a): Async<Result<'b, ApiError>> =
     async {
       let! ct = Async.CancellationToken
       let client = config.Client
       let url = getUrl config request.MethodName
       
-      let logger = RequestLogger.createIfRequired config
-      
-      let bytes = JsonSerializer.SerializeToUtf8Bytes(request, options)
-      logger |> Option.iter (RequestLogger.appendReqJson url bytes)
-      
+      let bytes = toJsonUtf8 config request
+      let log = RequestLogger.startJson config request.MethodName bytes
+
       let mutable statusCode = -1
       try
         use content = new ByteArrayContent(bytes)
@@ -547,12 +575,10 @@ module Api =
         statusCode <- result.StatusCode |> int
         
         use! stream = result.Content.ReadAsStreamAsync() |> Async.AwaitTask
-        match logger with
-        | Some logger -> do! logger |> RequestLogger.appendResAndWriteAsync stream
-        | _ -> ()
-        return parseJsonStreamApiResponse<'a> stream
+        do! RequestLogger.completedAsync log statusCode stream
+        return parseJsonResponseUtf8Stream<'b> config statusCode stream
       with
-      | e ->
-        logger |> Option.iter (RequestLogger.appendResExceptionAndWrite e)
-        return Error { Description = "HTTP_ERROR"; ErrorCode = statusCode }
+      | e when not ct.IsCancellationRequested ->
+        RequestLogger.failed log statusCode e
+        return Error (ApiError.Network e)
     }

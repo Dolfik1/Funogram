@@ -12,21 +12,24 @@ do ()
 type internal OptionConverter<'T>() =
   inherit JsonConverter<Option<'T>>()
 
+  let mutable inner: JsonConverter<'T> = null
+
+  let getInner (options: JsonSerializerOptions) =
+    if isNull inner then
+      inner <- options.GetConverter(typeof<'T>) :?> JsonConverter<'T>
+    inner
+
   override x.Read(reader, _, options) =
     match reader.TokenType with
     | JsonTokenType.Null ->
       None
     | _ ->
-      let converter = options.GetConverter(typeof<'T>)
-      let c = converter :?> JsonConverter<'T>
-      c.Read(&reader, typeof<'T>, options) |> Some
+      (getInner options).Read(&reader, typeof<'T>, options) |> Some
 
   override x.Write(writer, value, options) =
     match value with
     | Some v ->
-      let converter = options.GetConverter(typeof<'T>)
-      let c = converter :?> JsonConverter<'T>
-      c.Write(writer, v, options)
+      (getInner options).Write(writer, v, options)
     | None ->
       writer.WriteNullValue()
 

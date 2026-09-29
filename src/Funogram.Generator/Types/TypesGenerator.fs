@@ -123,14 +123,22 @@ let private generateFieldsBody tp (fields: ApiTypeField[]) code =
   |> Code.setIndent 1
   |> Code.printNewLine "}"
  
-let private generateCasesBody (cases: ApiTypeCase[]) code =
+[<Literal>]
+let private UnrecognizedCaseName = "UnrecognizedCase"
+
+let private generateCasesBody tpName (cases: ApiTypeCase[]) code =
   let code = code |> Code.setIndent 1
+
+  if cases |> Array.exists (fun case -> Helpers.toPascalCase case.Name = UnrecognizedCaseName) then
+    failwith $"Union {tpName} already has a case named {UnrecognizedCaseName}"
 
   cases
   |> Seq.fold (fun code case ->
     code
     |> Code.printNewLine (sprintf "| %s of %s" (Helpers.toPascalCase case.Name) case.CaseType)
   ) code
+  |> Code.printNewLine "/// A value that this Funogram version cannot map to a known case"
+  |> Code.printNewLine $"| {UnrecognizedCaseName} of RawJson"
 
 let private generateFieldsCreateMember tp (fields: ApiTypeField[]) code =
   let code =
@@ -191,7 +199,7 @@ let generate config =
       |> (fun code ->
         match tp.Kind with
         | Stub -> code |> Code.setIndent 1 |> Code.printNewLine "new() = {}"
-        | Cases cases -> generateCasesBody cases code
+        | Cases cases -> generateCasesBody tp.Name cases code
         | Fields fields -> code |> generateFieldsBody tp fields |> generateFieldsCreateMember tp fields)
 
       |> Code.setIndent 0

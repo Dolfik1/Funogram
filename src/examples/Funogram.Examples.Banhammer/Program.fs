@@ -38,7 +38,7 @@ let processBanCommand (msg: Message) (from: User) banlist ctx =
         | Result.Ok _ ->
           Api.sendMessageReply msg.Chat.Id "The user was banned!" msg.MessageId |> api ctx.Config |> Async.Ignore |> Async.Start
         | Result.Error e ->
-          let text = sprintf "Could not ban user! %s" e.Description
+          let text = sprintf "Could not ban user: %A" e
           Api.sendMessageReply msg.Chat.Id text msg.MessageId |> api ctx.Config |> Async.Ignore |> Async.Start
         
         return newBanlist
@@ -82,7 +82,7 @@ let processMembersJoin (msg: Message) (newChatMembers: User[]) banlist ctx  =
         if failed.Length > 0 then
           sprintf "%s\r\nCould not ban %s"
             text
-            (failed |> Seq.map (fun (x, e) -> sprintf "%s (%s)" x.FirstName e.Description) |> String.concat ", ")
+            (failed |> Seq.map (fun (x, e) -> sprintf "%s (%A)" x.FirstName e) |> String.concat ", ")
         else
           text
       

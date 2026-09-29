@@ -3,6 +3,7 @@
 open System.IO
 open System.Text
 
+open Funogram.Tests.Helpers
 open Xunit
 
 open Funogram
@@ -61,7 +62,7 @@ let ``Deserializing a deeply nested update fails fast instead of hanging``(): un
 }"""
     let input = Encoding.UTF8.GetBytes brokenUpdate
     use stream = new MemoryStream(input)
-    match Tools.parseJsonStreamApiResponse<Update[]> stream with
+    match parseJsonStream<Update[]> stream with
     | Error e -> Assert.True(false, e.ToString())
     | Ok result ->
 
@@ -73,7 +74,7 @@ let ``Deserializing a deeply nested update fails fast instead of hanging``(): un
 
 let private parseUpdates (json: string) =
     use stream = new MemoryStream(Encoding.UTF8.GetBytes json)
-    match Tools.parseJsonStreamApiResponse<Update[]> stream with
+    match parseJsonStream<Update[]> stream with
     | Ok result -> result
     | Error e -> failwithf "Expected Ok, got %A" e
 
